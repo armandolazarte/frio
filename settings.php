@@ -5,8 +5,8 @@ const SO_UNIX = true;
 
 # Credenciales para la conexión con la base de datos MySQL
 const DB_HOST = 'localhost';
-const DB_USER = 'root';
-const DB_PASS = 'Dandoran$16';
+const DB_USER = 'Takodana';
+const DB_PASS = 'fr10d15tr1buc10n35';
 const DB_NAME = 'dh.tordo.prod';
 
 
@@ -20,16 +20,16 @@ const ALGORITMO_FINAL = 'md5';
 # Direcciones a recursos estáticos de interfaz gráfica
 const TEMPLATE = "static/template.html";
 if (SO_UNIX == true) {
-	define('URL_APP', "/valdez");
+	define('URL_APP', "/frio");
 	define('URL_STATIC', "/static/template/");
 	
 	# Directorio private del sistema
-	$url_private = "/srv/websites/valdez/private/";
+	$url_private = "/srv/websites/frio/private/";
 	define('URL_PRIVATE', $url_private);
 	ini_set("include_path", URL_PRIVATE);
 } else {
-	define('URL_APP', "/valdez");
-	define('URL_STATIC', "/valdez/static/template/");
+	define('URL_APP', "/frio");
+	define('URL_STATIC', "/frio/static/template/");
 
 	# Directorio private del sistema
 	$url_private = "c:/dhTordoFiles/private/";
