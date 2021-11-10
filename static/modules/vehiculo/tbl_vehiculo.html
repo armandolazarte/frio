@@ -1,0 +1,14 @@
+<!--TBL_VEHICULO-->
+<tr style="font-size: 12px;">
+    <td>{vehiculo-denominacion}</td>
+    <td>{vehiculomarca-denominacion} {vehiculomodelo-denominacion}</td>
+    <td>{vehiculo-dominio}</td>
+    <td>{combustible-denominacion}</td>
+    <td>
+        <center>
+            <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/vehiculo/editar/{vehiculo-vehiculo_id}');" title="Editar vehículo"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-primary btn-xs" onclick="location.href='{url_app}/vehiculo/combustible/{vehiculo-vehiculo_id}'" title="Movimientos del vehículo"><i class="fa fa-retweet"></i></button>
+        </center>
+    </td>
+</tr>
+<!--TBL_VEHICULO-->

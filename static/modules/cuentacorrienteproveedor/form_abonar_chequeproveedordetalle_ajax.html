@@ -1,0 +1,28 @@
+<form class="form" id="formulario_guardar" method="post" action="{url_app}/cuentacorrienteproveedor/abonar_chequeproveedor">
+    <div class="form-group col-lg-12" style="padding-left: 0px;">
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-8">
+                <label>N° Cheque</label>
+                <input type="text" class="form-control" name="numero" value="{chequeproveedordetalle-numero}" readonly>
+            </div>
+            <div class="form-group col-lg-4">
+                <label>Fecha Vencimiento</label>
+                <input type="date" class="form-control" name="fecha_vencimiento" value="{chequeproveedordetalle-fecha_vencimiento}" readonly>
+            </div>
+        </div>
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-4 col-lg-offset-8">
+                <label>Fecha Pago</label>
+                <input type="date" class="form-control" name="fecha_pago" value="{fecha_sys}" required>
+            </div>
+        </div>
+        <div class="form-group col-lg-12" align="right">
+            <div class="form-group col-lg-12" align="right">
+                <input type="hidden" name="cuentacorrienteproveedor_id" id="cuentacorrienteproveedor_id" value="{chequeproveedordetalle-cuentacorrienteproveedor_id}">
+                <input type="hidden" name="chequeproveedordetalle_id" id="chequeproveedordetalle_id" value="{chequeproveedordetalle-chequeproveedordetalle_id}">
+                <input type="hidden" name="proveedor_id" id="proveedor_id" value="{proveedor-proveedor_id}">
+                <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Abonar cheque </button>
+            </div>
+        </div>
+    </div>
+</form>

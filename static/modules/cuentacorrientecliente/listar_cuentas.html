@@ -1,0 +1,101 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/cuentacorrientecliente/panel">Panel Cuentas Corrientes Clientes</a></li>
+        <li><a href="{url_app}/cuentacorrientecliente/consultar/{cliente-cliente_id}">Volver a: {cliente-razon_social}</a></li>
+    </ul>
+</div>
+<div class="col-md-7 col-sm-7 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Cuenta Corriente: <strong>{cliente-razon_social}</strong></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_cuentacorriente" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Referencia</th>
+                        <th>Balance</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_cuentacorriente}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-5 col-sm-5 col-xs-12" id="div_lst_movimientos"></div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="div_contenido">
+                    
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 1:
+                $(".remover").remove();
+                break;
+            case 2:
+                $(".remover").remove();
+                break;
+        }
+    });
+
+    
+    $(document).ready(function() {
+
+        $('#tbl_cuentacorriente').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":20
+        } );
+    } );
+
+    function cargarIngreso() {
+        $('#sistema_alertas').modal('show');
+    }
+
+    function cargarMovimientosCuentas(egreso_id) {
+        var tbl_movimientos_cuentacorrientecliente = $.ajax({
+            url: '{url_app}/cuentacorrientecliente/traer_listado_movimientos_cuentacorriente_ajax/' + egreso_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById("div_lst_movimientos").innerHTML = tbl_movimientos_cuentacorrientecliente;
+    }
+</script>

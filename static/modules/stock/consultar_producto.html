@@ -1,0 +1,82 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/stock/panel">Panel Inventario</a></li>
+    </ul>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="pricing">
+                <div class="title">
+                    <h2>{productomarca-denominacion}</h2>
+                    <h1>{producto-denominacion}</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> <strong> Rubro:</strong> {productocategoria-denominacion}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Unidad:</strong> {productounidad-denominacion}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Costo:</strong> ${producto-costo}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Costo-Desc:</strong> ${producto-costo_descuento}({producto-descuento}%)</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Costo+IVA:</strong> ${producto-costo_iva} ({producto-iva}%)</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Valor Ganancia:</strong> ${producto-valor_ganancia} ({producto-porcentaje_ganancia}%)</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Valor Venta:</strong> ${producto-valor_venta}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Stock Mínimo:</strong> {producto-stock_minimo}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Stock Ideal:</strong> {producto-stock_ideal}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Detalle:</strong> {producto-detalle}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8 col-sm-8 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Movimientos del producto</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_stock" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Concepto</th>
+                        <th>Stock</th>
+                        <th>Movimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_stock_array}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_stock').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>

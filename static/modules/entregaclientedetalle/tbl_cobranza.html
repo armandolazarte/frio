@@ -1,0 +1,27 @@
+<!--TBL_COBRANZA-->
+<tr style="font-size: 12px;">
+    <td>FACTURA <a target="_blank" class="btn btn-info btn-xs" href="{url_app}/egreso/consultar/EGRESO" title="Consultar Egreso"><i class="fa fa-file-text-o"></i></a></td>
+    <td>CLIENTE</td>
+    <td>FECHA</td>
+    <td>$BALANCE</td>
+    <td>MONTO</td>
+    <td>PARCIAL</td>
+    <td>
+        <center>
+            <button class="btn btn-warning btn-xs" onClick="editarCobranza(ID);" title="Editar cobranza" type="button"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-danger btn-xs" onclick="confirma_formulario(4, '{url_app}/entregaclientedetalle/eliminar/ID');" title="Eliminar cobranza" type="button"><i class="fa fa-trash-o"></i></button>
+        </center>
+        <input type="hidden" name="cobro[ID][entregaclientedetalle_id]" id="entregaclientedetalle_id_ID" value="ID">
+        <input type="hidden" name="cobro[ID][egreso_id]" id="egreso_id_ID" value="EGRESO">
+        <input type="hidden" name="cobro[ID][entregacliente_id]" id="entregacliente_id_ID" value="ENTREGACLIENTE">
+        <input type="hidden" name="cobro[ID][factura]" id="factura_ID" value="FACTURA">
+        <input type="hidden" name="cobro[ID][punto_venta]" id="punto_venta_ID" value="PUNTO_VENTA">
+        <input type="hidden" name="cobro[ID][cliente]" id="cliente_ID" value="CLIENTE">
+        <input type="hidden" name="cobro[ID][cliente_id]" id="cliente_id_ID" value="CLINT">
+        <input type="hidden" name="cobro[ID][fecha]" id="fecha_ID" value="FECHA">
+        <input type="hidden" name="cobro[ID][monto]" id="monto_ID" value="MONTO">
+        <input type="hidden" name="cobro[ID][parcial]" id="parcial_ID" value="PARCIAL">
+        <input type="hidden" name="cobro[ID][val_parcial]" id="val_parcial_ID" value="VAL_PARCIAL">
+    </td>
+</tr>
+<!--TBL_COBRANZA-->

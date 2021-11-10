@@ -1,0 +1,194 @@
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/listar">Listar Productos</a></li>
+    </ul>
+</div>
+<div class="col-md-8 col-sm-8 col-xs-8">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Agregar producto</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/producto/guardar">
+                    <div class="form-group col-lg-8">
+                        <label>Producto</label>
+                        <input type="text" class="form-control" id="denominacion" name="denominacion" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Peso(Kg)</label>
+                        <input type="number" class="form-control" id="peso" name="peso" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Marca</label>
+                        <select class="form-control m-bot15" name="productomarca" id="productomarca" required>
+                            {slt_productomarca}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Rubro</label>
+                        <select class="form-control m-bot15" name="productocategoria" id="productocategoria" required>
+                            {slt_productocategoria}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Unidad</label>
+                        <select class="form-control m-bot15" name="productounidad" id="productounidad" required>
+                            {slt_productounidad}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Stock Mínimo</label>
+                        <input type="number" class="form-control" id="stock_minimo" name="stock_minimo" value="10" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Stock Ideal</label>
+                        <input type="number" class="form-control" id="stock_ideal" name="stock_ideal" value="15" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Días Reintegro</label>
+                        <input type="number" class="form-control" id="dias_reintegro" name="dias_reintegro" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Costo</label>
+                        <input type="number" class="form-control" id="costo" name="costo" value="{producto-costo}" step="0.001" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Flete (%)</label>
+                        <input type="number" class="form-control" id="flete" name="flete" step="0.001" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Ganancia (%)</label>
+                        <input type="number" class="form-control" id="porcentaje_ganancia" name="porcentaje_ganancia" value="40" step="0.001" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>IVA</label>
+                        <select class="form-control m-bot15" name="iva" id="iva" required>
+                            <option value="27">27%</option>
+                            <option value="21" selected>21%</option>
+                            <option value="10.5">10.5%</option>
+                            <option value="5">5%</option>
+                            <option value="2.5">2.5%</option>
+                            <option value="0">0%</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Exento?</label>
+                        <select class="form-control m-bot15" name="exento" id="exento" required>
+                            <option value="0" selected>NO</option>
+                            <option value="1">SI</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>No gravado?</label>
+                        <select class="form-control m-bot15" name="no_gravado" id="no_gravado" required>
+                            <option value="0" selected>NO</option>
+                            <option value="1">SI</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>BarCode</label>
+                        <input type="text" class="form-control" id="barcode" name="barcode" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Detalle</label>
+                        <textarea class="form-control" id="detalle" name="detalle" rows="3"></textarea>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <a href="#" class="btn btn-app" onclick="verificarProducto();"> <i class="fa fa-save"></i> Guardar </a>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10"><h5 id="msj_alerta_modal"></h5></div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+function verificarProducto() {
+    var array = new Array();
+    var flag_array = 0;
+
+    var denominacion = document.getElementById("denominacion").value;
+    if (denominacion == null || denominacion.length == 0 || denominacion == "") {
+        flag_array = 1;
+        array.push("<strong>[ERROR]</strong> Por favor complete la DENOMINACIÓN del producto.");
+    }
+
+    var productomarca = document.getElementById("productomarca");
+    var productomarca_id = productomarca.options[productomarca.selectedIndex].value;
+    if (productomarca_id == null || productomarca_id.length == 0 || productomarca_id == "" || productomarca_id == 0) {
+        flag_array = 1;
+        array.push("<strong>[ERROR]</strong> Por favor seleccione la MARCA DEL PRODUCTO.");
+    }
+
+    var productocategoria = document.getElementById("productocategoria");
+    var productocategoria_id = productocategoria.options[productocategoria.selectedIndex].value;
+    if (productocategoria_id == null || productocategoria_id.length == 0 || productocategoria_id == "" || productocategoria_id == 0) {
+        flag_array = 1;
+        array.push("<strong>[ERROR]</strong> Por favor seleccione la CATEGORÍA DEL PRODUCTO.");
+    }
+
+    var productounidad = document.getElementById("productounidad");
+    var productounidad_id = productounidad.options[productounidad.selectedIndex].value;
+    if (productounidad_id == null || productounidad_id.length == 0 || productounidad_id == "" || productounidad_id == 0) {
+        flag_array = 1;
+        array.push("<strong>[ERROR]</strong> Por favor seleccione la UNIDAD DEL PRODUCTO.");
+    }
+
+    var stock_minimo = document.getElementById("stock_minimo").value;
+    if (stock_minimo == null || stock_minimo.length == 0 || stock_minimo == "") {
+        flag_array = 1;
+        array.push("<strong>[ERROR]</strong> Por favor complete el STOCK MÍNIMO DEL PRODUCTO.");
+    }   
+
+    if (flag_array == 0) {
+        /*
+        var flag = $.ajax({
+            url: '{url_app}/producto/verifica_existencia_codigo/' + codigo,
+                dataType: 'text',
+                async: false
+        }).responseText;
+        console.log(flag);
+        if (flag > 0) {
+            $('#sistema_alertas').modal('show');
+            document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> El CÓDIGO del producto ya se encuentra cargado en el sistema.";
+        } else {
+            document.getElementById("formulario_guardar").submit();
+        }
+        */
+        
+        document.getElementById("formulario_guardar").submit();
+    } else {
+        var mensaje = array.join("<br><br>");
+        $('#sistema_alertas').modal('show');
+        document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+    }
+}
+</script>

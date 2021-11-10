@@ -1,0 +1,98 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/{panel_objeto}">Panel Modelos Vehículos</a></li>
+    </ul>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-4">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp; Editar modelo de vehiculo</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/vehiculomodelo/guardar">
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" class="form-control" id="denominacion" name="denominacion" value="{vehiculomodelo-denominacion}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Marca</label>
+                        <select class="form-control m-bot15" name="vehiculomarca" required>
+                            <option value="{vehiculomarca-vehiculomarca_id}" selected>{vehiculomarca-denominacion}</option>
+                            {slt_vehiculomarca}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidad Tanque</label>
+                        <input type="text" class="form-control" id="capacidad_tanque" name="capacidad_tanque" value="{vehiculomodelo-capacidad_tanque}" required>
+                    </div> 
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="vehiculomodelo_id" id="vehiculomodelo_id" value="{vehiculomodelo-vehiculomodelo_id}">
+                        <a href="#" class="btn btn-app" onclick="confirma_formulario(2, '')"><i class="fa fa-edit"></i> Editar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8 col-sm-8 col-xs-8">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Listado de modelos de vehiculo</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_vehiculomodelo" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>Marca</th>
+                        <th>Modelo</th>
+                        <th>Tanque</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--TBL_VEHICULOMODELO-->
+                    <tr style="font-size: 12px;">
+                        <td>{vehiculomarca-denominacion}</td>
+                        <td>{vehiculomodelo-denominacion}</td>
+                        <td>{vehiculomodelo-capacidad_tanque}lts</td>
+                        <td>
+                            <center>
+                                <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/vehiculomodelo/editar/{vehiculomodelo-vehiculomodelo_id}');" title="Editar modelo"><i class="fa fa-edit"></i></button>
+                            </center>
+                        </td>
+                    </tr>
+                    <!--TBL_VEHICULOMODELO-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_vehiculomodelo').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>

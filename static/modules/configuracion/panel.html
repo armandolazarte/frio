@@ -1,0 +1,231 @@
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/panel">Panel Configuración</a></li>
+    </ul>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-4">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-cogs"></i>&nbsp;&nbsp; Parámetros configuración facturación</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracion/definir_parametros_facturacion">
+                    <div class="form-group col-lg-6">
+                        <label>Días Alerta Comisión</label>
+                        <input type="number" min="1" class="form-control" id="dias_alerta_comision" name="dias_alerta_comision" value="{configuracioncomprobante-dias_alerta_comision}">
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Días Vencimiento Comisión</label>
+                        <input type="number" min="1" class="form-control" id="dias_vencimiento" name="dias_vencimiento" value="{configuracioncomprobante-dias_vencimiento}">
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Restricción Ctas Ctes Cliente</label>
+                        <h4>
+                            <label class="checkbox">
+                                <input type="checkbox" name="dias_vencimiento_cuentacorrientecliente" value="1" {configuracioncomprobante-chk_dias_vencimiento_cuentacorrientecliente}>
+                                <span class="checkbox__icon"></span>
+                                Activar
+                            </label>
+                        </h4>
+                        <p> No podrá facturar a clientes que tengan ctas. vencidas. <p/>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <button type="submit" class="btn btn-app"> <i class="fa fa-cogs"></i> Configurar </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-building"></i>&nbsp;&nbsp; Configurar Tipo BarCode</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracion/definir_parametros_codebar">
+                    <div class="form-group col-lg-12">
+                        <label>Facturación Rápida</label>
+                        <h4>
+                            <label class="checkbox">
+                                <input type="checkbox" name="facturacion_rapida" value="1" {configuracioncomprobante-chk_facturacion_rapida}>
+                                <span class="checkbox__icon"></span>
+                                Activar
+                            </label>
+                        </h4>
+                        <p> Recuerde tener configurado el tipo de código de barras y su correspondiente lector. <p/>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <hr style="margin-top: 0px;">
+                        <label>Configurar Tipo BarCode</label>
+                    </div>
+                    <div class="form-group col-lg-5">
+                        <label>Parte 1</label>
+                        <select class="form-control m-bot15" name="parteuno_codebar" id="parteuno_codebar" onChange="configurarBarCode();" required>
+                            <option value="{configuracioncomprobante-parteuno_codebar}" selected>{configuracioncomprobante-txt_parteuno_codebar}</option>
+                            <option value="1">BarCode</option>
+                            <option value="2">Pesaje</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-2">
+                        <label>Sep</label>
+                        <input type="text" class="form-control" id="separador_codebar" name="separador_codebar" value="{configuracioncomprobante-separador_codebar}" required>
+                    </div>
+                    <div class="form-group col-lg-5">
+                        <label>Parte 2</label>
+                        <input type="text" class="form-control" id="txt_partedos_codebar" value="{configuracioncomprobante-txt_partedos_codebar}" readonly>
+                        <input type="hidden" class="form-control" id="partedos_codebar" name="partedos_codebar" value="{configuracioncomprobante-partedos_codebar}">
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <button type="submit" class="btn btn-app"> <i class="fa fa-cogs"></i> Configurar </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-4">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-cogs"></i>&nbsp;&nbsp; Vencimiento Cta Cte Clientes</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracion/configurar_dias_vencimiento_cta_cte_cliente">
+                    <div class="form-group col-lg-12">
+                        <label>Días Vencimiento</label>
+                        <input type="number" min="1" class="form-control" id="dias_vencimiento_cta_cte_cliente" name="dias_vencimiento_cta_cte_cliente">
+                        <p> Se aplicará a todos los clientes de su cartera.<p/>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <button type="submit" class="btn btn-app"> <i class="fa fa-cogs"></i> Configurar </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-cogs"></i>&nbsp;&nbsp; Vencimiento Cta Cte Clientes por Vendedor</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracion/configurar_dias_vencimiento_cta_cte_cliente_vendedor">
+                    <div class="form-group col-lg-12">
+                        <label>Días Vencimiento</label>
+                        <input type="number" min="1" class="form-control" id="dias_vencimiento_cta_cte_cliente" name="dias_vencimiento_cta_cte_cliente">
+                        <p> Se aplicará a todos los clientes de su cartera.<p/>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                            {slt_vendedor}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <button type="submit" class="btn btn-app"> <i class="fa fa-cogs"></i> Configurar </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-4">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-building"></i>&nbsp;&nbsp; Entidad</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracion/definir_entidad">
+                    <div class="form-group col-lg-8" style="padding-left: 0px;">
+                        <label>Razón Social</label>
+                        <input type="text" class="form-control" id="razon_social" name="razon_social" value="{configuracion-razon_social}" readonly>
+                    </div>
+                    <div class="form-group col-lg-4" style="padding-right: 0px;">
+                        <label>Inicio Act.</label>
+                        <input type="text" class="form-control" id="fecha_inicio_actividad" name="fecha_inicio_actividad" value="{configuracion-fecha_inicio_actividad}" readonly>
+                    </div>
+                    <div class="form-group col-lg-12" style="padding-left: 0px; padding-right: 0px;">
+                        <label>Domicilio Comercial</label>
+                        <input type="text" class="form-control" id="domicilio_comercial" name="domicilio_comercial" value="{configuracion-domicilio_comercial}" readonly>
+                    </div>
+                    <div class="form-group col-lg-6" style="padding-left: 0px;">
+                        <label>CUIT</label>
+                        <input type="text" class="form-control" id="cuit" name="cuit" value="{configuracion-cuit}" readonly>
+                    </div>
+                    <div class="form-group col-lg-6" style="padding-right: 0px;">
+                        <label>Ingresos Brutos</label>
+                        <input type="text" class="form-control" id="ingresos_brutos" name="ingresos_brutos" value="{configuracion-ingresos_brutos}" readonly>
+                    </div>
+                    <div class="form-group col-lg-12" style="padding-left: 0px; padding-right: 0px;">
+                        <label>Condición IVA</label>
+                        <input type="text" class="form-control" id="condicioniva" name="condicioniva" value="{condicioniva-denominacion}" readonly>
+                    </div>                    
+                </form>
+            </div>            
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-photo"></i>&nbsp;&nbsp; Logo</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <center><img src="file.php?f=configuracion_logo_logo&a=v" style="width: 65%; margin-bottom: 5%;"></center>
+            <div class="form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracion/definir_logo" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="logo" name="logo" required>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="configuracion_id" value="{configuracion-configuracion_id}">
+                        <button href="#" class="btn btn-app" type="submit"> <i class="fa fa-photo"></i> Definir </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>    
+</div>
+<script>
+function configurarBarCode() {
+    var parteuno_codebar = document.getElementById("parteuno_codebar");
+    var parteuno_codebar_id = parteuno_codebar.options[parteuno_codebar.selectedIndex].value;
+    if (parteuno_codebar_id == 1) {
+        document.getElementById("partedos_codebar").value = "2";
+        document.getElementById("txt_partedos_codebar").value = "Pesaje";
+    } else {
+        document.getElementById("partedos_codebar").value = "1";
+        document.getElementById("txt_partedos_codebar").value = "BarCode";
+    }
+}
+</script>

@@ -1,0 +1,15 @@
+<!--TBL_EMPLEADO-->
+<tr style="font-size: 12px;">
+    <td>{empleado-apellido} {empleado-nombre}</td>
+    <td>{documentotipo-denominacion} {empleado-documento}</td>
+    <td>{empleado-telefono}</td>
+    <td>{empleado-domicilio}</td>
+    <td>
+        <center>
+            <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/empleado/editar/{empleado-empleado_id}');" title="Editar empleado"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-dark btn-xs" onclick="location.href='{url_app}/empleado/consultar/{empleado-empleado_id}';" title="Consultar empleado"><i class="fa fa-eye"></i></button>
+            <button class="btn btn-danger btn-xs" onclick="confirma_formulario(4, '{url_app}/empleado/eliminar/{empleado-empleado_id}');" title="Dar de baja a empleado"><i class="fa fa-trash-o"></i></button>
+        </center>
+    </td>
+</tr>
+<!--TBL_EMPLEADO-->

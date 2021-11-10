@@ -1,0 +1,1174 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/reporte/reportes">Reportes</a></li>
+    </ul>
+</div>
+<div class="col-md-9 col-sm-9 col-xs-12">
+    <div class="col-md-8 col-sm-8 col-xs-12">     
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 0px; padding-right: 1px;">
+            <button class="btn btn-xs btn-dark" type="button" style="width: 100%;" onClick="mostrarReporteProducto();"> Reporte Producto </button>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1px; padding-right: 0px;">
+            <button class="btn btn-xs btn-dark" type="button" style="width: 100%;" onClick="mostrarReporteMarca();"> Reporte Marca </button>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 1px;" id="panel_reporte_producto">
+            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;" >
+                <div class="x_title" style="padding-left: 2%;">
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte Producto</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class=" form">
+                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
+                            <div class="form-group col-lg-6">
+                                <label>Desde</label>
+                                <input type="date" class="form-control" id="desde" name="desde" required>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Hasta</label>
+                                <input type="date" class="form-control" id="hasta" name="hasta" required>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Vendedor</label>
+                                <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                                    <option value="all" selected>TODOS</option>
+                                    {slt_vendedor}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Tipo</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" checked="" value="1" id="tipo_informe" name="tipo_informe"> Cantidades
+                                    </label>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label>
+                                        <input type="radio" value="2" id="tipo_informe" name="tipo_informe"> Sábana
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <label>Producto</label>
+                                <table id="tbl_producto" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr style="font-size: 12px;">
+                                            <th></th>
+                                            <th>COD</th>
+                                            <th>Rubro</th>
+                                            <th>Descripción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_producto">
+                                        {tbl_producto}
+                                    </tbody>
+                                </table>
+                                <div>
+                                    <h4><i class="fa fa-table"></i>&nbsp;&nbsp; Productos a reporte</h4>
+                                    <div id="lst_producto_reporte">
+                                        <table class="countries_list">
+                                            <tbody id="bodyTblProducto">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right" id="div_array_reporte_producto_vendedor_fecha">
+                                <input type="hidden" name="tipo_busqueda" value="3">
+                                <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte de cobertura Marca</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">                        
+                <div class=" form">
+                    <form class="form" id="formulario_generar" name="formulario_generar" method="post" action="{url_app}/reporte/post_generar">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde_grafico" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta_grafico" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Vendedor</label>
+                            <select class="form-control m-bot15" name="vendedor_grafico" id="vendedor_grafico" required>
+                                <option value="all" selected>TODOS</option>
+                                {slt_vendedor}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Tipo</label>
+                            <select class="form-control m-bot15" name="tipo_grafico" id="tipo_grafico" required>
+                                <option value="1" selected>IMPORTE</option>
+                                <option value="2">CANTIDAD</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Marca</label>
+                            <table id="tbl_marca_grafico" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr style="font-size: 12px;">
+                                        <th></th>
+                                        <th>Marca</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_marca_grafico">
+                                    {tbl_productomarca_grafico}
+                                </tbody>
+                            </table>
+                            <div>
+                                <h4><i class="fa fa-table"></i>&nbsp;&nbsp; Marcas a reporte</h4>
+                                <div id="lst_marca_reporte_grafico">
+                                    <table class="countries_list">
+                                        <tbody id="bodyTblMarcaGrafico">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right" id="div_array_reporte_marca_vendedor_fecha_grafico">
+                            <button class="btn btn-xs btn-primary" type="button" onclick="generarGrafico();" style="width: 100%"> <i class="fa fa-bar-chart"></i> Generar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div> 
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+            <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 1px;">
+                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                    <div class="x_title" style="padding-left: 3%;">
+                        <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Más Vendidos ($)</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a href="{url_app}/reporte/get_descarga/1"><i class="fa fa-download" style="color: #04B404;"></i></a></li>
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {tbl_sum_importe_producto}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 1px; padding-right: 0px;">
+                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                    <div class="x_title" style="padding-left: 3%;">
+                        <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Más Vendidos (Cant)</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a href="{url_app}/reporte/get_descarga/2"><i class="fa fa-download" style="color: #04B404;"></i></a></li>
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {tbl_sum_cantidad_producto}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                <div class="x_title" style="padding-left: 2%;">
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte clientes</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class=" form">
+                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/clientes_no_compra_x_dias">
+                            <div class="form-group col-lg-12" align="center">
+                              <label>Cantidad de Días</label>
+                              <input type="number" class="form-control" id="dias" name="dias" required="">
+                            </div>
+                            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                               <input type="hidden" name="cliente" value="all">
+                               <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; display: {display_perfil};">
+                <div class="x_title" style="padding-left: 2%;">
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Stock Valorizado</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class=" form">
+                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/descarga_stock_valorizado">
+                            <div class="form-group col-lg-12">
+                                <label>Proveedor</label>
+                                <select class="form-control m-bot15" name="proveedor" id="proveedor" required>
+                                    {slt_proveedor}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                                <input type="hidden" name="tipo_busqueda" value="1">
+                                <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="col-md-3 col-sm-3 col-xs-12">
+    <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar ventas</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
+                    <div class="form-group col-lg-6">
+                        <label>Desde</label>
+                        <input type="date" class="form-control" id="desde" name="desde" required>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="hasta" name="hasta" required>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="tipo_busqueda" value="1">
+                        <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel hidden-print">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Ventas por vendedor</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
+                    <div class="form-group col-lg-12">
+                        <label>Vendedor</label>
+                        <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                            {slt_vendedor}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Tipo Reporte</label>
+                        <select class="form-control m-bot15" name="tipo_reporte" id="tipo_reporte" required>
+                            <option value="1">Todo</option>
+                            <option value="2">Cantidades de Venta</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Desde</label>
+                        <input type="date" class="form-control" id="desde" name="desde" required>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="hasta" name="hasta" required>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="tipo_busqueda" value="2">
+                        <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Gastos por Categoría</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Categoría de Gasto</label>
+                            <select class="form-control m-bot15" name="gastocategoria" id="gastocategoria" required>
+                                <option value="all" selected>TODOS</option>
+                                {slt_gastocategoria}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <input type="hidden" name="tipo_busqueda" value="4">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="x_panel hidden-print">
+            <div class="x_title">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Totales Vendedor-Marca</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
+                        <div class="form-group col-lg-12">
+                            <label>Vendedor</label>
+                            <select class="form-control m-bot15" name="vendedor_id" id="vendedor_id" required>
+                                {slt_vendedor}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Marca</label>
+                            <select class="form-control m-bot15" name="marca_id" id="marca_id" required>
+                                {slt_productomarca}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                            <input type="hidden" name="tipo_busqueda" value="6">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-12" id="cargando" align="center" style="display: none;">
+    <p><img src='{url_app}/static/template/images/grafico.gif' /></p>
+    <p>Generando gráfica...</p>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12" id="panel_reporte_marca" style="display: none;"></div>
+<div class="col-md-6 col-sm-6 col-xs-6" style="display: none;">  
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Reporte 15 Dias</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-6 col-sm-6 col-xs-3" style="padding-left: 0px; padding-right: 1px;">
+                    <button class="btn btn-xs btn-dark" type="button" style="width: 100%;" onClick="mostrarReporteProducto15Dias();"> Reporte Producto </button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-3" style="padding-left: 1px; padding-right: 0px;">
+                    <button class="btn btn-xs btn-dark" type="button" style="width: 100%;" onClick="mostrarReporteMarca15Dias();"> Reporte Marca </button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-3" style="padding-left: 1px; padding-right: 0px;">
+                    <button class="btn btn-xs btn-dark" type="button" style="width: 100%;" onClick="mostrarReporteProveedor15Dias();"> Reporte Proveedor </button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-3" style="padding-left: 1px; padding-right: 0px;">
+                    <button class="btn btn-xs btn-dark" type="button" style="width: 100%;" onClick="mostrarReporteVendedor15Dias();"> Reporte Vendedor </button>
+                </div>
+                <div class=" form" id="panel_reporte_producto_15dias">
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte Producto</h2>
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/reporte_15dias">
+                        <div class="form-group col-lg-12">
+                            <div class="form-group col-lg-6">
+                                <label>Desde</label>
+                                <input type="date" class="form-control" id="desde" name="desde" required>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Hasta</label>
+                                <input type="date" class="form-control" id="hasta" name="hasta" required>
+                            </div>
+                            <label>Producto</label>
+                            <table id="tbl_producto_15dias" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr style="font-size: 12px;">
+                                        <th></th>
+                                        <th>COD</th>
+                                        <th>Rubro</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_producto">
+                                    {tbl_productos}
+                                </tbody>
+                            </table>
+                            <div>
+                                <h4><i class="fa fa-table"></i>&nbsp;&nbsp; Productos a reporte</h4>
+                                <div id="lst_productos_reporte">
+                                    <table class="countries_list">
+                                        <tbody id="bodyTblProductos">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right" id="div_array_reporte_Productos_vendedor_fecha">
+                            <input type="hidden" name="tipo_busqueda" value="1">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+                <div class=" form" id="panel_reporte_marca_15dias" style='display:none;'>
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte Marca</h2>
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/reporte_15dias">
+                        <div class="form-group col-lg-12">
+                            <div class="form-group col-lg-6">
+                                  <label>Desde</label>
+                                  <input type="date" class="form-control" id="desde" name="desde" required>
+                              </div>
+                              <div class="form-group col-lg-6">
+                                  <label>Hasta</label>
+                                  <input type="date" class="form-control" id="hasta" name="hasta" required>
+                              </div>
+                            <label>Marca</label>
+                            <table id="tbl_marca_15dias" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr style="font-size: 12px;">
+                                        <th></th>
+                                        <th>Marca</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_marca">
+                                    {tbl_productomarcas}
+                                </tbody>
+                            </table>
+                            <div>
+                                <h4><i class="fa fa-table"></i>&nbsp;&nbsp; Marcas a reporte</h4>
+                                <div id="lst_marcas_reporte">
+                                    <table class="countries_list">
+                                        <tbody id="bodyTblMarcas">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right" id="div_array_reporte_Marcas_vendedor_fecha">
+                            <input type="hidden" name="tipo_busqueda" value="2">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+                <div class=" form" id="panel_reporte_proveedor_15dias" style='display:none;'>
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte Proveedor</h2>
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/reporte_15dias">
+                        <div class="form-group col-lg-12">
+                            <div class="form-group col-lg-6">
+                                  <label>Desde</label>
+                                  <input type="date" class="form-control" id="desde" name="desde" required>
+                              </div>
+                              <div class="form-group col-lg-6">
+                                  <label>Hasta</label>
+                                  <input type="date" class="form-control" id="hasta" name="hasta" required>
+                              </div>
+                            <label>Proveedor</label>
+                            <table id="tbl_proveedor_15dias" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr style="font-size: 12px;">
+                                        <th></th>
+                                        <th>Nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_proveedor">
+                                    {tbl_proveedor}
+                                </tbody>
+                            </table>
+                            <div>
+                                <h4><i class="fa fa-table"></i>&nbsp;&nbsp; Proveedor a reporte</h4>
+                                <div id="lst_proveedor_reporte">
+                                    <table class="countries_list">
+                                        <tbody id="bodyTblProveedor">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right" id="div_array_reporte_Proveedor_vendedor_fecha">
+                            <input type="hidden" name="tipo_busqueda" value="3">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+                <div class=" form" id="panel_reporte_vendedor_15dias" style='display:none;'>
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte Vendedor</h2>
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/reporte_15dias">
+                        <div class="form-group col-lg-12">
+                            <div class="form-group col-lg-6">
+                                  <label>Desde</label>
+                                  <input type="date" class="form-control" id="desde" name="desde" required>
+                              </div>
+                              <div class="form-group col-lg-6">
+                                  <label>Hasta</label>
+                                  <input type="date" class="form-control" id="hasta" name="hasta" required>
+                              </div>
+                            <label>Vendedor</label>
+                            <table id="tbl_vendedor_15dias" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr style="font-size: 12px;">
+                                        <th></th>
+                                        <th>Nombre</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_vendedor">
+                                    {tbl_vendedor}
+                                </tbody>
+                            </table>
+                            <div>
+                                <h4><i class="fa fa-table"></i>&nbsp;&nbsp; Vendedor a reporte</h4>
+                                <div id="lst_vendedor_reporte">
+                                    <table class="countries_list">
+                                        <tbody id="bodyTblVendedor">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right" id="div_array_reporte_Vendedor_vendedor_fecha">
+                            <input type="hidden" name="tipo_busqueda" value="4">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<!-- morris.js -->
+<script src="{url_static}vendors/raphael/raphael.min.js"></script>
+<script src="{url_static}vendors/morris.js/morris.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_producto').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_marca').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_marca_grafico').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+    $('#tbl_producto_15dias').dataTable( {
+        "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_marca_15dias').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_proveedor_15dias').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_vendedor_15dias').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    array_ids = new Array();
+    array_marca_ids = new Array();
+    array_marca_grafico_ids = new Array();
+    array_productos_ids = new Array();
+    array_marcas_ids = new Array();
+    array_proveedor_ids = new Array();
+    array_vendedor_ids = new Array();
+
+    function mostrarReporteProducto() {
+        document.getElementById('panel_reporte_producto').style.display = 'block';
+        document.getElementById('panel_reporte_marca').style.display = 'none';
+    }
+
+    function mostrarReporteMarca() {
+        document.getElementById('panel_reporte_producto').style.display = 'none';
+        document.getElementById('panel_reporte_marca').style.display = 'block';
+    }
+
+    function getXMLHTTPRequest() {
+      var req = false;
+      try {
+        req = new XMLHttpRequest(); /* p.e. Firefox */
+      } catch(err1) {
+        try {
+          req = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch(err2) {
+          try {
+            req = new ActiveXObject("Microsoft.XMLHTTP");
+          } catch(err3) {
+            req = false;
+          }
+        }
+      }
+      return req;
+    }
+    var miPeticion = getXMLHTTPRequest();
+
+    function generarGrafico(){
+        document.getElementById('panel_reporte_marca').innerHTML = '';
+        $('#cargando').show();
+        var frm = $("#formulario_generar");
+        var datos = frm.serialize();
+        var desde = document.getElementById('desde_grafico').value;
+        var hasta = document.getElementById('hasta_grafico').value;
+        var vendedor = document.getElementById('vendedor_grafico').value;
+
+        var tipo = document.getElementById("tipo_grafico");
+        var tipo_grafico = tipo.options[tipo.selectedIndex].value;
+
+        var arrayInput = new Array();
+        var inputsValues = document.getElementsByClassName('datoInput');
+        namesValues = [].map.call(inputsValues,function(dataInput) {
+            arrayInput.push(dataInput.value);
+        });
+
+        var path = "{url_app}/reporte/post_generar/" + desde + "@" + hasta + "@" + vendedor + "@" + tipo_grafico + "@" + arrayInput;
+        var vinculo = path;
+        miPeticion.open("GET", vinculo, true);
+        miPeticion.onreadystatechange = miPeticion.onreadystatechange = function() {
+            if (miPeticion.readyState == 4) {
+                if (miPeticion.status == 200) {
+                    var http = miPeticion.responseText;
+                    $('#cargando').hide();
+                    $('#panel_reporte_marca').show();
+                    $('#panel_reporte_marca').fadeIn(1000).html(http);
+                }
+            }
+        }
+        miPeticion.send(null);
+    }
+
+    function cargarProductoReporte(producto_id) {
+        var flag = array_ids.indexOf(producto_id);
+        var codigo = document.getElementById('tbl_cod_' + producto_id).innerHTML;
+        var descripcion = document.getElementById('tbl_den_' + producto_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblProducto = document.getElementById('bodyTblProducto');
+
+            /* FILA */
+            var trTblProducto = document.createElement("tr");
+            trTblProducto.setAttribute("id", "idTrTbl_" + producto_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblCodigo = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitar_" + producto_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarProducto(" + producto_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtCodigo = document.createTextNode(codigo);
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblCodigo.appendChild(txtCodigo);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblProducto.appendChild(tdTblCodigo);
+            trTblProducto.appendChild(tdTblDescripcion);
+            trTblProducto.appendChild(tdTblBtnQuitar);
+
+            bodyTblProducto.appendChild(trTblProducto);
+
+            /* ARRAY */
+            var div_array_reporte_producto_vendedor_fecha = document.getElementById('div_array_reporte_producto_vendedor_fecha');
+            var inputProductoId = document.createElement("input");
+            inputProductoId.setAttribute("type", "hidden");
+            inputProductoId.setAttribute("name", "producto_id[]");
+            inputProductoId.setAttribute("id", "producto_id_" + producto_id);
+            inputProductoId.setAttribute("value", producto_id);
+            div_array_reporte_producto_vendedor_fecha.appendChild(inputProductoId);
+            array_ids.push(producto_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarProducto(producto_id) {
+        var bodyTblProducto = document.getElementById('bodyTblProducto');
+        var trTblProducto = document.getElementById("idTrTbl_" + producto_id);
+
+        var div_array_reporte_producto_vendedor_fecha = document.getElementById('div_array_reporte_producto_vendedor_fecha');
+        var input_producto_id = document.getElementById('producto_id_' + producto_id);
+
+        bodyTblProducto.removeChild(trTblProducto);
+        div_array_reporte_producto_vendedor_fecha.removeChild(input_producto_id);
+        var index = array_ids.indexOf(producto_id);
+        array_ids.splice(index, 1);
+    }
+
+    function cargarMarcaReporte(marca_id) {
+        var flag = array_marca_ids.indexOf(marca_id);
+        var descripcion = document.getElementById('tbl_denmar_' + marca_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblMarca = document.getElementById('bodyTblMarca');
+
+            /* FILA */
+            var trTblMarca = document.createElement("tr");
+            trTblMarca.setAttribute("id", "idTrTblMarca_" + marca_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitarMarca_" + marca_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarMarca(" + marca_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblMarca.appendChild(tdTblDescripcion);
+            trTblMarca.appendChild(tdTblBtnQuitar);
+
+            bodyTblMarca.appendChild(trTblMarca);
+
+            /* ARRAY */
+            var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_marca_vendedor_fecha');
+            var inputMarcaId = document.createElement("input");
+            inputMarcaId.setAttribute("type", "hidden");
+            inputMarcaId.setAttribute("name", "marca_id[]");
+            inputMarcaId.setAttribute("id", "marca_id_" + marca_id);
+            inputMarcaId.setAttribute("value", marca_id);
+            div_array_reporte_marca_vendedor_fecha.appendChild(inputMarcaId);
+            array_marca_ids.push(marca_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarMarca(marca_id) {
+        var bodyTblMarca = document.getElementById('bodyTblMarca');
+        var trTblMarca = document.getElementById("idTrTblMarca_" + marca_id);
+
+        var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_marca_vendedor_fecha');
+        var input_marca_id = document.getElementById('marca_id_' + marca_id);
+
+        bodyTblMarca.removeChild(trTblMarca);
+        div_array_reporte_marca_vendedor_fecha.removeChild(input_marca_id);
+        var index = array_marca_ids.indexOf(marca_id);
+        array_marca_ids.splice(index, 1);
+    }
+
+    function cargarMarcaGrafico(marca_id) {
+        var flag = array_marca_grafico_ids.indexOf(marca_id);
+        var descripcion = document.getElementById('tbl_denmargrafico_' + marca_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblMarca = document.getElementById('bodyTblMarcaGrafico');
+
+            /* FILA */
+            var trTblMarca = document.createElement("tr");
+            trTblMarca.setAttribute("id", "idTrTblMarcaGrafico_" + marca_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitarMarcaGrafico_" + marca_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarMarcaGrafico(" + marca_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblMarca.appendChild(tdTblDescripcion);
+            trTblMarca.appendChild(tdTblBtnQuitar);
+
+            bodyTblMarca.appendChild(trTblMarca);
+
+            /* ARRAY */
+            var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_marca_vendedor_fecha_grafico');
+            var inputMarcaId = document.createElement("input");
+            inputMarcaId.setAttribute("type", "hidden");
+            inputMarcaId.setAttribute("name", "marca_id[]");
+            inputMarcaId.setAttribute("class", "datoInput");
+            inputMarcaId.setAttribute("id", "marca_grafico_id_" + marca_id);
+            inputMarcaId.setAttribute("value", marca_id);
+            div_array_reporte_marca_vendedor_fecha.appendChild(inputMarcaId);
+            array_marca_grafico_ids.push(marca_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarMarcaGrafico(marca_id) {
+        var bodyTblMarcaGrafico = document.getElementById('bodyTblMarcaGrafico');
+        var trTblMarcaGrafico = document.getElementById("idTrTblMarcaGrafico_" + marca_id);
+
+        var div_array_reporte_marca_vendedor_fecha_grafico = document.getElementById('div_array_reporte_marca_vendedor_fecha_grafico');
+        var input_marca_id = document.getElementById('marca_grafico_id_' + marca_id);
+
+        bodyTblMarcaGrafico.removeChild(trTblMarcaGrafico);
+        div_array_reporte_marca_vendedor_fecha_grafico.removeChild(input_marca_id);
+        var index = array_marca_grafico_ids.indexOf(marca_id);
+        array_marca_grafico_ids.splice(index, 1);
+    }
+
+    /*15 dias reporte*/
+    function cargarProductoReporte15Dias(producto_id) {
+        var flag = array_productos_ids.indexOf(producto_id);
+        var codigo = document.getElementById('tbl_cod_' + producto_id).innerHTML;
+        var descripcion = document.getElementById('tbl_den_' + producto_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblProducto = document.getElementById('bodyTblProductos');
+
+            /* FILA */
+            var trTblProducto = document.createElement("tr");
+            trTblProducto.setAttribute("id", "idTrTbl_" + producto_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblCodigo = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitar_" + producto_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarProductos(" + producto_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtCodigo = document.createTextNode(codigo);
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblCodigo.appendChild(txtCodigo);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblProducto.appendChild(tdTblCodigo);
+            trTblProducto.appendChild(tdTblDescripcion);
+            trTblProducto.appendChild(tdTblBtnQuitar);
+
+            bodyTblProducto.appendChild(trTblProducto);
+
+            /* ARRAY */
+            var div_array_reporte_producto_vendedor_fecha = document.getElementById('div_array_reporte_Productos_vendedor_fecha');
+            var inputProductoId = document.createElement("input");
+            inputProductoId.setAttribute("type", "hidden");
+            inputProductoId.setAttribute("name", "producto_id[]");
+            inputProductoId.setAttribute("id", "producto_id_" + producto_id);
+            inputProductoId.setAttribute("value", producto_id);
+            div_array_reporte_producto_vendedor_fecha.appendChild(inputProductoId);
+            array_productos_ids.push(producto_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarProductos(producto_id) {
+        var bodyTblProducto = document.getElementById('bodyTblProductos');
+        var trTblProducto = document.getElementById("idTrTbl_" + producto_id);
+
+        var div_array_reporte_producto_vendedor_fecha = document.getElementById('div_array_reporte_Productos_vendedor_fecha');
+        var input_producto_id = document.getElementById('producto_id_' + producto_id);
+
+        bodyTblProducto.removeChild(trTblProducto);
+        div_array_reporte_producto_vendedor_fecha.removeChild(input_producto_id);
+        var index = array_productos_ids.indexOf(producto_id);
+        array_productos_ids.splice(index, 1);
+    }
+
+    function cargarMarcaReporte15Dias(marca_id) {
+        var flag = array_marcas_ids.indexOf(marca_id);
+        var descripcion = document.getElementById('tbl_denmar_' + marca_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblMarca = document.getElementById('bodyTblMarcas');
+
+            /* FILA */
+            var trTblMarca = document.createElement("tr");
+            trTblMarca.setAttribute("id", "idTrTblMarca_" + marca_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitarMarca_" + marca_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarMarcas(" + marca_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblMarca.appendChild(tdTblDescripcion);
+            trTblMarca.appendChild(tdTblBtnQuitar);
+
+            bodyTblMarca.appendChild(trTblMarca);
+
+            /* ARRAY */
+            var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_Marcas_vendedor_fecha');
+            var inputMarcaId = document.createElement("input");
+            inputMarcaId.setAttribute("type", "hidden");
+            inputMarcaId.setAttribute("name", "marca_id[]");
+            inputMarcaId.setAttribute("id", "marca_id_" + marca_id);
+            inputMarcaId.setAttribute("value", marca_id);
+            div_array_reporte_marca_vendedor_fecha.appendChild(inputMarcaId);
+            array_marcas_ids.push(marca_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarMarcas(marca_id) {
+        var bodyTblMarca = document.getElementById('bodyTblMarcas');
+        var trTblMarca = document.getElementById("idTrTblMarca_" + marca_id);
+
+        var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_Marcas_vendedor_fecha');
+        var input_marca_id = document.getElementById('marca_id_' + marca_id);
+
+        bodyTblMarca.removeChild(trTblMarca);
+        div_array_reporte_marca_vendedor_fecha.removeChild(input_marca_id);
+        var index = array_marcas_ids.indexOf(marca_id);
+        array_marcas_ids.splice(index, 1);
+    }
+
+    function cargarVendedorReporte15Dias(vendedor_id) {
+        var flag = array_vendedor_ids.indexOf(vendedor_id);
+        var descripcion = document.getElementById('tbl_denmar_' + vendedor_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblVendedor = document.getElementById('bodyTblVendedor');
+
+            /* FILA */
+            var trTblVendedor = document.createElement("tr");
+            trTblVendedor.setAttribute("id", "idTrTblVendedor_" + vendedor_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitarVendedor_" + vendedor_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarVendedor(" + vendedor_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblVendedor.appendChild(tdTblDescripcion);
+            trTblVendedor.appendChild(tdTblBtnQuitar);
+
+            bodyTblVendedor.appendChild(trTblVendedor);
+
+            /* ARRAY */
+            var div_array_reporte_Vendedor_vendedor_fecha = document.getElementById('div_array_reporte_Vendedor_vendedor_fecha');
+            var inputVendedorId = document.createElement("input");
+            inputVendedorId.setAttribute("type", "hidden");
+            inputVendedorId.setAttribute("name", "vendedor_id[]");
+            inputVendedorId.setAttribute("id", "vendedor_id_" + vendedor_id);
+            inputVendedorId.setAttribute("value", vendedor_id);
+            div_array_reporte_Vendedor_vendedor_fecha.appendChild(inputVendedorId);
+            array_vendedor_ids.push(vendedor_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarVendedor(vendedor_id) {
+        var bodyTblVendedor = document.getElementById('bodyTblVendedor');
+        var trTblVendedor = document.getElementById("idTrTblVendedor_" + vendedor_id);
+
+        var div_array_reporte_Vendedor_vendedor_fecha = document.getElementById('div_array_reporte_Vendedor_vendedor_fecha');
+        var input_vendedor_id = document.getElementById('vendedor_id_' + vendedor_id);
+
+        bodyTblVendedor.removeChild(trTblVendedor);
+        div_array_reporte_Vendedor_vendedor_fecha.removeChild(input_vendedor_id);
+        var index = array_Vendedor_ids.indexOf(vendedor_id);
+        array_Vendedor_ids.splice(index, 1);
+    }
+
+    function cargarProveedorReporte15Dias(proveedor_id) {
+        var flag = array_proveedor_ids.indexOf(proveedor_id);
+        var descripcion = document.getElementById('tbl_denmar_' + proveedor_id).innerHTML;
+
+        if(parseInt(flag) === -1){
+            var bodyTblProveedor = document.getElementById('bodyTblProveedor');
+
+            /* FILA */
+            var trTblProveedor = document.createElement("tr");
+            trTblProveedor.setAttribute("id", "idTrTblProveedor_" + proveedor_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitarProveedor_" + proveedor_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarProveedor(" + proveedor_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtDescripcion = document.createTextNode(descripcion);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblProveedor.appendChild(tdTblDescripcion);
+            trTblProveedor.appendChild(tdTblBtnQuitar);
+
+            bodyTblProveedor.appendChild(trTblProveedor);
+
+            /* ARRAY */
+            var div_array_reporte_Proveedor_vendedor_fecha = document.getElementById('div_array_reporte_Proveedor_vendedor_fecha');
+            var inputProveedorId = document.createElement("input");
+            inputProveedorId.setAttribute("type", "hidden");
+            inputProveedorId.setAttribute("name", "proveedor_id[]");
+            inputProveedorId.setAttribute("id", "proveedor_id_" + proveedor_id);
+            inputProveedorId.setAttribute("value", proveedor_id);
+            div_array_reporte_Proveedor_vendedor_fecha.appendChild(inputProveedorId);
+            array_proveedor_ids.push(proveedor_id);
+        } else {
+            return false;
+        }
+    }
+
+    function quitarProveedor(proveedor_id) {
+        var bodyTblProveedor = document.getElementById('bodyTblProveedor');
+        var trTblProveedor = document.getElementById("idTrTblProveedor_" + proveedor_id);
+
+        var div_array_reporte_proveedor_vendedor_fecha = document.getElementById('div_array_reporte_Proveedor_vendedor_fecha');
+        var input_proveedor_id = document.getElementById('proveedor_id_' + proveedor_id);
+
+        bodyTblProveedor.removeChild(trTblProveedor);
+        div_array_reporte_proveedor_vendedor_fecha.removeChild(input_proveedor_id);
+        var index = array_proveedor_ids.indexOf(proveedor_id);
+        array_Proveedor_ids.splice(index, 1);
+    }
+
+    /*Mostrar contenido*/
+    function mostrarReporteProducto15Dias() {
+        document.getElementById('panel_reporte_producto_15dias').style.display = 'block';
+        document.getElementById('panel_reporte_marca_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_vendedor_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_proveedor_15dias').style.display = 'none';
+    }
+
+    function mostrarReporteMarca15Dias() {
+        document.getElementById('panel_reporte_producto_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_marca_15dias').style.display = 'block';
+        document.getElementById('panel_reporte_vendedor_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_proveedor_15dias').style.display = 'none';
+    }
+
+    function mostrarReporteProveedor15Dias() {
+        document.getElementById('panel_reporte_producto_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_marca_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_vendedor_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_proveedor_15dias').style.display = 'block';
+    }
+
+    function mostrarReporteVendedor15Dias() {
+        document.getElementById('panel_reporte_producto_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_marca_15dias').style.display = 'none';
+        document.getElementById('panel_reporte_vendedor_15dias').style.display = 'block';
+        document.getElementById('panel_reporte_proveedor_15dias').style.display = 'none';
+    }
+</script>

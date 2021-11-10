@@ -1,0 +1,30 @@
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+  <div class="menu_section">
+    <ul class="nav side-menu">
+      <li style="border-bottom: 1px #AEB2B7 solid;"><a href="{url_app}/reporte/vdr_panel"><i class="fa fa-home"></i> HOME </a></li>
+      <!--BTN_MENU-->
+      <li style="border-bottom: 1px #AEB2B7 solid; border-top: 1px #AEB2B7 solid;">
+        <a>
+          <i class="fa {menu-icon}"></i>
+          {menu-denominacion} <span>{icon-plus-expand-menu}</span>
+        </a>
+        <ul class="nav child_menu">
+          <!--BTN_SUBMENU-->
+          <li class="">
+            <a href="{url_app}{submenu-url}" >
+              <i class="fa {submenu-icon}"></i>
+              <span>{submenu-denominacion} {icon-plus-expand}</span>
+            </a>
+            <ul class="nav child_menu" style="margin: 0px; padding: 0px;">
+              <!--BTN_ITEM-->
+              <li class="submenu" style="padding-bottom: 2%;"><a href="{url_app}{item-url}">{item-denominacion}</a></li>
+              <!--BTN_ITEM-->
+            </ul>
+          </li>
+          <!--BTN_SUBMENU-->
+        </ul>
+        <!--BTN_MENU-->
+      </li>
+    </ul>
+  </div>
+</div>

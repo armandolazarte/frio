@@ -1,0 +1,82 @@
+<div class="col-md-4 col-sm-12 col-xs-12">   
+  <table class="countries_list">
+    <tbody>
+      <tr>
+        <td style="font-weight: bold; text-align: center; background: #f7f4f4;" colspan="2">TOTALES IVA</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IVA 0%</td>
+        <td class="fs15 fw700 text-right">${iva_0}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IVA 2.5%</td>
+        <td class="fs15 fw700 text-right">${iva_2_5}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IVA 5%</td>
+        <td class="fs15 fw700 text-right">${iva_5}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IVA 10.5%</td>
+        <td class="fs15 fw700 text-right">${iva_10_5}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IVA 21%</td>
+        <td class="fs15 fw700 text-right">${iva_21}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IVA 27%</td>
+        <td class="fs15 fw700 text-right">${iva_27}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;"></td>
+        <td class="fs15 fw700 text-right" style="font-weight: bold;">${importe_iva}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="col-md-8 col-sm-12 col-xs-12">
+  <table class="countries_list">
+    <tbody>
+      <tr>
+        <td style="font-weight: bold; text-align: center; background: #f7f4f4;" colspan="2">CONTROLES AFIP</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">N° FACTURA</td>
+        <td class="fs15 fw700 text-right">{punto_venta}-{nueva_factura}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IMPORTE NETO GRAVADO</td>
+        <td class="fs15 fw700 text-right">${importe_neto}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IMPORTE IVA</td>
+        <td class="fs15 fw700 text-right">${importe_iva}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IMPORTE EXENTO</td>
+        <td class="fs15 fw700 text-right">${importe_exento}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IMPORTE NO GRAVADO</td>
+        <td class="fs15 fw700 text-right">${importe_nogravado}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">IMPORTE TOTAL FACTURADO</td>
+        <td class="fs15 fw700 text-right">${importe_total}</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">SUMA IMPORTES CONTROL</td>
+        <td class="fs15 fw700 text-right">${importe_control}</td>
+      </tr>
+      <tr>
+    </tbody>
+  </table>
+</div>
+<form class="form" id="formulario_facturar_afip_ajax" method="post" action="{url_app}/egreso/facturar_afip">
+  <input type="hidden" name="egreso_id" value="{egreso_id}">
+  <input type="hidden" name="tipofactura_id" value="{tipofactura_id}">
+  <input type="hidden" name="punto_venta" value="{punto_venta}">
+  <input type="hidden" name="numero_factura" value="{nueva_factura}">
+  <button type="button" class="btn btn-xs btn-danger" style="width: 100%; margin-top: 10px;" id="btn_facturar_afip_ajax" onClick="facturarAfip();"><i class="fa fa-file-text-o"></i> FACTURAR AFIP</button>
+</form>

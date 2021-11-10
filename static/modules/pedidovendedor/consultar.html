@@ -1,0 +1,80 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/pedidovendedor/panel">Panel Pedidos</a></li>
+    </ul>
+</div>
+<div class="col-md-5 col-md-5 col-sm-12 col-xs-12">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin-bottom: 10px;">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="pricing">
+                    <div class="title" style="height: 85px;">
+                        <h2>Pedido</h2>
+                        <h1>{pedidovendedor-numero_pedido}</h1>
+                    </div>
+                    <div class="x_content">
+                        <div class="">
+                            <div class="pricing_features">
+                                <ul class="list-unstyled text-left">
+                                    <li><i class="fa fa-check text-success"></i> <strong> Fecha:</strong> {pedidovendedor-fecha} - {pedidovendedor-hora}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Cliente:</strong> {cliente-razon_social} ({documentotipo-denominacion} {cliente-documento})</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Subtotal:</strong> ${pedidovendedor-subtotal}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Condición Venta:</strong> {condicionpago-denominacion}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Importe Total:</strong> ${pedidovendedor-importe_total}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Detalle:</strong> {pedidovendedor-detalle}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>
+<div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">    
+    <div class="x_panel" id="div_tbl_detalle">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle de venta</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_pedidovendedordetalle" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Descuento</th>
+                        <th>P.Unitario</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_pedidovendedordetalle}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_pedidovendedordetalle').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+</script>

@@ -1,0 +1,472 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li class="remover-breadcrumb-stock"><a href="{url_app}/stock/panel">INVENTARIO</a></li>
+    </ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top {total_facturado_class}"><i class="fa fa-minus-circle"></i> Caja diaria</span>
+            <div class="count {total_facturado_class}" style="font-size: 30px;">{total_facturado}</div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-archive green"></i> Stock valorizado con IVA</span>
+            <div class="count green" style="font-size: 30px;">${stock_valorizado}</div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-arrow-circle-o-up red"></i> Deuda cuentas clientes</span>
+            <div class="count red" style="font-size: 30px;">${deuda_cuentacorrientecliente}</div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-briefcase red"></i> Deuda cuentas proveedores</span>
+            <div class="count red" style="font-size: 30px;">${deuda_cuentacorrienteproveedor}</div>
+        </div>
+    </div>
+</div>
+<div class="col-md-9 col-sm-9 col-xs-12">
+    <div class="col-md-7 col-sm-7 col-xs-12">
+        <div class="x_panel hidden-print">
+            <div class="x_title">
+                <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Vencimiento de Boletas</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="tbl_cuentacorrienteproveedor" class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>Proveedor</th>
+                            <th>Boleta</th>
+                            <th style="display: none;">Fecha Vencimiento</th>
+                            <th>Importe</th>
+                            <th>Vencimiento</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tbl_cuentacorrienteproveedor}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-arrow-down"></i>&nbsp;&nbsp; Gastos Varios</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <canvas id="charGastos"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5 col-sm-5 col-xs-12">
+        <h2 class="page-header" style="margin: 0 0 20px;">Período: {periodo_actual}</h2>
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 0px; padding-right: 1px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; height: 100px;">
+                <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_importe_ventas_cc}</font> <br>
+                <font style="font-size: 13px;">Ventas Cta Cte</font>
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1px; padding-right: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; height: 100px;">
+                <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_importe_ventas_cont}</font> <br>
+                <font style="font-size: 13px;">Ventas Contado</font>
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 0px; padding-right: 1px;">
+            <button type="button" class="btn btn-primary" style="width: 100%; height: 100px;">
+                <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_importe_factura}</font> <br>
+                <font style="font-size: 13px;">Ventas Factura</font>
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1px; padding-right: 0px;">
+            <button type="button" class="btn btn-primary" style="width: 100%; height: 100px;">
+                <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_importe_remito}</font> <br>
+                <font style="font-size: 13px;">Ventas Remito</font>
+            </button>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+          <button type="button" class="btn btn-dark" style="width: 100%; height: 100px;">
+              <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_total_ventas}</font> <br>
+              <font style="font-size: 13px;">Total de Ventas</font>
+          </button>
+        </div>
+
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 0px; padding-right: 1px;">
+            <button type="button" class="btn btn-danger" style="width: 100%; height: 100px;">
+                <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_importe_compras_factura}</font> <br>
+                <font style="font-size: 13px;">Compras Factura</font>
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1px; padding-right: 0px;">
+            <button type="button" class="btn btn-danger" style="width: 100%; height: 100px;">
+                <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_importe_compras_remito}</font> <br>
+                <font style="font-size: 13px;">Compras Remito</font>
+            </button>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+          <button type="button" class="btn btn-danger" style="width: 100%; height: 100px;">
+              <i class="fa fa-usd" style="font-size: 20px;"></i><font style="font-size: 20px;"> {suma_total_compras}</font> <br>
+              <font style="font-size: 13px;">Total de Compras</font>
+          </button>
+        </div>
+
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+            <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                <div class="x_title" style="padding-left: 3%;">
+                    <h2><i class="fa fa-plus"></i>&nbsp;Ventas ($)</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table id="tbl_stock" class="table table-striped table-bordered">
+                        <thead>
+                            {tbl_sum_importe_producto}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+            <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                <div class="x_title" style="padding-left: 3%;">
+                    <h2><i class="fa fa-plus"></i>&nbsp;Ventas (Cant)</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <table id="tbl_stock" class="table table-striped table-bordered">
+                        <thead>
+                            {tbl_sum_cantidad_producto}
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Ventas por Cuentas <small>Semestral</small></h2>
+                <ul class="nav navbar-right panel_toolbox hidden-print">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <canvas id="mybarChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-3 col-sm-3 col-xs-12">
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Facturación diaria</h2>
+            <ul class="nav navbar-right panel_toolbox hidden-print">
+                <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Ventas Registradas</th>
+                        <th class="green">${suma_ingresos_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Notas de Crédito</th>
+                        <th class="red">${suma_notacredito_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Facturación</th>
+                        <th class="green">${total_facturacion_hoy}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Resúmen diario</h2>
+            <ul class="nav navbar-right panel_toolbox hidden-print">
+                <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_stock" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Contado</th>
+                        <th class="green">${ingreso_contado_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Pagos CC Clientes</th>
+                        <th class="green">${ingreso_cuentacorrientecliente_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Stock Valorizado</th>
+                        <th class="green">${stock_valorizado}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-minus-circle blue"></i> Deuda CC Clientes</th>
+                        <th class="blue">${deuda_cuentacorrientecliente}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Pago Comisión Vendedores</th>
+                        <th class="red">${egreso_comision_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Pagos CC Proveedores</th>
+                        <th class="red">${egreso_cuentacorrienteproveedor_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Deuda CC Proveedores</th>
+                        <th class="red">${deuda_cuentacorrienteproveedor}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar ventas</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/buscar">
+                    <div class="form-group">
+                        <label>Desde</label>
+                        <input type="date" class="form-control" id="desde" name="desde" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="hasta" name="hasta" required>
+                    </div>
+                    <div class="form-group" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="tipo_busqueda" value="1">
+                        <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-search"></i> Buscar </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel hidden-print remover-div-buscar-venta-vendedor" style="display: {display_operador};">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Ventas por vendedor</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/vendedor/ventas_vendedor">
+                    <div class="form-group">
+                        <label>Vendedor</label>
+                        <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                            {slt_vendedor}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Desde</label>
+                        <input type="date" class="form-control" id="fecha_desde" name="fecha_desde" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="fecha_HASTA" name="fecha_hasta" required>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-search"></i> Buscar </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; display: none">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Generar estadísticas</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/estadisticas">
+                        <div class="form-group col-lg-12">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <button class="btn btn-app" type="submit"> <i class="fa fa-area-chart"></i> Generar </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 1:
+                $(".remover-breadcrumb-stock").css("display","none");
+                $(".remover-div-buscar-venta-vendedor").css("display","none");
+                break;
+            case 2:
+                $(".remover-div-buscar-venta-vendedor").css("display","none");
+                break;
+        }
+    });
+
+    $(document).ready(function() {
+        $('#tbl_cuentacorrienteproveedor').dataTable( {
+            "aaSorting": [[ 2, "asc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>
+<!-- Chart.js -->
+<script src="{url_static}vendors/Chart.js/dist/Chart.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    if ($('#charVentasCondicionPago').length ){
+        var ctx = document.getElementById("charVentasCondicionPago");
+        var data = {
+            labels: [
+                "CTA CORRIENTE",
+                "CONTADO"
+            ],
+            datasets: [{
+                data: [
+                    {suma_importe_ventas_cc},
+                    {suma_importe_ventas_cont}
+                ],
+                backgroundColor: [
+                    "#455C73",
+                    "#9B59B6"
+
+                ],
+                hoverBackgroundColor: [
+                    "#34495E",
+                    "#B370CF"
+                ]
+            }]
+        };
+
+        var charVentasCondicionPago = new Chart(ctx, {
+            type: 'doughnut',
+            tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+            data: data
+        });
+    }
+
+    if ($('#charGastos').length ){
+        var ctx = document.getElementById("charGastos");
+        var data = {
+            labels: [{lbl_piechart_gasto}],
+            datasets: [{
+                data: [{valores_piechart_gasto}],
+                backgroundColor: [
+                    "#5E4EAE","#EFCB57","#F28C8F","#061E53",
+                    "#D14164","#5CB9D0","#DC5242","#499187",
+                    "#AD58B9","#798D8E","#FFC602","#0580BB",
+                    "#E74C3C","#96281B","#C8F7C5","#455C73",
+                    "#E87E04","#68C3A3","#9B59B6","#715548"
+
+                ],
+                hoverBackgroundColor: [
+                    "#3B23B3","#B39534","#C75053","#020E29",
+                    "#AB173B","#447582","#B72818","#2f615A",
+                    "#772184","#626C6D","#CCA008","#08618C",
+                    "#C63B2D","#821C12","#ACECA8","#34495E",
+                    "#F48401","#4CA486","#B370CF","#442F26"
+                ]
+            }]
+        };
+
+        var charGastos = new Chart(ctx, {
+            type: 'doughnut',
+            tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+            data: data
+        });
+    }
+
+    /* ************************************************************************* */
+
+    if ($('#mybarChart').length ){
+
+        var ctx = document.getElementById("mybarChart");
+        var mybarChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {barchart_periodo}
+                ],
+                datasets: [{
+                    label: '$ en Cta Corriente',
+                    backgroundColor: "#26B99A",
+                    data: [
+                        {barchart_sum_semestre_cc}
+                    ]
+                }, {
+                    label: '# en Contado',
+                    backgroundColor: "#03586A",
+                    data: [
+                        {barchart_sum_semestre_cont}
+                    ]
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: { beginAtZero: true }
+                    }]
+                }
+            }
+        });
+
+    }
+
+</script>

@@ -1,0 +1,226 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/egreso/listar">Panel Ventas</a></li>
+    </ul>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp; Configurar registro de venta</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/reconfigurar">
+                    <div class="col-lg-12">
+                        <div class="form-group col-lg-4">
+                            <label>Tipo Factura</label>
+                            <select class="form-control m-bot15" name="tipofactura" id="tipofactura" onChange="reConfigurarTipoFactura({egreso-egreso_id});" {egreso-tipofactura_readonly} {egreso-tipofactura_enabled}>
+                                <option value="{tipofactura-tipofactura_id}">{tipofactura-nomenclatura} - {tipofactura-denominacion}</option>
+                                {slt_tipofactura}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-8">
+                            <label>N° Factura</label>
+                            <input type="text" class="form-control" id="numero_factura" name="numero_factura" value="{egreso-punto_venta}-{egreso-numero_factura}" readonly>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Fecha</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" value="{egreso-fecha}" {egreso-tipofactura_readonly} {egreso-tipofactura_enabled} required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Descuento (%)</label>
+                            <input type="number" class="form-control" id="descuento" name="descuento" value="{egreso-descuento}" readonly>
+                        </div>
+                        <div class="form-group col-lg-6">                            
+                            <label>Condición IVA</label>
+                            <input type="text" class="form-control" id="condicioniva" name="condicioniva" value="{condicioniva-denominacion}" readonly>
+                        </div>
+                        <div class="form-group col-lg-6">                            
+                            <label>Condición Pago</label>
+                            <select class="form-control m-bot15" name="condicionpago" id="condicionpago" onChange="reConfigurarCondicionPago();" required>
+                                <option value="{condicionpago-condicionpago_id}">{condicionpago-denominacion}</option>
+                                {slt_condicionpago}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">                            
+                            <label>Cliente</label>
+                            <input type="text" class="form-control" id="cliente" name="cliente" value="{cliente-razon_social}" readonly>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Vendedor</label>
+                            <select class="form-control m-bot15" name="vendedor" id="vendedor" onChange="reConfigurarVendedor();" required>
+                                {slt_vendedor}
+                            </select>
+                            <input type="hidden" name="vendedor_id" id="vendedor_id" value="{vendedor-vendedor_id}">
+                        </div>
+                        <div class="form-group col-lg-12" align="right" id="div_array_egresos">
+                            <input type="hidden" name="egreso_id" id="egreso_id" value="{egreso-egreso_id}">
+                            <input type="hidden" name="bandera_tipofactura" id="bandera_tipofactura" value="0">
+                            <input type="hidden" name="bandera_vendedor" id="bandera_vendedor" value="0">
+                            <input type="hidden" name="bandera_condicionpago" id="bandera_condicionpago" value="0">
+                            <button type="button" class="btn btn-app" onClick="comprobarReConfiguracion();"> <i class="fa fa-cogs"></i> Reconfigurar Egreso </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">    
+    <div class="x_panel" id="div_tbl_detalle">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle de venta</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_egresodetalle" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Descuento</th>
+                        <th>P.Unitario</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_egresodetalle}
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10">
+                        <h5 id="msj_alerta_modal"></h5>
+                        <div class="form-group col-lg-12" align="right" id="div_array_egresos">
+                            <button type="button" class="btn btn-success" onClick="aceptaReConfiguracion();"> Continuar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_egresodetalle').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+
+    var bandera_tipofactura = 0;
+    var bandera_vendedor = 0;
+    var bandera_condicionpago = 0;
+    var fecha_original = document.getElementById("fecha").value;
+    var vendedor_original = {vendedor-vendedor_id};
+    var condicionpago_original = {condicionpago-condicionpago_id};
+
+    function reConfigurarCondicionPago() {
+        var condicionpago = document.getElementById("condicionpago");
+        var new_condicionpago_id = condicionpago.options[condicionpago.selectedIndex].value;
+        
+        if (condicionpago_original != new_condicionpago_id) {
+            bandera_condicionpago = 1;
+        } else {
+            bandera_condicionpago = 0;
+        }
+
+        document.getElementById('bandera_condicionpago').value = bandera_condicionpago;
+    }
+
+    function reConfigurarVendedor() {
+        var vendedor = document.getElementById("vendedor");
+        var new_vendedor_id = vendedor.options[vendedor.selectedIndex].value;
+        
+        if (vendedor_original != new_vendedor_id) {
+            bandera_vendedor = 1;
+        } else {
+            bandera_vendedor = 0;
+        }
+
+        document.getElementById('bandera_vendedor').value = bandera_vendedor;
+    }
+
+    function reConfigurarTipoFactura(egreso_id) {
+        var tipofactura = document.getElementById("tipofactura");
+        var tipofactura_id = tipofactura.options[tipofactura.selectedIndex].value;
+        var num_factura = $.ajax({
+            url: '{url_app}/egreso/traer_siguiente_numero_factura_ajax/' + tipofactura_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        if (tipofactura_id != 2) {
+            bandera_tipofactura = 1;
+            var fecha = new Date();
+            var mes = fecha.getMonth() + 1;
+            var dia = fecha.getDate();
+            var anio = fecha.getFullYear();
+            if(dia < 10)
+                dia = '0' + dia;
+            if(mes < 10)
+                mes = '0' + mes;
+            document.getElementById('fecha').value = anio + "-" + mes + "-" + dia;
+        } else {
+            bandera_tipofactura = 0;
+            document.getElementById('fecha').value = fecha_original;
+        }
+
+        document.getElementById('bandera_tipofactura').value = bandera_tipofactura;
+        document.getElementById('numero_factura').value = num_factura;
+    }
+
+    function comprobarReConfiguracion() {
+        if (bandera_tipofactura == 1) {
+            var array = new Array();
+            array.push("<strong>[ATENCIÓN]</strong> Ha modificado el tipo de factura, si continúa se emitirá a AFIP y modificará la fecha de venta a la fecha actual.");
+            var mensaje = array.join("<br><br>");
+            $('#sistema_alertas').modal('show');
+            document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+        } else {
+            document.getElementById('formulario_guardar').submit();
+        }
+    }
+
+    function aceptaReConfiguracion() {
+        document.getElementById('formulario_guardar').submit();
+    }
+</script>

@@ -1,0 +1,194 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>Recibo de Sueldo</title>
+    </head>
+    <body>
+        <table style=" width: 100%;" cellspacing="0">
+		    <tr>
+		        <td style=" width: 48%; padding-right: 15px;">
+		            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
+		                <tr style=" text-align: center; font-size: 16px; border: 1px #000 solid;">
+		                    <td style="border-bottom: 1px #000 solid;" colspan="3">RECIBO PARA EMPLEADO</td>
+		                </tr>
+		                <tr style="font-size: 12px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        Empleador: VALDEZ DISTRIBUCIONES
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 12px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        Período abonado: Desde {salario-desde} hasta {salario-hasta}
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 12px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        Fecha: {salario-fecha} {salario-hora}
+		                    </td>
+		                </tr>
+		                <tr style="height: 1px; border-top: 1px #000 solid;">
+		                    <td colspan="3"></td>
+		                </tr>
+		                <tr style="font-size: 18px; padding:5px 0 8px 0;">
+		                    <td style="width: 45%; border-top: 1px #000 solid; text-align: center; font-size: 25px; " colspan="3">
+		                        <table cellspacing="0">
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px;" colspan="2">
+		                                    Apellido y Nombre: {empleado-apellido} {empleado-nombre}
+		                                </td>
+		                            </tr>
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px;">
+		                                    Documento: {documentotipo-denominacion} {empleado-documento}
+		                                </td>
+		                            </tr>
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px;">
+		                                    Domicilio: {empleado-domicilio}
+		                                </td>
+		                            </tr>
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px; ">
+		                                    Teléfono: {empleado-telefono}
+		                                </td>
+		                            </tr>
+		                        </table>
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 18px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center; font-size: 25px; height: 150px !important; vertical-align: top;" colspan="3">
+		                        <table cellspacing="0" style="width: 100%;">
+		                            <tr style=" text-align: center; font-size: 12px;">
+		                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Detalle</td>
+		                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Tipo Pago</td>
+		                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Valor</td>
+		                            </tr>
+		                            {tbl_recibosueldo}
+		                        </table>
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+		                    <td style="width: 60%; border-top: 1px #000 solid; text-align: left; font-size: 11px;" colspan="2"></td>
+		                    <td style="width: 5%; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+		                        <strong>Total: ${salario-monto}</strong>
+		                    </td>
+		                </tr>
+		                <tr style="padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        <table cellspacing="0" style="width: 100%;">
+		                        	<tr style="font-size: 13px; padding:5px 0 8px 0;">
+					                    <td style="width: 45%; border-top: 1px #000 solid; text-align: center; font-size: 11px; height: 50px !important; vertical-align: bottom;">
+					                    	..................................
+					                    </td>
+					                    <td style="width: 45%; border-top: 1px #000 solid; text-align: center; font-size: 11px; height: 50px !important; vertical-align: bottom;">
+					                        ..................................
+					                    </td>
+					                </tr>
+					                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+					                    <td style="width: 45%; text-align: center; font-size: 11px;">
+					                    	{empleado-apellido} {empleado-nombre}
+					                    </td>
+					                    <td style="width: 45%; text-align: center; font-size: 11px;">
+					                        Empleador
+					                    </td>
+					                </tr>
+		                        </table>
+		                    </td>
+		                </tr>
+		            </table>
+		        </td>
+		        <td style=" width: 48%; padding-right: 15px;">
+		            <table style="border: 1px #000 solid; ; width: 100% !important;" cellspacing="1">
+		                <tr style=" text-align: center; font-size: 16px; border: 1px #000 solid;">
+		                    <td style="border-bottom: 1px #000 solid;" colspan="3">RECIBO PARA EMPLEADOR</td>
+		                </tr>
+		                <tr style="font-size: 12px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        Empleador: VALDEZ DISTRIBUCIONES
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 12px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        Período abonado: Desde {salario-desde} hasta {salario-hasta}
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 12px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        Fecha: {salario-fecha} {salario-hora}
+		                    </td>
+		                </tr>
+		                <tr style="height: 1px; border-top: 1px #000 solid;">
+		                    <td colspan="3"></td>
+		                </tr>
+		                <tr style="font-size: 18px; padding:5px 0 8px 0;">
+		                    <td style="width: 45%; border-top: 1px #000 solid; text-align: center; font-size: 25px; " colspan="3">
+		                        <table cellspacing="0">
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px;" colspan="2">
+		                                    Apellido y Nombre: {empleado-apellido} {empleado-nombre}
+		                                </td>
+		                            </tr>
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px;">
+		                                    Documento: {documentotipo-denominacion} {empleado-documento}
+		                                </td>
+		                            </tr>
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px;">
+		                                    Domicilio: {empleado-domicilio}
+		                                </td>
+		                            </tr>
+		                            <tr style=" text-align: center; font-size: 16px;">
+		                                <td style="width: 90%; text-align: left; font-size: 15px; ">
+		                                    Teléfono: {empleado-telefono}
+		                                </td>
+		                            </tr>
+		                        </table>
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 18px; padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center; font-size: 25px; height: 150px !important; vertical-align: top;" colspan="3">
+		                        <table cellspacing="0" style="width: 100%;">
+		                            <tr style=" text-align: center; font-size: 12px;">
+		                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Detalle</td>
+		                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Tipo Pago</td>
+		                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Valor</td>
+		                            </tr>
+		                            {tbl_recibosueldo}
+		                        </table>
+		                    </td>
+		                </tr>
+		                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+		                    <td style="width: 60%; border-top: 1px #000 solid; text-align: left; font-size: 11px;" colspan="2"></td>
+		                    <td style="width: 5%; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+		                        <strong>Total: ${salario-monto}</strong>
+		                    </td>
+		                </tr>
+		                <tr style="padding:5px 0 8px 0;">
+		                    <td style="width: 100%; text-align: center;" colspan="3">
+		                        <table cellspacing="0" style="width: 100%;">
+		                        	<tr style="font-size: 13px; padding:5px 0 8px 0;">
+					                    <td style="width: 45%; border-top: 1px #000 solid; text-align: center; font-size: 11px; height: 50px !important; vertical-align: bottom;">
+					                    	..................................
+					                    </td>
+					                    <td style="width: 45%; border-top: 1px #000 solid; text-align: center; font-size: 11px; height: 50px !important; vertical-align: bottom;">
+					                        ..................................
+					                    </td>
+					                </tr>
+					                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+					                    <td style="width: 45%; text-align: center; font-size: 11px;">
+					                    	{empleado-apellido} {empleado-nombre}
+					                    </td>
+					                    <td style="width: 45%; text-align: center; font-size: 11px;">
+					                        Empleador
+					                    </td>
+					                </tr>
+		                        </table>
+		                    </td>
+		                </tr>
+		            </table>
+		        </td>
+		    </tr>
+		</table>
+    </body>
+</html>

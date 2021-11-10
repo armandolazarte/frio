@@ -1,0 +1,234 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+  <ul class="breadcrumb">
+    <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+    <li><a href="{url_app}/{objeto}/panel">Panel Entregas Pendientes</a></li>
+  </ul>
+</div>
+<form class="form" id="formulario_guardar" name="f1" method="post" action="{url_app}/hojaruta/cerrar_toda_hojaruta">
+  <div  id="div_contenido">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="animated flipInY col-lg-2 col-md-2 col-sm-12 col-xs-12">
+        <div class="x_content tile-stats">
+          <div class="form">
+            <div class="form-group col-lg-12">
+              <a class="btn btn-xs btn-dark" style="width: 100%; height: 60px; font-size: 16px;"  href="{url_app}/egreso/reimprimir_hoja_ruta_flete/{hojaruta-hojaruta_id}" title="Reimprimir hoja de ruta"><b><i class="fa fa-file-pdf-o"></i> Descargar <br>Hoja de Ruta</b></a>
+            </div>
+          </div>
+        </div>
+        <div class="x_content tile-stats">
+          <div class="form">
+            <div class="form-group col-lg-12">
+              <a class="btn btn-xs btn-warning" style="width: 100%; height: 60px; font-size: 16px;"  href="{url_app}/hojaruta/editar_hojaruta/{hojaruta-hojaruta_id}@1" title="Agregar factura a hoja de ruta"><b><i class="fa fa-plus"></i> AGREGAR FACTURA A <br>HOJA DE RUTA </b></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="animated flipInY col-lg-4 col-md-4 col-sm-12 col-xs-12">
+        <div class="x_content tile-stats">
+          <div class="form">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 10px; display: {display-alert-cobrador};">
+              <div class="alert alert-danger alert-dismissible " role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <strong>Atención!</strong> Es necesario seleccionar quien entrega el dinero!
+              </div>
+            </div>
+            <div class="form-group col-lg-12">
+              <div class="form-group col-lg-12">
+                {slt_cobrador}
+              </div>
+              <input type="hidden" name="hojaruta_id" value="{hojaruta-hojaruta_id}">
+              <button onclick="enviar();"  id="btnEnviar" class="btn btn-xs btn-danger" style="width: 100%; font-size: 14px;" type="submit"> <i class="fa fa-check"></i> CERRAR HOJA DE RUTA </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="animated flipInY col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="tile-stats" style="padding-top: 20px; padding-bottom: 20px">
+          <div class="icon" style="padding-top: 20px; padding-right: 35px;"><i class="fa fa-money"></i></div>
+          <div class="count blue" id="txt_total" style="font-size: 30px;">${monto_total}</div>
+          <h3>Cobranza Total</h3>
+          <p>Suma de cobros</p>
+        </div>
+      </div>
+      <div class="animated flipInY col-lg-3 col-md-3 col-sm-12 col-xs-12">
+        <div class="tile-stats" style="padding: 20px 5px 20px 5px;">
+          <div class="icon" style="padding-top: 20px; padding-right: 35px;"><i class="fa fa-money"></i></div>
+          <div class="count blue" style="font-size: 30px;"><input id="total" type="text" placeholder="0.00" style="border: 0; width: 70%;"/></div>
+          <h3>Total Facturado</h3>
+          <button onclick="calcular();" class="btn btn-xs btn-success" style="width: 100%; font-size: 14px;" > <i class="fa fa-check"></i> Calcular </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+        <div class="x_title">
+          <ul class="nav navbar-right panel_toolbox">
+            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+            <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+          </ul>
+          <div class="clearfix"><h2><i class="fa fa-search"></i>&nbsp;&nbsp; Confirmar Entregas - <strong>Flete: {flete}</strong></h2></div>
+        </div>
+        <div class="x_content">
+          <table id="tbl_cobranza" class="table table-striped table-bordered bulk_action">
+            <thead>
+              <tr style="font-size: 12px;">
+                <th>Nº FACTURA</th>
+                <th>CLIENTE</th>
+                <th>FECHA</th>
+                <th>MONTO</th>
+                <th>ESTADO</th>
+                <th>PAGO</th>
+                <th>
+                  <div style="float: right;">
+                    <a name="marcar_todo" id="marcar_todo" href="javascript:seleccionar_todo()" title="Marcar Todo">Seleccionar Todo <i class="fa fa-check" aria-hidden="true"></i></a>
+                    <a name="desmarcar_todo" id="desmarcar_todo" href="javascript:deseleccionar_todo()" title="Desmarcar Todo" style="display: none;">Desmarcar Todo <i class="fa fa-times" aria-hidden="true"></i></a>
+                  <div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {tbl_entregas}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</form>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alerta_editar_cobranza">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="display: none;" id="div_editar_cobranza"></div>
+        <br><br><br><br><br>
+        <br><br><br><br><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas_cobranza">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+      </div>
+      <div class="modal-body">
+        <div class="col-lg-12">
+          <div class="col-lg-2">
+            <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+          </div>
+          <div class="col-lg-10"><h5 id="msj_alerta_modal"></h5></div>
+        </div>
+        <br><br><br><br><br>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function calcular() {
+    document.getElementById("cobrador").value = '';
+    var tot = $('#total');
+    tot.val(0);
+    $('.mis-checkboxes').each(function() {
+      if($(this).hasClass('mis-checkboxes')) {
+        tot.val(($(this).is(':checked') ? parseFloat($(this).attr('tu-attr-precio')) : 0) + parseFloat(tot.val()));
+      } else {
+        tot.val(parseFloat(tot.val()) + (isNaN(parseFloat($(this).val())) ? 0 : parseFloat($(this).val())));
+      }
+    });
+
+    $('.mis-adicionales').each(function() {
+      if($(this).val().length == 0) {
+        console.log('vacio');
+      } else {
+        tot.val(parseFloat(tot.val()) + (isNaN(parseFloat($(this).val())) ? 0 : parseFloat($(this).val())));
+        tot.val(parseFloat(tot.val()) - parseFloat($(this).attr('tu-attr-precio')));
+      }
+    });
+
+    var totalParts = parseFloat(tot.val()).toFixed(2).split('.');
+    tot.val('$' + totalParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '.' +  (totalParts.length > 1 ? totalParts[1] : '00'));
+  }
+</script>
+<script type="text/javascript" charset="utf-8">
+  function enviar() {
+    var cobrador = document.getElementById("cobrador").value;
+    if (cobrador === null || cobrador === "" || cobrador.length == 0 || cobrador == 0) {
+      document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> Por favor seleccione Cobrador.";
+      $('#sistema_alertas_cobranza').modal('show');
+    } else {
+      document.getElementById("formulario_guardar").submit();
+    }
+  }
+
+  function showInp(egreso_id) {
+    getSelectValue = document.getElementById("egreso_pagoentrega["+egreso_id+"]").value;
+    egreso_abonado = document.getElementById("egreso_abonado["+egreso_id+"]").getAttribute('tu-attr-precio');
+    monto = document.getElementById("egreso_abonado["+egreso_id+"]").getAttribute('tu-attr-precio');
+    var total = $('#total');
+    if(getSelectValue=="1"){
+      document.getElementById("monto_parcial["+egreso_id+"]").style.display = "inline-block";
+    } else {
+      document.getElementById("monto_parcial["+egreso_id+"]").style.display = "none";
+    }
+  }
+
+  function seleccionar_todo() {
+    document.getElementById("marcar_todo").style.display = "none";
+    document.getElementById("desmarcar_todo").style.display = "block";
+
+    for (i=0;i<document.f1.elements.length;i++)
+      if(document.f1.elements[i].type == "checkbox")
+        document.f1.elements[i].checked=1
+        $(".checkboxtext").text("Abonar");
+  }
+
+  function deseleccionar_todo() {
+    document.getElementById("marcar_todo").style.display = "block";
+    document.getElementById("desmarcar_todo").style.display = "none";
+
+    for (i=0;i<document.f1.elements.length;i++)
+      if(document.f1.elements[i].type == "checkbox")
+        document.f1.elements[i].checked=0
+        $(".checkboxtext").text("Debe");
+  }
+
+  $('input[type=checkbox]').on('change', function() {
+    var classname = $(this).prop("name").replace("[", '');
+    classname = classname.replace("]", '');
+    if ($(this).is(':checked') ) {
+      $("p.checkboxtext."+classname).text("Abonar");
+    } else {
+      $("p.checkboxtext."+classname).text("Debe");
+    }
+  });
+</script>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_cobranza').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":100
+        } );
+    } );
+</script>

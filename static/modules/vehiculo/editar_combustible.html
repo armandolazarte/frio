@@ -1,0 +1,105 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/panel">Panel Vehículos</a></li>
+    </ul>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="pricing">
+                <div class="title">
+                    <h2>{vehiculo-denominacion}</h2>
+                    <h1>{vehiculomarca-denominacion} {vehiculomodelo-denominacion}</h1>
+                </div>
+                <div class="x_content">
+                    <div class="pricing_features">
+                        <ul class="list-unstyled text-left">
+                            <li><i class="fa fa-check text-success"></i> <strong> Dominio:</strong> {vehiculo-dominio}</li>
+                            <li><i class="fa fa-check text-success"></i> <strong> Combustible:</strong> {combustible-denominacion}</li>
+                            <li><i class="fa fa-check text-success"></i> <strong> Año:</strong> {vehiculo-anio}</li>
+                            <li><i class="fa fa-check text-success"></i> <strong> Observación:</strong> {vehiculo-detalle}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Cargar combustible</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/vehiculo/actualizar_combustible">
+                    <div class="form-group col-lg-4">
+                        <label>Cantidad (Lts)</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" value="{vehiculocombustible-cantidad}" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Importe ($)</label>
+                        <input type="number" class="form-control" id="importe" name="importe" value="{vehiculocombustible-importe}" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Fecha</label>
+                        <input type="date" class="form-control" id="fecha" name="fecha" value="{vehiculocombustible-fecha}" required>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="vehiculo_id" value="{vehiculo-vehiculo_id}" required>
+                        <input type="hidden" name="vehiculocombustible_id" value="{vehiculocombustible-vehiculocombustible_id}" required>
+                        <a href="#" class="btn btn-app" onclick="confirma_formulario(2, '')"> <i class="fa fa-edit"></i> Editar </a>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Cargas del mes</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_vehiculocombustible" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>Fecha</th>
+                        <th>Litros</th>
+                        <th>Importe</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_vehiculocombustible}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_vehiculocombustible').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>

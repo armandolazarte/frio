@@ -1,0 +1,101 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb hidden-print">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/egreso/listar">Panel Ventas</a></li>
+        <li><a href="{url_app}/egreso/entregas_pendientes">Entregas Pendientes</a></li>
+    </ul>
+</div>
+<div class="col-md-3 col-sm-3 col-xs-12 hidden-print">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="pricing">
+                <div class="title">
+                    <h2>Flete</h2>
+                    <h1>{flete-denominacion}</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> <strong> Documento:</strong> {documentotipo-denominacion} {flete-documento}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Localidad:</strong> {flete-localidad}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Domicilio:</strong> {flete-domicilio}</li>
+                                {lst_infocontacto}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar entregas por flete</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <!--LST_FLETE-->
+                <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/flete_entregas_pendientes/{flete-flete_id}'">
+                    <i class="fa fa-user"></i> {flete-denominacion}
+                </button>
+                <!--LST_FLETE-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-9 col-sm-9 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Pendientes de entrega</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="hidden-print" onClick="print();"><i class="fa fa-print"></i></a></li>
+                <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Comprobante</th>
+                        <th>Cliente</th>
+                        <th>Barrio</th>
+                        <th>Domicilio</th>
+                        <th class="hidden-print">CPago</th>
+                        <th class="hidden-print">Entrega</th>
+                        <th class="hidden-print">I. Total</th>
+                        <th class="hidden-print"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_entregaspendientes}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_egreso').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>

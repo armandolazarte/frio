@@ -1,0 +1,76 @@
+<table style=" width: 100%;" cellspacing="0">
+    <tr style=" width: 100%;">
+        <td style=" width: 100%; padding-right: 5px;">
+            <table cellspacing="1" style=" width: 100%;">
+                <tr style=" text-align: center; font-size: 14px; border: 1px #000 solid;">
+                    <td style="border-bottom: 1px #000 solid; text-align: left;" colspan="3">Pago de Comisión</td>
+                </tr>
+                <tr style=" text-align: center; font-size: 14px; border: 1px #000 solid;">
+                    <td style="border-bottom: 1px #000 solid; text-align: left;" colspan="3">Vendedor: {vendedor-apellido} {vendedor-nombre}</td>
+                </tr>
+                <tr style=" text-align: center; font-size: 14px; border: 1px #000 solid;">
+                    <td style="border-bottom: 1px #000 solid; text-align: left;" colspan="3">Fecha Pago: {fecha}</td>
+                </tr>
+                <tr style="height: 1px; border: 1px #000 solid; width: 100%;">
+                    <td colspan="3"></td>
+                </tr>
+                <tr style="height: 5px; width: 100%;">
+                    <td colspan="3"></td>
+                </tr>
+                <tr style="font-size: 14px; padding:5px 0 8px 0; width: 100%;">
+                    <td style="width: 100%; text-align: center; font-size: 25px; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100%;">
+                            <tr style=" text-align: center; font-size: 12px; width: 100%;">
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">TIPO PAGO</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">FACTURA</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">IMP TOTAL</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">COMISIÓN ABONADA</td>
+                            </tr>
+                            {tbl_pago_egresocomision}
+                        </table>
+                    </td>
+                </tr>
+                <tr style="width: 100%;">
+                    <td colspan="3" style="height: 20px;"></td>
+                </tr>
+                <tr style=" text-align: center; font-size: 14px; border: 1px #000 solid;">
+                    <td style="border-bottom: 1px #000 solid; text-align: right;" colspan="3">Ventas Realizadas</td>
+                </tr>
+                <tr style=" text-align: center; font-size: 16px;">
+                    <td style="width: 100%; text-align: center; font-size: 25px; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100%;">
+                            <tr style=" text-align: center; font-size: 16px; width: 100%;">
+                                <td style="border: none;"></td>
+                                <td style="border: none;"></td>
+                                <td style="border: 1px #000 solid; width: 45%; text-align: right;">CONTADO: ${cant_contado}</td>
+                            </tr>
+                            <tr style=" text-align: center; font-size: 16px; width: 100%;">
+                                <td style="border: none; width: 45%; text-align: left;"></td>
+                                <td style="border: none; width: 10%;"></td>
+                                <td style="border: 1px #000 solid; width: 45%; text-align: right;">CUENTA CORRIENTE: ${cant_cuentacorriente}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="width: 100%;">
+                    <td style="height: 20px;" colspan="3"></td>
+                </tr>
+                <tr style=" text-align: center; font-size: 14px; border: 1px #000 solid;">
+                    <td style="border-bottom: 1px #000 solid; text-align: right;" colspan="3">Comisión Abonada</td>
+                </tr>
+                <tr style=" text-align: center; font-size: 16px;">
+                    <td style="width: 100%; text-align: center; font-size: 25px; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100%;">
+                            <tr style=" text-align: center; font-size: 16px; width: 100%;">
+                                <td style="border: none;"></td>
+                                <td style="border: none;"></td>
+                                <td style="border: 1px #000 solid; width: 45%; text-align: right;">COMISIÓN: ${cant_comision}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        
+    </tr>
+</table>

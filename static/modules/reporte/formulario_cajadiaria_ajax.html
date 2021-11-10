@@ -1,0 +1,13 @@
+<div class="x_content">
+    <div class=" form">
+        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/cerrar_cajadiaria">
+            <div class="form-group col-lg-12">
+                <label>Caja Diaria</label>
+                <input type="text" class="form-control" id="caja" name="caja" value="{cajadiaria-caja}" {caja_enabled} required>
+            </div>
+            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                <button class="btn btn-xs btn-primary" type="submit" style="width: 100%" {btn_enabled}> <i class="fa fa-money"></i> Cerrar Caja </button>
+            </div>
+        </form>
+    </div>    
+</div>

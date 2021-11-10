@@ -1,0 +1,41 @@
+<!--TBL_FORM_ENTREGA-->
+<tr style="font-size: 12px;">
+    <th>
+      <i class="fa fa-arrow-circle-up blue"></i> &nbsp;&nbsp; <a href="{url_app}/egreso/consultar/{formulario-egreso_id}" target="_blank" title="Ver Factura"> {formulario-factura} <br>TP: {formulario-txt_tipopago_msj}
+      <a class="btn btn-xs btn-info" target="_blank" href="{url_app}/egreso/consultar/{formulario-egreso_id}"><i class="fa fa-file-text-o"></i></a>
+    </th>
+    <th>
+        {formulario-cliente}
+    </th>
+    <th>
+        {formulario-fecha}
+    </th>
+    <th>
+        <span class="label label-danger" style="font-size: 13px;" id="column_price_siniva_{formulario-egreso_id}">$ {formulario-monto}</span>    
+    </th>
+    <th class="blue">
+        <select class="form-control col-lg-3" name="egreso_estadoentrega[{formulario-egreso_id}]" required>
+            <option value="4" selected>ENTREGADO</option>
+            <option value="2">PENDIENTE</option>
+        </select>
+    </th>
+    <th>
+      <select class="form-control col-lg-3" name="egreso_pagoentrega[{formulario-egreso_id}]" id="egreso_pagoentrega[{formulario-egreso_id}]" onchange="showInp({formulario-egreso_id})" required>
+          <option value="4" selected>TOTAL</option>
+          <option value="1">PARCIAL</option>
+      </select>
+      <br/>
+      <input class="form-control mis-adicionales col-lg-3" id="monto_parcial[{formulario-egreso_id}]" name="monto_parcial[{formulario-egreso_id}]" tu-attr-precio="{formulario-monto}" type="text" style="display: none" placeholder="Ingresar Pago Parcial"/>
+    </th>
+    <th class="blue">
+        <h4>
+        <label class="checkbox" style="display: {formulario-chk_abonado_display}">
+          <input type="checkbox" name="egreso_abonado[{formulario-egreso_id}]" id="egreso_abonado[{formulario-egreso_id}]"  class="mis-checkboxes"  tu-attr-precio="{formulario-monto}" value="1" {formulario-chk_abonado_check}>
+          <span class="checkbox__icon"></span>
+          <p class="checkboxtext egreso_abonado{formulario-egreso_id}">{formulario-chk_abonado_msj}</p>
+        </label>
+        </h4>
+        <p style="display: {formulario-txt_abonado_display};"> {formulario-txt_abonado_msj} <p/>
+    </th>
+</tr>
+<!--TBL_FORM_ENTREGA-->

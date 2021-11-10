@@ -1,0 +1,301 @@
+<div class="col-lg-12">
+    <ul class="breadcrumb hidden-print">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/egreso/listar">Panel Ventas</a></li>
+    </ul>
+</div>
+<div class="col-md-9 col-sm-9 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Pendientes de entrega</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a href="{url_app}/egreso/entregas_pendientes/1"><i class="fa fa-retweet" style="color: #31B404;"></i></a></li>
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="table-responsive">
+                <form class="form" id="formulario_guardar" method="post">
+                    <table id="tabla" class="table table-striped jambo_table bulk_action">
+                        <thead>
+                            <tr class="headings">
+                                <th>
+                                    <input type="checkbox" id="check-all" class="flat">
+                                </th>
+                                <th class="column-title">Fecha </th>
+                                <th class="column-title">Comprobante </th>
+                                <th class="column-title">Cliente </th>
+                                <th class="column-title">Flete </th>
+                                <th class="column-title">CPago </th>
+                                <th class="column-title">Entrega </th>
+                                <th class="column-title">I. Total </th>
+                                <th class="column-title"></th>
+                                <th class="bulk-actions" colspan="10">
+                                    <a class="antoo" style="color:#fff; font-weight:500;">Acción grupales ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                </th>
+                            </tr>
+                            <tr>
+                            <td colspan="9">
+                              <input id="buscar" type="text" class="form-control" placeholder="Buscar Flete" />
+                            </td>
+                        </thead>
+                        <tbody>
+                            {tbl_entregaspendientes}
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="flete_id" id="flete_id" value="0">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-3 col-sm-3 col-xs-12 hidden-print">
+    <button type="button" class="btn btn-success" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/hojaruta/panel'">
+        <i class="fa fa-eye"></i> VER HOJAS DE RUTA
+    </button>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Confeccionar entrega</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="form-group">
+                    <label>Flete</label>
+                    <select class="form-control m-bot15" name="flete" id="flete" required>
+                        {slt_flete}
+                    </select>
+                </div>
+                <label><small>Recuerde seleccionar al menos un egreso de la lista de pendientes!</small></label>
+                <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="armarHojaRuta();">
+                    <i class="fa fa-download"></i> DESCARGAR RUTA ENTREGA
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Confirmar entrega/s</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <label><small>Recuerde seleccionar al menos un egreso de la lista de pendientes!</small></label>
+                <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="confirmarEntregas();">
+                    <i class="fa fa-download"></i> CONFIRMAR ENTREGA/S
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar entregas por flete</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                {lst_btn_flete}
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar hojas de ruta</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/hojaruta/filtro_hojas_rutas">
+                    <div class="form-group col-lg-12">
+                        <label>Desde</label>
+                        <input type="date" class="form-control" id="desde" name="desde" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="hasta" name="hasta" required>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="tipo_busqueda" value="1">
+                        <button class="btn btn-xs btn-dark" style="width: 100%;" type="submit"> <i class="fa fa-search"></i> Buscar </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10"><h5 id="msj_alerta_modal"></h5></div>
+                    <div class="col-lg-10 col-lg-offset-2">
+                        <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: {display_btn}" onClick="location.href='{url_app}/egreso/entregas_pendientes/1'">
+                            <i class="fa fa-user"></i> {flete-denominacion}
+                        </button>
+                    </div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas_argumento">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10"><h5 id="msj_alerta_modal">{txt_modal}</h5></div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    document.querySelector("#buscar").onkeyup = function(){
+        $TableFilter("#tabla", this.value);
+    }
+
+    $TableFilter = function(id, value){
+        var rows = document.querySelectorAll(id + ' tbody tr');
+        for(var i = 0; i < rows.length; i++){
+            var showRow = false;
+            var row = rows[i];
+            row.style.display = 'none';
+
+            for(var x = 0; x < row.childElementCount; x++){
+                if(row.children[x].textContent.toLowerCase().indexOf(value.toLowerCase().trim()) > -1){
+                    showRow = true;
+                    break;
+                }
+            }
+
+            if(showRow) row.style.display = null;
+        }
+    }
+    $('#sistema_alertas_argumento').modal('{display_modal}');
+
+    function armarHojaRuta() {
+        var array = new Array();
+        var flag_array = 0;
+
+        var flete = document.getElementById("flete");
+        var flete_id = flete.options[flete.selectedIndex].value;
+        if (flete_id == null || flete_id.length == 0 || flete_id == "" || flete_id == 0) {
+            flag_array = 1;
+            array.push("<strong>[ERROR]</strong> Por favor seleccione un FLETE.");
+        } else {
+            document.getElementById('flete_id').value = flete_id;
+        }
+
+        if (flag_array == 0) {
+            var form = document.getElementById('formulario_guardar');
+            form.action = "{url_app}/egreso/descargar_hoja_ruta_flete";
+            document.getElementById("formulario_guardar").submit();
+        } else {
+            var mensaje = array.join("<br><br>");
+            $('#sistema_alertas').modal('show');
+            document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+        }
+    }
+
+    function confirmarEntregas() {
+        var form = document.getElementById('formulario_guardar');
+        form.action = "{url_app}/egreso/confirmar_entregas";
+        document.getElementById("formulario_guardar").submit();
+    }
+</script>
+<script>
+
+    // Table
+    $('table input').on('ifChecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().addClass('selected');
+        countChecked();
+    });
+    $('table input').on('ifUnchecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().removeClass('selected');
+        countChecked();
+    });
+
+    var checkState = '';
+
+    $('.bulk_action input').on('ifChecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().addClass('selected');
+        countChecked();
+    });
+    $('.bulk_action input').on('ifUnchecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().removeClass('selected');
+        countChecked();
+    });
+    $('.bulk_action input#check-all').on('ifChecked', function () {
+        checkState = 'all';
+        countChecked();
+    });
+    $('.bulk_action input#check-all').on('ifUnchecked', function () {
+        checkState = 'none';
+        countChecked();
+    });
+
+    function countChecked() {
+        if (checkState === 'all') {
+            $(".bulk_action input[name='objeto[]']").iCheck('check');
+        }
+        if (checkState === 'none') {
+            $(".bulk_action input[name='objeto[]']").iCheck('uncheck');
+        }
+
+        var checkCount = $(".bulk_action input[name='objeto[]']:checked").length;
+
+        if (checkCount) {
+            $('.column-title').hide();
+            $('.bulk-actions').show();
+            $('.action-cnt').html(checkCount + ' Filas seleccionadas');
+        } else {
+            $('.column-title').show();
+            $('.bulk-actions').hide();
+        }
+    }
+</script>

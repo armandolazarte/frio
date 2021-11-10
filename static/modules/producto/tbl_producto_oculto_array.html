@@ -1,0 +1,21 @@
+<!--TBL_PRODUCTO-->
+<tr style="font-size: 12px;">
+    <td>CODIGO</td>
+    <td>CATEGORIA</td>
+    <td>DENOMINACION</td>
+    <td>$COSTO</td>
+    <!--<td>$CD (DESCUENTO%)</td>-->
+    <td>$COIV (IVA%)</td>
+    <td>$COFLE (FLETE%)</td>    
+    <td>$VALOR_VENTA (GANANCIA%)</td>
+    <!-- <td>STMINIMO</td>
+    <td>STIDEAL</td> -->
+    <td>
+        <center>
+            <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/producto/editar/PRODUCTO_ID');" title="Editar producto"><i class="fa fa-edit"></i></button>
+            <button class="btn btn-dark btn-xs" onclick="location.href='{url_app}/producto/consultar/PRODUCTO_ID';" title="Consultar producto"><i class="fa fa-eye"></i></button>
+            <button class="btn btn-success btn-xs" onclick="confirma_formulario(3, '{url_app}/producto/activar/PRODUCTO_ID');" title="Activar producto"><i class="fa fa-check"></i></button>
+        </center>
+    </td>
+</tr>
+<!--TBL_PRODUCTO-->

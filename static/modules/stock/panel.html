@@ -1,0 +1,226 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/stock/panel">INVENTARIO</a></li>
+    </ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top {total_facturado_class}"><i class="fa fa-minus-circle"></i> Caja diaria: {fecha_sys}</span>
+            <div class="count {total_facturado_class}" style="font-size: 30px;">{total_facturado}</div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-archive green"></i> Stock valorizado</span>
+            <div class="count green" style="font-size: 30px;">${stock_valorizado}</div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-arrow-circle-o-up red"></i> Deuda cuentas clientes</span>
+            <div class="count red" style="font-size: 30px;">${deuda_cuentacorrientecliente}</div>
+        </div>
+        <div class="col-md-3 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-briefcase red"></i> Deuda cuentas proveedores</span>
+            <div class="count red" style="font-size: 30px;">${deuda_cuentacorrienteproveedor}</div>
+        </div>
+    </div>
+</div>
+<div class="col-md-9 col-sm-9 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Inventario</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_stock" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Marca</th>
+                        <th>Producto</th>
+                        <th>SM-SI</th>
+                        <th>SOTCK</th>
+                        <th>$</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_stock}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-3 col-sm-3 col-xs-12">
+    <div class="col-md-6 col-sm-6 col-xs-12 remover-btn-registrar-ingreso" style="padding-left: 0px;">
+        <button type="button" class="btn btn-dark" style="width: 100%; height: 100px;" onClick="location.href='{url_app}/ingreso/ingresar'">
+            <i class="fa fa-level-up" style="font-size: 20px;"></i> <br> <font style="font-size: 13px;">Registrar<br> Ingreso</font>
+        </button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 remover-btn-registrar-venta" style="padding-right: 0px;">
+        <button type="button" class="btn btn-dark" style="width: 100%; height: 100px;" onClick="location.href='{url_app}/egreso/egresar'">
+            <i class="fa fa-usd" style="font-size: 20px;"></i> <br> <font style="font-size: 13px;">Registrar<br> Venta</font>
+        </button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 0px;">
+        <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/ingreso/listar'">
+            <i class="fa fa-table"></i> Listar ingresos
+        </button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12" style="padding-right: 0px;">
+        <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/listar'">
+            <i class="fa fa-table"></i> Listar egresos
+        </button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 remover-btn-lista-precio" style="padding-left: 0px;">
+        <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/productos/buscar_lista_precio'">
+            <i class="fa fa-table"></i> <i class="fa fa-usd"></i> Lista de precios
+        </button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-xs-12 remover-btn-ajustar-stock" style="padding-right: 0px;">
+        <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/stock/ajustar_stock'">
+            <i class="fa fa-cogs"></i> Ajustar stock
+        </button>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+        <button type="button" class="btn btn-danger" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/entregas_pendientes'">
+            <i class="fa fa-truck"></i> Entregas Pendientes
+        </button>
+    </div>
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Resúmen diario: {fecha_sys}</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_stock" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Contado</th>
+                        <th class="green">${ingreso_contado_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Pagos CC Clientes</th>
+                        <th class="green">${ingreso_cuentacorrientecliente_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-up green"></i> Stock Valorizado</th>
+                        <th class="green">${stock_valorizado}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-minus-circle blue"></i> Deuda CC Clientes</th>
+                        <th class="blue">${deuda_cuentacorrientecliente}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Pago Comisión Vendedores</th>
+                        <th class="red">${egreso_comision_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Pagos CC Proveedores</th>
+                        <th class="red">${egreso_cuentacorrienteproveedor_hoy}</th>
+                    </tr>
+                    <tr style="font-size: 12px;">
+                        <th><i class="fa fa-arrow-circle-down red"></i> Deuda CC Proveedores</th>
+                        <th class="red">${deuda_cuentacorrienteproveedor}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar ventas</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/buscar">
+                    <div class="form-group col-lg-12">
+                        <label>Desde</label>
+                        <input type="date" class="form-control" id="desde" name="desde" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Hasta</label>
+                        <input type="date" class="form-control" id="hasta" name="hasta" required>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="tipo_busqueda" value="1">
+                        <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-search"></i> Buscar </button>
+                    </div>
+                </form>
+            </div>    
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; display: none">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Generar estadísticas</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/estadisticas">
+                        <div class="form-group col-lg-12">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <button class="btn btn-app" type="submit"> <i class="fa fa-area-chart"></i> Generar </button>
+                        </div>
+                    </form>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 1:
+                $(".remover-breadcrumb-stock").css("display","none");
+                break;
+            case 2:
+                $(".remover-btn-registrar-ingreso").css("display","none");
+                $(".remover-btn-registrar-venta").css("display","none");
+                $(".remover-btn-lista-precio").css("display","none");
+                $(".remover-btn-ajustar-stock").css("display","none");
+                break;
+        }
+    });
+
+    $(document).ready(function() {
+        $('#tbl_stock').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":20
+        } );
+    } );
+</script>

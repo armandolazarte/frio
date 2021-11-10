@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<loginTicketResponse version="1.0">
+    <header>
+        <source>CN=wsaahomo, O=AFIP, C=AR, SERIALNUMBER=CUIT 33693450239</source>
+        <destination>SERIALNUMBER=CUIT 20280565424, CN=frovira</destination>
+        <uniqueId>1838518616</uniqueId>
+        <generationTime>2018-11-30T20:17:15.427-03:00</generationTime>
+        <expirationTime>2018-12-01T08:17:15.427-03:00</expirationTime>
+    </header>
+    <credentials>
+        <token>PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/Pgo8c3NvIHZlcnNpb249IjIuMCI+CiAgICA8aWQgc3JjPSJDTj13c2FhaG9tbywgTz1BRklQLCBDPUFSLCBTRVJJQUxOVU1CRVI9Q1VJVCAzMzY5MzQ1MDIzOSIgZHN0PSJDTj13c2ZlLCBPPUFGSVAsIEM9QVIiIHVuaXF1ZV9pZD0iNTA1NDg3MzciIGdlbl90aW1lPSIxNTQzNjE5Nzc1IiBleHBfdGltZT0iMTU0MzY2MzAzNSIvPgogICAgPG9wZXJhdGlvbiB0eXBlPSJsb2dpbiIgdmFsdWU9ImdyYW50ZWQiPgogICAgICAgIDxsb2dpbiBlbnRpdHk9IjMzNjkzNDUwMjM5IiBzZXJ2aWNlPSJ3c2ZlIiB1aWQ9IlNFUklBTE5VTUJFUj1DVUlUIDIwMjgwNTY1NDI0LCBDTj1mcm92aXJhIiBhdXRobWV0aG9kPSJjbXMiIHJlZ21ldGhvZD0iMjIiPgogICAgICAgICAgICA8cmVsYXRpb25zPgogICAgICAgICAgICAgICAgPHJlbGF0aW9uIGtleT0iMjAyODA1NjU0MjQiIHJlbHR5cGU9IjQiLz4KICAgICAgICAgICAgPC9yZWxhdGlvbnM+CiAgICAgICAgPC9sb2dpbj4KICAgIDwvb3BlcmF0aW9uPgo8L3Nzbz4K</token>
+        <sign>rP+51l6JmWBd9IK/P5xhFFcnN2ALuaqOvHXvmyNwAyfV28cWU+Pxakf/z9aQPZ7nhld09jYAGdnqguzeGKf/aSvqQjSqRh6WRzexbSw9xpO4dPhj2sF7a5I5jeGrZC+pPIOhM33rOvEH4kCHkfBvkeUtZ/QESboSTaKAMa+fOcE=</sign>
+    </credentials>
+</loginTicketResponse>

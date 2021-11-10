@@ -1,0 +1,158 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/listar">Panel Vendedores</a></li>
+    </ul>
+</div>
+<div class="col-md-5 col-sm-5 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="pricing">
+                <div class="title">
+                    <h2>Vendedor</h2>
+                    <h1>{vendedor-apellido} {vendedor-nombre}</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Documento:</strong> {documentotipo-denominacion} {vendedor-documento}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Comisión:</strong> {vendedor-comision}%</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Provincia:</strong> {provincia-denominacion}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Localidad:</strong> {vendedor-codigopostal} - {vendedor-localidad}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Domicilio:</strong> {vendedor-domicilio}</li>
+                                {lst_infocontacto}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Listado de pagos</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_pago_egresocomision" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>Fecha</th>
+                        <th>Imp Facturado</th>
+                        <th>Comisión</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_pago_egresocomision}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-7 col-sm-7 col-xs-12">
+    <h2 class="page-header" style="margin: 0 0 20px;">Período: {PERACTUAL}</h2>
+    <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
+        <div class="col-md-4 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-asterisk blue"></i> Cantidad Ventas</span>
+            <div class="count blue" style="font-size: 30px;">{CANTVENTAS}</div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-usd blue"></i> Valor Ventas</span>
+            <div class="count blue" style="font-size: 30px;">${TOTAL}</div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12 tile_stats_count">
+            <span class="count_top"><i class="fa fa-usd red"></i> Pago de Comisiones</span>
+            <div class="count red" style="font-size: 30px;">${EGRESOCOMISION}</div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Importe total ventas mensual</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="tbl_sum_importe_venta_producto" class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>COD</th>
+                            <th>Descripción</th>
+                            <th>Imp</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tbl_sum_importe_venta_producto}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Cantidad total ventas mensual</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="tbl_sum_cantidad_venta_producto" class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>COD</th>
+                            <th>Descripción</th>
+                            <th>Cant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tbl_sum_cantidad_venta_producto}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_pago_egresocomision').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":3
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_sum_importe_venta_producto').dataTable( {
+            "aaSorting": [[ 2, "desc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_sum_cantidad_venta_producto').dataTable( {
+            "aaSorting": [[ 2, "desc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+</script>

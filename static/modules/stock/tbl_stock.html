@@ -1,0 +1,23 @@
+<!--TBL_STOCK-->
+<tr style="font-size: 12px;">
+    <td><strong>{producto-codigo}</strong></td>
+    <td><strong>{productomarca-denominacion}</strong></td>
+    <td><strong>{producto-denominacion}</strong></td>
+    <td>
+        <span class="label label-warning" style="font-size: 11px;">{producto-stock_ideal}{productounidad-denominacion}</span>
+        <span class="label label-primary" style="font-size: 11px;">{producto-stock_minimo}{productounidad-denominacion}</span>
+    </td>    
+    <td>
+    	<span class="label label-{stock-class_stm}" style="font-size: 14px;">{stock-cantidad_actual} {productounidad-denominacion}</span>
+    	&nbsp;&nbsp;<label class="red">{stock-mensaje_stm}</label>
+    </td>
+    <td>
+        <span class="label label-primary" style="font-size: 13px;">${stock-valor_stock}</span>
+    </td>
+    <td>
+        <center>
+            <a class="btn btn-dark btn-xs" href="{url_app}/stock/consultar_producto/{producto-producto_id}" title="Consultar movimientos"><i class="fa fa-eye"></i></a>
+        </center>
+    </td>
+</tr>
+<!--TBL_STOCK-->

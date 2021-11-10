@@ -1,0 +1,145 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/ingreso/listar">Panel Ingresos</a></li>
+    </ul>
+</div>
+<div class="col-md-5 col-sm-5 col-xs-12">
+    <div class="x_panel">
+        <div class="x_content">
+            <div class="pricing">
+                <div class="title">
+                    <h2>Comprobante</h2>
+                    <h1>{tipofactura-nomenclatura} {ingreso-punto_venta}-{ingreso-numero_factura}</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features">
+                            <ul class="list-unstyled text-left">
+                                <li><i class="fa fa-check text-success"></i> <strong> Proveedor:</strong> {proveedor-razon_social} ({documentotipo-denominacion} {proveedor-documento})</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Costo Distribución:</strong> {ingreso-costo_distribucion}%</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> IVA:</strong> {ingreso-iva}%</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Condición IVA:</strong> {condicioniva-denominacion}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Condición Pago:</strong> {condicionpago-denominacion}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Costo Total:</strong> ${ingreso-costo_total}</li>
+                                <li><i class="fa fa-check text-success"></i> <strong> Costo Total + IVA:</strong> ${ingreso-costo_total_iva}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-7 col-sm-7 col-xs-12">
+    <div class="col-lg-offset-8 col-lg-4" style="padding-right: 0px;">
+        <button type="button" class="btn btn-xs btn-danger remover-btn-generar-notacredito" onClick="location.href='{url_app}/ingreso/reingreso/{ingreso-ingreso_id}'" style="width: 100%; display: {ingreso-btn_generar_nc};"><i class="fa fa-file-text-o"></i> GENERAR NOTA CRÉDITO</button>
+        <button type="button" class="btn btn-xs btn-dark" id="btn_consultar_notacreditoproveedor" onClick="consultarNotaCredito();" style="width: 100%; display: {ingreso-btn_consultar_nc};"><i class="fa fa-file-text-o"></i> CONSULTAR NOTA DE CRÉDITO</button>
+        <button type="button" class="btn btn-xs btn-dark" id="btn_volver_ingreso" onClick="volverIngresoDetalle();" style="width: 100%; display: {ingreso-volver_ingresodetalle};"><i class="fa fa-arrow-left"></i> DETALLE INGRESO</button>
+    </div>    
+    <div class="x_panel" id="panel_ingresodetalle">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle de ingreso</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_ingresostock" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Descripción</th>
+                        <th>Cant</th>
+                        <th>Desc1</th>
+                        <th>Desc2</th>
+                        <th>Desc3</th>
+                        <th>Precio</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_ingresodetalle}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel" id="panel_notacreditoproveedor" style="display: {ingreso-notacredito}">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Nota de Crédito</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_notacreditoproveedordetalle" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Desc1</th>
+                        <th>Desc2</th>
+                        <th>Desc3</th>
+                        <th>P.Unitario</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_notacreditoproveedordetalle}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 2:
+                $(".remover-btn-generar-notacredito").css("display","none");
+                break;
+        }
+    });
+
+    $(document).ready(function() {
+        $('#tbl_ingresostock').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_notacreditoproveedordetalle').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+
+    function consultarNotaCredito() {
+        document.getElementById('panel_ingresodetalle').style.display = 'none';
+        document.getElementById('panel_notacreditoproveedor').style.display = 'inline-block';
+        document.getElementById('btn_consultar_notacreditoproveedor').style.display = 'none';
+        document.getElementById('btn_volver_ingreso').style.display = 'inline-block';
+    }
+
+    function volverIngresoDetalle() {
+        document.getElementById('panel_ingresodetalle').style.display = 'inline-block';
+        document.getElementById('panel_notacreditoproveedor').style.display = 'none';
+        document.getElementById('btn_consultar_notacreditoproveedor').style.display = 'inline-block';
+        document.getElementById('btn_volver_ingreso').style.display = 'none';
+    }
+</script>

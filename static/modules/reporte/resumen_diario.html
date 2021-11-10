@@ -1,0 +1,331 @@
+<div class="col-lg-12 hidden-print">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li class="remover-breadcrumb-stock"><a href="{url_app}/stock/panel">INVENTARIO</a></li>
+    </ul>
+</div>
+<div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12">
+    <div class="col-lg-12 col-md-12 col-sm-12" style="margin-bottom: 3%; width: 100%;">
+        <div class="col-lg-12 col-md-12 col-sm-12" style="width: 100%;">
+            <div class="col-lg-12 col-md-12 col-sm-12" style="width: 100%;">
+                <div class="row x_title">
+                    <div class="col-lg-10 col-md-10">
+                        <h1><small>Resultado Diario: {fecha}</small></h1>
+                    </div>
+                    <div class="col-lg-2 col-md-2">
+                        <a class="hidden-print" onclick="print();"><i class="fa fa-print blue"></i></a>&nbsp;&nbsp;&nbsp;
+                        <a class="hidden-print" onclick="buscarCaja();"><i class="fa fa-search blue"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-12 col-md-12 col-sm-12" style="width: 100%;">
+        <div class="top_tiles" style="width: 100%;">
+            <div class="animated flipInY col-lg-12 col-md-12 col-sm-12" style="width: 100%;">
+                <div class="tile-stats" style="width: 100%;">
+                    <div class="icon" style="margin-top: 4%"><i class="fa fa-money"></i></div>
+                    <h3 style="margin-top:1%;">CAJA</h3>
+                    <div class="count">${caja}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%;">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel" style="padding-left: 5px; padding-right: 5px;">
+                <div class="x_content">
+                    <table id="tbl_stock" class="table table-striped table-bordered">
+                        <thead>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-up green"></i> COBRANZA</th>
+                                <th class="green">${cobranza}</th>
+                                <th>
+                                    <button class="btn btn-dark btn-xs" onClick="verDetalleCobranza();" title="Detalle">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-up green"></i> VENTAS</th>
+                                <th class="green">${ventas}</th>
+                                <th></th>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-down red"></i> PAGO PROVEEDORES</th>
+                                <th class="red">${pago_proveedores}</th>
+                                <th>
+                                    <button class="btn btn-dark btn-xs" onClick="verDetallePagoProveedor();" title="Detalle">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </th>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-down red"></i> PAGO COMISIONES</th>
+                                <th class="red">${pago_comisiones}</th>
+                                <th>
+                                  <button class="btn btn-dark btn-xs" onClick="verDetalleComision();" title="Detalle">
+                                      <i class="fa fa-eye"></i>
+                                  </button>
+                                </th>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-down red"></i> GASTOS VARIOS</th>
+                                <th class="red">${gasto_diario}</th>
+                                <th>
+                                  <button class="btn btn-dark btn-xs" onClick="verDetalleGastosVarios();" title="Detalle">
+                                      <i class="fa fa-eye"></i>
+                                  </button>
+                                </th>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-down red"></i> LIQUIDACIONES</th>
+                                <th class="red">${liquidacion}</th>
+                                <th>
+                                  <button class="btn btn-dark btn-xs" onClick="verDetalleLiquidacion();" title="Detalle">
+                                      <i class="fa fa-eye"></i>
+                                  </button>
+                                </th>
+                            </tr>
+                            <tr style="font-size: 18px;">
+                                <th><i class="fa fa-arrow-circle-down red"></i> VEHÍCULOS</th>
+                                <th class="red">${vehiculos}</th>
+                                <th>
+                                  <button class="btn btn-dark btn-xs" onClick="verDetalleVehiculos();" title="Detalle">
+                                      <i class="fa fa-eye"></i>
+                                  </button>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_cobrador_cobranza">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle Cobranza</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel" style="padding-left: 5px; padding-right: 5px; margin-bottom: 2%;">
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {detalle_cobranza}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_pagoproveedor">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle Pago Proveedores</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel" style="padding-left: 5px; padding-right: 5px; margin-bottom: 2%;">
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {detalle_pagoproveedor}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_gastosvarios">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle Gastos</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel" style="padding-left: 5px; padding-right: 5px; margin-bottom: 2%;">
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {detalle_gastosvarios}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_liquidacion">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle Liquidaciones</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel" style="padding-left: 5px; padding-right: 5px; margin-bottom: 2%;">
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {detalle_liquidacion}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_vehiculos">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle Vehículos</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel" style="padding-left: 5px; padding-right: 5px; margin-bottom: 2%;">
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {detalle_vehiculos}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_comision">
+        <div class="col-md-12" style="width: 100%;">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle Comision</h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_panel" style="padding-left: 5px; padding-right: 5px; margin-bottom: 2%;">
+                    <div class="x_content">
+                        <table id="tbl_stock" class="table table-striped table-bordered">
+                            <thead>
+                                {detalle_comision}
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 remover-btn-cerrar-caja" style="margin-bottom: 3%; width: 100%;">
+        <div class="col-md-12" style="margin-bottom: 3%; width: 100%;">
+            <button class="btn btn-xs btn-primary" type="button" style="width: 100%" onClick="cerrarCaja();"> <i class="fa fa-money"></i> CERRAR CAJA DIARIA</button>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="modal_contenido"></div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 1:
+                $(".remover-breadcrumb-stock").css("display","none");
+                $(".remover-btn-cerrar-caja").css("display","none");
+                break;
+            case 2:
+                $(".remover-btn-cerrar-caja").css("display","none");
+                break;
+        }
+    });
+
+    function cerrarCaja() {
+        var cajadiaria = $.ajax({
+            url: '{url_app}/reporte/verificar_caja_diaria_ajax',
+                dataType: 'text',
+                async: false
+        }).responseText;
+        console.log(cajadiaria);
+        document.getElementById('modal_contenido').innerHTML = cajadiaria;
+        $('#sistema_alertas').modal('show');
+    }
+
+    function buscarCaja() {
+        var cajadiaria = $.ajax({
+            url: '{url_app}/reporte/form_buscar_caja_diaria_ajax',
+                dataType: 'text',
+                async: false
+        }).responseText;
+        console.log(cajadiaria);
+        document.getElementById('modal_contenido').innerHTML = cajadiaria;
+        $('#sistema_alertas').modal('show');
+    }
+
+    function verDetalleCobranza() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'block';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'none';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'none';
+        document.getElementById('div_detalle_liquidacion').style.display = 'none';
+        document.getElementById('div_detalle_vehiculos').style.display = 'none';
+        document.getElementById('div_detalle_comision').style.display = 'none';
+    }
+
+    function verDetallePagoProveedor() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'none';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'block';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'none';
+        document.getElementById('div_detalle_liquidacion').style.display = 'none';
+        document.getElementById('div_detalle_vehiculos').style.display = 'none';
+        document.getElementById('div_detalle_comision').style.display = 'none';
+    }
+
+    function verDetalleGastosVarios() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'none';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'none';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'block';
+        document.getElementById('div_detalle_liquidacion').style.display = 'none';
+        document.getElementById('div_detalle_vehiculos').style.display = 'none';
+        document.getElementById('div_detalle_comision').style.display = 'none';
+    }
+
+    function verDetalleLiquidacion() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'none';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'none';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'none';
+        document.getElementById('div_detalle_liquidacion').style.display = 'block';
+        document.getElementById('div_detalle_vehiculos').style.display = 'none';
+        document.getElementById('div_detalle_comision').style.display = 'none';
+    }
+
+    function verDetalleVehiculos() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'none';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'none';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'none';
+        document.getElementById('div_detalle_liquidacion').style.display = 'none';
+        document.getElementById('div_detalle_vehiculos').style.display = 'block';
+        document.getElementById('div_detalle_comision').style.display = 'none';
+    }
+
+    function verDetalleComision() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'none';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'none';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'none';
+        document.getElementById('div_detalle_liquidacion').style.display = 'none';
+        document.getElementById('div_detalle_vehiculos').style.display = 'none';
+        document.getElementById('div_detalle_comision').style.display = 'block';
+    }
+</script>

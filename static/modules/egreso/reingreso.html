@@ -1,0 +1,445 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/egreso/listar">Panel Ventas</a></li>
+    </ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-exchange"></i>&nbsp;&nbsp; Nota de Crédito <small>Conformar lista de reingreso de productos</small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/guardar_nota_credito">
+                    <div class="col-lg-6">
+                        <div class="form-group col-lg-4">
+                            <label>Pto Venta</label>
+                            <input type="number" class="form-control" id="punto_venta" value="{egreso-punto_venta}" readonly>
+                        </div>
+                        <div class="form-group col-lg-8">
+                            <label>N° Factura</label>
+                            <input type="number" class="form-control" id="numero_factura" value="{egreso-numero_factura}" readonly>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Fecha</label>
+                            <input type="date" class="form-control" id="fecha" value="{egreso-fecha}" readonly>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Descuento (%)</label>
+                            <input type="number" class="form-control" id="descuento" value="{egreso-descuento}" onChange="actualizarDescuento();" readonly>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Tipo Factura</label>
+                            <select class="form-control m-bot15" id="tipofactura" disabled>
+                                <option value="4">Nota de Crédito</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Condición IVA</label>
+                            <select class="form-control m-bot15" name="condicioniva" id="condicioniva" disabled>
+                                <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Condición Pago</label>
+                            <select class="form-control m-bot15" name="condicionpago" id="condicionpago" disabled>
+                                <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Cliente</label>
+                            <input type="text" class="form-control" id="cliente_denominacion" name="cliente_denominacion" value="{cliente-descripcion}" readonly>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Vendedor</label>
+                            <input type="text" class="form-control" id="vendedor_denominacion" name="vendedor_denominacion" value="{vendedor-descripcion}" readonly>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" id="div_productos">
+                        <div class="form-group col-lg-12" id="div_lst_producto">
+                            <label>Producto</label>
+                            <table id="tbl_producto" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr style="font-size: 12px;">
+                                        <th></th>
+                                        <th>COD</th>
+                                        <th>Rubro</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody_producto">
+                                    {tbl_producto}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group col-lg-12" id="div_form_producto" style="display: none;"></div>
+                    </div>
+                    <div class="form-group col-lg-12" id="div_tbl_egreso">
+                        <hr>
+                        <table class="table">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                    <th>COD</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>U.Medida</th>
+                                    <th>P.Unitario</th>
+                                    <th>%Bonif.</th>
+                                    <th>Imp. Bonif.</th>
+                                    <th>Subtotal</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTblProducto">
+                                {tbl_editar_egresodetalle_array}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group col-lg-2 col-md-offset-10">
+                        <ul class="to_do">
+                            <li><p id="subtotal">Subtotal: ${egreso-subtotal}</p></li>
+                            <li><p id="importe_total">Importe Total:${egreso-importe_total}</p></li>
+                        </ul>
+                    </div>
+                    <div class="form-group col-lg-12" align="right" id="div_array_egresos">
+                        <input type="hidden" name="egreso_id" id="egreso_id" value="{egreso-egreso_id}">
+                        <input type="hidden" name="producto" id="producto">
+                        <input type="hidden" name="subtotal" id="input_subtotal" value="{egreso-subtotal}">
+                        <input type="hidden" name="importe_total" id="input_importe_total" value="{egreso-importe_total}">
+                        {hidden_editar_egresodetalle_array}
+                        <button class="btn btn-app" onclick="verificarReingreso();" id="btn_generar"> <i class="fa fa-edit"></i> Generar Nota de Crédito </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10"><h5 id="msj_alerta_modal"></h5></div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_producto').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+
+    var ini_producto_id = 0; 
+    var costo_producto = 0; 
+    var costo_base = {egreso-costo_base}; 
+    var i = 1; 
+    array_ids = new Array();
+
+    function buscarProducto() {
+        document.getElementById('div_form_producto').style.display = "none";
+        document.getElementById('div_lst_producto').style.display = "block";
+    }
+
+    function seleccionarProducto(producto_id) {
+        ini_producto_id = producto_id;
+        document.getElementById('producto').value = producto_id;
+        var form_producto = $.ajax({
+            url: '{url_app}/egreso/traer_formulario_producto_ajax/' + producto_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById('div_form_producto').style.display = "block";
+        document.getElementById('div_form_producto').innerHTML = form_producto;
+        document.getElementById('div_lst_producto').style.display = "none";
+        document.getElementById('cantidad').focus();
+        actualizarCostoTotal();
+    }
+
+    function actualizarDescuento() {
+        var descuento = document.getElementById('descuento').value;   
+        console.log(descuento);
+        if (costo_base == 0) {
+            return false;
+        } else {
+            var valor_porcentaje_descuento = parseFloat(descuento) * parseFloat(costo_base) / 100; 
+            var costo_final = parseFloat(costo_base) - parseFloat(valor_porcentaje_descuento);
+            
+            document.getElementById('subtotal').innerHTML = 'Subtotal: $' + costo_final.toFixed(2);
+            document.getElementById('importe_total').innerHTML = 'Importe Total: $' + costo_final.toFixed(2);
+            document.getElementById('input_subtotal').value = costo_final.toFixed(2);
+            document.getElementById('input_importe_total').value = costo_final.toFixed(2);
+            buscarProducto();
+        }
+    }
+
+    function actualizarCostoTotal() {
+        if(ini_producto_id == 0) {
+            return false;
+        } else {    
+            var cantidad = document.getElementById('cantidad').value;
+            costo_producto = document.getElementById('costo').value;
+            if(cantidad == null || cantidad == undefined || cantidad == "") {
+                //document.getElementById('cantidad').value = 1;
+                return false;
+            } else {
+                if (costo_producto == 0) {
+                    return false;
+                } else {
+                    var costo_total = parseFloat(cantidad) * parseFloat(costo_producto);
+                }
+            } 
+        }
+        
+        var descuento = document.getElementById('descuento_producto').value;
+        if (descuento != null && descuento.length != 0 && descuento != "" && descuento > 0) {
+            var valor_descuento = parseFloat(descuento) * parseFloat(costo_total) / 100;
+            costo_total = parseFloat(costo_total) - parseFloat(valor_descuento);
+        }
+
+        costo_total = costo_total.toFixed(2);
+        document.getElementById('costo_total').value = costo_total;
+    }
+
+    function egresarProducto() {
+        var producto_id = document.getElementById('producto_id').value;
+        var codigo = document.getElementById('codigo').value;
+        var descripcion = document.getElementById('descripcion').value;
+        var iva = document.getElementById('iva').value;
+        var cantidad = document.getElementById('cantidad').value;
+        var unidad = document.getElementById('unidad').value;
+        var costo = document.getElementById('costo').value;
+        var descuento = document.getElementById('descuento_producto').value;
+        var importe_descuento = parseFloat(costo) * parseFloat(descuento) / 100;
+        importe_descuento = importe_descuento.toFixed(2);
+        var costo_total = document.getElementById('costo_total').value;
+
+        var flag = array_ids.indexOf(producto_id);
+        var bodyTblProducto = document.getElementById('bodyTblProducto');
+       
+        /* FILA */
+        var trTblProducto = document.createElement("tr");
+        trTblProducto.setAttribute("id", "idTrTbl_" + producto_id);
+
+        var tdTblBtnQuitar = document.createElement("td");
+        var tdTblCodigo = document.createElement("td");
+        var tdTblDescripcion = document.createElement("td");
+        var tdTblCantidad = document.createElement("td");
+        var tdTblUnidad = document.createElement("td");
+        var tdTblCosto = document.createElement("td");
+        var tdTblDescuento = document.createElement("td");
+        var tdTblImporteDescuento = document.createElement("td");
+        var tdTblTotal = document.createElement("td");
+        tdTblTotal.setAttribute("id", "idTdTotal_" + producto_id);
+
+        var btnQuitar = document.createElement("a");
+        btnQuitar.setAttribute("href", "#");
+        btnQuitar.setAttribute("id", "btnQuitar_" + producto_id);
+        btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+        btnQuitar.setAttribute("onClick", "quitarProducto(" + producto_id + ");");
+        var iconQuitar = document.createElement("i");
+        iconQuitar.setAttribute("class", "fa fa-trash-o");
+        btnQuitar.appendChild(iconQuitar);
+
+        var txtCodigo = document.createTextNode(codigo); 
+        var txtDescripcion = document.createTextNode(descripcion); 
+        var txtCantidad = document.createTextNode(cantidad); 
+        var txtUnidad = document.createTextNode(unidad); 
+        var txtCosto = document.createTextNode(" $" + costo); 
+        var txtDescuento = document.createTextNode(descuento + '%'); 
+        var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
+        var txtCostoTotal = document.createTextNode(" $" + costo_total); 
+        
+        tdTblCodigo.appendChild(txtCodigo);
+        tdTblDescripcion.appendChild(txtDescripcion);
+        tdTblCantidad.appendChild(txtCantidad);
+        tdTblUnidad.appendChild(txtUnidad);
+        tdTblCosto.appendChild(txtCosto);
+        tdTblDescuento.appendChild(txtDescuento);
+        tdTblImporteDescuento.appendChild(txtImporteDescuento);
+        tdTblTotal.appendChild(txtCostoTotal);
+        tdTblBtnQuitar.appendChild(btnQuitar);
+
+        trTblProducto.appendChild(tdTblCodigo);
+        trTblProducto.appendChild(tdTblDescripcion);
+        trTblProducto.appendChild(tdTblCantidad);
+        trTblProducto.appendChild(tdTblUnidad);
+        trTblProducto.appendChild(tdTblCosto);
+        trTblProducto.appendChild(tdTblDescuento);
+        trTblProducto.appendChild(tdTblImporteDescuento);
+        trTblProducto.appendChild(tdTblTotal);
+        trTblProducto.appendChild(tdTblBtnQuitar);
+
+        /* ARRAY */
+        var div_array_egresos = document.getElementById('div_array_egresos');
+        var inputEgresoProductoId = document.createElement("input");
+        inputEgresoProductoId.setAttribute("type", "hidden");
+        inputEgresoProductoId.setAttribute("name", "egreso[" + producto_id + "][producto_id]");
+        inputEgresoProductoId.setAttribute("id", "producto_id_" + producto_id);
+        inputEgresoProductoId.setAttribute("value", producto_id);
+        var inputEgresoCodigo = document.createElement("input");
+        inputEgresoCodigo.setAttribute("type", "hidden");
+        inputEgresoCodigo.setAttribute("name", "egreso[" + producto_id + "][codigo]");
+        inputEgresoCodigo.setAttribute("id", "codigo_" + producto_id);
+        inputEgresoCodigo.setAttribute("value", codigo);
+        var inputEgresoDescripcion = document.createElement("input");
+        inputEgresoDescripcion.setAttribute("type", "hidden");
+        inputEgresoDescripcion.setAttribute("name", "egreso[" + producto_id + "][descripcion]");
+        inputEgresoDescripcion.setAttribute("id", "descripcion_" + producto_id);
+        inputEgresoDescripcion.setAttribute("value", descripcion);
+        var inputEgresoIva = document.createElement("input");
+        inputEgresoIva.setAttribute("type", "hidden");
+        inputEgresoIva.setAttribute("name", "egreso[" + producto_id + "][iva]");
+        inputEgresoIva.setAttribute("id", "iva_" + producto_id);
+        inputEgresoIva.setAttribute("value", iva);
+        var inputEgresoCantidad = document.createElement("input");
+        inputEgresoCantidad.setAttribute("type", "hidden");
+        inputEgresoCantidad.setAttribute("name", "egreso[" + producto_id + "][cantidad]");
+        inputEgresoCantidad.setAttribute("id", "cantidad_" + producto_id);
+        inputEgresoCantidad.setAttribute("value", cantidad);
+        var inputEgresoUnidad = document.createElement("input");
+        inputEgresoUnidad.setAttribute("type", "hidden");
+        inputEgresoUnidad.setAttribute("name", "egreso[" + producto_id + "][unidad]");
+        inputEgresoUnidad.setAttribute("id", "unidad_" + producto_id);
+        inputEgresoUnidad.setAttribute("value", unidad);
+        var inputEgresoCosto = document.createElement("input");
+        inputEgresoCosto.setAttribute("type", "hidden");
+        inputEgresoCosto.setAttribute("name", "egreso[" + producto_id + "][costo]");
+        inputEgresoCosto.setAttribute("id", "costo_" + producto_id);
+        inputEgresoCosto.setAttribute("value", costo);
+        var inputEgresoDescuento = document.createElement("input");
+        inputEgresoDescuento.setAttribute("type", "hidden");
+        inputEgresoDescuento.setAttribute("name", "egreso[" + producto_id + "][descuento]");
+        inputEgresoDescuento.setAttribute("id", "descuento_" + producto_id);
+        inputEgresoDescuento.setAttribute("value", descuento);
+        var inputEgresoImporteDescuento = document.createElement("input");
+        inputEgresoImporteDescuento.setAttribute("type", "hidden");
+        inputEgresoImporteDescuento.setAttribute("name", "egreso[" + producto_id + "][importe_descuento]");
+        inputEgresoImporteDescuento.setAttribute("id", "importe_descuento_" + producto_id);
+        inputEgresoImporteDescuento.setAttribute("value", importe_descuento);
+        var inputEgresoCostoTotal = document.createElement("input");
+        inputEgresoCostoTotal.setAttribute("type", "hidden");
+        inputEgresoCostoTotal.setAttribute("name", "egreso[" + producto_id + "][costo_total]");
+        inputEgresoCostoTotal.setAttribute("id", "costo_total_" + producto_id);
+        inputEgresoCostoTotal.setAttribute("value", costo_total);
+
+        div_array_egresos.appendChild(inputEgresoProductoId);
+        div_array_egresos.appendChild(inputEgresoCodigo);
+        div_array_egresos.appendChild(inputEgresoDescripcion);
+        div_array_egresos.appendChild(inputEgresoIva);
+        div_array_egresos.appendChild(inputEgresoCantidad);
+        div_array_egresos.appendChild(inputEgresoUnidad);
+        div_array_egresos.appendChild(inputEgresoCosto);
+        div_array_egresos.appendChild(inputEgresoDescuento);
+        div_array_egresos.appendChild(inputEgresoImporteDescuento);
+        div_array_egresos.appendChild(inputEgresoCostoTotal);
+        bodyTblProducto.appendChild(trTblProducto);
+        
+        costo_final = 0;
+        costo_base = parseFloat(costo_base) + parseFloat(costo_total);
+        var descuento = document.getElementById('descuento').value;
+        if (descuento != null && descuento.length != 0 && descuento != "" && descuento > 0) {
+            var valor_descuento = parseFloat(descuento) * parseFloat(costo_base) / 100;
+            costo_final = parseFloat(costo_base) - parseFloat(valor_descuento);
+        } else {
+            costo_final = parseFloat(costo_base);
+        }
+        
+        document.getElementById('subtotal').innerHTML = 'Subtotal: $' + costo_final.toFixed(2);
+        document.getElementById('importe_total').innerHTML = 'Importe Total: $' + costo_final.toFixed(2);
+        document.getElementById('input_subtotal').value = costo_final.toFixed(2);
+        document.getElementById('input_importe_total').value = costo_final.toFixed(2);
+        array_ids.push(producto_id);
+        buscarProducto();
+        i = i + 1;
+    }
+
+    function quitarProducto(producto_id) {
+        var bodyTblProducto = document.getElementById('bodyTblProducto');
+        var trTblProducto = document.getElementById("idTrTbl_" + producto_id);
+        var tdTblTotal = document.getElementById("idTdTotal_" + producto_id);
+        var totalProducto = tdTblTotal.textContent;
+        var total_quitar = totalProducto.substring(1);
+
+        var div_array_egresos = document.getElementById('div_array_egresos');
+        var input_producto_id = document.getElementById('producto_id_' + producto_id);
+        var input_codigo = document.getElementById('codigo_' + producto_id);
+        var input_descripcion = document.getElementById('descripcion_' + producto_id);
+        var input_iva = document.getElementById('iva_' + producto_id);
+        var input_cantidad = document.getElementById('cantidad_' + producto_id);
+        var input_unidad = document.getElementById('unidad_' + producto_id);
+        var input_costo = document.getElementById('costo_' + producto_id);
+        var input_descuento = document.getElementById('descuento_' + producto_id);
+        var input_importe_descuento = document.getElementById('importe_descuento_' + producto_id);
+        var input_costo_total = document.getElementById('costo_total_' + producto_id);
+
+        costo_base = parseFloat(costo_base) - parseFloat(total_quitar);
+        
+        document.getElementById('subtotal').innerHTML = 'Subtotal: $' + costo_base.toFixed(2);
+        document.getElementById('importe_total').innerHTML = 'Importe Total: $' + costo_base.toFixed(2);
+        document.getElementById('input_subtotal').value = costo_base.toFixed(2);
+        document.getElementById('input_importe_total').value = costo_base.toFixed(2);
+
+        bodyTblProducto.removeChild(trTblProducto);   
+        div_array_egresos.removeChild(input_producto_id);
+        div_array_egresos.removeChild(input_codigo);
+        div_array_egresos.removeChild(input_descripcion);
+        div_array_egresos.removeChild(input_iva);
+        div_array_egresos.removeChild(input_cantidad);
+        div_array_egresos.removeChild(input_unidad);
+        div_array_egresos.removeChild(input_descuento);
+        div_array_egresos.removeChild(input_importe_descuento);
+        div_array_egresos.removeChild(input_costo);
+        div_array_egresos.removeChild(input_costo_total);
+    }
+
+    function verificarReingreso() {
+        var array = new Array();
+        var flag_array = 0;
+
+        if (flag_array == 0) {
+            var div_productos = document.getElementById("div_productos");
+            var input_producto = document.getElementById("producto");
+            var div_form_producto = document.getElementById("div_form_producto");
+            var div_array_egresos = document.getElementById("div_array_egresos");
+            div_productos.removeChild(div_form_producto);
+            div_array_egresos.removeChild(input_producto); 
+            document.getElementById('btn_generar').disabled = 'true';           
+            document.getElementById("formulario_guardar").submit();
+        } else {
+            var mensaje = array.join("<br><br>");
+            $('#sistema_alertas').modal('show');
+            document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+        }
+    }
+</script>

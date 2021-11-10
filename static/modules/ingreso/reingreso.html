@@ -1,0 +1,541 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/ingreso/listar">Panel Ingresos</a></li>
+    </ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-exchange"></i>&nbsp;&nbsp; Nota de Crédito</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/ingreso/guardar_nota_credito">
+                    <div class="col-lg-6">
+                        <div class="form-group col-lg-4">
+                            <label>Pto Venta</label>
+                            <input type="number" class="form-control" id="punto_venta" value="{ingreso-punto_venta}" readonly>
+                        </div>
+                        <div class="form-group col-lg-8">
+                            <label>N° Factura</label>
+                            <input type="number" class="form-control" id="numero_factura" value="{ingreso-numero_factura}" readonly>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Fecha</label>
+                            <input type="date" class="form-control" id="fecha" value="{ingreso-fecha}" readonly>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>IVA</label>
+                            <select class="form-control m-bot15" name="iva" id="iva" readonly>
+                                <option value="{ingreso-iva}" selected>{ingreso-iva}%</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Flete (%)</label>
+                            <input type="number" class="form-control" id="costo_distribucion" name="costo_distribucion" value="{ingreso-costo_distribucion}" readonly>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Percepción IVA</label>
+                            <select class="form-control m-bot15" name="percepcion_iva" id="percepcion_iva" readonly>
+                                <option value="{ingreso-percepcion_iva}" selected>{ingreso-percepcion_iva}%</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Condición IVA</label>
+                            <select class="form-control m-bot15" name="condicioniva" id="condicioniva" readonly>
+                                <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label>Condición Pago</label>
+                            <select class="form-control m-bot15" name="condicionpago" id="condicionpago" readonly>
+                                <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Proveedor</label>        
+                            <input type="text" class="form-control" id="proveedor_denominacion" name="proveedor_denominacion" value="{proveedor-descripcion}" readonly>
+                            <input type="hidden" name="proveedor" id="proveedor">                            
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Actualiza Stock?</label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" {ingreso-checked_actualiza_stock_si} value="1" id="actualiza_stock" name="opcion_stock" disabled> Si
+                                </label>
+                                &nbsp;&nbsp;&nbsp;
+                                <label>
+                                    <input type="radio" {ingreso-checked_actualiza_stock_no} value="0" id="actualiza_stock" name="opcion_stock" disabled> No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6" id="div_productos">
+                        <div class="form-group col-lg-12" id="div_visor_producto">
+                            <label>Visor producto</label>
+                        </div>
+                        <div class="form-group col-lg-12" id="div_form_producto" style="display: none;"></div>
+                    </div>
+                    <div class="form-group col-lg-12" id="div_tbl_ingreso">
+                        <hr>
+                        <table class="table">
+                            <thead>
+                                <tr style="font-size: 13px;">
+                                    <th>COD</th>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Desc1</th>
+                                    <th>Desc2</th>
+                                    <th>Desc3</th>
+                                    <th>P.Unitario</th>
+                                    <th>Importe</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="bodyTblProducto">
+                                {tbl_editar_ingresodetalle_array}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="form-group col-lg-2 col-md-offset-10">
+                        <ul class="to_do">
+                            <li><p id="suma_total">TOTAL: ${ingreso-costo_total}</p></li>
+                            <li><p id="suma_total_iva">TOTAL(IVA):${ingreso-costo_total_iva}</p></li>
+                        </ul>
+                    </div>
+                    <div class="form-group col-lg-12" align="right" id="div_array_ingresos">
+                        <input type="hidden" name="ingreso_id" id="ingreso_id" value="{ingreso-ingreso_id}">
+                        <input type="hidden" name="producto" id="producto">
+                        <input type="hidden" name="suma_total" id="input_suma_total" value="{ingreso-suma_total}">
+                        <input type="hidden" name="suma_total_iva" id="input_suma_total_iva" value="{ingreso-suma_total_iva}">
+                        {hidden_editar_ingresodetalle_array}
+                        <button class="btn btn-app" onclick="verificarReingreso();" id="btn_generar"> <i class="fa fa-edit"></i> Generar Nota de Crédito </button>
+                    </div>
+                </form>
+            </div>            
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10"><h5 id="msj_alerta_modal"></h5></div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_producto').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+
+    var ini_producto_id = 0; 
+    var costo_producto = 0; 
+    var costo_base = {ingreso-costo_base}; 
+    var i = 1; 
+    array_ids = [{ingreso-array_producto_ids}];
+
+    function buscarProducto() {
+        document.getElementById('div_form_producto').style.display = "none";
+        document.getElementById('div_visor_producto').style.display = "block";
+    }
+
+    function editarCantidadProducto(producto_id, ingresodetalle_id) {
+        ini_producto_id = producto_id;
+        document.getElementById('producto').value = producto_id;
+        var form_producto = $.ajax({
+            url: '{url_app}/ingreso/traer_formulario_reingreso_producto_ajax/' + ingresodetalle_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById('div_form_producto').style.display = "block";
+        document.getElementById('div_form_producto').innerHTML = form_producto;
+        document.getElementById('div_visor_producto').style.display = "none";
+        document.getElementById('cantidad').focus();
+        actualizarCostoTotal();
+    }
+
+    function actualizarCostoTotal() {
+        if(ini_producto_id == 0) {
+            return false;
+        } else {    
+            var cantidad = document.getElementById('cantidad').value;
+            costo_producto = document.getElementById('costo').value;
+            if(cantidad == null || cantidad == undefined || cantidad == "") {
+                //document.getElementById('cantidad').value = 1;
+                return false;
+            } else {
+                if (costo_producto == 0) {
+                    return false;
+                } else {
+                    var costo_total = parseFloat(cantidad) * parseFloat(costo_producto);
+                }
+            } 
+        }
+        
+        var desc1 = document.getElementById('descuento1').value;
+        var desc2 = document.getElementById('descuento2').value;
+        var desc3 = document.getElementById('descuento3').value;
+
+        if (desc1 != null && desc1.length != 0 && desc1 != "" && desc1 > 0) {
+            var valor_desc1 = parseFloat(desc1) * parseFloat(costo_total) / 100;
+            costo_total = parseFloat(costo_total) - parseFloat(valor_desc1);
+        }
+
+        if (desc2 != null && desc2.length != 0 && desc2 != "" && desc2 > 0) {
+            var valor_desc2 = parseFloat(desc2) * parseFloat(costo_total) / 100;
+            costo_total = parseFloat(costo_total) - parseFloat(valor_desc2);
+        }
+
+        if (desc3 != null && desc3.length != 0 && desc3 != "" && desc3 > 0) {
+            var valor_desc3 = parseFloat(desc3) * parseFloat(costo_total) / 100;
+            costo_total = parseFloat(costo_total) - parseFloat(valor_desc3);
+        }
+
+        costo_total = costo_total.toFixed(3);
+        document.getElementById('costo_total').value = costo_total;
+    }
+
+    function actualizarCostoFinal() {
+        var costo_distribucion = document.getElementById('costo_distribucion').value;   
+        var iva = document.getElementById('iva').value;
+        var percepcion_iva = document.getElementById('percepcion_iva').value;
+        
+        if (costo_base == 0) {
+            return false;
+        } else {
+            //CALCULO TOTAL MAS FLETE
+            var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            
+            //AGREGAR IVA A COSTO FINAL MAS FLETE
+            var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
+            
+            //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
+            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100);
+
+            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+            document.getElementById('suma_total_iva').innerHTML = 'TOTAL(IVA): $' + valor_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+            document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
+            //buscarProducto();
+        }
+    }
+
+    function ingresarProducto() {
+        var producto_id = document.getElementById('producto_id').value;
+        var codigo = document.getElementById('codigo').value;
+        var descripcion = document.getElementById('descripcion').value;
+        var contenido = document.getElementById('contenido').value;
+        var cantidad = document.getElementById('cantidad').value;
+        var costo = document.getElementById('costo').value;
+        var descuento1 = document.getElementById('descuento1').value;
+        var descuento2 = document.getElementById('descuento2').value;
+        var descuento3 = document.getElementById('descuento3').value;
+        var costo_total = document.getElementById('costo_total').value;
+
+        var flag = array_ids.indexOf(producto_id);
+        if(parseInt(flag) === -1){
+            var bodyTblProducto = document.getElementById('bodyTblProducto');
+           
+            /* FILA */
+            var trTblProducto = document.createElement("tr");
+            trTblProducto.setAttribute("id", "idTrTbl_" + producto_id);
+
+            var tdTblBtnQuitar = document.createElement("td");
+            var tdTblCodigo = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+            var tdTblCantidad = document.createElement("td");
+            tdTblCantidad.setAttribute("id", "idTdCantidad_" + producto_id);
+            var tdTblDescuento1 = document.createElement("td");
+            tdTblDescuento1.setAttribute("id", "idTdDescuento1_" + producto_id);
+            var tdTblDescuento2 = document.createElement("td");
+            tdTblDescuento2.setAttribute("id", "idTdDescuento2_" + producto_id);
+            var tdTblDescuento3 = document.createElement("td");
+            tdTblDescuento3.setAttribute("id", "idTdDescuento3_" + producto_id);
+            var tdTblCosto = document.createElement("td");
+            var tdTblTotal = document.createElement("td");
+            tdTblTotal.setAttribute("id", "idTdTotal_" + producto_id);
+
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitar_" + producto_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarProducto(" + producto_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtCodigo = document.createTextNode(codigo); 
+            var txtDescripcion = document.createTextNode(descripcion); 
+            var txtCantidad = document.createTextNode(cantidad + contenido); 
+            var txtDescuento1 = document.createTextNode(descuento1 + '%'); 
+            var txtDescuento2 = document.createTextNode(descuento2 + '%'); 
+            var txtDescuento3 = document.createTextNode(descuento3 + '%'); 
+            var txtCosto = document.createTextNode(" $" + costo); 
+            var txtCostoTotal = document.createTextNode(" $" + costo_total); 
+            
+            tdTblCodigo.appendChild(txtCodigo);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblCantidad.appendChild(txtCantidad);
+            tdTblDescuento1.appendChild(txtDescuento1);
+            tdTblDescuento2.appendChild(txtDescuento2);
+            tdTblDescuento3.appendChild(txtDescuento3);
+            tdTblCosto.appendChild(txtCosto);
+            tdTblTotal.appendChild(txtCostoTotal);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblProducto.appendChild(tdTblCodigo);
+            trTblProducto.appendChild(tdTblDescripcion);
+            trTblProducto.appendChild(tdTblCantidad);
+            trTblProducto.appendChild(tdTblDescuento1);
+            trTblProducto.appendChild(tdTblDescuento2);
+            trTblProducto.appendChild(tdTblDescuento3);
+            trTblProducto.appendChild(tdTblCosto);
+            trTblProducto.appendChild(tdTblTotal);
+            trTblProducto.appendChild(tdTblBtnQuitar);
+
+            /* ARRAY */
+            var div_array_ingresos = document.getElementById('div_array_ingresos');
+            var inputIngresoProductoId = document.createElement("input");
+            inputIngresoProductoId.setAttribute("type", "hidden");
+            inputIngresoProductoId.setAttribute("name", "ingreso[" + producto_id + "][producto_id]");
+            inputIngresoProductoId.setAttribute("id", "producto_id_" + producto_id);
+            inputIngresoProductoId.setAttribute("value", producto_id);
+            var inputIngresoCodigo = document.createElement("input");
+            inputIngresoCodigo.setAttribute("type", "hidden");
+            inputIngresoCodigo.setAttribute("name", "ingreso[" + producto_id + "][codigo]");
+            inputIngresoCodigo.setAttribute("id", "codigo_" + producto_id);
+            inputIngresoCodigo.setAttribute("value", codigo);
+            var inputIngresoDescripcion = document.createElement("input");
+            inputIngresoDescripcion.setAttribute("type", "hidden");
+            inputIngresoDescripcion.setAttribute("name", "ingreso[" + producto_id + "][descripcion]");
+            inputIngresoDescripcion.setAttribute("id", "descripcion_" + producto_id);
+            inputIngresoDescripcion.setAttribute("value", descripcion);
+            var inputIngresoCantidad = document.createElement("input");
+            inputIngresoCantidad.setAttribute("type", "hidden");
+            inputIngresoCantidad.setAttribute("name", "ingreso[" + producto_id + "][cantidad]");
+            inputIngresoCantidad.setAttribute("id", "cantidad_" + producto_id);
+            inputIngresoCantidad.setAttribute("value", cantidad);
+            var inputIngresoDescuento1 = document.createElement("input");
+            inputIngresoDescuento1.setAttribute("type", "hidden");
+            inputIngresoDescuento1.setAttribute("name", "ingreso[" + producto_id + "][descuento1]");
+            inputIngresoDescuento1.setAttribute("id", "descuento1_" + producto_id);
+            inputIngresoDescuento1.setAttribute("value", descuento1);
+            var inputIngresoDescuento2 = document.createElement("input");
+            inputIngresoDescuento2.setAttribute("type", "hidden");
+            inputIngresoDescuento2.setAttribute("name", "ingreso[" + producto_id + "][descuento2]");
+            inputIngresoDescuento2.setAttribute("id", "descuento2_" + producto_id);
+            inputIngresoDescuento2.setAttribute("value", descuento2);
+            var inputIngresoDescuento3 = document.createElement("input");
+            inputIngresoDescuento3.setAttribute("type", "hidden");
+            inputIngresoDescuento3.setAttribute("name", "ingreso[" + producto_id + "][descuento3]");
+            inputIngresoDescuento3.setAttribute("id", "descuento3_" + producto_id);
+            inputIngresoDescuento3.setAttribute("value", descuento3);
+            var inputIngresoCosto = document.createElement("input");
+            inputIngresoCosto.setAttribute("type", "hidden");
+            inputIngresoCosto.setAttribute("name", "ingreso[" + producto_id + "][costo]");
+            inputIngresoCosto.setAttribute("id", "costo_" + producto_id);
+            inputIngresoCosto.setAttribute("value", costo);
+            var inputIngresoCostoTotal = document.createElement("input");
+            inputIngresoCostoTotal.setAttribute("type", "hidden");
+            inputIngresoCostoTotal.setAttribute("name", "ingreso[" + producto_id + "][costo_total]");
+            inputIngresoCostoTotal.setAttribute("id", "costo_total_" + producto_id);
+            inputIngresoCostoTotal.setAttribute("value", costo_total);
+
+            div_array_ingresos.appendChild(inputIngresoProductoId);
+            div_array_ingresos.appendChild(inputIngresoCodigo);
+            div_array_ingresos.appendChild(inputIngresoDescripcion);
+            div_array_ingresos.appendChild(inputIngresoCantidad);
+            div_array_ingresos.appendChild(inputIngresoDescuento1);
+            div_array_ingresos.appendChild(inputIngresoDescuento2);
+            div_array_ingresos.appendChild(inputIngresoDescuento3);
+            div_array_ingresos.appendChild(inputIngresoCosto);
+            div_array_ingresos.appendChild(inputIngresoCostoTotal);
+            bodyTblProducto.appendChild(trTblProducto);
+            
+            var costo_distribucion = document.getElementById('costo_distribucion').value;   
+            var iva = document.getElementById('iva').value;
+            var percepcion_iva = document.getElementById('percepcion_iva').value;
+           
+            //RESTO VIEJO IMPORTE DE COSTO BASE
+            costo_base = parseFloat(costo_base) - parseFloat(old_total);
+            //SUMO NUEVO IMPORTE A COSTO BASE
+            costo_base = parseFloat(costo_base) + parseFloat(costo_total);
+            
+            //CALCULO TOTAL MAS FLETE
+            var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            
+            //AGREGAR IVA A COSTO FINAL MAS FLETE
+            var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
+            
+            //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
+            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100);
+            
+            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+            document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+            document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
+            array_ids.push(producto_id);
+            
+            buscarProducto();
+            i = i + 1;
+        } else {
+            var quitar = /\$/g;
+
+            var td_cantidad = document.getElementById('idTdCantidad_' + producto_id);
+            var old_cantidad = td_cantidad.innerHTML;
+            var td_descuento1 = document.getElementById('idTdDescuento1_' + producto_id);
+            var old_descuento1 = td_descuento1.innerHTML;
+            var td_descuento2 = document.getElementById('idTdDescuento2_' + producto_id);
+            var old_descuento2 = td_descuento2.innerHTML;
+            var td_descuento3 = document.getElementById('idTdDescuento3_' + producto_id);
+            var old_descuento3 = td_descuento3.innerHTML;
+            var td_total = document.getElementById('idTdTotal_' + producto_id);
+            var old_total = td_total.innerHTML;
+            old_total = old_total.replace(quitar, '');
+                
+            //SUSTITUYE EN TABLA POR NUEVOS VALORES
+            td_cantidad.innerHTML = cantidad;
+            td_descuento1.innerHTML = descuento1 + "%";
+            td_descuento2.innerHTML = descuento2 + "%";
+            td_descuento3.innerHTML = descuento3 + "%";
+            td_total.innerHTML = '$' + costo_total;
+
+            //SUSTITUYE VALORES EN INPUTS HIDDEN
+            document.getElementById("cantidad_" + producto_id).value = cantidad;
+            document.getElementById("descuento1_" + producto_id).value = descuento1;
+            document.getElementById("descuento2_" + producto_id).value = descuento2;
+            document.getElementById("descuento3_" + producto_id).value = descuento3;
+            document.getElementById("costo_total_" + producto_id).value = costo_total;
+                
+            var costo_distribucion = document.getElementById('costo_distribucion').value;   
+            var iva = document.getElementById('iva').value;
+            var percepcion_iva = document.getElementById('percepcion_iva').value;
+           
+            //RESTO VIEJO IMPORTE DE COSTO BASE
+            costo_base = parseFloat(costo_base) - parseFloat(old_total);
+            //SUMO NUEVO IMPORTE A COSTO BASE
+            costo_base = parseFloat(costo_base) + parseFloat(costo_total);
+            
+            //CALCULO TOTAL MAS FLETE
+            var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            
+            //AGREGAR IVA A COSTO FINAL MAS FLETE
+            var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
+            
+            //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
+            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100) ;
+            
+            
+            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+            document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+            document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
+            buscarProducto();
+        }
+    }
+
+    function quitarProducto(producto_id) {
+        var bodyTblProducto = document.getElementById('bodyTblProducto');
+        var trTblProducto = document.getElementById("idTrTbl_" + producto_id);
+        var tdTblTotal = document.getElementById("idTdTotal_" + producto_id);
+        var totalProducto = tdTblTotal.textContent;
+        var total_quitar = totalProducto.substring(1);
+
+        var div_array_ingresos = document.getElementById('div_array_ingresos');
+        var input_producto_id = document.getElementById('producto_id_' + producto_id);
+        var input_codigo = document.getElementById('codigo_' + producto_id);
+        var input_descripcion = document.getElementById('descripcion_' + producto_id);
+        var input_cantidad = document.getElementById('cantidad_' + producto_id);
+        var input_descuento1 = document.getElementById('descuento1_' + producto_id);
+        var input_descuento2 = document.getElementById('descuento2_' + producto_id);
+        var input_descuento3 = document.getElementById('descuento3_' + producto_id);
+        var input_costo = document.getElementById('costo_' + producto_id);
+        var input_costo_total = document.getElementById('costo_total_' + producto_id);
+
+        var costo_distribucion = document.getElementById('costo_distribucion').value;   
+        var iva = document.getElementById('iva').value;
+        var percepcion_iva = document.getElementById('percepcion_iva').value;
+           
+        //RESTO VIEJO IMPORTE DE COSTO BASE
+        costo_base = parseFloat(costo_base) - parseFloat(total_quitar);
+            
+        //CALCULO TOTAL MAS FLETE
+        var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            
+        //AGREGAR IVA A COSTO FINAL MAS FLETE
+        var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
+        
+        //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
+        var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100);
+
+        document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+        document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
+        document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+        document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
+
+        bodyTblProducto.removeChild(trTblProducto);   
+        div_array_ingresos.removeChild(input_producto_id);
+        div_array_ingresos.removeChild(input_codigo);
+        div_array_ingresos.removeChild(input_descripcion);
+        div_array_ingresos.removeChild(input_cantidad);
+        div_array_ingresos.removeChild(input_descuento1);
+        div_array_ingresos.removeChild(input_descuento2);
+        div_array_ingresos.removeChild(input_descuento3);
+        div_array_ingresos.removeChild(input_costo);
+        div_array_ingresos.removeChild(input_costo_total);
+    }
+
+    function verificarReingreso() {
+        var array = new Array();
+        var flag_array = 0;
+
+        if (flag_array == 0) {
+            var div_productos = document.getElementById("div_productos");
+            var input_producto = document.getElementById("producto");
+            var div_form_producto = document.getElementById("div_form_producto");
+            var div_array_ingresos = document.getElementById("div_array_ingresos");
+            div_productos.removeChild(div_form_producto);
+            div_array_ingresos.removeChild(input_producto);   
+            document.getElementById('btn_cargar').disabled = 'true';         
+            document.getElementById("formulario_guardar").submit();
+        } else {
+            var mensaje = array.join("<br><br>");
+            $('#sistema_alertas').modal('show');
+            document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+        }
+    }
+</script>

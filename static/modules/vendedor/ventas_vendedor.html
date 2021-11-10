@@ -1,0 +1,399 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12 hidden-print">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/listar">Panel Vendedores</a></li>
+        <li><a href="{url_app}/vendedor/estadisticas">Estadísticas</a></li>
+    </ul>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="x_panel visible-print" style="display: none">
+        <font class="font-size: 12px"><i class="fa fa-briefcase"></i> Pago de Comisión
+            <ul class="nav navbar-right panel_toolbox">
+                <li><i class="fa fa-calendar" style="color: #2883bf;"></i> Fecha: {fecha_sys}</li>
+            </ul>
+        </font>
+    </div>
+    <br>
+    <div class="x_panel">
+        <h3 class="green"><i class="fa fa-briefcase"></i> {vendedor-apellido} {vendedor-nombre}
+            <ul class="nav navbar-right panel_toolbox hidden-print">
+                <li><a href="#" onClick="window.print();"><i class="fa fa-print" style="color: #2883bf;"></i></a></li>
+            </ul>
+        </h3>
+    </div>
+    <div class="x_panel hidden-print">
+        <div class="x_content">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <canvas id="canvasDoughnut1"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_content">
+            <h3 class="blue">Información</h3>
+            <strong>Desde <font style="font-size: 14px;">{fecha_desde}</font> hasta <font style="font-size: 14px;">{fecha_hasta}</font></strong><hr />
+            <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px; margin-left: 1%;">
+                <center>
+                    <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                        <span class="count_top"><i class="fa fa-usd blue"></i> Facturación</span>
+                        <div class="count blue" style="font-size: 30px;">${valor_total_facturado}</div>
+                    </div>
+                </center>
+                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count visible-print" style="display: none;">
+                    <span class="count_top">% Comisión</span>
+                    <div class="count red" style="font-size: 30px;">{porcentaje_comision}</div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd red"></i> Comisión a Pagar</span>
+                    <div class="count red" style="font-size: 30px;" id="comision_pendiente">${valor_comision_pendiente}</div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count visible-print" style="display: none;">
+                    <span class="count_top">Adelantos</span>
+                    <div class="count red" style="font-size: 30px;">${suma_adelantos}</div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 col-xs-offset-6 tile_stats_count visible-print" style="display: none;">
+                    <span class="count_top">Total a Pagar</span>
+                    <div class="count red" style="font-size: 30px;">${total_pagar}</div>
+                </div>
+                <!--
+                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd green"></i> Comisión Abonada</span>
+                    <div class="count green" style="font-size: 30px;">${valor_comision_abonada}</div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd green"></i> Comisión Abonada (Sin IVA)</span>
+                    <div class="count green" style="font-size: 30px;">${valor_comision_abonado_siniva}</div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd red"></i> Comisión Pendiente (Sin IVA)</span>
+                    <div class="count red" style="font-size: 30px;" id="comision_pendiente">${valor_comision_pendiente_siniva}</div>
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+    <div class="x_panel visible-print" style="display: none;">
+        <div class="x_content" style="text-align : right;">
+            <br><br><br><br><br><br><br>
+            <h4 class="blue">----------------------------------------</h4>
+            <h4 class="blue">{vendedor-apellido} {vendedor-nombre}</h4>
+            <h4 class="blue">{vendedor-documento}</h4>
+        </div>
+    </div>
+    <div class="x_panel hidden-print">
+        <div class="x_content">
+            <h3 class="blue">Modificar % comisión</h3>
+            <small><strong>Desde {fecha_desde} hasta {fecha_hasta}</strong></small><hr />
+            <form class="form-inline" method="post" action="{url_app}/vendedor/cambiar_comision_conjunta">
+                <div class="form-group">
+                    <label for="ex3">Porcentaje</label>
+                    <input type="number" name="comision" id="comision" step="0.01" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-success" style="margin-top: 1%;">Aplicar</button>
+                <input type="hidden" name="desde" value="{comision_fecha_desde}">
+                <input type="hidden" name="hasta" value="{comision_fecha_hasta}">
+                <input type="hidden" name="vendedor_id" value="{vendedor-vendedor_id}">
+            </form>
+            <small class="red"><strong>* No aplica a comisiones abonadas en forma parcial o total.</strong></small><hr />
+        </div>
+    </div>
+</div>
+<div class="col-md-8 col-sm-8 col-xs-12 hidden-print">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Total ventas del período seleccionado   </h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_egreso_total" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Factura</th>
+                        <th>Cliente</th>
+                        <th>Cond PAGO</th>
+                        <th>Subtotal</th>
+                        <th>I. Total</th>
+                        <th>Valor Comisión (%)</th>
+                        <th>Pago Comisión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_egreso_total}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12 hidden-print">
+    <hr>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Ventas a rendir con vendedor <small>Desde {fecha_desde} hasta {fecha_hasta}</small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <form class="form" id="formulario_guardar" method="post" action="{url_app}/vendedor/abonar_comision_conjunta">
+                <div class="col-md-10 col-sm-10 col-xs-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action">
+                            <thead>
+                                <tr class="headings" style="font-size: 12px;">
+                                    <th>
+                                        <!--<input type="checkbox" id="check-all" class="flat">-->
+                                    </th>
+                                    <th class="column-title"># </th>
+                                    <th class="column-title">Fecha</th>
+                                    <th class="column-title">Factura</th>
+                                    <th class="column-title">Cliente</th>
+                                    <th class="column-title">Vendedor</th>
+                                    <th class="column-title">Cond PAGO</th>
+                                    <th class="column-title">Subtotal</th>
+                                    <th class="column-title">I. Total</th>
+                                    <th class="column-title">I. Total (Sin IVA)</th>
+                                    <th class="column-title">Valor Comisión</th>
+                                    <th class="column-title">Valor Comisión (Sin IVA)</th>
+                                    <th class="column-title">%</th>
+                                    <th class="column-title">Pago Comisión</th>
+                                    <th class="column-title"></th>
+                                    <th class="bulk-actions" colspan="13">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">ABONAR COMISIÓN TOTAL DE LAS FACTURAS SELECCIONADAS ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tbl_egreso_pendiente}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2 col-xs-12">
+                    <div class="form-group">
+                        <label>Fecha de Pago</label>
+                        <input type="date" class="form-control" name="fecha_pago" id="fecha_pago" value="{fecha_sys}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Seleccionar Iva</label><br>
+                        <input type="radio" id="flag_iva" name="flag_iva" value="0"> Con Iva<br>
+                        <input type="radio" id="flag_iva" name="flag_iva" value="1" checked> Sin Iva
+                    </div>
+                    <button type="button" class="btn btn-dark" style="width: 100%; height: 100px;" onclick="confirma_formulario(2, '')">
+                        <i class="fa fa-level-up" style="font-size: 20px;"></i> <br> <font style="font-size: 13px;">ABONAR COMISIÓN<br> <small>Seleccionar facturas</small></font>
+                        <input type="hidden" name="fecha_desde" value="{fecha_desde}">
+                        <input type="hidden" name="fecha_hasta" value="{fecha_hasta}">
+                        <input type="hidden" name="desde" value="{desde}">
+                        <input type="hidden" name="hasta" value="{hasta}">
+                        <input type="hidden" name="vendedor_id" value="{vendedor-vendedor_id}">
+                    </button>
+                    <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                            <span class="count_top"><i class="fa fa-usd blue"></i> Pago Comisión</span>
+                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${valor_comision_pendiente}</div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                            <span class="count_top"><i class="fa fa-usd blue"></i> Pago Comisión (Sin IVA)</span>
+                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${valor_comision_pendiente_siniva}</div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                            <span class="count_top"><i class="fa fa-usd blue"></i> Total Facturado (Com. Pendiente)</span>
+                            <div class="count blue" id="txt_total" style="font-size: 30px;">${valor_total_facturado_comision_pendiente}</div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas_1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="formulario_comision">
+
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var comision_total = {valor_comision_pendiente_siniva};
+    var total = {valor_total_facturado_comision_pendiente};
+
+    // Table
+    $('table input').on('ifChecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().addClass('selected');
+        countChecked();
+    });
+    $('table input').on('ifUnchecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().removeClass('selected');
+        countChecked();
+    });
+
+    var checkState = '';
+
+    $('.bulk_action input').on('ifChecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().addClass('selected');
+        var egresocomision_id = $(this).val();
+
+        //COMISION
+        var comision = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
+        comision = comision.substring(1)
+        comision_total = parseFloat(comision_total) + parseFloat(comision);
+        comision_total = Number(comision_total.toFixed(2));
+        document.getElementById('txt_comision_total').innerHTML = "$" + comision_total;
+
+        //TOTAL
+        var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
+        importe = importe.substring(1)
+        total = parseFloat(total) + parseFloat(importe);
+        total = Number(total.toFixed(2));
+        document.getElementById('txt_total').innerHTML = "$" + total;
+
+        countChecked();
+
+    });
+    $('.bulk_action input').on('ifUnchecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().removeClass('selected');
+        var egresocomision_id = $(this).val();
+
+        //COMISION
+        var comision = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
+        comision = comision.substring(1)
+        comision_total = parseFloat(comision_total) - parseFloat(comision);
+        comision_total = Number(comision_total.toFixed(2));
+        document.getElementById('txt_comision_total').innerHTML = "$" + comision_total;
+
+        //TOTAL
+        var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
+        importe = importe.substring(1)
+        total = parseFloat(total) - parseFloat(importe);
+        total = Number(total.toFixed(2));
+        document.getElementById('txt_total').innerHTML = "$" + total;
+
+        countChecked();
+    });
+    $('.bulk_action input#check-all').on('ifChecked', function () {
+        checkState = 'all';
+        countChecked();
+    });
+    $('.bulk_action input#check-all').on('ifUnchecked', function () {
+        checkState = 'none';
+        countChecked();
+    });
+
+    function countChecked() {
+        if (checkState === 'all') {
+            $(".bulk_action input[name='objeto[]']").iCheck('check');
+        }
+        if (checkState === 'none') {
+            $(".bulk_action input[name='objeto[]']").iCheck('uncheck');
+        }
+
+        var checkCount = $(".bulk_action input[name='objeto[]']:checked").length;
+
+        if (checkCount) {
+            $('.column-title').hide();
+            $('.bulk-actions').show();
+            $('.action-cnt').html(checkCount + ' Filas seleccionadas');
+        } else {
+            $('.column-title').show();
+            $('.bulk-actions').hide();
+        }
+    }
+</script>
+<!-- Chart.js -->
+<script src="{url_static}vendors/Chart.js/dist/Chart.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    if ($('#canvasDoughnut1').length ){
+        var ctx = document.getElementById("canvasDoughnut1");
+        var data = {
+            labels: [
+                {lst_carga_bardonuts_venta_periodo_producto}
+            ],
+            datasets: [{
+                {lst_carga_bardonuts_venta_cantidad_producto}
+                backgroundColor: [
+                    "#455C73",
+                    "#9B59B6",
+                    "#BDC3C7",
+                    "#26B99A",
+                    "#00AA39",
+                    "#50AAA9",
+                    "#3498DB",
+                    "#FFAA29",
+                    "#BCC92A",
+                    "#F9D56B",
+                    "#DD45DD",
+                    "#AF422F",
+                    "#BA39B2"
+
+                ],
+                hoverBackgroundColor: [
+                    "#34495E",
+                    "#B370CF",
+                    "#CFD4D8",
+                    "#36CAAB",
+                    "#49A9EA"
+                ]
+            }]
+        };
+
+        var canvasDoughnut1 = new Chart(ctx, {
+            type: 'doughnut',
+            tooltipFillColor: "rgba(51, 51, 51, 0.55)",
+            data: data
+        });
+    }
+
+
+</script>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#tbl_egreso_total').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":15
+        } );
+    } );
+
+    function abonarVendedor(egreso_id) {
+
+        var formularioComisionParcial = $.ajax({
+            url: '{url_app}/vendedor/formulario_abonar_egreso_ajax/' + egreso_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById("formulario_comision").innerHTML = formularioComisionParcial;
+        $('#sistema_alertas_1').modal('show');
+    }
+</script>

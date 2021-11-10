@@ -1,0 +1,226 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/egreso/listar">Panel Ventas</a></li>
+    </ul>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="col-md-8 col-sm-8 col-xs-12" style="padding: 0px; margin-bottom: 10px;">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="pricing">
+                    <div class="title" style="height: 85px;">
+                        <h2>Comprobante</h2>
+                        <h1>{egreso-punto_venta}-{egreso-numero_factura}</h1>
+                    </div>
+                    <div class="x_content">
+                        <div class="">
+                            <div class="pricing_features">
+                                <ul class="list-unstyled text-left">
+                                    <li><i class="fa fa-check text-success"></i> <strong> Fecha:</strong> {egreso-fecha} - {egreso-hora}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Cliente:</strong> {cliente-razon_social} ({documentotipo-denominacion} {cliente-documento})</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Condición IVA:</strong> {condicioniva-denominacion}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Condición Pago:</strong> {condicionpago-denominacion}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Descuento:</strong> {egreso-descuento}%</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Subtotal:</strong> ${egreso-subtotal}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Importe Total:</strong> ${egreso-importe_total}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <div class="col-md-4 col-sm-4 col-xs-12" style="padding: 0px; margin-bottom: 10px;">
+        <div class="col-md-12 col-sm-12 col-xs-12 remover-btn-registrar-venta" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
+                <i class="fa fa-usd"></i> Registrar Venta
+            </button>
+        </div>
+        <div class="x_panel" id="div_tbl_detalle">
+            <div class="x_title">
+                <h2><i class="fa fa-truck"></i>&nbsp;&nbsp; ENTREGA</h2>
+                <ul class="nav navbar-right panel_toolbox" style="display: {egresoentrega-btn_entrega_display}">
+                    <li><a class="btn btn-xs btn-danger" href="#" onClick="programarEntrega({egreso-egreso_id});"><i class="fa fa-clock-o" style="color: #FFF;"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> {flete-denominacion}</span>
+                    <div style="font-size: 20px;">{estadoentrega-denominacion}</div>
+                    <span class="count_bottom"><i class="blue">{egresoentrega-fecha} </i> </span>
+                </div>        
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <button type="submit" class="btn btn-xs btn-success" onClick="location.href='{url_app}/egreso/confirmar_entrega/{egreso-egreso_id}'" style="margin-top: 5px; width: 100%; display: {egresoentrega-btn_entrega_display}">CONFIRMAR ENTREGA</button>
+                </div>
+            </div>
+        </div>
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; COMISIÓN</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-user"></i> {vendedor-apellido} {vendedor-nombre}</span>
+                    <div style="font-size: 20px;">${egresocomision-valor_abonado}</div>
+                    <span class="count_bottom"><i class="blue">EST: PAGO {estadocomision-denominacion} </i> </span>
+                </div>
+            </div>
+        </div>
+        <div class="x_panel" style="padding-bottom: 0px; display: {egreso-div_datos_facturarafip_display};">
+            <div class="x_title">
+                <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; DATOS AFIP</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                    <div class="x_content">
+                        <ul class="list-unstyled text-left">
+                            <li><i class="fa fa-check text-success"></i> <strong> N°:</strong> {TIPOFACTURA} {PUNTO_VENTA}-{NUMERO_FACTURA}</li>
+                            <li><i class="fa fa-check text-success"></i> <strong> CAE:</strong> {CAE}</li>
+                            <li><i class="fa fa-check text-success"></i> <strong> FVenc:</strong> {FVENCIMIENTO}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel" id="div_tbl_detalle">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle de venta</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_egresodetalle" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Descuento</th>
+                        <th>P.Unitario</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_egresodetalle}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">    
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; " id="div_pdf_factura">
+        <div class="form-group col-lg-4 remover-btn-facturar-afip" style="padding-left: 0px;">
+            <form class="form-horizontal form-label-left" id="formulario_guardar">
+                <input type="hidden" name="tipofactura" id="tipofactura" value="{cliente-tipofactura-id}" required>
+                <input type="hidden" name="egreso_id" id="egreso_id" value="{egreso-egreso_id}">
+                <button type="button" class="btn btn-xs btn-danger" onClick="prepararFacturaAfip();" style="width: 100%; display: {egreso-div_facturarafip_display};"><i class="fa fa-file-text-o"></i> FACTURAR AFIP</button>
+            </form>
+        </div>
+        <div class="form-group col-lg-4">
+            <button type="button" class="btn btn-xs btn-danger remover-btn-generar-notacredito" onClick="location.href='{url_app}/egreso/reingreso/{egreso-egreso_id}'" style="width: 100%; display: {egreso-btn_generar_nc};"><i class="fa fa-file-text-o"></i> GENERAR NOTA CRÉDITO</button>
+            <button type="button" class="btn btn-xs btn-danger" onClick="location.href='{url_app}/notacredito/consultar/{notacredito-notacredito_id}'" style="width: 100%; display: {egreso-btn_consultar_nc};"><i class="fa fa-file-text-o"></i> CONSULTAR NOTA DE CRÉDITO</button>
+        </div>
+        <div class="form-group col-lg-4" style="padding-right: 0px;">
+            <a type="button" class="btn btn-xs btn-dark" href="file.php?f=facturas_egresos_Factura-{egreso-egreso_id}&a=d" style="width: 100%; display: {egreso-btn_imprimir_comprobante};" target="_blank"><i class="fa fa-print"></i> IMPRIMIR</a>
+            <button type="button" class="btn btn-xs btn-dark remover-btn-cerrar-comprobante" onClick="location.href='{url_app}/egreso/cerrar_comprobante/{egreso-egreso_id}'" style="width: 100%; display: {egreso-btn_cerrar_comprobante};"><i class="fa fa-check"></i> CERRAR COMPROBANTE</button>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; " id="div_pdf_factura">
+        <iframe src="file.php?f=facturas_egresos_Factura-{egreso-egreso_id}&a=v#toolbar=0&navpanes=0" style="width:100%; height:580px;" frameborder="0"></iframe>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="div_contenido"></div>
+                <br><br><br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 1:
+                $(".remover-btn-generar-notacredito").css("display","none");
+                break;
+            case 2:
+                $(".remover-btn-facturar-afip").css("display","none");
+                //$(".remover-btn-generar-notacredito").css("display","none");
+                break;
+        }
+    });
+
+    $(document).ready(function() {
+        $('#tbl_egresodetalle').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+
+    function programarEntrega(egreso_id) {
+        var formProgramarEntrega = $.ajax({
+            url: '{url_app}/egreso/traer_formulario_entrega_ajax/' + egreso_id,
+            dataType: 'text',
+            async: false
+        }).responseText;
+
+        document.getElementById("div_contenido").innerHTML = formProgramarEntrega;
+        $('#sistema_alertas').modal('show');
+    }
+
+    function prepararFacturaAfip() {
+        var egreso_id = document.getElementById("egreso_id").value;
+        var tipofactura_id = document.getElementById("tipofactura").value;
+        
+        var datosFacturaAFIP = $.ajax({
+            url: '{url_app}/egreso/prepara_factura_afip/' + egreso_id + '@' + tipofactura_id,
+            dataType: 'text',
+            async: false
+        }).responseText;
+
+        document.getElementById("div_contenido").innerHTML = datosFacturaAFIP;
+        $('#sistema_alertas').modal('show');
+    }
+
+    function facturarAfip() {
+        document.getElementById('btn_facturar_afip_ajax').disabled = 'true';   
+        document.getElementById("formulario_facturar_afip_ajax").submit();
+    }
+
+    function cerrarComprobante(egreso_id) {
+        $.ajax({
+            url: '{url_app}/egreso/cerrar_comprobante/' + egreso_id,
+            async: false
+        });
+    }
+</script>

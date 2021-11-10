@@ -1,0 +1,45 @@
+<div class="col-lg-12">
+    <div class="col-lg-2">
+        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+    </div>
+    <div class="col-lg-10">
+    	<h5><strong>[ERROR]</strong> El CLIENTE seleccionado posee cuentas corrientes vencidas.</h5>
+    	<h5><strong><a href='{url_app}/cuentacorrientecliente/consultar/{cliente-cliente_id}' style='color: #26ba9a;'>[VER CUENTA]<a></strong></h5>
+    </div>
+</div>
+<div class="col-lg-12">
+	<div class="col-lg-12">
+		<div class="col-lg-12">
+			<hr />
+    		<h2><strong>AUTORIZAR</strong></h2>
+    	</div>
+    </div>
+	<div class="col-lg-2">
+        <center><h1><i class="fa fa-unlock-alt" style="color: #669bc9;"></i></h1></center>
+    </div>
+	<div class="col-lg-10">
+		<div class="x_content">
+	        <div class=" form">
+	            <form class="form" id="formulario_guardar_autorizar" method="post">
+	                <div class="input-group col-lg-12">
+	                	<input type="password" id="clave_autorizar" class="form-control"> 
+	                	<input type="hidden" id="autorizar_cliente_id" value="{cliente-cliente_id}" class="form-control"> 
+	                	<span class="input-group-btn"><button type="button" class="btn btn-primary" onClick="autorizarVenta();">AUTORIZAR</button></span>
+	                </div>
+	            </form>
+	        </div>    
+	    </div>
+    </div>
+</div>
+<div class="col-lg-12" id="error_clave_autorizacion" style="display: none;">
+	<div class="col-lg-12">
+		<div class="col-lg-12"><hr /></div>
+    </div>
+	<div class="col-lg-2">
+        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+    </div>
+	<div class="col-lg-10">
+    	<h5><strong>[ERROR]</strong> La CLAVE proporcionada es incorrecta.</h5>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>

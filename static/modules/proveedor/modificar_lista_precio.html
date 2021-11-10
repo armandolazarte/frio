@@ -1,0 +1,163 @@
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/listar">Panel Proveedores</a></li>
+    </ul>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2>Modificar lista de precios</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Modificar lista de precios</a></li>
+                    </ul>
+                </li>
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <form class="form" id="formulario_guardar" method="post" action="{url_app}/proveedor/actualizar_lista_precio">
+                <div class="col-md-9 col-sm-9 col-xs-9">
+                    <div class="table-responsive">
+                        <table class="table table-striped jambo_table bulk_action">
+                            <thead>
+                                <tr class="headings">
+                                    <th>
+                                        <input type="checkbox" id="check-all" class="flat">
+                                    </th>
+                                    <th class="column-title">COD </th>
+                                    <th class="column-title">Rubro </th>
+                                    <th class="column-title">Descripcion </th>
+                                    <th class="column-title">Costo </th>
+                                    <th class="column-title">COSTO+IVA </th>
+                                    <th class="column-title">Ganancia </th>
+                                    <!--<th class="column-title">Descuento </th>-->
+                                    <th class="column-title">Venta </th>
+                                    <th class="bulk-actions" colspan="9">
+                                        <a class="antoo" style="color:#fff; font-weight:500;">Acción grupales ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tbl_productodetalle}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3">
+                    <div class="form-group col-lg-5">
+                        <label>Valor (%)</label>
+                        <input type="text" class="form-control" name="porcentaje" id="porcentaje" value="1" required>
+                    </div>
+                    <div class="form-group col-lg-7">
+                        <label>Fecha</label>
+                        <input type="date" name="fecha" id="fecha" class="form-control" value="{fecha}" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <label>Tipo de Modificaicón</label>
+                        <div class="radio">
+                            <label class="hover">
+                                <div class="iradio_flat-green checked hover" style="position: relative;"><input type="radio" class="flat" name="tipo_modificacion" value="1" checked></ins></div> Mod Costo
+                            </label>
+                        </div>
+                        <!--
+                        <div class="radio">
+                            <label class="hover">
+                                <div class="iradio_flat-green checked hover" style="position: relative;"><input type="radio" class="flat" name="tipo_modificacion" value="2" ></ins></div> Mod Descuento
+                            </label>
+                        </div>
+                        -->
+                    </div>
+                    <div class="form-group col-lg-12" style="text-align: right; margin-top: 5%;">
+                        <input type="hidden" name="proveedor" value="{proveedor-proveedor_id}">
+                        <button type="button" onclick="confirma_formulario(2, '')" class="btn btn-success">Actualizar Lista de Precio</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>  
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="alerta">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <div class="col-lg-2">
+                        <center><h1><i class="fa fa-exclamation-triangle" style="color: #ff6c60;"></i></h1></center>
+                    </div>
+                    <div class="col-lg-10"><h5 id="msj_alerta_modal">{mensaje}</h5></div>
+                </div>
+                <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    
+    // Table
+    $('table input').on('ifChecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().addClass('selected');
+        countChecked();
+    });
+    $('table input').on('ifUnchecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().removeClass('selected');
+        countChecked();
+    });
+
+    var checkState = '';
+
+    $('.bulk_action input').on('ifChecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().addClass('selected');
+        countChecked();
+    });
+    $('.bulk_action input').on('ifUnchecked', function () {
+        checkState = '';
+        $(this).parent().parent().parent().removeClass('selected');
+        countChecked();
+    });
+    $('.bulk_action input#check-all').on('ifChecked', function () {
+        checkState = 'all';
+        countChecked();
+    });
+    $('.bulk_action input#check-all').on('ifUnchecked', function () {
+        checkState = 'none';
+        countChecked();
+    });
+
+    function countChecked() {
+        if (checkState === 'all') {
+            $(".bulk_action input[name='objeto[]']").iCheck('check');
+        }
+        if (checkState === 'none') {
+            $(".bulk_action input[name='objeto[]']").iCheck('uncheck');
+        }
+
+        var checkCount = $(".bulk_action input[name='objeto[]']:checked").length;
+
+        if (checkCount) {
+            $('.column-title').hide();
+            $('.bulk-actions').show();
+            $('.action-cnt').html(checkCount + ' Filas seleccionadas');
+        } else {
+            $('.column-title').show();
+            $('.bulk-actions').hide();
+        }
+    }
+
+    $('#alerta').modal('{display}');
+</script>

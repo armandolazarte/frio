@@ -1,0 +1,113 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/presupuesto/listar">Panel Presupuestos</a></li>
+    </ul>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="col-md-8 col-sm-8 col-xs-12" style="padding: 0px; margin-bottom: 10px;">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="pricing">
+                    <div class="title" style="height: 85px;">
+                        <h2>Comprobante</h2>
+                        <h1>{presupuesto-punto_venta}-{presupuesto-numero_factura}</h1>
+                    </div>
+                    <div class="x_content">
+                        <div class="">
+                            <div class="pricing_features">
+                                <ul class="list-unstyled text-left">
+                                    <li><i class="fa fa-check text-success"></i> <strong> Fecha:</strong> {presupuesto-fecha} - {presupuesto-hora}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Cliente:</strong> {cliente-razon_social} ({documentotipo-denominacion} {cliente-documento})</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Descuento:</strong> {presupuesto-descuento}%</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Subtotal:</strong> ${presupuesto-subtotal}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Importe Total:</strong> ${presupuesto-importe_total}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+    <div class="col-md-4 col-sm-4 col-xs-12" style="padding: 0px; margin-bottom: 10px;">
+        <div class="col-md-12 col-sm-12 col-xs-12 remover-btn-registrar-venta" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/presupuesto/presupuestar'">
+                <i class="fa fa-usd"></i> Registrar Presupuesto
+            </button>
+        </div>
+    </div>
+    <div class="x_panel" id="div_tbl_detalle">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Detalle de venta</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_presupuestodetalle" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Descripción</th>
+                        <th>Cantidad</th>
+                        <th>Descuento</th>
+                        <th>P.Unitario</th>
+                        <th>Importe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_presupuestodetalle}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-6 col-sm-6 col-xs-12">    
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; " id="div_pdf_factura">
+        <div class="form-group col-lg-4" style="padding-right: 0px;">
+            <a type="button" class="btn btn-xs btn-dark" href="{url_app}/presupuesto/ver_pdf/file.php?f=facturas_presupuestos_Presupuesto-{presupuesto-presupuesto_id}&a=d" style="width: 100%; display: {presupuesto-btn_imprimir_comprobante};" target="_blank"><i class="fa fa-print"></i> IMPRIMIR</a>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; " id="div_pdf_factura">
+        <iframe src="{url_app}/presupuesto/ver_pdf/file.php?f=facturas_presupuestos_Presupuesto-{presupuesto-presupuesto_id}&a=v#toolbar=0&navpanes=0" style="width:100%; height:580px;" frameborder="0"></iframe>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="div_contenido"></div>
+                <br><br><br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_presupuestodetalle').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+          , "iDisplayLength":5
+        } );
+    } );
+</script>

@@ -1,0 +1,19 @@
+<!--TBL_CUENTACORRIENTE-->
+<tr style="font-size: 11px;">
+    <td style="font-size: 10px;"><strong>CCPID</strong></td>
+    <td style="font-size: 10px;"><strong>FECHA</strong></td>
+    <td>
+        REFERENCIA&nbsp;&nbsp;
+        <a class="btn btn-xs btn-info" href="{url_app}/ingreso/consultar/IID" style="font-size: 12px;"><i class="fa fa-file-text-o"></i></a>&nbsp;
+        <button class="btn btn-xs btn-dark" onClick="verTipoPagoDetalle(MOVID,BTN_TIPOPAGO_ID,PROID);" style="font-size: 11px; display: DISPLAY_VER_TIPOPAGO;"><i class="fa fa-search"></i></button>
+    </td>
+    <td>
+        <span class="label label-CLASS" style="font-size: 9px;"><i class="fa fa-arrow-circle-MOVICON"></i></span> 
+        <span class="label label-primary" style="font-size: 15px;">$IMPORTE</span>
+    </td>
+    <td>
+        <span class="label label-BCOLOR" style="font-size: 15px;">BALANCE</span>
+        <button type="button" class="btn btn-xs btn-dark" onClick="cargarIngresoComprobante(CCPID);" style=" margin-top: 0px; display: BTN_DISPLAY;"><strong><i class="fa fa-usd"></i></strong></button>
+    </td>
+</tr>
+<!--TBL_CUENTACORRIENTE-->
