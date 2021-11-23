@@ -35,25 +35,19 @@
                         <label>Número</label>
                         <input type="number" name="documento" id="documento" class="form-control">
                     </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-4">
                         <label>Condición IVA</label>
                         <select class="form-control m-bot15" name="condicioniva" id="condicioniva" required>
                             {slt_condicioniva}
                         </select>
                     </div>
-                    <div class="form-group col-lg-3">
-                        <label>Condición Fiscal</label>
-                        <select class="form-control m-bot15" name="condicionfiscal" id="condicionfiscal" required>
-                            {slt_condicionfiscal}
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-4">
                         <label>Tipo Factura</label>
                         <select class="form-control m-bot15" name="tipofactura" id="tipofactura" required>
                             {slt_tipofactura}
                         </select>
                     </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-4">
                         <label>IVA</label>
                         <select class="form-control m-bot15" name="iva" id="iva" required>
                             <option value="21">21%</option>
@@ -73,22 +67,15 @@
                             {slt_frecuenciaventa}
                         </select>
                     </div>
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-3">
                         <label>Flete</label>
                         <select class="form-control m-bot15" name="flete" id="flete" required>
                             {slt_flete}
                         </select>
                     </div>
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-3">
                         <label>Días Venc. Cta. Cte.</label>
                         <input type="number" name="dias_vencimiento_cuenta_corriente" id="dias_vencimiento_cuenta_corriente" value="1" class="form-control">
-                    </div>
-                    <div class="form-group col-lg-2">
-                        <label>Imp. Ganancia</label>
-                        <select class="form-control m-bot15" name="impacto_ganancia" id="impacto_ganancia" required>
-                            <option value="1">SI</option>
-                            <option value="0">NO</option>
-                        </select>
                     </div>
                     <div class="form-group col-lg-8">
                         <div class="form-group">
@@ -158,7 +145,6 @@
                         </div>
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                        <input type="hidden" name="descuento" id="descuento" step="0.01" value="0" class="form-control">
                         <a href="#" class="btn btn-app" onclick="verificarCliente();"> <i class="fa fa-save"></i> Agregar </a>
                     </div>
                 </form>
@@ -192,21 +178,6 @@
 function verificarCliente() {
     var array = new Array();
     var flag_array = 0;
-
-    /*
-    var documento = document.getElementById("documento").value;
-    if (documento == null || documento.length == 0 || documento == "") {
-        flag_array = 1;
-        array.push("<strong>[ERROR]</strong> Por favor complete el número de DOCUMENTO.");
-    }
-
-    var documentotipo = document.getElementById("documentotipo");
-    var documentotipo_id = documentotipo.options[documentotipo.selectedIndex].value;
-    if (documentotipo_id == null || documentotipo_id.length == 0 || documentotipo_id == "" || documentotipo_id == 0) {
-        flag_array = 1;
-        array.push("<strong>[ERROR]</strong> Por favor seleccione el TIPO DE DOCUMENTO.");
-    }
-    */
 
     if (flag_array == 0) {
         var flag = $.ajax({

@@ -27,6 +27,7 @@ class SessionBaseHandler {
                 $data_login = array(
                     "usuario-usuario_id"=>$um->usuario_id,
                     "usuario-denominacion"=>$um->denominacion,
+                    "almacen-almacen_id"=>$um->almacen->almacen_id,
                     "usuario-nivel"=>$um->nivel,
                     "nivel-denominacion"=>$nivel_denominacion,
                     "configuracionmenu-denominacion"=>$configuracionmenu_denominacion,

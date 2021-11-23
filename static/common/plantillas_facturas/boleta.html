@@ -1,0 +1,85 @@
+<table style=" width: 100% !important;" cellspacing="0">
+    <tr>
+        <td style="padding-right: 5px; width: 100% !important;">
+            <table style="border: 1px #000 solid;" cellspacing="1">
+                <tr style=" text-align: center; font-size: 15px; border: 1px #000 solid;">
+                    <td style="border-bottom: 1px #000 solid; width: 100% !important;" colspan="3">BOLETA TESTIGO - Referencia: {tipofactura-nomenclatura} {ingreso-punto_venta}-{ingreso-numero_factura}</td>
+                </tr>
+                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 70% !important; text-align: left; font-size: 15px;" colspan="2">
+                        Proveedor: {proveedor-razon_social}
+                    </td>
+                    <td style="width: 30% !important; text-align: left; font-size: 15px;">
+                        Documento: {proveedor-documento}
+                    </td>
+                </tr>
+                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 50% !important; text-align: left; font-size: 15px;">
+                        Condición de Venta: {condicionpago-denominacion}<br>                                    
+                    </td>
+                    <td style="width: 50% !important; text-align: left; font-size: 15px;" colspan="2">
+                        Condición IVA: {proveedor-condicioniva}        
+                    </td>
+                </tr>
+                <tr style="font-size: 18px; padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; text-align: center; font-size: 25px; height: 345px !important; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; font-size: 12px;">
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Producto</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Cant</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Desc1</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Desc2</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Desc3</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">$ Unit.</td>
+                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Subtotal </td>
+                            </tr>
+                            {tbl_ingresodetalle}
+                        </table>
+                    </td>
+                </tr>
+                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+                    <td style="width: 65% !important; border-top: 1px #000 solid; text-align: center; font-size: 25px;" colspan="2">
+                    </td>
+                    <td style="width: 35% !important; border-top: 1px #000 solid; border-left: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+                        <strong>IVA: ${ingreso-iva}</strong>
+                    </td>
+                </tr>
+                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+                    <td style="width: 65% !important; border-top: none; text-align: center; font-size: 25px;" colspan="2">
+                    </td>
+                    <td style="width: 35% !important; border-top: none; border-left: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+                        <strong>Percepción IVA: ${ingreso-percepcion_iva}</strong>
+                    </td>
+                </tr>
+                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+                    <td style="width: 65% !important; border-top: none; text-align: center; font-size: 25px;" colspan="2">
+                    </td>
+                    <td style="width: 35% !important; border-top: none; border-left: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+                        <strong>Ingresos Brutos: ${ingreso-ingresos_brutos}</strong>
+                    </td>
+                </tr>
+                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+                    <td style="width: 65% !important; border-top: none; text-align: center; font-size: 25px;" colspan="2">
+                    </td>
+                    <td style="width: 35% !important; border-top: none; border-left: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+                        <strong>Imp. Interno: ${ingreso-impuesto_interno}</strong>
+                    </td>
+                </tr>
+                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+                    <td style="width: 65% !important; border-top: none; text-align: center; font-size: 25px;" colspan="2">
+                    </td>
+                    <td style="width: 35% !important; border-top: none; border-left: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+                        <strong>Subtotal: ${ingreso-costo_total}</strong>
+                    </td>
+                </tr>
+                <tr style="font-size: 13px; padding:5px 0 8px 0;">
+                    <td style="width: 65% !important; border-top: none; text-align: center; font-size: 25px;" colspan="2">
+                    </td>
+                    <td style="width: 35% !important; border-top: none; border-left: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
+                        <strong>Total: ${ingreso-costo_total_iva}</strong>
+                    </td>
+                </tr>
+            </table>
+        </td>        
+    </tr>
+</table>

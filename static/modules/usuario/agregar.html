@@ -21,42 +21,47 @@
         <div class="x_content">
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/usuario/guardar">
-                    <div class="form-group">
+                    <div class="form-group col-lg-12">
                         <label>Nombre</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required onKeypress="if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122)) event.returnValue = false;">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-lg-12">
                         <label>Apellido</label>
                         <input type="text" class="form-control" name="apellido" id="apellido" required onKeypress="if ((event.keyCode != 32) && (event.keyCode < 65) || (event.keyCode > 90) && (event.keyCode < 97) || (event.keyCode > 122)) event.returnValue = false;">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-lg-6">
                         <label>Usuario</label>
                         <input type="text" class="form-control" name="denominacion" id="denominacion" required>
                         <div class="form-group col-lg-12" id="div_error_usuario"></div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-lg-6">
+                        <label>Almacén por defecto</label>
+                        <select class="form-control" name="almacen" id="almacen">
+                            {slt_almacen}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12">
                         <label>Menú</label>
                         <select class="form-control" name="configuracionmenu" id="configuracionmenu" onChange="verificaRol()";>
                             {slt_configuracionmenu}
                         </select>
                     </div>
-                    <div class="form-group" id="div_slt_vendedor" style="display: none;">
+                    <div class="form-group col-lg-12" id="div_slt_vendedor" style="display: none;">
                         <label>Vendedor</label>
                         <select class="form-control" name="vendedor" id="vendedor" disabled>
                             {slt_vendedor}
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-lg-12">
                         <label>Perfil</label>
                         <select class="form-control" name="nivel">
                             <option value="1"> Operador</option>
                             <option value="3"> Admnistrador</option>
                         </select>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group col-lg-12">
                         <label>Correo Electrónico</label>
                         <input type="mail" class="form-control" name="correoelectronico" required>
-                        <div class="form-group col-lg-12" id="div_error_usuario"></div>
                     </div>
                     <div class="form-group">
                         <label>Contraseña</label>

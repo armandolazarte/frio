@@ -25,7 +25,7 @@
     </div>
     <div class="form-group col-lg-3">
         <label>P.Unitario</label>
-        <input type="number" class="form-control" name="costo" id="costo" value="{producto-valor_venta}" step="0.01" onBlur="actualizarCostoTotal();" required>
+        <input type="number" class="form-control" name="costo" id="costo" value="{producto-precio_venta}" step="0.01" onBlur="actualizarCostoTotal();" required>
     </div>
     <div class="col-lg-6" style="padding-top: 3%;">
         <span class="label label-danger" style="font-size: 15px;">CANT DISP: <strong>{cantidad_disponible}{productounidad-denominacion}</strong></span>
@@ -46,7 +46,7 @@
     <div class="form-group col-lg-10">
         <input type="hidden" class="form-control" name="producto_id" id="producto_id" value="{producto-producto_id}">
         <input type="hidden" name="iva_original" id="iva_original" value="{producto-iva}">
-        <input type="hidden" name="costo_original" id="costo_original" value="{producto-valor_venta}">
+        <input type="hidden" name="costo_original" id="costo_original" value="{producto-precio_venta}">
         <button type="button" class="btn btn-success btn-xs" onClick="egresarProducto();" style="width:100%;"> <i class="fa fa-plus-square"></i>&nbsp;&nbsp;Cargar a comprobante </button>
     </div>
     <div class="form-group col-lg-12" id="alerta_stock" style="display: none; text-align: center; font-size: 15px;">

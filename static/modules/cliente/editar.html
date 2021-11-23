@@ -36,28 +36,21 @@
                         <label>Número</label>
                         <input type="number" name="documento" id="documento" class="form-control" value="{cliente-documento}" required>
                     </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-4">
                         <label>Condición IVA</label>
                         <select class="form-control m-bot15" name="condicioniva" id="condicioniva" required>
                             <option value="{condicioniva-condicioniva_id}">{condicioniva-denominacion}</option>
                             {slt_condicioniva}
                         </select>
                     </div>
-                    <div class="form-group col-lg-3">
-                        <label>Condición Fiscal</label>
-                        <select class="form-control m-bot15" name="condicionfiscal" id="condicionfiscal" required>
-                            <option value="{condicionfiscal-condicionfiscal_id}">{condicionfiscal-denominacion}</option>
-                            {slt_condicionfiscal}
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-4">
                         <label>Tipo Factura</label>
                         <select class="form-control m-bot15" name="tipofactura" id="tipofactura" required>
                             <option value="{tipofactura-tipofactura_id}" selected>{tipofactura-nomenclatura}</option>
                             {slt_tipofactura}
                         </select>
                     </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-4">
                         <label>IVA</label>
                         <select class="form-control m-bot15" name="iva" id="iva" required>
                             <option value="{cliente-iva}" selected>{cliente-iva}</option>
@@ -80,24 +73,16 @@
                             {slt_frecuenciaventa}
                         </select>
                     </div>
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-3">
                         <label>Flete</label>
                         <select class="form-control m-bot15" name="flete" id="flete" required>
                             <option value="{flete-flete_id}">{flete-denominacion}</option>
                             {slt_flete}
                         </select>
                     </div>
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-3">
                         <label>Días Venc. Cta. Cte.</label>
                         <input type="number" name="dias_vencimiento_cuenta_corriente" id="dias_vencimiento_cuenta_corriente" value="{cliente-dias_vencimiento_cuenta_corriente}" class="form-control">
-                    </div>
-                    <div class="form-group col-lg-2">
-                        <label>Imp. Ganancia</label>
-                        <select class="form-control m-bot15" name="impacto_ganancia" id="impacto_ganancia" required>
-                            <option value="{cliente-impacto_ganancia}">{cliente-txt_impacto_ganancia}</option>
-                            <option value="1">SI</option>
-                            <option value="0">NO</option>
-                        </select>
                     </div>
                     <div class="form-group col-lg-8">
                         <div class="form-group">
@@ -158,7 +143,6 @@
                         </div>
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                        <input type="hidden" name="descuento" id="descuento" value="{cliente-descuento}">
                         <input type="hidden" name="cliente_id" value="{cliente-cliente_id}">
                         <a href="#" class="btn btn-app" onclick="verificarCliente()"><i class="fa fa-edit"></i> Editar</a>
                     </div>
@@ -171,21 +155,6 @@
 function verificarCliente() {
     var array = new Array();
     var flag_array = 0;
-
-    /*
-    var documento = document.getElementById("documento").value;
-    if (documento == null || documento.length == 0 || documento == "") {
-        flag_array = 1;
-        array.push("<strong>[ERROR]</strong> Por favor complete el número de DOCUMENTO.");
-    }
-
-    var documentotipo = document.getElementById("documentotipo");
-    var documentotipo_id = documentotipo.options[documentotipo.selectedIndex].value;
-    if (documentotipo_id == null || documentotipo_id.length == 0 || documentotipo_id == "" || documentotipo_id == 0) {
-        flag_array = 1;
-        array.push("<strong>[ERROR]</strong> Por favor seleccione el TIPO DE DOCUMENTO.");
-    }
-    */
 
     if (flag_array == 0) {
         document.getElementById("formulario_guardar").submit();

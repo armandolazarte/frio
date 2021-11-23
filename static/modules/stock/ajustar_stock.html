@@ -8,10 +8,10 @@
         <li class="remover-breadcrumb-stock"><a href="{url_app}/stock/panel">INVENTARIO</a></li>
     </ul>
 </div>
-<div class="col-md-12 col-sm-12 col-xs-12">
+<div class="col-md-9 col-sm-12 col-xs-12">
     <div class="x_panel">
         <div class="x_title">
-            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Inventario</h2>
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Inventario almacén: {almacen-codigo} - {almacen-denominacion}</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -36,9 +36,37 @@
                     </tbody>
                 </table>
                 <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                    <input type="hidden" name="almacen_id" id="almacen_id" value="{almacen-almacen_id}">
                     <button type="submit" class="btn btn-app"> <i class="fa fa-plus-circle"></i> Ajustar Stock </button>
                 </div>
             </form>
+        </div>
+    </div>
+</div>
+<div class="col-md-3 col-sm-12 col-xs-12">
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Ajustar almacén</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/stock/ajustar_stock_almacen">
+                    <div class="form-group col-lg-12">
+                        <label>Almacén</label>
+                        <select class="form-control m-bot15" name="almacen" id="almacen" required>
+                            {slt_almacen}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-search"></i> Buscar </button>
+                    </div>
+                </form>
+            </div>    
         </div>
     </div>
 </div>

@@ -12,6 +12,7 @@ class Stock extends StandardObject {
 		$this->cantidad_actual = 0.00;
 		$this->cantidad_movimiento = 0.00;
 		$this->producto_id = 0;
+		$this->almacen_id = 0;
 	}
 }
 ?>

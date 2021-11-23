@@ -22,14 +22,8 @@ class IngresoController {
 
 	function listar($arg) {
     	SessionHandler()->check_session();
-    	$select = "i.ingreso_id AS INGRESO_ID, i.fecha AS FECHA, prv.razon_social AS PROV, ci.denominacion AS CONDI,
-    			   CONCAT(tf.nomenclatura, ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, i.costo_total AS TOTAL, 
-    			   i.costo_distribucion AS COSTDIST, i.costo_total_iva AS TIVA, cp.denominacion AS CP,     			    
-    			   CASE WHEN (SELECT COUNT(ccp.ingreso_id) FROM cuentacorrienteproveedor ccp WHERE ccp.ingreso_id = i.ingreso_id) > 1 THEN 'none' ELSE 'inline-block'END AS DSP_BTN_EDIT ";
-		$from = "ingreso i INNER JOIN proveedor prv ON i.proveedor = prv.proveedor_id INNER JOIN 
-				 condicionpago cp ON i.condicionpago = cp.condicionpago_id INNER JOIN 
-				 condicioniva ci ON i.condicioniva = ci.condicioniva_id INNER JOIN tipofactura tf ON i.tipofactura = tf.tipofactura_id
-				 ORDER BY i.fecha DESC";
+    	$select = "i.ingreso_id AS INGRESO_ID, i.fecha AS FECHA, date_format(i.fecha, '%d/%m/%Y') AS FECEMI, date_format(i.fecha_ingreso, '%d/%m/%Y') AS FECING, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS FECVEN, prv.razon_social AS PROV, ci.denominacion AS CONDI,CONCAT(tf.nomenclatura, ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, i.costo_total AS TOTAL, i.costo_total_iva AS TIVA, cp.denominacion AS CP, CASE WHEN (SELECT COUNT(ccp.ingreso_id) FROM cuentacorrienteproveedor ccp WHERE ccp.ingreso_id = i.ingreso_id) > 1 THEN 'none' ELSE 'inline-block'END AS DSP_BTN_EDIT";
+		$from = "ingreso i INNER JOIN proveedor prv ON i.proveedor = prv.proveedor_id INNER JOIN  condicionpago cp ON i.condicionpago = cp.condicionpago_id INNER JOIN  condicioniva ci ON i.condicioniva = ci.condicioniva_id INNER JOIN tipofactura tf ON i.tipofactura = tf.tipofactura_id ORDER BY i.fecha DESC";
 		$ingreso_collection = CollectorCondition()->get('Ingreso', NULL, 4, $from, $select);
 		
 		foreach ($ingreso_collection as $clave=>$valor) {
@@ -72,30 +66,24 @@ class IngresoController {
 		$condicionpago_collection = Collector()->get('CondicionPago');
 		$condicioniva_collection = Collector()->get('CondicionIVA');
 		$tipofactura_collection = Collector()->get('TipoFactura');
+		
 		$array_ids = array(1,2,3);
 		foreach ($tipofactura_collection as $clave=>$valor) {
 			if (!in_array($valor->tipofactura_id, $array_ids)) unset($tipofactura_collection[$clave]);
 		}
 
-
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, 
-				   pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, 
-				   p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN
-				 productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN
-				 productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
 		$where = "p.oculto = 0";
 		$groupby = "p.producto_id";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
 
-		$select = "p.proveedor_id AS PROVEEDOR_ID, p.razon_social AS RAZON_SOCIAL,  
-				   CONCAT(dt.denominacion, ' ', p.documento) AS DOCUMENTO";
+		$select = "p.proveedor_id AS PROVEEDOR_ID, p.razon_social AS RAZON_SOCIAL, CONCAT(dt.denominacion, ' ', p.documento) AS DOCUMENTO";
 		$from = "proveedor p INNER JOIN documentotipo dt ON p.documentotipo = dt.documentotipo_id";
 		$where = "p.oculto = 0";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
 
-		$this->view->ingresar($producto_collection, $proveedor_collection, $condicionpago_collection, 
-							  $condicioniva_collection, $tipofactura_collection);
+		$this->view->ingresar($producto_collection, $proveedor_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection);
 	}
 
 	function consultar($arg) {
@@ -105,12 +93,8 @@ class IngresoController {
 		$this->model->ingreso_id = $ingreso_id;
 		$this->model->get();
 
-		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION,
-							CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.descuento1 AS DESCUENTO1,
-							id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO,
-							id.importe AS IMPORTE";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN
-						  productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE";
+		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
 		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
 
@@ -130,59 +114,44 @@ class IngresoController {
 			$ncpm->notacreditoproveedor_id = $ingreso_id;
 			$ncpm->get();
 
-			$select = "ncpd.codigo_producto AS CODIGO, ncpd.descripcion_producto AS DESCRIPCION, CONCAT(ncpd.cantidad, pu.denominacion) as CANTIDAD,
-					   ncpd.descuento1 AS DESCUENTO1, ncpd.descuento2 AS DESCUENTO2, ncpd.descuento3 AS DESCUENTO3,
-					   costo_producto AS COSTO, ncpd.importe AS IMPORTE";
-			$from = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id INNER JOIN
-					 productounidad pu ON p.productounidad = pu.productounidad_id";
+			$select = "ncpd.codigo_producto AS CODIGO, ncpd.descripcion_producto AS DESCRIPCION, CONCAT(ncpd.cantidad, pu.denominacion) as CANTIDAD, ncpd.descuento1 AS DESCUENTO1, ncpd.descuento2 AS DESCUENTO2, ncpd.descuento3 AS DESCUENTO3, costo_producto AS COSTO, ncpd.importe AS IMPORTE";
+			$from = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 			$where = "ncpd.ingreso_id = {$ingreso_id} AND ncpd.notacreditoproveedor_id = {$notacredito_id} ORDER BY ncpd.notacreditoproveedordetalle_id DESC";
 			$notacreditoproveedordetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where, 4, $from, $select);
-
 		} else {
 			$ncpm = null;
 			$notacredito_id = 0;
 			$notacreditoproveedordetalle_collection = array();
 		}
 
-		$this->view->consultar($ingresodetalle_collection, $cuentacorrienteproveedor_collection, $ncpm, 
-							   $notacreditoproveedordetalle_collection, $this->model, $notacredito_id);
+		$this->view->consultar($ingresodetalle_collection, $cuentacorrienteproveedor_collection, $ncpm,  $notacreditoproveedordetalle_collection, $this->model, $notacredito_id);
 	}
 
 	function editar($arg) {
-    	SessionHandler()->check_session();
-		
+    	SessionHandler()->check_session();		
 		$this->model->ingreso_id = $arg;
 		$this->model->get();
 
 		$condicionpago_collection = Collector()->get('CondicionPago');
 		$condicioniva_collection = Collector()->get('CondicionIVA');
 		$tipofactura_collection = Collector()->get('TipoFactura');
+		
 		$array_ids = array(1,2,3);
 		foreach ($tipofactura_collection as $clave=>$valor) {
 			if (!in_array($valor->tipofactura_id, $array_ids)) unset($tipofactura_collection[$clave]);
 		}
 
-
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, 
-				   pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, 
-				   p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN
-				 productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN
-				 productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION,  pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL,  p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
 		$groupby = "p.producto_id";
 		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
 
-		$select = "p.proveedor_id AS PROVEEDOR_ID, p.razon_social AS RAZON_SOCIAL,  
-				   CONCAT(dt.denominacion, ' ', p.documento) AS DOCUMENTO";
+		$select = "p.proveedor_id AS PROVEEDOR_ID, p.razon_social AS RAZON_SOCIAL, CONCAT(dt.denominacion, ' ', p.documento) AS DOCUMENTO";
 		$from = "proveedor p INNER JOIN documentotipo dt ON p.documentotipo = dt.documentotipo_id";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', NULL, 4, $from, $select);
 
-		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION,
-							id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1,
-							id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO,
-							id.importe AS IMPORTE, id.ingresodetalle_id AS ID, id.producto_ID AS PRODUCTO";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN
-						  productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE, id.ingresodetalle_id AS ID, id.producto_ID AS PRODUCTO";
+		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where_ingresos = "id.ingreso_id = {$arg}";
 		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
 
@@ -192,7 +161,6 @@ class IngresoController {
 
 	function guardar() {
 		SessionHandler()->check_session();
-
 		$punto_venta = filter_input(INPUT_POST, 'punto_venta');
 		$numero_factura = filter_input(INPUT_POST, 'numero_factura');
 		$fecha = filter_input(INPUT_POST, 'fecha');
@@ -213,10 +181,14 @@ class IngresoController {
 		$this->model->punto_venta = $punto_venta;
 		$this->model->numero_factura = $numero_factura;
 		$this->model->fecha = $fecha;
+		$this->model->fecha_ingreso = filter_input(INPUT_POST, 'fecha_ingreso');
+		$this->model->vencimiento = filter_input(INPUT_POST, 'vencimiento');
 		$this->model->fecha_vencimiento = $fecha_vencimiento;
 		$this->model->hora = $hora;
 		$this->model->iva = filter_input(INPUT_POST, 'iva');
 		$this->model->percepcion_iva = filter_input(INPUT_POST, 'percepcion_iva');
+		$this->model->impuesto_interno = filter_input(INPUT_POST, 'impuesto_interno');
+		$this->model->ingresos_brutos = filter_input(INPUT_POST, 'ingresos_brutos');
 		$this->model->costo_distribucion = $costo_distribucion;
 		$this->model->costo_total = filter_input(INPUT_POST, 'suma_total');
 		$this->model->costo_total_iva = $costo_final;
@@ -254,13 +226,19 @@ class IngresoController {
 		$productos_ids = array();
 		foreach ($ingresos_array as $ingreso) {
 			$costo_base = round(($ingreso['costo_total'] / $ingreso['cantidad']),2);
-			$valor_distribucion = $costo_distribucion * $costo_base / 100;
-
+			
 			$productos_ids[] = $ingreso['producto_id'];
 			$pm = new Producto();
 			$pm->producto_id = $ingreso['producto_id'];
 			$pm->get();
-			$pm->costo = $costo_base + $valor_distribucion;
+			$pm->costo = $costo_base;
+			$iva = $pm->iva;
+			$porcentaje_ganancia = $pm->porcentaje_ganancia;
+			$valor_iva = ($iva * $costo_base) / 100;
+			$costo_iva = $valor_iva + $costo_base;
+			$valor_ganancia = ($valor_ganancia * $costo_iva) / 100;
+			$precio_venta = $costo_iva + $valor_ganancia;
+			$pm->precio_venta = round($precio_venta, 2);
 			if ($opcion_actualiza_producto == 1) $pm->save();
 
 			$idm = new IngresoDetalle();
@@ -277,68 +255,45 @@ class IngresoController {
 			$idm->save();
 		}
 
-		if ($opcion_actualiza_producto_proveedor == 1) {
-			$productos_ids = implode(',', $productos_ids);
-			$select = "p.producto_id AS PROD_ID";
-			$from = "producto p INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id INNER JOIN
-					 proveedor prv ON pd.proveedor_id = prv.proveedor_id ";
-			$where = "pd.proveedor_id = {$proveedor_id} AND p.producto_id NOT IN ({$productos_ids})";
-			$producto_collection = CollectorCondition()->get('ProductoDetalle', $where, 4, $from, $select, $groupby);
+		$select_ingresos = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
+		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
+		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
+		
+		foreach ($ingresodetalle_collection as $ingreso) {
+			$temp_producto_id = $ingreso['PRODUCTO_ID'];
+			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
+			$from_stock = "stock s";
+			$where_stock = "s.producto_id = {$temp_producto_id}";
+			$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
 
-			foreach ($producto_collection as $clave=>$valor) {
-				$pm = new Producto();
-				$pm->producto_id = $valor['PROD_ID'];
-				$pm->get();
+			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
+				$sm = new Stock();
+				$sm->fecha = $fecha;
+				$sm->hora = $hora;
+				$sm->concepto = "Ingreso. Comprobante: {$comprobante}";
+				$sm->codigo = $ingreso['CODIGO'];
+				$sm->cantidad_actual = $ingreso['CANTIDAD'];
+				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
+				$sm->producto_id = $temp_producto_id;
+				$sm->save();
+			} else {
+				$stock_id = $rst_stock[0]['STOCK_ID'];
+				$sm = new Stock();
+				$sm->stock_id = $stock_id;
+				$sm->get();
+				$ultima_cantidad = $sm->cantidad_actual;
+				$nueva_cantidad = $ultima_cantidad + $ingreso['CANTIDAD'];
 				
-				$costo_base = $pm->costo;
-				$valor_distribucion = $costo_distribucion * $costo_base / 100;
-
-				$pm->costo = round(($costo_base + $valor_distribucion), 2);
-				$pm->save();
-			}
-		}
-
-		if ($opcion_actualiza_stock == 1) {
-			$select_ingresos = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
-			$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
-			$where_ingresos = "id.ingreso_id = {$ingreso_id}";
-			$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
-			
-			foreach ($ingresodetalle_collection as $ingreso) {
-				$temp_producto_id = $ingreso['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
-				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
-
-				if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
-					$sm = new Stock();
-					$sm->fecha = $fecha;
-					$sm->hora = $hora;
-					$sm->concepto = "Ingreso. Comprobante: {$comprobante}";
-					$sm->codigo = $ingreso['CODIGO'];
-					$sm->cantidad_actual = $ingreso['CANTIDAD'];
-					$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
-					$sm->producto_id = $temp_producto_id;
-					$sm->save();
-				} else {
-					$stock_id = $rst_stock[0]['STOCK_ID'];
-					$sm = new Stock();
-					$sm->stock_id = $stock_id;
-					$sm->get();
-					$ultima_cantidad = $sm->cantidad_actual;
-					$nueva_cantidad = $ultima_cantidad + $ingreso['CANTIDAD'];
-					
-					$sm = new Stock();
-					$sm->fecha = $fecha;
-					$sm->hora = $hora;
-					$sm->concepto = "Ingreso. Comprobante: {$comprobante}";
-					$sm->codigo = $ingreso['CODIGO'];
-					$sm->cantidad_actual = $nueva_cantidad;
-					$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
-					$sm->producto_id = $temp_producto_id;
-					$sm->save();
-				}
+				$sm = new Stock();
+				$sm->fecha = $fecha;
+				$sm->hora = $hora;
+				$sm->concepto = "Ingreso. Comprobante: {$comprobante}";
+				$sm->codigo = $ingreso['CODIGO'];
+				$sm->cantidad_actual = $nueva_cantidad;
+				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
+				$sm->producto_id = $temp_producto_id;
+				$sm->save();
 			}
 		}
 		
@@ -426,8 +381,7 @@ class IngresoController {
 			}
 		}
 
-		$select_ingresos = "id.ingresodetalle_id AS ID,id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, 
-							id.cantidad AS CANTIDAD";
+		$select_ingresos = "id.ingresodetalle_id AS ID,id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
 		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
 		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
 		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);		
@@ -469,12 +423,11 @@ class IngresoController {
 		$ingresos_array = $_POST['ingreso'];
 		foreach ($ingresos_array as $ingreso) {
 			$costo_base = round(($ingreso['costo_total'] / $ingreso['cantidad']),2);
-			$valor_distribucion = $costo_distribucion * $costo_base / 100;
-
+			
 			$pm = new Producto();
 			$pm->producto_id = $ingreso['producto_id'];
 			$pm->get();
-			$pm->costo = $costo_base + $valor_distribucion;
+			$pm->costo = $costo_base;
 			if ($opcion_actualiza_producto == 1) $pm->save();
 
 			$idm = new IngresoDetalle();
@@ -490,50 +443,49 @@ class IngresoController {
 			$idm->ingreso_id = $ingreso_id;
 			$idm->save();
 		}
+		
+		$select_ingresos = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
+		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
+		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);	
 
-		if ($opcion_actualiza_stock == 1) {
-			$select_ingresos = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
-			$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
-			$where_ingresos = "id.ingreso_id = {$ingreso_id}";
-			$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);	
+		foreach ($ingresodetalle_collection as $ingreso) {
+			$temp_producto_id = $ingreso['PRODUCTO_ID'];
+			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
+			$from_stock = "stock s";
+			$where_stock = "s.producto_id = {$temp_producto_id}";
+			$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
 
-			foreach ($ingresodetalle_collection as $ingreso) {
-				$temp_producto_id = $ingreso['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
-				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
-
-				if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
-					$sm = new Stock();
-					$sm->fecha = $fecha;
-					$sm->hora = $hora;
-					$sm->concepto = "Edición Ingreso. Comprobante: {$comprobante}";
-					$sm->codigo = $ingreso['CODIGO'];
-					$sm->cantidad_actual = $ingreso['CANTIDAD'];
-					$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
-					$sm->producto_id = $temp_producto_id;
-					$sm->save();
-				} else {
-					$stock_id = $rst_stock[0]['STOCK_ID'];
-					$sm = new Stock();
-					$sm->stock_id = $stock_id;
-					$sm->get();
-					$ultima_cantidad = $sm->cantidad_actual;
-					$nueva_cantidad = $ultima_cantidad + $ingreso['CANTIDAD'];
-					
-					$sm = new Stock();
-					$sm->fecha = $fecha;
-					$sm->hora = $hora;
-					$sm->concepto = "Edición Ingreso. Comprobante: {$comprobante}";
-					$sm->codigo = $ingreso['CODIGO'];
-					$sm->cantidad_actual = $nueva_cantidad;
-					$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
-					$sm->producto_id = $temp_producto_id;
-					$sm->save();
-				}
+			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
+				$sm = new Stock();
+				$sm->fecha = $fecha;
+				$sm->hora = $hora;
+				$sm->concepto = "Edición Ingreso. Comprobante: {$comprobante}";
+				$sm->codigo = $ingreso['CODIGO'];
+				$sm->cantidad_actual = $ingreso['CANTIDAD'];
+				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
+				$sm->producto_id = $temp_producto_id;
+				$sm->save();
+			} else {
+				$stock_id = $rst_stock[0]['STOCK_ID'];
+				$sm = new Stock();
+				$sm->stock_id = $stock_id;
+				$sm->get();
+				$ultima_cantidad = $sm->cantidad_actual;
+				$nueva_cantidad = $ultima_cantidad + $ingreso['CANTIDAD'];
+				
+				$sm = new Stock();
+				$sm->fecha = $fecha;
+				$sm->hora = $hora;
+				$sm->concepto = "Edición Ingreso. Comprobante: {$comprobante}";
+				$sm->codigo = $ingreso['CODIGO'];
+				$sm->cantidad_actual = $nueva_cantidad;
+				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
+				$sm->producto_id = $temp_producto_id;
+				$sm->save();
 			}
 		}
+		
 
 		header("Location: " . URL_APP . "/ingreso/listar/2");
 	}
@@ -589,20 +541,15 @@ class IngresoController {
 		$this->model->ingreso_id = $arg;
 		$this->model->get();
 		
-		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION,
-						   id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, 
-						   id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE, 
-						   id.ingresodetalle_id AS INGRESODETALLEID, id.producto_id AS PRODUCTO";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN
-						  productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2,  id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE,  id.ingresodetalle_id AS INGRESODETALLEID, id.producto_id AS PRODUCTO";
+		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where_ingresos = "id.ingreso_id = {$arg}";
 		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
 		$this->view->reingreso($ingresodetalle_collection, $this->model);
 	}
 
 	function guardar_nota_credito() {
-		SessionHandler()->check_session();
-		
+		SessionHandler()->check_session();		
 		$ingreso_id = filter_input(INPUT_POST, 'ingreso_id');
 		$suma_total = filter_input(INPUT_POST, 'suma_total');
 		$suma_total_iva = filter_input(INPUT_POST, 'suma_total_iva');
@@ -638,8 +585,7 @@ class IngresoController {
 		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
 		$comprobante .= str_pad($numero_factura, 8, '0', STR_PAD_LEFT);
 
-		$select_notascredito = "ncpd.notacreditoproveedordetalle_id AS ID, ncpd.producto_id AS PRODUCTO_ID, ncpd.codigo_producto AS CODIGO, 
-						   		ncpd.cantidad AS CANTIDAD";
+		$select_notascredito = "ncpd.notacreditoproveedordetalle_id AS ID, ncpd.producto_id AS PRODUCTO_ID, ncpd.codigo_producto AS CODIGO, ncpd.cantidad AS CANTIDAD";
 		$from_notascredito = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id";
 		$where_notascredito = "ncpd.ingreso_id = {$ingreso_id}";
 		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where_notascredito, 4, $from_notascredito, $select_notascredito);		
@@ -754,6 +700,19 @@ class IngresoController {
 		$this->view->traer_formulario_producto_ajax($pm);
 	}
 
+	function traer_cantidad_bulto_ajax($arg) {
+		$ids = explode('@', $arg);
+		$producto_id = $ids[0];
+		$bultos = $ids[1];
+		$pm = new Producto();
+		$pm->producto_id = $producto_id;
+		$pm->get();
+
+		$unidad_bulto = $pm->unidad_bulto;
+		$cantidad = $unidad_bulto * $bultos;
+		print $cantidad;		
+	}
+
 	function traer_formulario_editar_producto_ajax($arg) {
 		$ids = explode('@', $arg);
 		$ingreso_id = $ids[0];
@@ -805,14 +764,58 @@ class IngresoController {
 		$this->model->ingreso_id = $ingreso_id;
 		$this->model->get();
 
-		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION,  
-				   CONCAT(dt.denominacion, ' ', p.documento) AS DOCUMENTO";
+		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION, CONCAT(dt.denominacion, ' ', p.documento) AS DOCUMENTO";
 		$from = "proveedor p INNER JOIN documentotipo dt ON p.documentotipo = dt.documentotipo_id";
 		$where = "p.oculto = 0";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
 		$tipofactura_collection = Collector()->get('TipoFactura');
 
 		$this->view->traer_formulario_editar_ingresar_ajax($this->model, $proveedor_collection, $tipofactura_collection);
+	}
+
+	function traer_proveedor_tipofactura_ajax($arg) {
+		$pm = new Proveedor();
+		$pm->proveedor_id = $arg;
+		$pm->get();
+
+		$condicioniva_id = $pm->condicioniva->condicioniva_id;
+		switch ($condicioniva_id) {
+			case 1:
+				$tipofactura_id = 1;
+				break;
+			case 2:
+				$tipofactura_id = 3;
+				break;
+			case 3:
+				$tipofactura_id = 2;
+				break;
+			default:
+				$tipofactura_id = 2;
+				break;
+		}
+
+		$tfm = new TipoFactura();
+		$tfm->tipofactura_id = $tipofactura_id;
+		$tfm->get();
+		$tipofactura = $tfm->tipofactura_id . '@';
+		$tipofactura .= $tfm->nomenclatura . ' - ' . $tfm->denominacion;
+		print $tipofactura;
+	}
+
+	function imprimir_boleta_testigo($arg) {
+		SessionHandler()->check_session();		
+		require_once 'tools/boletaPDFTool.php';
+		$ingreso_id = $arg;
+		$this->model->ingreso_id = $ingreso_id;
+		$this->model->get();
+
+		$select = "id.descripcion_producto AS DESCRIPCION, CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.costo_producto AS COSTO, id.importe AS IMPORTE, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);
+
+		$facturaPDFHelper = new BoletaPDF();
+		$facturaPDFHelper->boleta_testigo($ingresodetalle_collection, $this->model);
 	}
 }
 ?>

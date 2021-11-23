@@ -17,12 +17,17 @@ class Producto extends StandardObject {
 		$this->descuento = 0.00;
 		$this->flete = 0.00;
 		$this->porcentaje_ganancia = 0.00;
+		$this->precio_venta = 0.00;
 		$this->iva = 0.00;
 		$this->exento = 0;
 		$this->no_gravado = 0;
 		$this->stock_minimo = 0;
 		$this->stock_ideal = 0;
 		$this->dias_reintegro = 0;
+		$this->unidad_bulto = 0;
+		$this->pisos_pallet = 0;
+		$this->bulto_pallet = 0;
+		$this->ubicacion = '';
 		$this->oculto = 0;
         $this->barcode = '';
         $this->detalle = '';

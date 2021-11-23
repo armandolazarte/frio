@@ -2,36 +2,45 @@
 
 
 class StockView extends View {
-	function panel($stock_collection, $array_totales) {
+	function panel($stock_collection, $almacen_collection, $array_totales, $obj_almacen) {
 		$gui = file_get_contents("static/modules/stock/panel.html");
 		$tbl_stock = file_get_contents("static/modules/stock/tbl_stock.html");
-		$tbl_stock = $this->render_regex('TBL_STOCK', $tbl_stock, $stock_collection);		
+		$tbl_stock = $this->render_regex('TBL_STOCK', $tbl_stock, $stock_collection);
+		$slt_almacen = file_get_contents("static/common/slt_almacen.html");
+		$slt_almacen = $this->render_regex('SLT_ALMACEN', $slt_almacen, $almacen_collection);		
 
+		$obj_almacen = $this->set_dict($obj_almacen);
 		$render = str_replace('{tbl_stock}', $tbl_stock, $gui);
+		$render = str_replace('{slt_almacen}', $slt_almacen, $render);
 		$render = str_replace('{fecha_sys}', date('d/m/Y'), $render);
 		$render = $this->render($array_totales, $render);
+		$render = $this->render($obj_almacen, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
 	}
 
-	function vdr_stock($stock_collection) {
+	function vdr_stock($stock_collection, $obj_almacen) {
 		$gui = file_get_contents("static/modules/stock/vdr_stock.html");
 		$tbl_stock = file_get_contents("static/modules/stock/tbl_vdr_stock.html");
-		$tbl_stock = $this->render_regex('TBL_STOCK', $tbl_stock, $stock_collection);		
+		$tbl_stock = $this->render_regex('TBL_STOCK', $tbl_stock, $stock_collection);
 
+		$obj_almacen = $this->set_dict($obj_almacen);
 		$render = str_replace('{tbl_stock}', $tbl_stock, $gui);
 		$render = str_replace('{fecha_sys}', date('d/m/Y'), $render);
 		$render = $this->render($array_totales, $render);
+		$render = $this->render($obj_almacen, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
 	}
 
-	function ajustar_stock($stock_collection, $flag_modal) {
+	function ajustar_stock($stock_collection, $almacen_collection, $obj_almacen, $flag_modal) {
 		$gui = file_get_contents("static/modules/stock/ajustar_stock.html");
 		$tbl_ajustar_stock = file_get_contents("static/modules/stock/tbl_ajustar_stock.html");
 		$tbl_ajustar_stock = $this->render_regex('TBL_AJUSTARSTOCK', $tbl_ajustar_stock, $stock_collection);
+		$slt_almacen = file_get_contents("static/common/slt_almacen.html");
+		$slt_almacen = $this->render_regex('SLT_ALMACEN', $slt_almacen, $almacen_collection);
 
 		switch ($flag_modal) {
 			case 1:
@@ -48,17 +57,43 @@ class StockView extends View {
 				break;
 		}
 
+		$obj_almacen = $this->set_dict($obj_almacen);
 		$render = str_replace('{tbl_ajustar_stock}', $tbl_ajustar_stock, $gui);
+		$render = str_replace('{slt_almacen}', $slt_almacen, $render);
+		$render = $this->render($obj_almacen, $render);
 		$render = $this->render($array_modal, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
 	}
 
-	function stock_inicial($stock_collection, $flag_modal) {
+	function movimiento_stock_1($almacen_collection) {
+		$gui = file_get_contents("static/modules/stock/movimiento_stock_1.html");
+		$slt_almacen = file_get_contents("static/common/slt_almacen.html");
+		$slt_almacen = $this->render_regex('SLT_ALMACEN', $slt_almacen, $almacen_collection);
+		$render = str_replace('{slt_almacen}', $slt_almacen, $gui);
+		$render = $this->render($array_modal, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
+
+	function movimiento_stock_2($producto_collection, $almacen_origen_id, $almacen_destino_id) {
+		$gui = file_get_contents("static/modules/stock/movimiento_stock_2.html");
+		$tbl_movimiento_stock = file_get_contents("static/modules/stock/tbl_movimiento_stock.html");
+		$tbl_movimiento_stock = $this->render_regex('TBL_MOVIMIENTO_STOCK', $tbl_movimiento_stock, $producto_collection);	
+		$render = str_replace('{tbl_movimiento_stock}', $tbl_movimiento_stock, $gui);
+		$render = str_replace('{almacen_origen}', $almacen_origen_id, $render);
+		$render = str_replace('{almacen_destino}', $almacen_destino_id, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
+
+	function stock_inicial($stock_collection, $obj_almacen, $flag_modal) {
 		$gui = file_get_contents("static/modules/stock/stock_inicial.html");
 		$tbl_stock_inicial_array = file_get_contents("static/modules/stock/tbl_stock_inicial_array.html");
-
+		
 		switch ($flag_modal) {
 			case 1:
 				$array_modal = array('{display}'=>'none',
@@ -75,7 +110,10 @@ class StockView extends View {
 		}
 
 		$tbl_stock_inicial_array = $this->render_regex_dict('TBL_STOCK_INICIAL', $tbl_stock_inicial_array, $stock_collection);
+
+		$obj_almacen = $this->set_dict($obj_almacen);
 		$render = str_replace('{tbl_stock_inicial}', $tbl_stock_inicial_array, $gui);
+		$render = $this->render($obj_almacen, $render);
 		$render = $this->render($array_modal, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);

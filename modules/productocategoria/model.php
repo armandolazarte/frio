@@ -7,6 +7,7 @@ class ProductoCategoria extends StandardObject {
 		$this->productocategoria_id = 0;
 		$this->denominacion = '';
 		$this->detalle = '';
+		$this->oculto = 0;
 	}
 }
 ?>

@@ -1,0 +1,90 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/{objeto}/{panel_objeto}">Panel Cuenta Contable</a></li>
+    </ul>
+</div>
+<div class="col-md-4 col-sm-4 col-xs-4">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp; Editar cuenta contable</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/cuentacontable/guardar">
+                    <div class="form-group">
+                        <label>Detalle</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo" value="{cuentacontable-codigo}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Denominación</label>
+                        <input type="text" class="form-control" id="denominacion" name="denominacion" value="{cuentacontable-denominacion}" required>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" name="cuentacontable_id" id="cuentacontable_id" value="{cuentacontable-cuentacontable_id}">
+                        <a href="#" class="btn btn-app" onclick="confirma_formulario(2, '')"><i class="fa fa-edit"></i> Editar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-8 col-sm-8 col-xs-8">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Listado de cuentas contables</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_cuentacontable" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>COD</th>
+                        <th>Cuenta</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--TBL_CUENTACONTABLE-->
+                    <tr style="font-size: 12px;">
+                        <td>{cuentacontable-codigo}</td>
+                        <td>{cuentacontable-denominacion}</td>
+                        <td>
+                            <center>
+                                <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/cuentacontable/editar/{cuentacontable-cuentacontable_id}');" title="Editar condición"><i class="fa fa-edit"></i></button>
+                                <button class="btn btn-danger btn-xs" onclick="confirma_formulario(4, '{url_app}/cuentacontable/ocultar/{cuentacontable-cuentacontable_id}');" title="Ocultar cuenta"><i class="fa fa-trash"></i></button>
+                            </center>
+                        </td>
+                    </tr>
+                    <!--TBL_CUENTACONTABLE-->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_cuentacontable').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>

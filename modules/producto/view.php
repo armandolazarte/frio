@@ -62,6 +62,9 @@ class ProductoView extends View {
 
 		foreach ($proveedor_collection as $clave=>$valor) unset($proveedor_collection[$clave]->infocontacto_collection);
 
+		$productomarca_collection = $this->order_collection_objects($productomarca_collection, 'denominacion', SORT_ASC);
+		$proveedor_collection = $this->order_collection_objects($proveedor_collection, 'razon_social', SORT_ASC);
+
 		$tbl_listaprecio_array = $this->render_regex_dict('TBL_LISTAPRECIO', $tbl_listaprecio_array, $producto_collection);
 		$gui_slt_productomarca = $this->render_regex('SLT_PRODUCTOMARCA', $gui_slt_productomarca, $productomarca_collection);
 		$gui_slt_proveedor = $this->render_regex('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
@@ -87,18 +90,21 @@ class ProductoView extends View {
 		print $template;
 	}
 
-	function agregar($productomarca_collection, $productocategoria_collection, $productounidad_collection) {
+	function agregar($productomarca_collection, $productocategoria_collection, $productounidad_collection, $proveedor_collection) {
 		$gui = file_get_contents("static/modules/producto/agregar.html");
 		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
 		$gui_slt_productocategoria = file_get_contents("static/common/slt_productocategoria.html");
 		$gui_slt_productounidad = file_get_contents("static/common/slt_productounidad.html");
+		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor.html");
 
 		$gui_slt_productomarca = $this->render_regex('SLT_PRODUCTOMARCA', $gui_slt_productomarca, $productomarca_collection);
 		$gui_slt_productocategoria = $this->render_regex('SLT_PRODUCTOCATEGORIA', $gui_slt_productocategoria, $productocategoria_collection);
 		$gui_slt_productounidad = $this->render_regex('SLT_PRODUCTOUNIDAD', $gui_slt_productounidad, $productounidad_collection);
+		$gui_slt_proveedor = $this->render_regex('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
 		$render = str_replace('{slt_productomarca}', $gui_slt_productomarca, $gui);
 		$render = str_replace('{slt_productocategoria}', $gui_slt_productocategoria, $render);
 		$render = str_replace('{slt_productounidad}', $gui_slt_productounidad, $render);
+		$render = str_replace('{slt_proveedor}', $gui_slt_proveedor, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
@@ -142,16 +148,7 @@ class ProductoView extends View {
 		$tbl_stock_array = file_get_contents("static/modules/stock/tbl_stock_array.html");
 		$tbl_stock_array = $this->render_regex_dict('TBL_STOCK', $tbl_stock_array, $stock_collection);
 
-		$costo_flete = $obj_producto->costo + (($obj_producto->costo * $obj_producto->flete) / 100);
-		$costo_iva = (($costo_flete * $obj_producto->iva) / 100) + $costo_flete;
-		$valor_ganancia = $costo_iva * $obj_producto->porcentaje_ganancia / 100;
-		$valor_venta = $costo_iva + $valor_ganancia;
-
-		$obj_producto->costo_iva = round($costo_iva, 2);
-		$obj_producto->valor_ganancia = round($valor_ganancia, 2);
-		$obj_producto->valor_venta = round($valor_venta, 2);
 		$obj_producto = $this->set_dict($obj_producto);
-
 		$render = $this->render($obj_producto, $gui);
 		$render = str_replace('{tbl_stock_array}', $tbl_stock_array, $render);
 		$render = $this->render_breadcrumb($render);

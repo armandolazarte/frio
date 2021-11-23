@@ -14,13 +14,13 @@ require_once "modules/categoriacliente/model.php";
 
 class Cliente extends StandardObject {
 
-	function __construct(Provincia $provincia=NULL, DocumentoTipo $documentotipo=NULL, CondicionIVA $condicioniva=NULL, Flete $flete=NULL, CondicionFiscal $condicionfiscal=NULL, FrecuenciaVenta $frecuenciaventa=NULL, Vendedor $vendedor=NULL, TipoFactura $tipofactura=NULL,ListaPrecio $listaprecio=NULL,CategoriaCliente $categoriacliente=NULL) {
-		$this->cliente_id = 0;
+    function __construct(Provincia $provincia=NULL, DocumentoTipo $documentotipo=NULL, CondicionIVA $condicioniva=NULL, Flete $flete=NULL, CondicionFiscal $condicionfiscal=NULL, FrecuenciaVenta $frecuenciaventa=NULL, Vendedor $vendedor=NULL, TipoFactura $tipofactura=NULL,ListaPrecio $listaprecio=NULL,CategoriaCliente $categoriacliente=NULL) {
+        $this->cliente_id = 0;
         $this->razon_social = '';
-		$this->nombre_fantasia = '';
+        $this->nombre_fantasia = '';
         $this->descuento = 0.00;
-		$this->iva = 0.00;
-		$this->documento = 0;
+        $this->iva = 0.00;
+        $this->documento = 0;
         $this->domicilio = '';
         $this->codigopostal = 0;
         $this->localidad = 0;
@@ -29,9 +29,9 @@ class Cliente extends StandardObject {
         $this->impacto_ganancia = 0;
         $this->dias_vencimiento_cuenta_corriente = 0;
         $this->oculto = 0;
-		$this->ordenentrega = 0;
-		$this->entregaminima = 0;		
-		$this->observacion = '';
+        $this->ordenentrega = 0;
+        $this->entregaminima = 0;       
+        $this->observacion = '';
         $this->provincia = $provincia;
         $this->documentotipo = $documentotipo;
         $this->condicioniva = $condicioniva;
@@ -39,13 +39,13 @@ class Cliente extends StandardObject {
         $this->frecuenciaventa = $frecuenciaventa;
         $this->vendedor = $vendedor;
         $this->flete = $flete;
-		$this->tipofactura = $tipofactura;
-		$this->listaprecio = $listaprecio;
-		$this->categoriacliente = $categoriacliente;
-		$this->infocontacto_collection = array();
-	}
+        $this->tipofactura = $tipofactura;
+        $this->listaprecio = $listaprecio;
+        $this->categoriacliente = $categoriacliente;
+        $this->infocontacto_collection = array();
+    }
 
-	function add_infocontacto(InfoContacto $infocontacto) {
+    function add_infocontacto(InfoContacto $infocontacto) {
         $this->infocontacto_collection[] = $infocontacto;
     }
 }

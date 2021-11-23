@@ -7,6 +7,7 @@ class ProductoUnidad extends StandardObject {
 		$this->productounidad_id = 0;
 		$this->denominacion = '';
 		$this->detalle = '';
+		$this->oculto = 0;
 	}
 }
 ?>

@@ -3,6 +3,7 @@ require_once "modules/usuario/model.php";
 require_once "modules/usuario/view.php";
 require_once "modules/usuariodetalle/controller.php";
 require_once "modules/usuariovendedor/model.php";
+require_once "modules/almacen/model.php";
 require_once "modules/configuracionmenu/model.php";
 
 
@@ -47,7 +48,12 @@ class UsuarioController {
 		$select = "CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, v.vendedor_id AS VID";
 		$from = "vendedor v";
 		$vendedor_collection = CollectorCondition()->get('Vendedor', NULL, 4, $from, $select);
-		$this->view->agregar($usuario_collection, $vendedor_collection, $configuracionmenu_collection);
+		$almacen_collection = Collector()->get('Almacen');
+		foreach ($almacen_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($almacen_collection[$clave]);
+		}
+
+		$this->view->agregar($usuario_collection, $vendedor_collection, $configuracionmenu_collection, $almacen_collection);
 	}
 
 	function guardar() {
@@ -57,6 +63,7 @@ class UsuarioController {
         $this->model->denominacion = filter_input(INPUT_POST, "denominacion");
         $this->model->nivel = filter_input(INPUT_POST, "nivel");
         $this->model->configuracionmenu = filter_input(INPUT_POST, "configuracionmenu");
+        $this->model->almacen = filter_input(INPUT_POST, "almacen");
         $this->model->usuariodetalle = $detalle->model->usuariodetalle_id;        
         $this->model->save();
 		header("Location: " . URL_APP . "/usuario/agregar");
@@ -69,6 +76,7 @@ class UsuarioController {
         $this->model->denominacion = filter_input(INPUT_POST, "denominacion");
         $this->model->nivel = filter_input(INPUT_POST, "nivel");
         $this->model->configuracionmenu = filter_input(INPUT_POST, "configuracionmenu");
+        $this->model->almacen = filter_input(INPUT_POST, "almacen");
         $this->model->usuariodetalle = $detalle->model->usuariodetalle_id;        
         $this->model->save();
         $usuario_id = $this->model->usuario_id;
@@ -103,7 +111,12 @@ class UsuarioController {
 			$usuario_collection = CollectorCondition()->get('Usuario', $where_usuario, 4, $from_usuario, $select_usuario);
 		}
 
-		$this->view->editar($usuario_collection, $configuracionmenu_collection, $this->model);
+		$almacen_collection = Collector()->get('Almacen');
+		foreach ($almacen_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($almacen_collection[$clave]);
+		}
+
+		$this->view->editar($usuario_collection, $configuracionmenu_collection, $almacen_collection, $this->model);
 	}
 
 	function actualizar() {
@@ -115,6 +128,7 @@ class UsuarioController {
         $this->model->usuario_id = filter_input(INPUT_POST, "usuario_id");
         $this->model->get();
         $this->model->nivel = filter_input(INPUT_POST, "nivel");
+        $this->model->almacen = filter_input(INPUT_POST, "almacen");
         $this->model->configuracionmenu = filter_input(INPUT_POST, "configuracionmenu");
 		$this->model->save();
 		header("Location: " . URL_APP . "/usuario/agregar");
@@ -188,8 +202,7 @@ class UsuarioController {
 		}
 
 		$emailHelper = new EmailUsuario();
-		$emailHelper->envia_email_usuario($usuario_temp);
-		
+		$emailHelper->envia_email_usuario($usuario_temp);		
 	}
 }
 ?>

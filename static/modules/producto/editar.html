@@ -25,13 +25,9 @@
                         <label>Código</label>
                         <input type="text" class="form-control" id="codigo" name="codigo" value="{producto-codigo}" required>
                     </div>
-                    <div class="form-group col-lg-6">
-                        <label>Producto</label>
+                    <div class="form-group col-lg-8">
+                        <label>Descripción</label>
                         <input type="text" class="form-control" id="denominacion" name="denominacion" value="{producto-denominacion}" required>
-                    </div>
-                    <div class="form-group col-lg-2">
-                        <label>Peso(Kg)</label>
-                        <input type="number" class="form-control" id="peso" name="peso" value="{producto-peso}" required>
                     </div>
                     <div class="form-group col-lg-4">
                         <label>Marca</label>
@@ -48,7 +44,7 @@
                         </select>
                     </div>
                     <div class="form-group col-lg-4">
-                        <label>Unidad</label>
+                        <label>Unidad Venta</label>
                         <select class="form-control m-bot15" name="productounidad" id="productounidad" required>
                             <option value="{productounidad-productounidad_id}">{productounidad-denominacion}</option>
                             {slt_productounidad}
@@ -66,17 +62,21 @@
                         <label>Días Reintegro</label>
                         <input type="number" class="form-control" id="dias_reintegro" name="dias_reintegro" value="{producto-dias_reintegro}" required>
                     </div>
-                    <div class="form-group col-lg-4">
-                        <label>Costo</label>
-                        <input type="number" class="form-control" id="costo" name="costo" value="{producto-costo}" step="0.001" required>
+                    <div class="form-group col-lg-3">
+                        <label>Unidad por Bulto</label>
+                        <input type="number" class="form-control" id="unidad_bulto" name="unidad_bulto" value="{producto-unidad_bulto}" required>
                     </div>
-                    <div class="form-group col-lg-4">
-                        <label>Flete (%)</label>
-                        <input type="number" class="form-control" id="flete" name="flete" value="{producto-flete}" step="0.001" required>
+                    <div class="form-group col-lg-3">
+                        <label>Pisos por Pallet</label>
+                        <input type="number" class="form-control" id="pisos_pallet" name="pisos_pallet" value="{producto-pisos_pallet}" required>
                     </div>
-                    <div class="form-group col-lg-4">
-                        <label>Ganancia (%)</label>
-                        <input type="number" class="form-control" id="porcentaje_ganancia" name="porcentaje_ganancia" value="{producto-porcentaje_ganancia}" step="0.001" required>
+                    <div class="form-group col-lg-3">
+                        <label>Bultos por Pallet</label>
+                        <input type="number" class="form-control" id="bulto_pallet" name="bulto_pallet" value="{producto-bulto_pallet}" required>
+                    </div>
+                    <div class="form-group col-lg-3">
+                        <label>Ubicación</label>
+                        <input type="text" class="form-control" id="ubicacion" name="ubicacion" value="{producto-ubicacion}" required>
                     </div>
                     <div class="form-group col-lg-4">
                         <label>IVA</label>
@@ -106,15 +106,32 @@
                             <option value="1">SI</option>
                         </select>
                     </div>
+                    <div class="form-group col-lg-4">
+                        <label>Precio Costo</label>
+                        <input type="number" class="form-control" id="costo" name="costo" value="{producto-costo}" step="0.001" onchange="calculaPrecioVenta();" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Ganancia (%)</label>
+                        <input type="number" class="form-control" id="porcentaje_ganancia" name="porcentaje_ganancia" value="{producto-porcentaje_ganancia}" step="0.001" onchange="calculaPrecioVenta();" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Precio Venta</label>
+                        <input type="number" class="form-control" id="precio_venta" name="precio_venta" step="0.001" value="{producto-precio_venta}" required>
+                    </div>
+                    <!--
                     <div class="form-group col-lg-12">
                         <label>BarCode</label>
                         <input type="text" class="form-control" id="barcode" name="barcode" value="{producto-barcode}" required>
                     </div>
+                    -->
                     <div class="form-group col-lg-12">
                         <label>Detalle</label>
                         <textarea class="form-control" id="detalle" name="detalle" rows="3">{producto-detalle}</textarea>
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" id="barcode" name="barcode" value="{producto-barcode}" required>
+                        <input type="hidden" id="peso" name="peso" value="{producto-peso}" required>
+                        <input type="hidden" id="flete" name="flete" value="{producto-flete}" required>
                         <input type="hidden" name="producto_id" value="{producto-producto_id}">
                         <a href="#" class="btn btn-app" onclick="verificarProducto();"> <i class="fa fa-edit"></i> Editar </a>
                     </div>
@@ -209,6 +226,23 @@
     </div>
 </div>
 <script>
+    function calculaPrecioVenta() {
+        var costo = document.getElementById('costo').value;
+        var porcentaje_ganancia = document.getElementById('porcentaje_ganancia').value;
+        var slt_iva = document.getElementById("iva");
+        var iva = slt_iva.options[slt_iva.selectedIndex].value;
+
+        if (costo == 0) {
+            document.getElementById('precio_venta').value = 0;
+        } else {
+            var monto_iva = (iva * costo) / 100;
+            var costo_iva = parseFloat(costo) + parseFloat(monto_iva);
+            var monto_ganancia = (porcentaje_ganancia * costo_iva) / 100;
+            var valor_venta = parseFloat(costo_iva) + parseFloat(monto_ganancia);
+            document.getElementById('precio_venta').value = valor_venta.toFixed(2);
+        }
+    }
+
     function verificarProducto() {
         var array = new Array();
         var flag_array = 0;

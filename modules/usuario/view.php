@@ -14,11 +14,14 @@ class UsuarioView extends View {
 		print $template;
 	}
 
-	function agregar($usuario_collection, $vendedor_collection, $configuracionmenu_collection) {
+	function agregar($usuario_collection, $vendedor_collection, $configuracionmenu_collection, $almacen_collection) {
 		$gui = file_get_contents("static/modules/usuario/agregar.html");
+		$slt_almacen = file_get_contents("static/common/slt_almacen.html");
 		$slt_configuracionmenu = file_get_contents("static/modules/usuario/slt_configuracionmenu.html");
 		$slt_vendedor = file_get_contents("static/modules/usuario/slt_vendedor.html");
 		
+		$almacen_collection = $this->order_collection_objects($almacen_collection, 'denominacion', SORT_ASC);
+		$slt_almacen = $this->render_regex('SLT_ALMACEN', $slt_almacen, $almacen_collection);
 		$configuracionmenu_collection = $this->order_collection_array($configuracionmenu_collection, 'DENOMINACION', SORT_ASC);
 		$slt_configuracionmenu = $this->render_regex_dict('SLT_CONFIGURACIONMENU', $slt_configuracionmenu, $configuracionmenu_collection);
 
@@ -27,16 +30,20 @@ class UsuarioView extends View {
 
 		$render = $this->render_regex_dict('TBL_USUARIO', $gui, $usuario_collection);
 		$render = str_replace('{slt_configuracionmenu}', $slt_configuracionmenu, $render);
+		$render = str_replace('{slt_almacen}', $slt_almacen, $render);
 		$render = str_replace('{slt_vendedor}', $slt_vendedor, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
 	}
 
-	function editar($usuario_collection, $configuracionmenu_collection, $usuario) {
+	function editar($usuario_collection, $configuracionmenu_collection, $almacen_collection, $usuario) {
 		$gui = file_get_contents("static/modules/usuario/editar.html");
+		$slt_almacen = file_get_contents("static/common/slt_almacen.html");
 		$slt_configuracionmenu = file_get_contents("static/modules/usuario/slt_configuracionmenu.html");
 
+		$almacen_collection = $this->order_collection_objects($almacen_collection, 'denominacion', SORT_ASC);
+		$slt_almacen = $this->render_regex('SLT_ALMACEN', $slt_almacen, $almacen_collection);
 		$configuracionmenu_collection = $this->order_collection_array($configuracionmenu_collection, 'DENOMINACION', SORT_ASC);
 		$slt_configuracionmenu = $this->render_regex_dict('SLT_CONFIGURACIONMENU', $slt_configuracionmenu, $configuracionmenu_collection);
 		
@@ -51,6 +58,7 @@ class UsuarioView extends View {
 		
 		$render = $this->render_regex_dict('TBL_USUARIO', $gui, $usuario_collection);
 		$render = str_replace('{slt_configuracionmenu}', $slt_configuracionmenu, $render);
+		$render = str_replace('{slt_almacen}', $slt_almacen, $render);
 		$render = $this->render($usuario, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);

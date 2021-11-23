@@ -25,7 +25,7 @@
                         <div class="form-group col-lg-4">
                             <label>Tipo Factura</label>
                             <select class="form-control m-bot15" name="tipofactura" id="tipofactura" required>
-                                <option value="{tipofactura-tipofactura_id}" selected>{tipofactura-nomenclatura}</option>
+                                <option value="{tipofactura-tipofactura_id}" id="opt_tipofactura_selected" selected>{tipofactura-nomenclatura}</option>
                                 {slt_tipofactura}
                             </select>
                         </div>
@@ -38,42 +38,49 @@
                             <input type="number" class="form-control" id="numero_factura" name="numero_factura" value="{ingreso-numero_factura}" required>
                         </div>
                         <div class="form-group col-lg-3">
-                            <label>Fecha</label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" value="{ingreso-fecha}">
+                            <label>Fecha Emisión</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" value="{ingreso-fecha}" required>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Fecha Ingreso</label>
+                            <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" value="{ingreso-fecha_ingreso}" onchange="actualizarFechaVencimiento();" required>
                         </div>
                         <div class="form-group col-lg-3">
                             <label>Vencimiento</label>
-                            <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" value="{ingreso-fecha_vencimiento}">
+                            <select class="form-control m-bot15" name="vencimiento" id="vencimiento" onchange="actualizarFechaVencimiento();" required>
+                                <option value="{ingreso-vencimiento}" selected>{ingreso-vencimiento} Días</option>
+                                <option value="14">14 Días</option>
+                                <option value="21">21 Días</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Fecha Vencimiento</label>
+                            <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_vencimiento" value="{ingreso-fecha_vencimiento}" required>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Percepción IVA</label>
+                            <input type="number" class="form-control" id="percepcion_iva" name="percepcion_iva" onchange="actualizarCostoFinal();" value="{ingreso-percepcion_iva}" required>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Imp. Interno</label>
+                            <input type="number" class="form-control" id="impuesto_interno" name="impuesto_interno" onchange="actualizarCostoFinal();" value="{ingreso-impuesto_interno}" required>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Ing. Brutos</label>
+                            <input type="number" class="form-control" id="ingresos_brutos" name="ingresos_brutos" onchange="actualizarCostoFinal();" value="{ingreso-ingresos_brutos}" required>
                         </div>
                         <div class="form-group col-lg-3">
                             <label>IVA</label>
-                            <select class="form-control m-bot15" name="iva" id="iva" onChange="actualizarCostoFinal();" required>
-                                <option value="{ingreso-iva}" selected>{ingreso-iva}%</option>
-                                <option value="21">21%</option>
-                                <option value="10.5">10.5%</option>
-                                <option value="0">0%</option>
-                            </select>
+                            <input type="number" class="form-control" id="iva" name="iva" onchange="actualizarCostoFinal();" value="{ingreso-iva}" required>
                         </div>
-                        <div class="form-group col-lg-3">
-                            <label>Flete (%)</label>
-                            <input type="number" class="form-control" id="costo_distribucion" name="costo_distribucion" value="{ingreso-costo_distribucion}" step="0.01" onBlur="actualizarCostoFinal();" required>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label>Percepción IVA</label>
-                            <select class="form-control m-bot15" name="percepcion_iva" id="percepcion_iva" onChange="actualizarCostoFinal();" required>
-                                <option value="{ingreso-percepcion_iva}" selected>{ingreso-percepcion_iva}%</option>
-                                <option value="0">0%</option>
-                                <option value="3">3%</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <label>Condición IVA</label>
                             <select class="form-control m-bot15" name="condicioniva" id="condicioniva" required>
                                 <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
                                 {slt_condicioniva}
                             </select>
                         </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-6">
                             <label>Condición Pago</label>
                             <select class="form-control m-bot15" name="condicionpago" id="condicionpago" required>
                                 <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
@@ -90,18 +97,6 @@
                                     </button>
                                 </span>
                                 <input type="hidden" name="proveedor" id="proveedor" value="{proveedor-proveedor_id}">
-                            </div>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label>Actualiza Stock?</label>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" {ingreso-checked_actualiza_stock_si} value="1" id="actualiza_stock" name="opcion_stock" disabled> Si
-                                </label>
-                                &nbsp;&nbsp;&nbsp;
-                                <label>
-                                    <input type="radio" {ingreso-checked_actualiza_stock_no} value="0" id="actualiza_stock" name="opcion_stock" disabled> No
-                                </label>
                             </div>
                         </div>
                         <div class="form-group col-lg-6">
@@ -173,12 +168,15 @@
                     </div>
                     <div class="form-group col-lg-2 col-md-offset-10">
                         <ul class="to_do">
-                            <li><p id="suma_total">TOTAL: ${ingreso-costo_total}</p></li>
-                            <li><p id="suma_total_iva">TOTAL(IVA):${ingreso-costo_total_iva}</p></li>
+                            <li><p id="suma_total">SUBTOTAL: ${ingreso-costo_total}</p></li>
+                            <li><p id="suma_total_iva">TOTAL:${ingreso-costo_total_iva}</p></li>
                         </ul>
                     </div>
                     <div class="form-group col-lg-12" align="right" id="div_array_ingresos">
                         <input type="hidden" name="ingreso_id" id="ingreso_id" value="{ingreso-ingreso_id}">
+                        <input type="hidden" value="1" id="actualiza_stock" name="opcion_stock">
+                        <input type="hidden" value="0" id="actualiza_precio_producto" name="opcion_producto_proveedor">
+                        <input type="hidden" id="costo_distribucion" name="costo_distribucion" value="0">
                         <input type="hidden" name="producto" id="producto">
                         <input type="hidden" name="suma_total" id="input_suma_total" value="{ingreso-costo_total}">
                         <input type="hidden" name="suma_total_iva" id="input_suma_total_iva" value="{ingreso-costo_total_iva}">
@@ -238,6 +236,27 @@
     var i = 1; 
     array_ids = [{ingreso-array_producto_ids}];
 
+    function actualizarCantidad(producto_id) {
+        var bultos = document.getElementById('bultos').value;
+        if (parseInt(bultos) <= 0) {
+            return false;
+        } else {
+            var cantidad = $.ajax({
+                url: '{url_app}/ingreso/traer_cantidad_bulto_ajax/' + producto_id + '@' + bultos,
+                    dataType: 'text',
+                    async: false
+            }).responseText;
+
+            if (parseInt(cantidad) <= 0) {
+                return false;
+            } else {
+                document.getElementById('cantidad').value = cantidad;
+                ini_producto_id = producto_id;
+                actualizarCostoTotal();
+            }
+        }
+    }
+
     function buscarProveedor() {
         document.getElementById('div_form_producto').style.display = "none";
         document.getElementById('div_lst_producto').style.display = "none";
@@ -274,11 +293,44 @@
                 dataType: 'text',
                 async: false
         }).responseText;
+
+        var tipofactura = $.ajax({
+            url: '{url_app}/ingreso/traer_proveedor_tipofactura_ajax/' + proveedor_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+        
+        var elementos_tipofactura = tipofactura.split('@');
+        completarProveedor(elementos_tipofactura[0], elementos_tipofactura[1]);
         
         document.getElementById('proveedor_denominacion').value = denominacion_proveedor;
         document.getElementById('div_form_producto').style.display = "none";
         document.getElementById('div_lst_producto').style.display = "block";
         document.getElementById('div_tbl_proveedor').style.display = "none";
+    }
+
+    function completarProveedor(tipofactura0, tipofactura1) {
+        var slt_tipofactura = document.getElementById('tipofactura');
+        var opt_tipofactura_selected = document.getElementById('opt_tipofactura_selected');
+        slt_tipofactura.removeChild(opt_tipofactura_selected);
+        var new_opt_tipofactura_selected = document.createElement('option');
+        new_opt_tipofactura_selected.setAttribute('value', parseInt(tipofactura0));
+        new_opt_tipofactura_selected.innerHTML = tipofactura1;
+        new_opt_tipofactura_selected.setAttribute('selected', 'selected');
+        new_opt_tipofactura_selected.setAttribute('id', 'opt_tipofactura_selected');
+        slt_tipofactura.appendChild(new_opt_tipofactura_selected);
+    }
+
+    function actualizarFechaVencimiento() {
+        var fecha_ingreso = document.getElementById("fecha_ingreso").value;
+        var slt_vencimiento = document.getElementById("vencimiento");
+        var vencimiento = slt_vencimiento.options[slt_vencimiento.selectedIndex].value;
+        vencimiento = parseInt(vencimiento);
+
+        var d = new Date(fecha_ingreso);
+        var nueva_fecha = new Date(d.setDate(d.getDate() + vencimiento));
+        var fecha_vencimiento = nueva_fecha.toISOString().slice(0,10);
+        document.getElementById('fecha_vencimiento').value = fecha_vencimiento;
     }
 
     function actualizarCostoTotal() {
@@ -323,33 +375,21 @@
     }
 
     function actualizarCostoFinal() {
-        var costo_distribucion = document.getElementById('costo_distribucion').value;   
         var iva = document.getElementById('iva').value;
         var percepcion_iva = document.getElementById('percepcion_iva').value;
+        var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+        var impuesto_interno = document.getElementById('impuesto_interno').value;
         
         if (costo_base == 0) {
             return false;
         } else {
-            //NETO + FLETE
-            var costo_neto = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
 
-            //FLETE
-            var costo_flete = parseFloat(costo_distribucion) * parseFloat(costo_base) / 100;
-            
-            //IVA
-            var costo_iva = parseFloat(iva) * parseFloat(costo_base) / 100;
-
-            //PERCEPCIÓN IVA
-            var costo_percepcion_iva = parseFloat(percepcion_iva) * parseFloat(costo_base) / 100;
-            
-            //NETO + FLETE + IVA + PERCEPCIÓN IVA
-            var valor_final = parseFloat(costo_base) + parseFloat(costo_flete) + parseFloat(costo_iva) + parseFloat(costo_percepcion_iva);
-
-            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_neto.toFixed(2);
-            document.getElementById('suma_total_iva').innerHTML = 'TOTAL(IVA): $' + valor_final.toFixed(2);
-            document.getElementById('input_suma_total').value = costo_neto.toFixed(2);
+            document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
+            document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_base.toFixed(2);
             document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
-            //buscarProducto();
+            buscarProducto();
         }
     }
 
@@ -485,31 +525,20 @@
             div_array_ingresos.appendChild(inputIngresoCostoTotal);
             bodyTblProducto.appendChild(trTblProducto);
 
-            var costo_distribucion = document.getElementById('costo_distribucion').value;   
             var iva = document.getElementById('iva').value;
             var percepcion_iva = document.getElementById('percepcion_iva').value;
+            var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+            var impuesto_interno = document.getElementById('impuesto_interno').value;
            
             //SUMO NUEVO IMPORTE A COSTO BASE
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             
-            //NETO + FLETE
-            var costo_neto = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
-
-            //FLETE
-            var costo_flete = parseFloat(costo_distribucion) * parseFloat(costo_base) / 100;
+            //VALOR FINAL
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
             
-            //IVA
-            var costo_iva = parseFloat(iva) * parseFloat(costo_base) / 100;
-
-            //PERCEPCIÓN IVA
-            var costo_percepcion_iva = parseFloat(percepcion_iva) * parseFloat(costo_base) / 100;
-            
-            //NETO + FLETE + IVA + PERCEPCIÓN IVA
-            var valor_final = parseFloat(costo_base) + parseFloat(costo_flete) + parseFloat(costo_iva) + parseFloat(costo_percepcion_iva);
-            
-            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_neto.toFixed(2);
+            document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
-            document.getElementById('input_suma_total').value = costo_neto.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_base.toFixed(2);
             document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
 
             array_ids.push(producto_id);
@@ -553,33 +582,22 @@
             document.getElementById("descuento3_" + producto_id).value = descuento3;
             document.getElementById("costo_total_" + producto_id).value = costo_total;
                 
-            var costo_distribucion = document.getElementById('costo_distribucion').value;   
             var iva = document.getElementById('iva').value;
             var percepcion_iva = document.getElementById('percepcion_iva').value;
+            var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+            var impuesto_interno = document.getElementById('impuesto_interno').value;
            
             //RESTO VIEJO IMPORTE DE COSTO BASE
             costo_base = parseFloat(costo_base) - parseFloat(old_total);
             //SUMO NUEVO IMPORTE A COSTO BASE
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             
-            //NETO + FLETE
-            var costo_neto = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
-
-            //FLETE
-            var costo_flete = parseFloat(costo_distribucion) * parseFloat(costo_base) / 100;
+            //VALOR FINAL
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
             
-            //IVA
-            var costo_iva = parseFloat(iva) * parseFloat(costo_base) / 100;
-
-            //PERCEPCIÓN IVA
-            var costo_percepcion_iva = parseFloat(percepcion_iva) * parseFloat(costo_base) / 100;
-            
-            //NETO + FLETE + IVA + PERCEPCIÓN IVA
-            var valor_final = parseFloat(costo_base) + parseFloat(costo_flete) + parseFloat(costo_iva) + parseFloat(costo_percepcion_iva);
-            
-            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_neto.toFixed(2);
+            document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
-            document.getElementById('input_suma_total').value = costo_neto.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_base.toFixed(2);
             document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
 
             buscarProducto();
@@ -604,31 +622,20 @@
         var input_costo = document.getElementById('costo_' + producto_id);
         var input_costo_total = document.getElementById('costo_total_' + producto_id);
 
-        var costo_distribucion = document.getElementById('costo_distribucion').value;   
         var iva = document.getElementById('iva').value;
         var percepcion_iva = document.getElementById('percepcion_iva').value;
+        var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+        var impuesto_interno = document.getElementById('impuesto_interno').value;
            
         //RESTO VIEJO IMPORTE DE COSTO BASE
         costo_base = parseFloat(costo_base) - parseFloat(total_quitar);
             
-        //NETO + FLETE
-        var costo_neto = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+        //VALOR FINAL
+        var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
 
-        //FLETE
-        var costo_flete = parseFloat(costo_distribucion) * parseFloat(costo_base) / 100;
-        
-        //IVA
-        var costo_iva = parseFloat(iva) * parseFloat(costo_base) / 100;
-
-        //PERCEPCIÓN IVA
-        var costo_percepcion_iva = parseFloat(percepcion_iva) * parseFloat(costo_base) / 100;
-        
-        //NETO + FLETE + IVA + PERCEPCIÓN IVA
-        var valor_final = parseFloat(costo_base) + parseFloat(costo_flete) + parseFloat(costo_iva) + parseFloat(costo_percepcion_iva);
-
-        document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_neto.toFixed(2);
+        document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
         document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
-        document.getElementById('input_suma_total').value = costo_neto.toFixed(2);
+        document.getElementById('input_suma_total').value = costo_base.toFixed(2);
         document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
 
         bodyTblProducto.removeChild(trTblProducto);   
@@ -678,19 +685,6 @@
             flag_array = 1;
             array.push("<strong>[ERROR]</strong> Por favor seleccione el PROVEEDOR.");
         }
-
-        var iva = document.getElementById("iva");
-        var iva_id = iva.options[iva.selectedIndex].value;
-        if (iva_id == null || iva_id == "") {
-            flag_array = 1;
-            array.push("<strong>[ERROR]</strong> Por favor seleccione el IVA.");
-        }
-
-        var costo_distribucion = document.getElementById("costo_distribucion").value;
-        if (costo_distribucion == null || costo_distribucion == "") {
-            flag_array = 1;
-            array.push("<strong>[ERROR]</strong> Por favor complete el COSTO DE DISTRIBUCIÓN.");
-        } 
 
         if (flag_array == 0) {
             var div_productos = document.getElementById("div_productos");

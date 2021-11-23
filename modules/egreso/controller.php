@@ -33,10 +33,12 @@ class EgresoController {
 
 	function listar($arg) {
     	SessionHandler()->check_session();
+    	$fecha_sys = strtotime(date('Y-m-d'));
     	$periodo_actual = date('Ym');
-    	$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, ci.denominacion AS CONDIV, CONCAT(LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) AS BK, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+    	$dias_minimo = date("Y-m-d", strtotime("-15 days", $fecha_sys));
+    	$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
-		$where = "date_format(e.fecha, '%Y%m') = {$periodo_actual} ORDER BY e.fecha DESC";
+		$where = "e.fecha >= {$dias_minimo} ORDER BY e.fecha DESC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
 		$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
@@ -115,7 +117,7 @@ class EgresoController {
 
 		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-		$where = "p.oculto = 0 AND p.producto_id != 344";
+		$where = "p.oculto = 0";
 		$groupby = "p.producto_id";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
 		foreach ($producto_collection as $clave=>$valor) {
@@ -148,7 +150,8 @@ class EgresoController {
 
 		$select = "v.vendedor_id AS VENDEDOR_ID, CONCAT(v.apellido, ' ', v.nombre) AS DENOMINACION, CONCAT(dt.denominacion, ' ', v.documento) AS DOCUMENTO";
 		$from = "vendedor v INNER JOIN documentotipo dt ON v.documentotipo = dt.documentotipo_id";
-		$vendedor_collection = CollectorCondition()->get('Vendedor', NULL, 4, $from, $select);
+		$where = "v.oculto = 0";
+		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
 
 		$select = "(MAX(e.numero_factura) + 1 ) AS SIGUIENTE_NUMERO ";
 		$from = "egreso e";
@@ -202,7 +205,7 @@ class EgresoController {
 
 			if (!empty($telefono)) {
 				$this->model->cliente->telefono = 'Tel: ' . $telefono;
-			}else {
+			} else {
 				$this->model->cliente->telefono = '';
 			}
 		} else {
@@ -243,10 +246,10 @@ class EgresoController {
 		$notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
 		$notacredito_id = (is_array($notacredito) AND !empty($notacredito)) ? $notacredito[0]['notacredito_id'] : 0;
 
-		$select_egresoafip = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
-		$from_egresoafip = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
-		$where_egresoafip = "eafip.egreso_id = {$egreso_id}";
-		$egresoafip = CollectorCondition()->get('EgresoAfip', $where_egresoafip, 4, $from_egresoafip, $select_egresoafip);
+		$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+		$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+		$where = "eafip.egreso_id = {$egreso_id}";
+		$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
 
 		$telefono_vendedor = '';
 		$infocontacto_vendedor = $this->model->vendedor->infocontacto_collection;
@@ -345,10 +348,10 @@ class EgresoController {
 			$notacredito_id = 0;
 		}
 
-		$select_egresoafip = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
-		$from_egresoafip = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
-		$where_egresoafip = "eafip.egreso_id = {$egreso_id}";
-		$egresoafip = CollectorCondition()->get('EgresoAfip', $where_egresoafip, 4, $from_egresoafip, $select_egresoafip);
+		$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+		$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+		$where = "eafip.egreso_id = {$egreso_id}";
+		$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
 
 		$this->model = new Egreso();
 		$this->model->egreso_id = $egreso_id;
@@ -361,7 +364,8 @@ class EgresoController {
 
 		$select = "v.vendedor_id AS ID, CONCAT(v.apellido, ' ', v.nombre) AS DENOMINACION, CONCAT(dt.denominacion, ' ', v.documento) AS DOCUMENTO";
 		$from = "vendedor v INNER JOIN documentotipo dt ON v.documentotipo = dt.documentotipo_id";
-		$vendedor_collection = CollectorCondition()->get('Vendedor', NULL, 4, $from, $select);
+		$where = "v.oculto = 0";
+		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
 		$tipofactura_collection = Collector()->get('TipoFactura');
 		$condicionpago_collection = Collector()->get('CondicionPago');
 		$array_ids = array(1,2,3);
@@ -501,10 +505,10 @@ class EgresoController {
 		$this->model->egreso_id = $ncm->egreso_id;
 		$this->model->get();
 
-		$select_notascredito = "ncd.codigo_producto AS CODIGO, ncd.descripcion_producto AS DESCRIPCION, ncd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ncd.descuento AS DESCUENTO, ncd.valor_descuento AS VD, ncd.costo_producto AS COSTO, ROUND((ncd.costo_producto * ncd.cantidad),2) AS IMPORTE, ncd.iva AS IVA";
-		$from_notascredito = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_notascredito = "ncd.notacredito_id = {$notacredito_id}";
-		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where_notascredito, 4, $from_notascredito, $select_notascredito);
+		$select = "ncd.codigo_producto AS CODIGO, ncd.descripcion_producto AS DESCRIPCION, ncd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ncd.descuento AS DESCUENTO, ncd.valor_descuento AS VD, ncd.costo_producto AS COSTO, ROUND((ncd.costo_producto * ncd.cantidad),2) AS IMPORTE, ncd.iva AS IVA";
+		$from = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ncd.notacredito_id = {$notacredito_id}";
+		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
 
 		$facturaPDFHelper = new FacturaPDF();
 		$facturaPDFHelper->descarga_notacredito($notascreditodetalle_collection, $cm, $this->model, $ncm);
@@ -519,23 +523,25 @@ class EgresoController {
 		$condicionpago_collection = Collector()->get('CondicionPago');
 		$condicioniva_collection = Collector()->get('CondicionIVA');
 
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, p.precio_venta AS VENTA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
 		$groupby = "p.producto_id";
 		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
 
 		$select = "c.cliente_id AS CLIENTE_ID, LPAD(c.cliente_id, 5, 0) AS CODCLI, CONCAT(c.razon_social, '(', c.nombre_fantasia, ')') AS RAZON_SOCIAL, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO";
 		$from = "cliente c INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id";
-		$cliente_collection = CollectorCondition()->get('Cliente', NULL, 4, $from, $select);
+		$where = "c.oculto = 0";
+		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
 
 		$select = "v.vendedor_id AS VENDEDOR_ID, CONCAT(v.apellido, ' ', v.nombre) AS DENOMINACION, CONCAT(dt.denominacion, ' ', v.documento) AS DOCUMENTO";
 		$from = "vendedor v INNER JOIN documentotipo dt ON v.documentotipo = dt.documentotipo_id";
-		$vendedor_collection = CollectorCondition()->get('Vendedor', NULL, 4, $from, $select);
+		$where = "v.oculto = 0";
+		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
 
-		$select_egresos = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.costo_producto AS COSTO, ed.importe AS IMPORTE, ed.egresodetalle_id AS EGRESODETALLEID, ed.producto_id AS PRODUCTO, ed.valor_descuento AS VD, ed.iva AS IVA, ed.neto_producto AS NETPRO";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_egresos = "ed.egreso_id = {$arg}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.costo_producto AS COSTO, ed.importe AS IMPORTE, ed.egresodetalle_id AS EGRESODETALLEID, ed.producto_id AS PRODUCTO, ed.valor_descuento AS VD, ed.iva AS IVA, ed.neto_producto AS NETPRO";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ed.egreso_id = {$arg}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$this->view->editar($producto_collection, $cliente_collection, $vendedor_collection, $condicionpago_collection,
 							$condicioniva_collection, $egresodetalle_collection, $this->model);
@@ -547,15 +553,15 @@ class EgresoController {
 		$this->model->egreso_id = $arg;
 		$this->model->get();
 
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, p.precio_venta AS VENTA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
 		$groupby = "p.producto_id";
 		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
 
-		$select_egresos = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.costo_producto AS COSTO, ed.importe AS IMPORTE, ed.egresodetalle_id AS EGRESODETALLEID, ed.producto_id AS PRODUCTO, ed.valor_descuento AS VD, ed.iva AS IVA, ed.neto_producto AS NETPRO";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_egresos = "ed.egreso_id = {$arg}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.costo_producto AS COSTO, ed.importe AS IMPORTE, ed.egresodetalle_id AS EGRESODETALLEID, ed.producto_id AS PRODUCTO, ed.valor_descuento AS VD, ed.iva AS IVA, ed.neto_producto AS NETPRO";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ed.egreso_id = {$arg}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$this->view->reingreso($producto_collection, $egresodetalle_collection, $this->model);
 	}
@@ -723,10 +729,10 @@ class EgresoController {
 			$egresodetalle_ids[] = $edm->egresodetalle_id;
 		}
 
-		$select_egresos = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$flag_error = 0;
 		if ($tipofactura == 1 OR $tipofactura == 3) {
@@ -775,10 +781,10 @@ class EgresoController {
 		if ($flag_error == 0) {
 			foreach ($egresodetalle_collection as $egreso) {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
-				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+				$select = "MAX(s.stock_id) AS STOCK_ID";
+				$from = "stock s";
+				$where = "s.producto_id = {$temp_producto_id}";
+				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
 					$sm = new Stock();
@@ -875,19 +881,19 @@ class EgresoController {
 			}
 		}
 
-		$select_egresos = "ed.egresodetalle_id AS ID,ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.egresodetalle_id AS ID,ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		if (!empty($egresodetalle_collection) AND is_array($egresodetalle_collection)) {
 			foreach ($egresodetalle_collection as $egresodetalle) {
 				$temp_egresodetalle_id = $egresodetalle['ID'];
 				$temp_producto_id = $egresodetalle['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
-				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+				$select = "MAX(s.stock_id) AS STOCK_ID";
+				$from = "stock s";
+				$where = "s.producto_id = {$temp_producto_id}";
+				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				$stock_id = $rst_stock[0]['STOCK_ID'];
 				$sm = new Stock();
@@ -951,17 +957,17 @@ class EgresoController {
 			$edm->save();
 		}
 
-		$select_egresos = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		foreach ($egresodetalle_collection as $egreso) {
 			$temp_producto_id = $egreso['PRODUCTO_ID'];
-			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-			$from_stock = "stock s";
-			$where_stock = "s.producto_id = {$temp_producto_id}";
-			$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+			$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id = {$temp_producto_id}";
+			$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
 				$sm = new Stock();
@@ -1052,19 +1058,19 @@ class EgresoController {
 		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
 		$comprobante .= str_pad($numero_factura, 8, '0', STR_PAD_LEFT);
 
-		$select_notascredito = "ncd.notacreditodetalle_id AS ID, ncd.producto_id AS PRODUCTO_ID, ncd.codigo_producto AS CODIGO, ncd.cantidad AS CANTIDAD";
-		$from_notascredito = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id";
-		$where_notascredito = "ncd.egreso_id = {$egreso_id}";
-		$notascreditodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_notascredito, 4, $from_notascredito, $select_notascredito);
+		$select = "ncd.notacreditodetalle_id AS ID, ncd.producto_id AS PRODUCTO_ID, ncd.codigo_producto AS CODIGO, ncd.cantidad AS CANTIDAD";
+		$from = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id";
+		$where = "ncd.egreso_id = {$egreso_id}";
+		$notascreditodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		if (!empty($notascreditodetalle_collection) AND is_array($notascreditodetalle_collection)) {
 			foreach ($notascreditodetalle_collection as $notacredito) {
 				$temp_notacredito_id = $notacredito['ID'];
 				$temp_producto_id = $notacredito['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
-				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+				$select = "MAX(s.stock_id) AS STOCK_ID";
+				$from = "stock s";
+				$where = "s.producto_id = {$temp_producto_id}";
+				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				$stock_id = $rst_stock[0]['STOCK_ID'];
 				$sm = new Stock();
@@ -1098,18 +1104,6 @@ class EgresoController {
 			$importe = $egreso['costo_total'];
 			$ganancia_temp = $egreso['ganancia'];
 
-			/*
-			$neto = $pm->costo;
-			$flete = $pm->flete;
-			$porcentaje_ganancia = $pm->porcentaje_ganancia;
-			$valor_neto = $neto + ($flete * $neto / 100);
-			$total_neto = $valor_neto * $cantidad;
-
-			$ganancia_temp = $total_neto * ($porcentaje_ganancia / 100 + 1);
-			$ganancia = round(($ganancia_temp - $total_neto),2);
-			---------------------
-			*/
-
 			$pm = new Producto();
 			$pm->producto_id = $producto_id;
 			$pm->get();
@@ -1139,17 +1133,17 @@ class EgresoController {
 			$ncdm->save();
 		}
 
-		$select_notascredito = "ncd.producto_id AS PRODUCTO_ID, ncd.codigo_producto AS CODIGO, ncd.cantidad AS CANTIDAD";
-		$from_notascredito = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id";
-		$where_notascredito = "ncd.egreso_id = {$egreso_id} AND ncd.notacredito_id = {$notacredito_id}";
-		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where_notascredito, 4, $from_notascredito, $select_notascredito);
+		$select = "ncd.producto_id AS PRODUCTO_ID, ncd.codigo_producto AS CODIGO, ncd.cantidad AS CANTIDAD";
+		$from = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id";
+		$where = "ncd.egreso_id = {$egreso_id} AND ncd.notacredito_id = {$notacredito_id}";
+		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
 
 		foreach ($notascreditodetalle_collection as $notacredito) {
 			$temp_producto_id = $notacredito['PRODUCTO_ID'];
-			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-			$from_stock = "stock s";
-			$where_stock = "s.producto_id = {$temp_producto_id}";
-			$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+			$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id = {$temp_producto_id}";
+			$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
 				$sm = new Stock();
@@ -1200,7 +1194,7 @@ class EgresoController {
 
 	function entregas_pendientes($arg) {
 		SessionHandler()->check_session();
-    	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, ci.denominacion AS CI, e.subtotal AS SUBTOTAL, f.denominacion AS FLETE, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CONCAT(ese.denominacion, ' (', date_format(ee.fecha, '%d/%m/%Y'), ')') AS ENTREGA, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+    	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, f.denominacion AS FLETE, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CONCAT(ese.denominacion, ' (', date_format(ee.fecha, '%d/%m/%Y'), ')') AS ENTREGA, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id INNER JOIN flete f ON ee.flete = f.flete_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "ee.estadoentrega NOT IN(3,4,5) ORDER BY e.fecha ASC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
@@ -1216,7 +1210,6 @@ class EgresoController {
 				$importe_notacredito = $notacredito[0]['IMPORTETOTAL'];
 				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = $importe_notacredito;
 				$egreso_collection[$clave]['IMPORTETOTAL'] = $egreso_collection[$clave]['IMPORTETOTAL'] - $importe_notacredito;
-				//$egreso_collection[$clave]['VC'] = round(($egreso_collection[$clave]['COMISION'] * $egreso_collection[$clave]['IMPORTETOTAL'] / 100),2);
 			} else {
 				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = 0;
 			}
@@ -1249,7 +1242,7 @@ class EgresoController {
 	function buscar() {
 		SessionHandler()->check_session();
 
-    	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, ci.denominacion AS CI, CONCAT(LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) AS BK, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+    	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, CONCAT(LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) AS BK, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 
 		$tipo_busqueda = filter_input(INPUT_POST, 'tipo_busqueda');
@@ -1750,10 +1743,10 @@ class EgresoController {
 		$tfm->tipofactura_id = $tipofactura_id;
 		$tfm->get();
 
-		$select_egresos = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, p.exento AS EXENTO";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, p.exento AS EXENTO";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$array_afip = FacturaAFIPTool()->preparaFacturaAFIP($tfm, $this->model, $egresodetalle_collection);
 		unset($array_afip['array_alicuotas']);
@@ -1778,10 +1771,10 @@ class EgresoController {
 		$tfm->tipofactura_id = $tipofactura_id;
 		$tfm->get();
 
-		$select_egresos = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, p.exento AS EXENTO";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, p.exento AS EXENTO";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$resultadoAFIP = FacturaAFIPTool()->facturarAFIP($cm, $tfm, $this->model, $egresodetalle_collection);
 		if (is_array($resultadoAFIP)) {
@@ -1821,10 +1814,10 @@ class EgresoController {
 		$tfm->tipofactura_id = $tipofactura_id;
 		$tfm->get();
 
-		$select_egresos = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, p.exento AS EXENTO";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, p.exento AS EXENTO";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$resultadoAFIP = FacturaAFIPTool()->facturarAFIP($cm, $tfm, $em, $egresodetalle_collection);
 		if (is_array($resultadoAFIP)) {

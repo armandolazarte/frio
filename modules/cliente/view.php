@@ -42,13 +42,11 @@ class ClienteView extends View {
 		print $template;
 	}
 
-	function agregar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $condicionfiscal_collection,
-					 $frecuenciaventa_collection, $vendedor_collection, $flete_collection, $tipofactura_collection, $listaprecio_collection,$categoriacliente_collection) {
+	function agregar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $frecuenciaventa_collection, $vendedor_collection, $flete_collection, $tipofactura_collection, $listaprecio_collection,$categoriacliente_collection) {
 		$gui = file_get_contents("static/modules/cliente/agregar.html");
 		$gui_slt_provincia = file_get_contents("static/common/slt_provincia.html");
 		$gui_slt_documentotipo = file_get_contents("static/common/slt_documentotipo.html");
 		$gui_slt_condicioniva = file_get_contents("static/common/slt_condicioniva.html");
-		$gui_slt_condicionfiscal = file_get_contents("static/common/slt_condicionfiscal.html");
 		$gui_slt_frecuenciaventa = file_get_contents("static/common/slt_frecuenciaventa.html");
 		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor.html");
 		$gui_slt_flete = file_get_contents("static/common/slt_flete.html");
@@ -61,7 +59,6 @@ class ClienteView extends View {
 		$gui_slt_provincia = $this->render_regex('SLT_PROVINCIA', $gui_slt_provincia, $provincia_collection);
 		$gui_slt_documentotipo = $this->render_regex('SLT_DOCUMENTOTIPO', $gui_slt_documentotipo, $documentotipo_collection);
 		$gui_slt_condicioniva = $this->render_regex('SLT_CONDICIONIVA', $gui_slt_condicioniva, $condicioniva_collection);
-		$gui_slt_condicionfiscal = $this->render_regex('SLT_CONDICIONFISCAL', $gui_slt_condicionfiscal, $condicionfiscal_collection);
 		$gui_slt_frecuenciaventa = $this->render_regex('SLT_FRECUENCIAVENTA', $gui_slt_frecuenciaventa, $frecuenciaventa_collection);
 		$gui_slt_vendedor = $this->render_regex('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
 		$gui_slt_flete = $this->render_regex('SLT_FLETE', $gui_slt_flete, $flete_collection);
@@ -72,7 +69,6 @@ class ClienteView extends View {
 		$render = str_replace('{slt_provincia}', $gui_slt_provincia, $gui);
 		$render = str_replace('{slt_documentotipo}', $gui_slt_documentotipo, $render);
 		$render = str_replace('{slt_condicioniva}', $gui_slt_condicioniva, $render);
-		$render = str_replace('{slt_condicionfiscal}', $gui_slt_condicionfiscal, $render);
 		$render = str_replace('{slt_frecuenciaventa}', $gui_slt_frecuenciaventa, $render);
 		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
 		$render = str_replace('{slt_flete}', $gui_slt_flete, $render);
@@ -84,13 +80,11 @@ class ClienteView extends View {
 		print $template;
 	}
 
-	function editar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $condicionfiscal_collection,
-					$frecuenciaventa_collection, $vendedor_collection, $flete_collection,$tipofactura_collection, $obj_cliente,$listaprecio_collection,$categoriacliente_collection) {
+	function editar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $frecuenciaventa_collection, $vendedor_collection, $flete_collection,$tipofactura_collection, $obj_cliente,$listaprecio_collection,$categoriacliente_collection) {
 		$gui = file_get_contents("static/modules/cliente/editar.html");
 		$gui_slt_provincia = file_get_contents("static/common/slt_provincia.html");
 		$gui_slt_documentotipo = file_get_contents("static/common/slt_documentotipo.html");
 		$gui_slt_condicioniva = file_get_contents("static/common/slt_condicioniva.html");
-		$gui_slt_condicionfiscal = file_get_contents("static/common/slt_condicionfiscal.html");
 		$gui_slt_frecuenciaventa = file_get_contents("static/common/slt_frecuenciaventa.html");
 		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor.html");
 		$gui_slt_flete = file_get_contents("static/common/slt_flete.html");
@@ -116,7 +110,6 @@ class ClienteView extends View {
 		$gui_slt_provincia = $this->render_regex('SLT_PROVINCIA', $gui_slt_provincia, $provincia_collection);
 		$gui_slt_documentotipo = $this->render_regex('SLT_DOCUMENTOTIPO', $gui_slt_documentotipo, $documentotipo_collection);
 		$gui_slt_condicioniva = $this->render_regex('SLT_CONDICIONIVA', $gui_slt_condicioniva, $condicioniva_collection);
-		$gui_slt_condicionfiscal = $this->render_regex('SLT_CONDICIONFISCAL', $gui_slt_condicionfiscal, $condicionfiscal_collection);
 		$gui_slt_frecuenciaventa = $this->render_regex('SLT_FRECUENCIAVENTA', $gui_slt_frecuenciaventa, $frecuenciaventa_collection);
 		$gui_slt_vendedor = $this->render_regex('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
 		$gui_slt_flete = $this->render_regex('SLT_FLETE', $gui_slt_flete, $flete_collection);
@@ -127,7 +120,6 @@ class ClienteView extends View {
 		$render = str_replace('{slt_provincia}', $gui_slt_provincia, $gui);
 		$render = str_replace('{slt_documentotipo}', $gui_slt_documentotipo, $render);
 		$render = str_replace('{slt_condicioniva}', $gui_slt_condicioniva, $render);
-		$render = str_replace('{slt_condicionfiscal}', $gui_slt_condicionfiscal, $render);
 		$render = str_replace('{slt_frecuenciaventa}', $gui_slt_frecuenciaventa, $render);
 		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
 		$render = str_replace('{slt_flete}', $gui_slt_flete, $render);
