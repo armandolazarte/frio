@@ -23,9 +23,14 @@
                                     <li><i class="fa fa-check text-success"></i> <strong> Fecha:</strong> {pedidovendedor-fecha} - {pedidovendedor-hora}</li>
                                     <li><i class="fa fa-check text-success"></i> <strong> Cliente:</strong> {cliente-razon_social} ({documentotipo-denominacion} {cliente-documento})</li>
                                     <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
-                                    <li><i class="fa fa-check text-success"></i> <strong> Subtotal:</strong> ${pedidovendedor-subtotal}</li>
                                     <li><i class="fa fa-check text-success"></i> <strong> Condición Venta:</strong> {condicionpago-denominacion}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Subtotal:</strong> ${pedidovendedor-subtotal}</li>
                                     <li><i class="fa fa-check text-success"></i> <strong> Importe Total:</strong> ${pedidovendedor-importe_total}</li>
+                                    <li style="display: {pedidovendedor-display_consultar_factura};">
+                                        <i class="fa fa-check text-success"></i> 
+                                        <strong> Factura:</strong> {pedidovendedor-factura}
+                                        <a class="btn btn-info btn-xs" href="{url_app}/egreso/consultar/{pedidovendedor-egreso_id}" title="Consultar pedido"><i class="fa fa-eye"></i></a>
+                                    </li>
                                     <li><i class="fa fa-check text-success"></i> <strong> Detalle:</strong> {pedidovendedor-detalle}</li>
                                 </ul>
                             </div>

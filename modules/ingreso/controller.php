@@ -161,6 +161,7 @@ class IngresoController {
 
 	function guardar() {
 		SessionHandler()->check_session();
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$punto_venta = filter_input(INPUT_POST, 'punto_venta');
 		$numero_factura = filter_input(INPUT_POST, 'numero_factura');
 		$fecha = filter_input(INPUT_POST, 'fecha');
@@ -255,17 +256,17 @@ class IngresoController {
 			$idm->save();
 		}
 
-		$select_ingresos = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
-		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
-		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
+		$select = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
+		$where = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);
 		
 		foreach ($ingresodetalle_collection as $ingreso) {
 			$temp_producto_id = $ingreso['PRODUCTO_ID'];
-			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-			$from_stock = "stock s";
-			$where_stock = "s.producto_id = {$temp_producto_id}";
-			$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+			$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
+			$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
 				$sm = new Stock();
@@ -276,6 +277,7 @@ class IngresoController {
 				$sm->cantidad_actual = $ingreso['CANTIDAD'];
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = 1;
 				$sm->save();
 			} else {
 				$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -293,6 +295,7 @@ class IngresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = 1;
 				$sm->save();
 			}
 		}
@@ -303,7 +306,7 @@ class IngresoController {
 
 	function actualizar() {
 		SessionHandler()->check_session();
-
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$ingreso_id = filter_input(INPUT_POST, 'ingreso_id');
 		$this->model->ingreso_id = $ingreso_id;
 		$this->model->get();
@@ -381,20 +384,20 @@ class IngresoController {
 			}
 		}
 
-		$select_ingresos = "id.ingresodetalle_id AS ID,id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
-		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
-		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);		
+		$select = "id.ingresodetalle_id AS ID,id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
+		$where = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);		
 		
 		if (!empty($ingresodetalle_collection) AND is_array($ingresodetalle_collection)) {
 			foreach ($ingresodetalle_collection as $ingresodetalle) {
 				$temp_ingresodetalle_id = $ingresodetalle['ID'];
 				if ($opcion_actualiza_stock == 1) {
 					$temp_producto_id = $ingresodetalle['PRODUCTO_ID'];
-					$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-					$from_stock = "stock s";
-					$where_stock = "s.producto_id = {$temp_producto_id}";
-					$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+					$select = "MAX(s.stock_id) AS STOCK_ID";
+					$from = "stock s";
+					$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
+					$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 					
 					$stock_id = $rst_stock[0]['STOCK_ID'];
 					$sm = new Stock();
@@ -411,6 +414,7 @@ class IngresoController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$ingresodetalle['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				}
 
@@ -444,17 +448,17 @@ class IngresoController {
 			$idm->save();
 		}
 		
-		$select_ingresos = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
-		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
-		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);	
+		$select = "id.producto_id AS PRODUCTO_ID, id.codigo_producto AS CODIGO, id.cantidad AS CANTIDAD";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id";
+		$where = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);	
 
 		foreach ($ingresodetalle_collection as $ingreso) {
 			$temp_producto_id = $ingreso['PRODUCTO_ID'];
-			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-			$from_stock = "stock s";
-			$where_stock = "s.producto_id = {$temp_producto_id}";
-			$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+			$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
+			$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
 				$sm = new Stock();
@@ -465,6 +469,7 @@ class IngresoController {
 				$sm->cantidad_actual = $ingreso['CANTIDAD'];
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = 1;
 				$sm->save();
 			} else {
 				$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -482,6 +487,7 @@ class IngresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = 1;
 				$sm->save();
 			}
 		}
@@ -541,15 +547,16 @@ class IngresoController {
 		$this->model->ingreso_id = $arg;
 		$this->model->get();
 		
-		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2,  id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE,  id.ingresodetalle_id AS INGRESODETALLEID, id.producto_id AS PRODUCTO";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_ingresos = "id.ingreso_id = {$arg}";
-		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
+		$select = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2,  id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE,  id.ingresodetalle_id AS INGRESODETALLEID, id.producto_id AS PRODUCTO";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "id.ingreso_id = {$arg}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);
 		$this->view->reingreso($ingresodetalle_collection, $this->model);
 	}
 
 	function guardar_nota_credito() {
-		SessionHandler()->check_session();		
+		SessionHandler()->check_session();
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];		
 		$ingreso_id = filter_input(INPUT_POST, 'ingreso_id');
 		$suma_total = filter_input(INPUT_POST, 'suma_total');
 		$suma_total_iva = filter_input(INPUT_POST, 'suma_total_iva');
@@ -585,20 +592,20 @@ class IngresoController {
 		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
 		$comprobante .= str_pad($numero_factura, 8, '0', STR_PAD_LEFT);
 
-		$select_notascredito = "ncpd.notacreditoproveedordetalle_id AS ID, ncpd.producto_id AS PRODUCTO_ID, ncpd.codigo_producto AS CODIGO, ncpd.cantidad AS CANTIDAD";
-		$from_notascredito = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id";
-		$where_notascredito = "ncpd.ingreso_id = {$ingreso_id}";
-		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where_notascredito, 4, $from_notascredito, $select_notascredito);		
+		$select = "ncpd.notacreditoproveedordetalle_id AS ID, ncpd.producto_id AS PRODUCTO_ID, ncpd.codigo_producto AS CODIGO, ncpd.cantidad AS CANTIDAD";
+		$from = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id";
+		$where = "ncpd.ingreso_id = {$ingreso_id}";
+		$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where, 4, $from, $select);		
 
 		if (!empty($notascreditodetalle_collection) AND is_array($notascreditodetalle_collection)) {
 			foreach ($notascreditodetalle_collection as $notacredito) {
 				$temp_notacreditoproveedor_id = $notacredito['ID'];
 				if ($opcion_actualiza_stock == 1) {
 					$temp_producto_id = $notacredito['PRODUCTO_ID'];
-					$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-					$from_stock = "stock s";
-					$where_stock = "s.producto_id = {$temp_producto_id}";
-					$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+					$select = "MAX(s.stock_id) AS STOCK_ID";
+					$from = "stock s";
+					$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
+					$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 					
 					$stock_id = $rst_stock[0]['STOCK_ID'];
 					$sm = new Stock();
@@ -615,6 +622,7 @@ class IngresoController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = $notacredito['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				}
 
@@ -644,17 +652,17 @@ class IngresoController {
 		}
 
 		if ($opcion_actualiza_stock == 1) {
-			$select_notascredito = "ncpd.producto_id AS PRODUCTO_ID, ncpd.codigo_producto AS CODIGO, ncpd.cantidad AS CANTIDAD";
-			$from_notascredito = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id";
-			$where_notascredito = "ncpd.ingreso_id = {$ingreso_id} AND ncpd.notacreditoproveedor_id = {$notacreditoproveedor_id}";
-			$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where_notascredito, 4, $from_notascredito, $select_notascredito);	
+			$select = "ncpd.producto_id AS PRODUCTO_ID, ncpd.codigo_producto AS CODIGO, ncpd.cantidad AS CANTIDAD";
+			$from = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id";
+			$where = "ncpd.ingreso_id = {$ingreso_id} AND ncpd.notacreditoproveedor_id = {$notacreditoproveedor_id}";
+			$notascreditodetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where, 4, $from, $select);	
 
 			foreach ($notascreditodetalle_collection as $notacredito) {
 				$temp_producto_id = $notacredito['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
-				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
+				$select = "MAX(s.stock_id) AS STOCK_ID";
+				$from = "stock s";
+				$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
+				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				$stock_id = $rst_stock[0]['STOCK_ID'];
 				$sm = new Stock();
@@ -671,8 +679,8 @@ class IngresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = -$notacredito['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
-				$sm->save();
-				
+				$sm->almacen_id = 1;
+				$sm->save();				
 			}
 		}
 

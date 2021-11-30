@@ -19,7 +19,9 @@ require_once "modules/stock/model.php";
 require_once "modules/hojaruta/model.php";
 require_once "modules/configuracion/model.php";
 require_once "modules/configuracioncomprobante/model.php";
+require_once "modules/usuario/model.php";
 require_once "modules/usuariodetalle/model.php";
+require_once "modules/usuariovendedor/model.php";
 require_once "tools/facturaAFIPTool.php";
 require_once "tools/hojaRutaPDFTool.php";
 
@@ -581,7 +583,8 @@ class EgresoController {
 
 	function guardar() {
 		SessionHandler()->check_session();
-
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+		
 		$com = new Configuracion();
 		$com->configuracion_id = 1;
 		$com->get();
@@ -783,7 +786,7 @@ class EgresoController {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";
 				$from = "stock s";
-				$where = "s.producto_id = {$temp_producto_id}";
+				$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
 				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
@@ -795,6 +798,7 @@ class EgresoController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = $almacen_id;
 					$sm->save();
 				} else {
 					$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -812,6 +816,7 @@ class EgresoController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = $almacen_id;
 					$sm->save();
 				}
 			}
@@ -824,7 +829,7 @@ class EgresoController {
 
 	function actualizar() {
 		SessionHandler()->check_session();
-
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$egreso_id = filter_input(INPUT_POST, 'egreso_id');
 		$this->model->egreso_id = $egreso_id;
 		$this->model->get();
@@ -892,7 +897,7 @@ class EgresoController {
 				$temp_producto_id = $egresodetalle['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";
 				$from = "stock s";
-				$where = "s.producto_id = {$temp_producto_id}";
+				$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
 				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -910,6 +915,7 @@ class EgresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = +$egresodetalle['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = $almacen_id;
 				$sm->save();
 
 				$edm = new EgresoDetalle();
@@ -966,7 +972,7 @@ class EgresoController {
 			$temp_producto_id = $egreso['PRODUCTO_ID'];
 			$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
-			$where = "s.producto_id = {$temp_producto_id}";
+			$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
 			$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
@@ -978,6 +984,7 @@ class EgresoController {
 				$sm->cantidad_actual = $egreso['CANTIDAD'];
 				$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = $almacen_id;
 				$sm->save();
 			} else {
 				$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -995,6 +1002,7 @@ class EgresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = $almacen_id;
 				$sm->save();
 			}
 		}
@@ -1019,8 +1027,10 @@ class EgresoController {
 		$importe_total = filter_input(INPUT_POST, 'importe_total');
 		$this->model->egreso_id = $egreso_id;
 		$this->model->get();
+		$vendedor_id = $this->model->vendedor->vendedor_id;
 		$condicionpago_egreso = $this->model->condicionpago->condicionpago_id;
 		$tipofactura_egreso = $this->model->tipofactura->tipofactura_id;
+
 		switch ($tipofactura_egreso) {
 			case 1:
 				$tipofactura_nc = 4;
@@ -1031,6 +1041,20 @@ class EgresoController {
 			case 3:
 				$tipofactura_nc = 5;
 				break;
+		}
+
+		$select = "uv.usuario_id AS USUID";
+		$from = "usuariovendedor uv";
+		$where = "uv.vendedor_id = {$vendedor_id}";
+		$usuario_id = CollectorCondition()->get('UsuarioVendedor', $where, 4, $from, $select); 
+		if (is_array($usuario_id) AND !empty($usuario_id)) {
+			$usuario_id = $usuario_id[0]['USUID'];
+			$um = new Usuario();
+			$um->usuario_id = $usuario_id;
+			$um->get();
+			$almacen_id = $um->almacen->almacen_id;
+		} else {
+			$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		}
 
 		$fecha = date('Y-m-d');
@@ -1069,7 +1093,7 @@ class EgresoController {
 				$temp_producto_id = $notacredito['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";
 				$from = "stock s";
-				$where = "s.producto_id = {$temp_producto_id}";
+				$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
 				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 				$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -1087,6 +1111,7 @@ class EgresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = -$notacredito['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = $almacen_id;
 				$sm->save();
 
 				$ncdm = new NotaCreditoDetalle();
@@ -1142,7 +1167,7 @@ class EgresoController {
 			$temp_producto_id = $notacredito['PRODUCTO_ID'];
 			$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
-			$where = "s.producto_id = {$temp_producto_id}";
+			$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
 			$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
 			if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
@@ -1154,6 +1179,7 @@ class EgresoController {
 				$sm->cantidad_actual = $notacredito['CANTIDAD'];
 				$sm->cantidad_movimiento = $notacredito['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = $almacen_id;
 				$sm->save();
 			} else {
 				$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -1171,6 +1197,7 @@ class EgresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = $notacredito['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->almacen_id = $almacen_id;
 				$sm->save();
 			}
 		}
@@ -1516,13 +1543,14 @@ class EgresoController {
 	}
 
 	function traer_formulario_producto_ajax($arg) {
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$producto_id = $arg;
 		$pm = new Producto();
 		$pm->producto_id = $producto_id;
 		$pm->get();
 		$select = "MAX(s.stock_id) AS MAXID";
 		$from = "stock s";
-		$where = "s.producto_id = {$producto_id}";
+		$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
 		$stock_id = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 		$stock_id = $stock_id[0]['MAXID'];
 
@@ -1535,6 +1563,7 @@ class EgresoController {
 	}
 
 	function traer_formulario_producto_barcode_ajax($arg) {
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$ccm = new ConfiguracionComprobante();
 		$ccm->configuracioncomprobante_id = 1;
 		$ccm->get();
@@ -1576,7 +1605,7 @@ class EgresoController {
 				$pm->get();
 				$select = "MAX(s.stock_id) AS MAXID";
 				$from = "stock s";
-				$where = "s.producto_id = {$producto_id}";
+				$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
 				$stock_id = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 				$stock_id = $stock_id[0]['MAXID'];
 

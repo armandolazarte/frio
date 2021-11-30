@@ -24,7 +24,7 @@
                         <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
                             <label>Tipo Factura</label>
                             <select class="form-control m-bot15" name="tipofactura" id="tipofactura" required>
-                                <option value="2" id="opt_tipofactura_selected" selected>R - REMITO</option>
+                                <option value="{tipofactura-tipofactura_id}" id="opt_tipofactura_selected" selected>{tipofactura-nomenclatura} - {tipofactura-denominacion}</option>
                                 {slt_tipofactura}
                             </select>
                         </div>
@@ -42,6 +42,7 @@
                         <div class="form-group col-lg-6">
                             <label>Condición Pago</label>
                             <select class="form-control m-bot15" name="condicionpago" id="condicionpago" required>
+                                <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
                                 {slt_condicionpago}
                             </select>
                         </div>
@@ -461,6 +462,7 @@
                 document.getElementById("cantidad_" + producto_id).value = cantidad;
                 document.getElementById("descuento_" + producto_id).value = descuento;
                 document.getElementById("importe_descuento_" + producto_id).value = importe_descuento;
+                document.getElementById("costo_" + producto_id).value = costo;
                 document.getElementById("costo_total_" + producto_id).value = costo_total;
                 
                 costo_final = 0;

@@ -16,6 +16,7 @@ class PedidoVendedor extends StandardObject {
 		$this->estadopedido = $estadopedido;
 		$this->vendedor_id = 0;
 		$this->cliente_id = 0;
+		$this->egreso_id = 0;
 	}
 }
 ?>

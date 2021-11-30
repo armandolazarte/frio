@@ -165,7 +165,15 @@ class PedidoVendedorView extends View {
 		$tbl_cliente_array = str_replace('<!--TBL_CLIENTE-->', '', $tbl_cliente_array);
 		if (!empty($pedidovendedordetalle_collection) OR is_array($pedidovendedordetalle_collection)) {
 			$array_producto_ids = array();
-			foreach ($pedidovendedordetalle_collection as $clave=>$valor) $array_producto_ids[] = '"' . $valor['PRODUCTO'] . '"';
+			foreach ($pedidovendedordetalle_collection as $clave=>$valor) {
+				$costo_flete = $valor['COSTO'] + (($valor['COSTO'] * $valor['FLETE']) / 100);
+				$costo_iva = (($costo_flete * $valor['IVA']) / 100) + $costo_flete;
+				$valor_ganancia = $costo_iva * $valor['VALGAN'] / 100;
+				$valor_venta = $costo_iva + $valor_ganancia;
+				$pedidovendedordetalle_collection[$clave]['COSTO'] = round($valor_venta, 2);
+				$array_producto_ids[] = '"' . $valor['PRODUCTO'] . '"';
+			}
+			
 			$array_producto_ids = implode(',', $array_producto_ids);
 			$obj_pedidovendedor->array_producto_ids = $array_producto_ids;
 

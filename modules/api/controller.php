@@ -660,7 +660,7 @@ class ApiController {
         }
     }
 
-    function producto() {
+    function bk_producto() {
         if (isset($_POST['token']) && !empty($_POST['token'])) {
             $token = $_POST['token'];
             $jwt = new JwtProtocolo();
@@ -715,6 +715,144 @@ class ApiController {
                         }
                     }
                 }
+                $json = new stdClass();
+                $json->resultados = $respuesta;
+                echo Util::respuestaJSON($json);
+            } else {
+                $error_texto = Util::getTextoCodigo(72);
+                echo $error_texto;
+            }
+        } else {
+            $error_texto = Util::getTextoCodigo(77);
+            echo $error_texto;
+        }
+    }
+
+    function producto() {
+        if (isset($_POST['token']) && !empty($_POST['token'])) {
+            $token = $_POST['token'];
+            $jwt = new JwtProtocolo();
+            if ($jwt->autenticar($token)) {
+                $select = "p.producto_id AS ID, s.cantidad_actual AS CANTIDAD";
+                $from = "stock s INNER JOIN (SELECT MAX(s1.stock_id) AS MAXID, s1.producto_id AS PROID FROM stock s1 WHERE s1.almacen_id = 1 GROUP BY s1.producto_id) ultimo ON ultimo.MAXID = s.stock_id AND ultimo.PROID = s.producto_id INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+                $where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
+                $stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
+
+                $respuesta = array();
+                if (is_array($stock_collection)) {
+                    foreach ($stock_collection as $clave=>$valor) {
+                        $producto_id = $valor['ID'];                        
+                        $pm = new Producto(); 
+                        $pm->producto_id = $producto_id;
+                        $pm->get();
+
+                        if ($pm->oculto == 0) {
+                            $select = "SUM(pvd.cantidad) AS SUGERIDO ";
+                            $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
+                            $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
+                            $group_by = "pvd.producto_id"; 
+                            $sugerido = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select, $group_by);
+                            $sugerido = (is_array($sugerido) AND !empty($sugerido)) ? $sugerido[0]['SUGERIDO'] : 0;
+
+                            $cantidad_disponible = $valor['CANTIDAD'];
+                            $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
+
+                            $producto = new stdClass();
+                            $producto->producto_id = $pm->producto_id;
+                            $producto->codigo = $pm->codigo;
+                            $producto->denominacion = $pm->codigo." - ".$pm->denominacion;
+                            $producto->costo = $pm->costo;
+                            $producto->descuento = $pm->descuento;
+                            $producto->flete = $pm->flete;
+                            $producto->porcentaje_ganancia = $pm->porcentaje_ganancia;
+                            $producto->iva = $pm->iva;
+                            $producto->exento = $pm->exento;
+                            $producto->no_gravado = $pm->no_gravado;
+                            $producto->stock_minimo = $pm->stock_minimo;
+                            $producto->stock_ideal = $pm->stock_ideal;
+                            $producto->dias_reintegro = $pm->dias_reintegro;
+                            $producto->oculto = $pm->oculto;
+                            $producto->barcode = $pm->barcode;
+                            $producto->detalle = $pm->detalle;
+                            $producto->productomarca = $pm->productomarca;
+                            $producto->productocategoria = $pm->productocategoria;
+                            $producto->productounidad = $pm->productounidad;
+                            $producto->cantidad_disponible = $cantidad_disponible;
+                            $producto->cantidad_sugerida = $stock_sugerido;
+                            array_push($respuesta, $producto);
+                        }
+                    }
+                }
+
+                $json = new stdClass();
+                $json->resultados = $respuesta;
+                echo Util::respuestaJSON($json);
+            } else {
+                $error_texto = Util::getTextoCodigo(72);
+                echo $error_texto;
+            }
+        } else {
+            $error_texto = Util::getTextoCodigo(77);
+            echo $error_texto;
+        }
+    }
+
+    function lista_productos() {
+        if (isset($_POST['token']) && !empty($_POST['token'])) {
+            $token = $_POST['token'];
+            $jwt = new JwtProtocolo();
+            if ($jwt->autenticar($token)) {
+                $select = "p.producto_id AS ID, s.cantidad_actual AS CANTIDAD";
+                $from = "stock s INNER JOIN (SELECT MAX(s1.stock_id) AS MAXID, s1.producto_id AS PROID FROM stock s1 WHERE s1.almacen_id = 1 GROUP BY s1.producto_id) ultimo ON ultimo.MAXID = s.stock_id AND ultimo.PROID = s.producto_id INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+                $where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
+                $stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
+
+                $respuesta = array();
+                if (is_array($stock_collection)) {
+                    foreach ($stock_collection as $clave=>$valor) {
+                        $producto_id = $valor['ID'];                        
+                        $pm = new Producto(); 
+                        $pm->producto_id = $producto_id;
+                        $pm->get();
+
+                        if ($pm->oculto == 0) {
+                            $select = "SUM(pvd.cantidad) AS SUGERIDO ";
+                            $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
+                            $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
+                            $group_by = "pvd.producto_id"; 
+                            $sugerido = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select, $group_by);
+                            $sugerido = (is_array($sugerido) AND !empty($sugerido)) ? $sugerido[0]['SUGERIDO'] : 0;
+
+                            $cantidad_disponible = $valor['CANTIDAD'];
+                            $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
+
+                            $producto = new stdClass();
+                            $producto->producto_id = $pm->producto_id;
+                            $producto->codigo = $pm->codigo;
+                            $producto->denominacion = $pm->codigo." - ".$pm->denominacion;
+                            $producto->costo = $pm->costo;
+                            $producto->descuento = $pm->descuento;
+                            $producto->flete = $pm->flete;
+                            $producto->porcentaje_ganancia = $pm->porcentaje_ganancia;
+                            $producto->iva = $pm->iva;
+                            $producto->exento = $pm->exento;
+                            $producto->no_gravado = $pm->no_gravado;
+                            $producto->stock_minimo = $pm->stock_minimo;
+                            $producto->stock_ideal = $pm->stock_ideal;
+                            $producto->dias_reintegro = $pm->dias_reintegro;
+                            $producto->oculto = $pm->oculto;
+                            $producto->barcode = $pm->barcode;
+                            $producto->detalle = $pm->detalle;
+                            $producto->productomarca = $pm->productomarca;
+                            $producto->productocategoria = $pm->productocategoria;
+                            $producto->productounidad = $pm->productounidad;
+                            $producto->cantidad_disponible = $cantidad_disponible;
+                            $producto->cantidad_sugerida = $stock_sugerido;
+                            array_push($respuesta, $producto);
+                        }
+                    }
+                }
+
                 $json = new stdClass();
                 $json->resultados = $respuesta;
                 echo Util::respuestaJSON($json);

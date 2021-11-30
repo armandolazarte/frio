@@ -9,6 +9,7 @@ require_once "modules/condicionpago/model.php";
 require_once "modules/condicioniva/model.php";
 require_once "modules/tipofactura/model.php";
 require_once "modules/pedidovendedordetalle/model.php";
+require_once "modules/usuario/model.php";
 require_once "modules/usuariovendedor/model.php";
 require_once "modules/configuracion/model.php";
 require_once "modules/configuracioncomprobante/model.php";
@@ -217,6 +218,34 @@ class PedidoVendedorController {
 		$this->model->get();
 		$cliente_id = $this->model->cliente_id;
 		$vendedor_id = $this->model->vendedor_id;
+		$egreso_id = $this->model->egreso_id;
+
+		if (!is_null($egreso_id) AND $egreso_id > 0) {
+			$em = new Egreso();
+			$em->egreso_id = $egreso_id;
+			$em->get();
+		
+			$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+			$where = "eafip.egreso_id = {$egreso_id}";
+			$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+
+			if (is_array($egresoafip) AND !empty($egresoafip)) {
+				$em->punto_venta = $egresoafip[0]['PUNTO_VENTA'];
+				$em->numero_factura = $egresoafip[0]['NUMERO_FACTURA'];
+				$em->tipofactura->nomenclatura = $egresoafip[0]['TIPOFACTURA'];
+			}
+
+			$tipofactura = $em->tipofactura->nomenclatura;
+			$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
+    		$numero_factura = "{$tipofactura} {$punto_venta}-" . str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+			$this->model->display_consultar_factura = 'block';
+		} else {
+			$this->model->display_consultar_factura = 'none';
+			$numero_factura = 'Sin Información';
+		}
+
+		$this->model->factura = $numero_factura;
 
 		$cm = new Cliente();
 		$cm->cliente_id = $cliente_id;
@@ -226,8 +255,11 @@ class PedidoVendedorController {
 		$vm->vendedor_id = $vendedor_id;
 		$vm->get();
 
-		$select = "pvd.codigo_producto AS CODIGO, pvd.descripcion_producto AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, pvd.valor_descuento AS VD, pvd.costo_producto AS COSTO, ROUND(pvd.importe, 2) AS IMPORTE, pvd.iva AS IVA";
-		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select = "pvd.codigo_producto AS CODIGO, pvd.descripcion_producto AS DESCRIPCION, pvd.cantidad AS CANTIDAD,
+				   pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, pvd.valor_descuento AS VD,
+				   pvd.costo_producto AS COSTO, ROUND(pvd.importe, 2) AS IMPORTE, pvd.iva AS IVA";
+		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN
+				 productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "pvd.pedidovendedor_id = {$pedidovendedor_id}";
 		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
 
@@ -335,8 +367,8 @@ class PedidoVendedorController {
 		}
 
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
-		$select = "pvd.codigo_producto AS CODIGO, pvd.descripcion_producto AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, pvd.costo_producto AS COSTO, pvd.importe AS IMPORTE, pvd.pedidovendedordetalle_id AS PEDVENID, pvd.producto_id AS PRODUCTO, pvd.valor_descuento AS VD, pvd.iva AS IVA, pvd.valor_ganancia AS VALGAN";
-		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select = "pvd.codigo_producto AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, p.costo AS COSTO, pvd.importe AS IMPORTE, pvd.pedidovendedordetalle_id AS PEDVENID, pvd.producto_id AS PRODUCTO, pvd.valor_descuento AS VD, p.iva AS IVA, p.porcentaje_ganancia AS VALGAN, p.flete AS FLETE";
+		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "pvd.pedidovendedor_id = {$arg}";
 		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
 
@@ -554,6 +586,20 @@ class PedidoVendedorController {
 		$vm->get();
 		$comision = $vm->comision;
 
+		$select = "uv.usuario_id AS USUID";
+		$from = "usuariovendedor uv";
+		$where = "uv.vendedor_id = {$vendedor_id}";
+		$temp_usuario_id = CollectorCondition()->get('UsuarioVendedor', $where, 4, $from, $select); 
+		if (is_array($temp_usuario_id) AND !empty($temp_usuario_id)) {
+			$temp_usuario_id = $temp_usuario_id[0]['USUID'];
+			$um = new Usuario();
+			$um->usuario_id = $temp_usuario_id;
+			$um->get();
+			$almacen_id = $um->almacen->almacen_id;
+		} else {
+			$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+		}
+
 		$ecm = new EgresoComision();
 		$ecm->fecha = $fecha;
 		$ecm->valor_comision = round($comision, 2);
@@ -593,6 +639,7 @@ class PedidoVendedorController {
 		$mem->emitido = 0;
 		$mem->dias_alerta_comision = $dias_alerta_comision;
 		$mem->dias_vencimiento = $dias_vencimiento;
+		$mem->usuario_id = $usuario_id;
 		$mem->cliente = $cliente_id;
 		$mem->vendedor = $vendedor_id;
 		$mem->tipofactura = $tipofactura;
@@ -661,10 +708,10 @@ class PedidoVendedorController {
 			$egresodetalle_ids[] = $edm->egresodetalle_id;
 		}
 
-		$select_egresos = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
-		$from_egresos = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
-		$where_egresos = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where_egresos, 4, $from_egresos, $select_egresos);
+		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 		$flag_error = 0;
 		if ($tipofactura == 1 OR $tipofactura == 3) {
@@ -713,9 +760,9 @@ class PedidoVendedorController {
 		if ($flag_error == 0) {
 			foreach ($egresodetalle_collection as $egreso) {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
-				$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-				$from_stock = "stock s";
-				$where_stock = "s.producto_id = {$temp_producto_id}";
+				$select = "MAX(s.stock_id) AS STOCK_ID";
+				$from = "stock s";
+				$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
 				$rst_stock = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock);
 
 				if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
@@ -727,6 +774,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = $almacen_id;
 					$sm->save();
 				} else {
 					$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -744,10 +792,10 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = $almacen_id;
 					$sm->save();
 				}
 			}
-
 			
 			$this->model->pedidovendedor_id = filter_input(INPUT_POST, 'pedidovendedor_id');
 			$this->model->get();
