@@ -78,7 +78,11 @@
                         <label>Ubicación</label>
                         <input type="text" class="form-control" id="ubicacion" name="ubicacion" value="{producto-ubicacion}" required>
                     </div>
-                    <div class="form-group col-lg-4">
+                     <div class="form-group col-lg-3">
+                        <label>Flete (%)</label>
+                        <input type="number" class="form-control" id="flete" name="flete" value="0" step="0.001" onchange="calculaPrecioVenta();" required>
+                    </div>
+                    <div class="form-group col-lg-3">
                         <label>IVA</label>
                         <select class="form-control m-bot15" name="iva" id="iva" required>
                             <option value="{producto-iva}" selected>{producto-iva}%</option>
@@ -90,7 +94,7 @@
                             <option value="0">0%</option>
                         </select>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>Exento?</label>
                         <select class="form-control m-bot15" name="exento" id="exento" required>
                             <option value="{producto-exento}" selected>{producto-txt_exento}</option>
@@ -98,7 +102,7 @@
                             <option value="1">SI</option>
                         </select>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>No gravado?</label>
                         <select class="form-control m-bot15" name="no_gravado" id="no_gravado" required>
                             <option value="{producto-no_gravado}" selected>{producto-txt_no_gravado}</option>
@@ -131,7 +135,6 @@
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
                         <input type="hidden" id="barcode" name="barcode" value="{producto-barcode}" required>
                         <input type="hidden" id="peso" name="peso" value="{producto-peso}" required>
-                        <input type="hidden" id="flete" name="flete" value="{producto-flete}" required>
                         <input type="hidden" name="producto_id" value="{producto-producto_id}">
                         <a href="#" class="btn btn-app" onclick="verificarProducto();"> <i class="fa fa-edit"></i> Editar </a>
                     </div>
@@ -235,8 +238,12 @@
         if (costo == 0) {
             document.getElementById('precio_venta').value = 0;
         } else {
-            var monto_iva = (iva * costo) / 100;
-            var costo_iva = parseFloat(costo) + parseFloat(monto_iva);
+            var monto_flete = (flete * costo) / 100;
+            var costo_mas_flete = parseFloat(costo) + parseFloat(monto_flete);
+
+            var monto_iva = (iva * costo_mas_flete) / 100;
+            var costo_iva = parseFloat(costo_mas_flete) + parseFloat(monto_iva);
+
             var monto_ganancia = (porcentaje_ganancia * costo_iva) / 100;
             var valor_venta = parseFloat(costo_iva) + parseFloat(monto_ganancia);
             document.getElementById('precio_venta').value = valor_venta.toFixed(2);
