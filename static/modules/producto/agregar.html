@@ -195,22 +195,16 @@
             document.getElementById('precio_venta').value = 0;
             document.getElementById('porcentaje_ganancia').value = 0;
         } else {
-            if (parseFloat(flete) > 0) {
+            
                 var monto_flete = (flete * costo) / 100;
                 var costo_mas_flete = parseFloat(costo) + parseFloat(monto_flete);
 
                 var monto_iva = (iva * costo_mas_flete) / 100;
                 var costo_iva = parseFloat(costo_mas_flete) + parseFloat(monto_iva);
 
-                var monto_ganancia = parseFloat(precio_venta) - parseFloat(costo_iva);
-                var porcentaje_ganancia = monto_ganancia * 100 / precio_venta;
-            } else {
-                var monto_iva = (iva * costo) / 100;
-                var costo_iva = parseFloat(costo) + parseFloat(monto_iva);
-
-                var monto_ganancia = parseFloat(precio_venta) - parseFloat(costo_iva);
-                var porcentaje_ganancia = monto_ganancia * 100 / precio_venta;
-            }
+                var ganancia = parceFloat(precio_venta) / parseFloat(costo_iva);
+                var porcentaje_ganancia = parceFloat(ganancia) - 1 * 100;
+            
 
             document.getElementById('porcentaje_ganancia').value = porcentaje_ganancia.toFixed(2);
         }
