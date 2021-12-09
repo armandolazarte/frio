@@ -181,6 +181,8 @@
             var monto_ganancia = (porcentaje_ganancia * costo_iva) / 100;
             var valor_venta = parseFloat(costo_iva) + parseFloat(monto_ganancia);
             document.getElementById('precio_venta').value = valor_venta.toFixed(2);
+
+            calculaGanancia();
         }
     }
 
