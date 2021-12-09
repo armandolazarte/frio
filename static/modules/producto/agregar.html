@@ -203,7 +203,7 @@
                 var costo_iva = parseFloat(costo_mas_flete) + parseFloat(monto_iva);
 
                 var ganancia = parseFloat(precio_venta) / parseFloat(costo_iva);
-                var porcentaje_ganancia = parseFloat(ganancia) - 1 * 100;
+                var porcentaje_ganancia = (parseFloat(ganancia) - 1) * 100;
             
 
             document.getElementById('porcentaje_ganancia').value = porcentaje_ganancia.toFixed(2);
