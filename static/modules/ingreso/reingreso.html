@@ -246,27 +246,22 @@
     }
 
     function actualizarCostoFinal() {
-        var costo_distribucion = document.getElementById('costo_distribucion').value;   
         var iva = document.getElementById('iva').value;
         var percepcion_iva = document.getElementById('percepcion_iva').value;
+        var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+        var impuesto_interno = document.getElementById('impuesto_interno').value;
+        var costo_distribucion = document.getElementById('costo_distribucion').value;
         
         if (costo_base == 0) {
             return false;
         } else {
-            //CALCULO TOTAL MAS FLETE
-            var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
-            
-            //AGREGAR IVA A COSTO FINAL MAS FLETE
-            var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
-            
-            //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
-            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100);
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
 
-            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL(IVA): $' + valor_final.toFixed(2);
-            document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_base.toFixed(2);
             document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
-            //buscarProducto();
+            buscarProducto();
         }
     }
 
@@ -402,27 +397,23 @@
             div_array_ingresos.appendChild(inputIngresoCostoTotal);
             bodyTblProducto.appendChild(trTblProducto);
             
-            var costo_distribucion = document.getElementById('costo_distribucion').value;   
             var iva = document.getElementById('iva').value;
             var percepcion_iva = document.getElementById('percepcion_iva').value;
+            var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+            var impuesto_interno = document.getElementById('impuesto_interno').value;
+            var costo_distribucion = document.getElementById('costo_distribucion').value;
            
             //RESTO VIEJO IMPORTE DE COSTO BASE
             costo_base = parseFloat(costo_base) - parseFloat(old_total);
             //SUMO NUEVO IMPORTE A COSTO BASE
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             
-            //CALCULO TOTAL MAS FLETE
-            var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            //VALOR FINAL
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
             
-            //AGREGAR IVA A COSTO FINAL MAS FLETE
-            var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
-            
-            //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
-            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100);
-            
-            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
-            document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_base.toFixed(2);
             document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
             array_ids.push(producto_id);
             
@@ -457,27 +448,23 @@
             document.getElementById("descuento3_" + producto_id).value = descuento3;
             document.getElementById("costo_total_" + producto_id).value = costo_total;
                 
-            var costo_distribucion = document.getElementById('costo_distribucion').value;   
             var iva = document.getElementById('iva').value;
             var percepcion_iva = document.getElementById('percepcion_iva').value;
+            var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+            var impuesto_interno = document.getElementById('impuesto_interno').value;
+            var costo_distribucion = document.getElementById('costo_distribucion').value;
            
             //RESTO VIEJO IMPORTE DE COSTO BASE
             costo_base = parseFloat(costo_base) - parseFloat(old_total);
             //SUMO NUEVO IMPORTE A COSTO BASE
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             
-            //CALCULO TOTAL MAS FLETE
-            var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
+            //VALOR FINAL
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
             
-            //AGREGAR IVA A COSTO FINAL MAS FLETE
-            var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
-            
-            //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
-            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100) ;            
-            
-            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+            document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
-            document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+            document.getElementById('input_suma_total').value = costo_base.toFixed(2);
             document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
             buscarProducto();
         }
@@ -501,25 +488,21 @@
         var input_costo = document.getElementById('costo_' + producto_id);
         var input_costo_total = document.getElementById('costo_total_' + producto_id);
 
-        var costo_distribucion = document.getElementById('costo_distribucion').value;   
         var iva = document.getElementById('iva').value;
-        var percepcion_iva = document.getElementById('percepcion_iva').value;
+            var percepcion_iva = document.getElementById('percepcion_iva').value;
+            var ingresos_brutos = document.getElementById('ingresos_brutos').value;
+            var impuesto_interno = document.getElementById('impuesto_interno').value;
+            var costo_distribucion = document.getElementById('costo_distribucion').value;
            
         //RESTO VIEJO IMPORTE DE COSTO BASE
         costo_base = parseFloat(costo_base) - parseFloat(total_quitar);
             
-        //CALCULO TOTAL MAS FLETE
-        var costo_final = parseFloat(costo_base) + (parseFloat(costo_distribucion) * parseFloat(costo_base) / 100);
-            
-        //AGREGAR IVA A COSTO FINAL MAS FLETE
-        var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
-        
-        //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
-        var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100);
+        //VALOR FINAL
+        var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
 
-        document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
+        document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_base.toFixed(2);
         document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
-        document.getElementById('input_suma_total').value = costo_final.toFixed(2);
+        document.getElementById('input_suma_total').value = costo_base.toFixed(2);
         document.getElementById('input_suma_total_iva').value = valor_final.toFixed(2);
 
         bodyTblProducto.removeChild(trTblProducto);   
