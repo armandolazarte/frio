@@ -680,13 +680,6 @@
             array.push("<strong>[ERROR]</strong> Por favor seleccione el PROVEEDOR.");
         }
 
-        var iva = document.getElementById("iva");
-        var iva_id = iva.options[iva.selectedIndex].value;
-        if (iva_id == null || iva_id == "") {
-            flag_array = 1;
-            array.push("<strong>[ERROR]</strong> Por favor seleccione el IVA.");
-        }
-
         if (flag_array == 0) {
             var div_productos = document.getElementById("div_productos");
             var input_producto = document.getElementById("producto");
