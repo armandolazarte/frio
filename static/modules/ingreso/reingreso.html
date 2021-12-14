@@ -21,18 +21,42 @@
         <div class="x_content">
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/ingreso/guardar_nota_credito">
-                    <div class="col-lg-6">
-                        <div class="form-group col-lg-4">
+                    <div class="col-lg-12">
+                        <div class="form-group col-lg-3">
                             <label>Pto Venta</label>
                             <input type="number" class="form-control" id="punto_venta" value="{ingreso-punto_venta}" readonly>
                         </div>
-                        <div class="form-group col-lg-8">
+                        <div class="form-group col-lg-3">
                             <label>N° Factura</label>
                             <input type="number" class="form-control" id="numero_factura" value="{ingreso-numero_factura}" readonly>
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>Fecha</label>
-                            <input type="date" class="form-control" id="fecha" value="{ingreso-fecha}" readonly>
+                        <div class="form-group col-lg-3">
+                            <label>Condición IVA</label>
+                            <select class="form-control m-bot15" name="condicioniva" id="condicioniva" readonly>
+                                <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Condición Pago</label>
+                            <select class="form-control m-bot15" name="condicionpago" id="condicionpago" readonly>
+                                <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Fecha Emisión</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha" value="{ingreso-fecha}" readonly>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Fecha Ingreso</label>
+                            <input type="date" class="form-control" id="fecha_ingreso" name="fecha_ingreso" value="{ingreso-fecha}" readonly>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Vencimiento</label>
+                            <input type="text" class="form-control" id="vencimiento" name="vencimiento" value="{ingreso-vencimiento}" readonly>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Fecha Vencimiento</label>
+                            <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_ingreso" value="{ingreso-fecha_vencimiento}" readonly>
                         </div>
                         <div class="form-group col-lg-4">
                             <label>IVA</label>
@@ -50,18 +74,7 @@
                                 <option value="{ingreso-percepcion_iva}" selected>{ingreso-percepcion_iva}%</option>
                             </select>
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>Condición IVA</label>
-                            <select class="form-control m-bot15" name="condicioniva" id="condicioniva" readonly>
-                                <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label>Condición Pago</label>
-                            <select class="form-control m-bot15" name="condicionpago" id="condicionpago" readonly>
-                                <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
-                            </select>
-                        </div>
+                        
                         <div class="form-group col-lg-12">
                             <label>Proveedor</label>        
                             <input type="text" class="form-control" id="proveedor_denominacion" name="proveedor_denominacion" value="{proveedor-descripcion}" readonly>
@@ -457,8 +470,7 @@
             var costo_final_iva = parseFloat(costo_final) + (parseFloat(iva) * parseFloat(costo_final) / 100);        
             
             //AGREGAR PERCEPCIÓN IVA A COSTO FINAL IVA
-            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100) ;
-            
+            var valor_final = parseFloat(costo_final_iva) + (parseFloat(percepcion_iva) * parseFloat(costo_final_iva) / 100) ;            
             
             document.getElementById('suma_total').innerHTML = 'TOTAL: $' + costo_final.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
