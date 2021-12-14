@@ -52,27 +52,27 @@
                         </div>
                         <div class="form-group col-lg-3">
                             <label>Vencimiento</label>
-                            <input type="text" class="form-control" id="vencimiento" name="vencimiento" value="{ingreso-vencimiento}" readonly>
+                            <input type="text" class="form-control" id="vencimiento" name="vencimiento" value="{ingreso-vencimiento} días" readonly>
                         </div>
                         <div class="form-group col-lg-3">
                             <label>Fecha Vencimiento</label>
                             <input type="date" class="form-control" id="fecha_vencimiento" name="fecha_ingreso" value="{ingreso-fecha_vencimiento}" readonly>
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>IVA</label>
-                            <select class="form-control m-bot15" name="iva" id="iva" readonly>
-                                <option value="{ingreso-iva}" selected>{ingreso-iva}%</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label>Flete (%)</label>
-                            <input type="number" class="form-control" id="costo_distribucion" name="costo_distribucion" value="{ingreso-costo_distribucion}" readonly>
-                        </div>
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-3">
                             <label>Percepción IVA</label>
-                            <select class="form-control m-bot15" name="percepcion_iva" id="percepcion_iva" readonly>
-                                <option value="{ingreso-percepcion_iva}" selected>{ingreso-percepcion_iva}%</option>
-                            </select>
+                            <input type="number" class="form-control" id="percepcion_iva" name="percepcion_iva" value="0" step="0.01" min="0" value="{ingreso-percepcion_iva}" readonly>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Imp. Interno</label>
+                            <input type="number" class="form-control" id="impuesto_interno" name="impuesto_interno" value="0" step="0.01" min="0" value="{ingreso-impuesto_interno}" readonly>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>Ing. Brutos</label>
+                            <input type="number" class="form-control" id="ingresos_brutos" name="ingresos_brutos" value="0" step="0.01" min="0" value="{ingreso-ingresos_brutos}" readonly>
+                        </div>
+                        <div class="form-group col-lg-3">
+                            <label>IVA</label>
+                            <input type="number" class="form-control" id="iva" name="iva" value="0" step="0.01" min="0" value="{ingreso-iva}" readonly>
                         </div>
                         
                         <div class="form-group col-lg-12">
