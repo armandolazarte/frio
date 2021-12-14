@@ -74,13 +74,11 @@
                             <label>IVA</label>
                             <input type="number" class="form-control" id="iva" name="iva" value="{ingreso-iva}" readonly>
                         </div>
-                        
-                        <div class="form-group col-lg-12">
-                            <label>Proveedor</label>        
-                            <input type="text" class="form-control" id="proveedor_denominacion" name="proveedor_denominacion" value="{proveedor-descripcion}" readonly>
-                            <input type="hidden" name="proveedor" id="proveedor">                            
-                        </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
+                            <label>Flete</label>
+                            <input type="number" class="form-control" id="costo_distribucion" name="costo_distribucion" value="{ingreso-costo_distribucion}" readonly>
+                        </div> 
+                        <div class="form-group col-lg-3">
                             <label>Actualiza Stock?</label>
                             <div class="radio">
                                 <label>
@@ -91,6 +89,11 @@
                                     <input type="radio" {ingreso-checked_actualiza_stock_no} value="0" id="actualiza_stock" name="opcion_stock" disabled> No
                                 </label>
                             </div>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Proveedor</label>        
+                            <input type="text" class="form-control" id="proveedor_denominacion" name="proveedor_denominacion" value="{proveedor-descripcion}" readonly>
+                            <input type="hidden" name="proveedor" id="proveedor">                            
                         </div>
                     </div>
                     <div class="col-lg-6" id="div_productos">
