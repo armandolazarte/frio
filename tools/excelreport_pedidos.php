@@ -22,7 +22,7 @@ class ExcelReport extends View {
                                  ->setKeywords("infDHTordo")
                                  ->setCategory("infDHTordo");
     
-    $tituloReporte = "Valdez Distribuciones";
+    $tituloReporte = "Frío Distribuciones";
     $fechaReporte = date("d-m-Y");
     $softReporte = "dhTordo";
     $tituloWeb = $tituloReporte;
