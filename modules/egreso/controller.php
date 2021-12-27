@@ -1347,6 +1347,20 @@ class EgresoController {
 				$em->egreso_id = $egreso_id;
 				$em->get();
 
+				$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
+				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+				$where = "eafip.egreso_id = {$egreso_id}";
+				$eafip = CollectorCondition()->get('EgrasoAFIP', $where, 4, $from, $select);
+
+				if (is_array($eafip)) {
+					$factura = $eafip[0]['REFERENCIA'];
+				} else {
+					$tipofactura_nomenclatura = $em->tipofactura->nomenclatura;
+					$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
+					$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+					$factura = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura}";
+				}
+
 				$total = $total + $em->importe_total;
 				$condicionpago_id = $em->condicionpago->condicionpago_id;
 				switch ($condicionpago_id) {
@@ -1371,7 +1385,7 @@ class EgresoController {
 				$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
 				$array_temp = array(
 								$em->fecha
-								, "{$punto_venta}-{$numero_factura}"
+								, $factura
 								, $em->cliente->razon_social
 								, $em->condicionpago->denominacion
 								, $em->importe_total);
@@ -2005,13 +2019,27 @@ class EgresoController {
 		$total_deuda = 0;
 
 		$subtitulo = "{$fecha_actual} - HOJA DE RUTA: {$denominacion} - Nº{$arg}";
-		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'COND PAGO', 'IMPORTE TOTAL', 'TOTAL/PARCIAL');
+		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'BARRIO', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL', 'TOTAL/PARCIAL');
 		$array_exportacion[] = $array_encabezados;
 		$total = 0;
 		foreach ($egreso_ids as $egreso_id) {
 			$em = new Egreso();
 			$em->egreso_id = $egreso_id;
 			$em->get();
+			
+			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
+			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+			$where = "eafip.egreso_id = {$egreso_id}";
+			$eafip = CollectorCondition()->get('EgrasoAFIP', $where, 4, $from, $select);
+
+			if (is_array($eafip)) {
+				$factura = $eafip[0]['REFERENCIA'];
+			} else {
+				$tipofactura_nomenclatura = $em->tipofactura->nomenclatura;
+				$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
+				$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+				$factura = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura}";
+			}
 
 			$select = "importe AS IMPORTE";
 			$from = "cuentacorrientecliente";
@@ -2035,33 +2063,34 @@ class EgresoController {
 
 			$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
 			$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
-			$array_temp = array($em->fecha
-								, "{$punto_venta}-{$numero_factura}"
-								, $em->cliente->razon_social
-								, $em->condicionpago->denominacion
-								, $em->importe_total
-								, $importe);
+			$array_temp = array(
+							$em->fecha
+							, $factura
+							, $em->cliente->razon_social
+							, $em->cliente->localidad
+							, $em->cliente->domicilio
+							, $em->condicionpago->denominacion
+							, $em->importe_total
+							, $importe);
 			$array_exportacion[] = $array_temp;
 		}
 
-		$array_exportacion[] = array('','','','','','');
-		$array_exportacion[] = array('','','','','','');
-		$array_exportacion[] = array('','','','','Cuenta Corriente',$cant_cuentacorriente);
-		$array_exportacion[] = array('','','','','Contado',$cant_contado);
-		$array_exportacion[] = array('','','','','Total',$total);
-		$array_exportacion[] = array('','','','','Total Abonado',$total_abonado);
-		$array_exportacion[] = array('','','','','Total Deuda',$total_deuda);
-		$array_exportacion[] = array('','','','','','');
-		$array_exportacion[] = array('','','','','Combustible','$.......................');
-		$array_exportacion[] = array('','','','','Sencillo','$.......................');
-		$array_exportacion[] = array('','','','','Descuentos','$.......................');
-		$array_exportacion[] = array('','','','','Cuenta Corriente','$.......................');
-		$array_exportacion[] = array('','','','','Efectivo','$.......................');
-		$array_exportacion[] = array('','','','','Totales','$.......................');
-
+		$array_exportacion[] = array('','','','','','','','');
+		$array_exportacion[] = array('','','','','','','','');
+		$array_exportacion[] = array('','','','','','','Cuenta Corriente',$cant_cuentacorriente);
+		$array_exportacion[] = array('','','','','','','Contado',$cant_contado);
+		$array_exportacion[] = array('','','','','','','Total',$total);
+		$array_exportacion[] = array('','','','','','','Total Abonado',$total_abonado);
+		$array_exportacion[] = array('','','','','','','Total Deuda',$total_deuda);
 		$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente, '{cant_contado}'=>$cant_contado);
 
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
+
+	function qr() {
+		require_once 'tools/facturaPDFTool.php';
+		$facturaPDFHelper = new FacturaPDF();
+		$facturaPDFHelper->qrAFIP();
 	}
 }
 ?>
