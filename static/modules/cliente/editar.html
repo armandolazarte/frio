@@ -17,6 +17,10 @@
         <div class="x_content">
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/cliente/actualizar">
+                    <div class="form-group col-lg-1">
+                        <label>COD</label>
+                        <input type="text" class="form-control" name="codigo" id="codigo" value="{cliente-codigo}" required>
+                    </div>
                     <div class="form-group col-lg-4">
                         <label>Razón Social</label>
                         <input type="text" class="form-control" name="razon_social" id="razon_social" value="{cliente-razon_social}" required>
@@ -32,25 +36,25 @@
                             {slt_documentotipo}
                         </select>
                     </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-2">
                         <label>Número</label>
                         <input type="number" name="documento" id="documento" class="form-control" value="{cliente-documento}" required>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>Condición IVA</label>
                         <select class="form-control m-bot15" name="condicioniva" id="condicioniva" required>
                             <option value="{condicioniva-condicioniva_id}">{condicioniva-denominacion}</option>
                             {slt_condicioniva}
                         </select>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>Tipo Factura</label>
                         <select class="form-control m-bot15" name="tipofactura" id="tipofactura" required>
                             <option value="{tipofactura-tipofactura_id}" selected>{tipofactura-nomenclatura}</option>
                             {slt_tipofactura}
                         </select>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>IVA</label>
                         <select class="form-control m-bot15" name="iva" id="iva" required>
                             <option value="{cliente-iva}" selected>{cliente-iva}</option>
@@ -84,61 +88,81 @@
                         <label>Días Venc. Cta. Cte.</label>
                         <input type="number" name="dias_vencimiento_cuenta_corriente" id="dias_vencimiento_cuenta_corriente" value="{cliente-dias_vencimiento_cuenta_corriente}" class="form-control">
                     </div>
+                    <div class="form-group col-lg-3">
+                        <label>Habilita Cta. Cte.</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" value="1" id="habilita_cuenta_corriente_si" name="habilita_cuenta_corriente" {cliente-checked_habilita_cuenta_corriente_si}> SI
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label>
+                                <input type="radio" value="0" id="habilita_cuenta_corriente_no" name="habilita_cuenta_corriente" {cliente-checked_habilita_cuenta_corriente_no}> NO
+                            </label>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-8">
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Lista Precios</label>
                             <select class="form-control m-bot15" name="lista_precio" required>
                                 <option value="{listaprecio-listaprecio}">{listaprecio-denominacion} ( {listaprecio-condicion} {listaprecio-porcentaje}% )</option>
                                 {slt_listaprecio}
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Provincia</label>
-                            <select class="form-control m-bot15" name="provincia" required>
-                                <option value="{provincia-provincia_id}">{provincia-denominacion}</option>
-                                {slt_provincia}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Barrio</label>
-                            <input type="text" class="form-control" id="localidad" name="localidad" value="{cliente-localidad}" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Domicilio</label>
-                            <input type="text" class="form-control" id="domicilio" name="domicilio" value="{cliente-domicilio}" required>
-                        </div>
-                        {lst_input_infocontacto}
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Categoria</label>
                             <select class="form-control m-bot15" name="categoriacliente" id="categoriacliente" required>
                               <option value="{categoriacliente-categoriacliente_id}">{categoriacliente-denominacion}</option>
                                 {slt_categoriacliente}
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group col-lg-4">
-                        <div class="form-group">
-                            <label>Orden de Entrega</label>
-                            <input type="text" class="form-control" id="ordenentrega" name="ordenentrega" value="{cliente-ordenentrega}" required>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Provincia</label>
+                            <select class="form-control m-bot15" name="provincia" required>
+                                <option value="{provincia-provincia_id}">{provincia-denominacion}</option>
+                                {slt_provincia}
+                            </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Departamento</label>
+                            <input type="text" class="form-control" id="departamento" name="departamento" value="{cliente-departamento}" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Localidad</label>
+                            <input type="text" class="form-control" id="localidad" name="localidad" value="{cliente-localidad}" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Código Postal</label>
                             <input type="text" class="form-control" id="codigopostal" name="codigopostal" value="{cliente-codigopostal}" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Barrio</label>
+                            <input type="text" class="form-control" id="barrio" name="barrio" value="{cliente-barrio}" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Domicilio</label>
+                            <input type="text" class="form-control" id="domicilio" name="domicilio" value="{cliente-domicilio}" required>
+                        </div>
+                        {lst_input_infocontacto}                        
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-12" style="padding-right: 0px;">
+                            <label>Orden de Entrega</label>
+                            <input type="text" class="form-control" id="ordenentrega" name="ordenentrega" value="{cliente-ordenentrega}" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
                             <label>Latitud</label>
                             <input type="text" class="form-control" id="latitud" name="latitud" value="{cliente-latitud}" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
                             <label>Longitud</label>
                             <input type="text" class="form-control" id="longitud" name="longitud" value="{cliente-longitud}" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-12" style="padding-right: 0px;">
                             <label>Observación</label>
                             <textarea class="form-control" id="observacion" name="observacion" rows="7">{cliente-observacion}</textarea>
                         </div>
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" id="entregaminima" name="entregaminima" value="100" required>
                         <input type="hidden" name="cliente_id" value="{cliente-cliente_id}">
                         <a href="#" class="btn btn-app" onclick="verificarCliente()"><i class="fa fa-edit"></i> Editar</a>
                     </div>

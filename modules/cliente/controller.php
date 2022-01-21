@@ -27,7 +27,8 @@ class ClienteController {
 
 	function listar() {
     	SessionHandler()->check_session();
-		$select = "c.cliente_id AS CLIENTE_ID, LPAD(c.cliente_id, 5, 0) AS CODCLI, c.localidad AS LOCALIDAD, pr.denominacion AS PROVINCIA, c.codigopostal AS CODPOSTAL, CONCAT (c.razon_social, ' (', c.nombre_fantasia, ')') AS RAZON_SOCIAL, cf.denominacion AS CONDICIONFISCAL, ci.denominacion AS CIV, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA, c.iva AS CONDIVA, c.dias_vencimiento_cuenta_corriente AS DVCC, c.descuento AS DESCUENTO,fl.denominacion AS FLETE";
+		$select = "c.cliente_id AS CLIENTE_ID, c.codigo AS CODCLI, c.barrio AS BARRIO, pr.denominacion AS PROVINCIA, c.codigopostal AS CODPOSTAL, CONCAT (c.razon_social, ' (', c.nombre_fantasia, ')') AS RAZON_SOCIAL, cf.denominacion AS CONDICIONFISCAL, ci.denominacion AS CIV, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA, c.iva AS CONDIVA, c.dias_vencimiento_cuenta_corriente AS DVCC, c.descuento AS DESCUENTO,fl.denominacion AS FLETE, CASE habilita_cuenta_corriente WHEN 0 THEN 'danger' ELSE 'success' END AS CLACTACTE, CASE habilita_cuenta_corriente WHEN 0 THEN 'close' ELSE 'check' END AS ICOCTACTE";
+
 		$from = "cliente c INNER JOIN provincia pr ON c.provincia = pr.provincia_id INNER JOIN condicionfiscal cf ON c.condicionfiscal = cf.condicionfiscal_id INNER JOIN condicioniva ci ON c.condicioniva = ci.condicioniva_id INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id INNER JOIN vendedor v ON c.vendedor = v.vendedor_id INNER JOIN frecuenciaventa fv ON c.frecuenciaventa = fv.frecuenciaventa_id INNER JOIN flete fl ON fl.flete_id = c.flete";
 		$where = "c.oculto = 0";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
@@ -36,7 +37,8 @@ class ClienteController {
 
 	function ocultos() {
     	SessionHandler()->check_session();
-		$select = "c.cliente_id AS CLIENTE_ID, LPAD(c.cliente_id, 5, 0) AS CODCLI, c.localidad AS LOCALIDAD, pr.denominacion AS PROVINCIA, c.codigopostal AS CODPOSTAL, c.razon_social AS RAZON_SOCIAL, cf.denominacion AS CONDICIONFISCAL, ci.denominacion AS CIV, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA, c.iva AS CONDIVA, c.descuento AS DESCUENTO,fl.denominacion AS FLETE";
+		$select = "c.cliente_id AS CLIENTE_ID, c.codigo AS CODCLI, c.barrio AS BARRIO, pr.denominacion AS PROVINCIA, c.codigopostal AS CODPOSTAL, c.razon_social AS RAZON_SOCIAL, cf.denominacion AS CONDICIONFISCAL, ci.denominacion AS CIV, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA, c.iva AS CONDIVA, c.descuento AS DESCUENTO,fl.denominacion AS FLETE, CASE habilita_cuenta_corriente WHEN 0 THEN 'danger' ELSE 'success' END AS CLACTACTE, CASE habilita_cuenta_corriente WHEN 0 THEN 'close' ELSE 'check' END AS ICOCTACTE";
+		
 		$from = "cliente c INNER JOIN provincia pr ON c.provincia = pr.provincia_id INNER JOIN condicionfiscal cf ON c.condicionfiscal = cf.condicionfiscal_id INNER JOIN condicioniva ci ON c.condicioniva = ci.condicioniva_id INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id INNER JOIN vendedor v ON c.vendedor = v.vendedor_id INNER JOIN frecuenciaventa fv ON c.frecuenciaventa = fv.frecuenciaventa_id INNER JOIN flete fl ON fl.flete_id = c.flete";
 		$where = "c.oculto = 1";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
@@ -92,18 +94,22 @@ class ClienteController {
 
 	function guardar() {
 		SessionHandler()->check_session();
+		$this->model->codigo = filter_input(INPUT_POST, 'codigo');
 		$this->model->razon_social = filter_input(INPUT_POST, 'razon_social');
 		$this->model->nombre_fantasia = filter_input(INPUT_POST, 'nombre_fantasia');
 		$this->model->descuento = 0;
 		$this->model->iva = filter_input(INPUT_POST, 'iva');
 		$this->model->documento = filter_input(INPUT_POST, 'documento');
+		$this->model->departamento = filter_input(INPUT_POST, 'departamento');
+		$this->model->localidad = filter_input(INPUT_POST, 'localidad');
 		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');
 		$this->model->provincia = filter_input(INPUT_POST, 'provincia');
 		$this->model->codigopostal = filter_input(INPUT_POST, 'codigopostal');
-		$this->model->localidad = filter_input(INPUT_POST, 'localidad');
+		$this->model->barrio = filter_input(INPUT_POST, 'barrio');
 		$this->model->latitud = filter_input(INPUT_POST, 'latitud');
 		$this->model->longitud = filter_input(INPUT_POST, 'longitud');
 		$this->model->impacto_ganancia = 1;
+		$this->model->habilita_cuenta_corriente = filter_input(INPUT_POST, 'habilita_cuenta_corriente');
 		$this->model->dias_vencimiento_cuenta_corriente = filter_input(INPUT_POST, 'dias_vencimiento_cuenta_corriente');
 		$this->model->oculto = 0;
 		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');
@@ -154,16 +160,20 @@ class ClienteController {
 		$cliente_id = filter_input(INPUT_POST, 'cliente_id');
 		$this->model->cliente_id = $cliente_id;
 		$this->model->get();
+		$this->model->codigo = filter_input(INPUT_POST, 'codigo');
 		$this->model->razon_social = filter_input(INPUT_POST, 'razon_social');
 		$this->model->nombre_fantasia = filter_input(INPUT_POST, 'nombre_fantasia');
 		$this->model->iva = filter_input(INPUT_POST, 'iva');
 		$this->model->documento = filter_input(INPUT_POST, 'documento');
+		$this->model->departamento = filter_input(INPUT_POST, 'departamento');
+		$this->model->localidad = filter_input(INPUT_POST, 'localidad');
 		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');
 		$this->model->provincia = filter_input(INPUT_POST, 'provincia');
 		$this->model->codigopostal = filter_input(INPUT_POST, 'codigopostal');
-		$this->model->localidad = filter_input(INPUT_POST, 'localidad');
+		$this->model->barrio = filter_input(INPUT_POST, 'barrio');
 		$this->model->latitud = filter_input(INPUT_POST, 'latitud');
 		$this->model->longitud = filter_input(INPUT_POST, 'longitud');
+		$this->model->habilita_cuenta_corriente = filter_input(INPUT_POST, 'habilita_cuenta_corriente');
 		$this->model->dias_vencimiento_cuenta_corriente = filter_input(INPUT_POST, 'dias_vencimiento_cuenta_corriente');
 		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');
 		$this->model->ordenentrega = filter_input(INPUT_POST, 'ordenentrega');
@@ -219,7 +229,7 @@ class ClienteController {
 	function buscar() {
 		SessionHandler()->check_session();
 		$buscar = filter_input(INPUT_POST, 'buscar');
-		$select = "c.cliente_id AS CLIENTE_ID, c.localidad AS LOCALIDAD, pr.denominacion AS PROVINCIA, c.codigopostal AS CODPOSTAL, c.razon_social AS RAZON_SOCIAL, cf.denominacion AS CONDICIONFISCAL, ci.denominacion AS CIV, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA, c.iva AS CONDIVA, c.descuento AS DESCUENTO";
+		$select = "c.cliente_id AS CLIENTE_ID, c.barrio AS BARRIO, pr.denominacion AS PROVINCIA, c.codigopostal AS CODPOSTAL, c.razon_social AS RAZON_SOCIAL, cf.denominacion AS CONDICIONFISCAL, ci.denominacion AS CIV, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA, c.iva AS CONDIVA, c.descuento AS DESCUENTO";
 		$from = "cliente c INNER JOIN provincia pr ON c.provincia = pr.provincia_id INNER JOIN condicionfiscal cf ON c.condicionfiscal = cf.condicionfiscal_id INNER JOIN condicioniva ci ON c.condicioniva = ci.condicioniva_id INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id INNER JOIN vendedor v ON c.vendedor = v.vendedor_id INNER JOIN frecuenciaventa fv ON c.frecuenciaventa = fv.frecuenciaventa_id";
 		$where = "c.razon_social LIKE '%{$buscar}%' OR c.documento LIKE '%{$buscar}%'";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);

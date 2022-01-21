@@ -17,6 +17,10 @@
         <div class="x_content">
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/cliente/guardar">
+                    <div class="form-group col-lg-1">
+                        <label>COD</label>
+                        <input type="text" class="form-control" name="codigo" id="codigo" required>
+                    </div>
                     <div class="form-group col-lg-4">
                         <label>Razón Social</label>
                         <input type="text" class="form-control" name="razon_social" id="razon_social" required>
@@ -31,23 +35,23 @@
                             {slt_documentotipo}
                         </select>
                     </div>
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-2">
                         <label>Número</label>
                         <input type="number" name="documento" id="documento" class="form-control">
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>Condición IVA</label>
                         <select class="form-control m-bot15" name="condicioniva" id="condicioniva" required>
                             {slt_condicioniva}
                         </select>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>Tipo Factura</label>
                         <select class="form-control m-bot15" name="tipofactura" id="tipofactura" required>
                             {slt_tipofactura}
                         </select>
                     </div>
-                    <div class="form-group col-lg-4">
+                    <div class="form-group col-lg-3">
                         <label>IVA</label>
                         <select class="form-control m-bot15" name="iva" id="iva" required>
                             <option value="21">21%</option>
@@ -77,71 +81,90 @@
                         <label>Días Venc. Cta. Cte.</label>
                         <input type="number" name="dias_vencimiento_cuenta_corriente" id="dias_vencimiento_cuenta_corriente" value="1" class="form-control">
                     </div>
+                    <div class="form-group col-lg-3">
+                        <label>Habilita Cta. Cte.</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" value="1" id="habilita_cuenta_corriente_si" name="habilita_cuenta_corriente"> SI
+                            </label>&nbsp;&nbsp;&nbsp;
+                            <label>
+                                <input type="radio" checked value="0" id="habilita_cuenta_corriente_no" name="habilita_cuenta_corriente"> NO
+                            </label>
+                        </div>
+                    </div>
                     <div class="form-group col-lg-8">
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Lista Precios</label>
                             <select class="form-control m-bot15" name="lista_precio" required>
                                 {slt_listaprecio}
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Categoria</label>
+                            <select class="form-control m-bot15" name="categoriacliente" id="categoriacliente" required>
+                                {slt_categoriacliente}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Provincia</label>
                             <select class="form-control m-bot15" name="provincia" required>
                                 <option value="11" selected>La Rioja</option>
                                 {slt_provincia}
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Barrio</label>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Departamento</label>
+                            <input type="text" class="form-control" id="departamento" name="departamento" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Localidad</label>
                             <input type="text" class="form-control" id="localidad" name="localidad" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Cód Postal</label>
+                            <input type="text" class="form-control" id="codigopostal" name="codigopostal" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
+                            <label>Barrio</label>
+                            <input type="text" class="form-control" id="barrio" name="barrio" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Domicilio</label>
                             <input type="text" class="form-control" id="domicilio" name="domicilio" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Teléfono</label>
                             <input type="text" class="form-control" id="telefono" name="infocontacto[Teléfono]" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-left: 0px;">
                             <label>Celular</label>
                             <input type="text" class="form-control" id="celular" name="infocontacto[Celular]" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-12" style="padding-left: 0px;">
                             <label>Email</label>
                             <input type="text" class="form-control" id="correoelectronico" name="infocontacto[Email]" required>
                         </div>
-                        <div class="form-group">
-                            <label>Categoria</label>
-                            <select class="form-control m-bot15" name="categoriacliente" id="categoriacliente" required>
-                                {slt_categoriacliente}
-                            </select>
-                        </div>
                     </div>
                     <div class="form-group col-lg-4">
-                        <div class="form-group">
-                            <label>Orden de Entrega</label>
-                            <input type="text" class="form-control" id="ordenentrega" name="ordenentrega" placeholder="1" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Código Postal</label>
-                            <input type="text" class="form-control" id="codigopostal" name="codigopostal" required>
-                        </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-12" style="padding-right: 0px;">
+                            <label>% de Entrega Minima</label>
+                            <input type="text" class="form-control" id="entregaminima" name="entregaminima" placeholder="30" required>
+                        </div>                        
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
                             <label>Latitud</label>
                             <input type="text" class="form-control" id="latitud" name="latitud" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
                             <label>Longitud</label>
                             <input type="text" class="form-control" id="longitud" name="longitud" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-12" style="padding-right: 0px;">
                             <label>Observación</label>
                             <textarea class="form-control" id="observacion" name="observacion" rows="7"></textarea>
                         </div>
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                        <input type="hidden" id="entregaminima" name="entregaminima" value="100">
+                        <input type="hidden" id="entregaminima" name="entregaminima" value="100" required>
                         <a href="#" class="btn btn-app" onclick="verificarCliente();"> <i class="fa fa-save"></i> Agregar </a>
                     </div>
                 </form>

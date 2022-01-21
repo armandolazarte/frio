@@ -97,13 +97,13 @@ class ClienteView extends View {
 		foreach ($flete_collection as $flete) unset($flete->infocontacto_collection);
 
 		$infocontacto_collection = $obj_cliente->infocontacto_collection;
-		foreach ($infocontacto_collection as $key => $infocontacto) if ($infocontacto->denominacion == 'Celular') unset($infocontacto_collection[$key]);
-
 		$gui_lst_input_infocontacto = $this->render_regex('LST_INPUT_INFOCONTACTO', $gui_lst_input_infocontacto, $infocontacto_collection);
 		unset($obj_cliente->infocontacto_collection, $obj_cliente->vendedor->infocontacto_collection,
 			  $obj_cliente->vendedor->frecuenciaventa);
 
 		$obj_cliente->txt_impacto_ganancia = ($obj_cliente->impacto_ganancia == 1) ? 'SI' : 'NO';
+		$obj_cliente->checked_habilita_cuenta_corriente_si = ($obj_cliente->habilita_cuenta_corriente == 1) ? 'checked' : '';
+		$obj_cliente->checked_habilita_cuenta_corriente_no = ($obj_cliente->habilita_cuenta_corriente == 1) ? '' : 'checked';
 		$obj_cliente->documentotipo_id = $obj_cliente->documentotipo->documentotipo_id;
 		$obj_cliente->documento_denominacion = $obj_cliente->documentotipo->denominacion;
 		$obj_cliente = $this->set_dict($obj_cliente);
