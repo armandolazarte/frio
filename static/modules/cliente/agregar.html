@@ -124,10 +124,6 @@
                             <input type="text" class="form-control" id="ordenentrega" name="ordenentrega" placeholder="1" required>
                         </div>
                         <div class="form-group">
-                            <label>% de Entrega Minima</label>
-                            <input type="text" class="form-control" id="entregaminima" name="entregaminima" placeholder="30" required>
-                        </div>
-                        <div class="form-group">
                             <label>Código Postal</label>
                             <input type="text" class="form-control" id="codigopostal" name="codigopostal" required>
                         </div>
@@ -145,6 +141,7 @@
                         </div>
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                        <input type="hidden" id="entregaminima" name="entregaminima" value="100">
                         <a href="#" class="btn btn-app" onclick="verificarCliente();"> <i class="fa fa-save"></i> Agregar </a>
                     </div>
                 </form>

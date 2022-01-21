@@ -108,7 +108,7 @@ class ClienteController {
 		$this->model->oculto = 0;
 		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');
 		$this->model->ordenentrega = filter_input(INPUT_POST, 'ordenentrega');
-		$this->model->entregaminima = filter_input(INPUT_POST, 'entregaminima');
+		$this->model->entregaminima = 100;
 		$this->model->observacion = filter_input(INPUT_POST, 'observacion');
 		$this->model->condicioniva = filter_input(INPUT_POST, 'condicioniva');
 		$this->model->condicionfiscal = filter_input(INPUT_POST, 'condicioniva');
@@ -167,7 +167,7 @@ class ClienteController {
 		$this->model->dias_vencimiento_cuenta_corriente = filter_input(INPUT_POST, 'dias_vencimiento_cuenta_corriente');
 		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');
 		$this->model->ordenentrega = filter_input(INPUT_POST, 'ordenentrega');
-		$this->model->entregaminima = filter_input(INPUT_POST, 'entregaminima');
+		$this->model->entregaminima = 100;
 		$this->model->observacion = filter_input(INPUT_POST, 'observacion');
 		$this->model->condicioniva = filter_input(INPUT_POST, 'condicioniva');
 		$this->model->condicionfiscal = filter_input(INPUT_POST, 'condicioniva');

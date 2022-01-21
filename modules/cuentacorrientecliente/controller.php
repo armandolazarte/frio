@@ -307,7 +307,7 @@ class CuentaCorrienteClienteController {
 		$where = "((IF((SELECT ROUND(SUM(cccia.importe),2) FROM cuentacorrientecliente cccia WHERE cccia.tipomovimientocuenta = 2 AND cccia.egreso_id = ccc.egreso_id) IS NULL, 0, (SELECT ROUND(SUM(cccia.importe),2) FROM cuentacorrientecliente cccia WHERE cccia.tipomovimientocuenta = 2 AND cccia.egreso_id = ccc.egreso_id))) - (SELECT ROUND(SUM(cccd.importe),2) FROM cuentacorrientecliente cccd WHERE cccd.tipomovimientocuenta = 1 AND cccd.egreso_id = ccc.egreso_id)) < -0.5 {$prewhere}";
 		$groupby = "ccc.egreso_id ORDER BY e.fecha ASC";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
-		
+
 		$vendedor_collection = Collector()->get('Vendedor');
 		$this->view->buscar($cuentacorriente_collection, $vendedor_collection, $argumento);
 	}
