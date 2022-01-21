@@ -39,6 +39,16 @@ class HojaRutaController {
     				$egreso_id = $ids[0];
     				$estadoentrega_id = $ids[1];
 
+    				$em = new Egreso();
+					$em->egreso_id = $egreso_id;
+					$em->get();
+					$cliente_id = $em->cliente->cliente_id;
+
+					$cm = new Cliente();
+					$cm->cliente_id = $cliente_id;
+					$cm->get();
+					$razon_social = $cm->razon_social;
+
     				$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 					$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
 					$where = "eafip.egreso_id = {$egreso_id}";
@@ -51,15 +61,12 @@ class HojaRutaController {
 					}
 
 					if (is_array($eafip)) {
-						$factura = $eafip[0]['REFERENCIA'] . " {$lbl_quitar}";
+						$factura = "{$razon_social} - " . $eafip[0]['REFERENCIA'] . " {$lbl_quitar}";
 					} else {
-						$em = new Egreso();
-						$em->egreso_id = $egreso_id;
-						$em->get();
 						$tipofactura_nomenclatura = $em->tipofactura->nomenclatura;
 						$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
 						$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
-						$factura = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura} {$lbl_quitar}";
+						$factura = "{$razon_social} - {$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura} {$lbl_quitar}";
 					}
 
 					$array_nums_facturas[] = $factura;
