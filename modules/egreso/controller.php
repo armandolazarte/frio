@@ -1401,8 +1401,6 @@ class EgresoController {
 			$array_exportacion[] = array('','','','','','');
 			$array_exportacion[] = array('','','','','Cant. Clientes',count($array_clientes));
 			$array_exportacion[] = array('','','','','Cant. Pedidos',$cant_pedidos);
-			$array_exportacion[] = array('','','','','','');
-			$array_exportacion[] = array('','','','','','');
 			$array_exportacion[] = array('','','','','Cuenta Corriente',$cant_cuentacorriente);
 			$array_exportacion[] = array('','','','','Contado',$cant_contado);
 			$array_exportacion[] = array('','','','','Total',$total);
@@ -1425,7 +1423,7 @@ class EgresoController {
 
 			$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente,
 									  '{cant_contado}'=>$cant_contado);
-			$subtitulo = "{$fecha_actual} - HOJA DE RUTA: {$denominacion} - Nº{$hrm->hojaruta_id}";
+			$subtitulo = "{$hrm->fecha} - FLETE: {$denominacion} - Nº{$hrm->hojaruta_id}";
 
 			ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		} else {
@@ -1537,10 +1535,8 @@ class EgresoController {
 
 		$array_exportacion[] = array('','','','','');
 		$array_exportacion[] = array('','','','','');
-		$array_exportacion[] = array('','','','Cant. Clientes',count($array_clientes));
-		$array_exportacion[] = array('','','','Cant. Pedidos',$cant_pedidos);
-		$array_exportacion[] = array('','','','','','');
-		$array_exportacion[] = array('','','','','','');
+		$array_exportacion[] = array('','','','','Cant. Clientes',count($array_clientes));
+		$array_exportacion[] = array('','','','','Cant. Pedidos',$cant_pedidos);
 		$array_exportacion[] = array('','','','','Cuenta Corriente',$cant_cuentacorriente);
 		$array_exportacion[] = array('','','','','Contado',$cant_contado);
 		$array_exportacion[] = array('','','','','Total',$total);
