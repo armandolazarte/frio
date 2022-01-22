@@ -1475,14 +1475,19 @@ class EgresoController {
 			$array_exportacion2[] = $array_temp;
 		}
 
-		$subtitulo = "{$hrm->fecha} - HOJA DE RUTA: {$denominacion} - Nº{$arg}";
-		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'COND PAGO', 'IMPORTE TOTAL');
+		$fecha_hoja_ruta = $hrm->fecha;
+		$subtitulo = "FLETE: {$denominacion} - Nº{$arg}";
+		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL');
 		$array_exportacion[] = $array_encabezados;
 		$total = 0;
+		$array_clientes = array();
+		$cant_pedidos = count($egreso_ids);
 		foreach ($egreso_ids as $egreso_id) {
 			$em = new Egreso();
 			$em->egreso_id = $egreso_id;
 			$em->get();
+			$cliente_id = $em->cliente->cliente_id;
+			if (!in_array($cliente_id, $array_clientes)) $cliente_id;
 
 			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
@@ -1515,11 +1520,16 @@ class EgresoController {
 							$em->fecha
 							, $factura
 							, $em->cliente->razon_social
+							, $em->cliente->domicilio
 							, $em->condicionpago->denominacion
 							, $em->importe_total);
 			$array_exportacion[] = $array_temp;
 		}
 
+		$array_exportacion[] = array('','','','','');
+		$array_exportacion[] = array('','','','','');
+		$array_exportacion[] = array('','','','Cant. Clientes',count($array_clientes));
+		$array_exportacion[] = array('','','','Cant. Pedidos',$cant_pedidos);
 		$array_exportacion[] = array('','','','','');
 		$array_exportacion[] = array('','','','','');
 		$array_exportacion[] = array('','','','Cuenta Corriente',$cant_cuentacorriente);
@@ -1534,7 +1544,7 @@ class EgresoController {
 		$array_exportacion[] = array('','','','Totales','$.......................');
 		$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente, '{cant_contado}'=>$cant_contado);
 
-		ExcelReport()->extraer_informe_conjunto_remanente($subtitulo, $array_exportacion,$array_exportacion2);
+		ExcelReport()->extraer_informe_conjunto_remanente($subtitulo, $array_exportacion,$array_exportacion2, $fecha_hoja_ruta);
 
 	}
 

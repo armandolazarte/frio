@@ -109,7 +109,7 @@ class ExcelReport extends View {
         $objWriter->save('php://output');
     }
 
-    function extraer_informe_conjunto_remanente($subtitulo, $array_exportacion,$array_exportacion2) {
+    function extraer_informe_conjunto_remanente($subtitulo, $array_exportacion,$array_exportacion2, $fecha_hoja_ruta) {
         date_default_timezone_set('America/Mexico_City');
         if (PHP_SAPI == 'cli') die('Este archivo solo se puede ver desde un navegador web');
         $objPHPExcel = new PHPExcel();
@@ -122,7 +122,7 @@ class ExcelReport extends View {
                                      ->setCategory("infDHTordo");
 
         $tituloReporte = "Frío Distribuciones";
-        $fechaReporte = date("d-m-Y");
+        $fechaReporte = $fecha_hoja_ruta;
         $softReporte = "dhTordo";
         $tituloWeb = $tituloReporte;
         $titulosColumnas = array_shift($array_exportacion);
@@ -332,7 +332,7 @@ class ExcelReport extends View {
         $this->estilo_subtitulo = array(
                                         'font'=>array(
                                             'name'=>'Bookman Old Style',
-                                            'size'=>17,
+                                            'size'=>13,
                                             'color'=>array('rgb' => '000000')),
                                         'fill'=>array(
                                             'type'=>PHPExcel_Style_Fill::FILL_SOLID,
