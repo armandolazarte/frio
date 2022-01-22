@@ -14,22 +14,16 @@ class NotaCreditoProveedorController {
 
 	function listar() {
     	SessionHandler()->check_session();
-		$select = "ncp.fecha AS FECHA, CONCAT(LPAD(ncp.punto_venta, 4, 0), '-', LPAD(ncp.numero_factura, 8, 0)) AS NOTCRE,
-    			   CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) END AS REFERENCIA,
-    			   p.razon_social AS PROVEEDOR, ncp.importe_total AS IMPORTETOTAL, ncp.notacredito_id AS NOTACREDITO_ID";
-		$from = "notacreditoproveedor ncp INNER JOIN ingreso i ON ncp.ingreso_id = i.ingreso_id INNER JOIN 
-				 proveedor p ON i.proveedor = p.proveedor_id";
+		$select = "ncp.fecha AS FECHA, CONCAT(LPAD(ncp.punto_venta, 4, 0), '-', LPAD(ncp.numero_factura, 8, 0)) AS NOTCRE, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) END AS REFERENCIA, p.razon_social AS PROVEEDOR, ncp.importe_total AS IMPORTETOTAL, ncp.notacredito_id AS NOTACREDITO_ID";
+		$from = "notacreditoproveedor ncp INNER JOIN ingreso i ON ncp.ingreso_id = i.ingreso_id INNER JOIN proveedor p ON i.proveedor = p.proveedor_id";
 		$notacredito_collection = CollectorCondition()->get('NotaCreditoProveedor', null, 4, $from, $select);
 		$this->view->listar($notacredito_collection);
 	}
 
 	function buscar() {
     	SessionHandler()->check_session();
-		$select = "ncp.fecha AS FECHA, CONCAT(LPAD(ncp.punto_venta, 4, 0), '-', LPAD(ncp.numero_factura, 8, 0)) AS NOTCRE,
-    			   CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) END AS REFERENCIA,
-    			   p.razon_social AS PROVEEDOR, ncp.importe_total AS IMPORTETOTAL, ncp.notacredito_id AS NOTACREDITO_ID";
-		$from = "notacreditoproveedor ncp INNER JOIN ingreso i ON ncp.ingreso_id = i.ingreso_id INNER JOIN 
-				 proveedor p ON i.proveedor = p.proveedor_id";
+		$select = "ncp.fecha AS FECHA, CONCAT(LPAD(ncp.punto_venta, 4, 0), '-', LPAD(ncp.numero_factura, 8, 0)) AS NOTCRE, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) END AS REFERENCIA, p.razon_social AS PROVEEDOR, ncp.importe_total AS IMPORTETOTAL, ncp.notacredito_id AS NOTACREDITO_ID";
+		$from = "notacreditoproveedor ncp INNER JOIN ingreso i ON ncp.ingreso_id = i.ingreso_id INNER JOIN proveedor p ON i.proveedor = p.proveedor_id";
 
 		$tipo_busqueda = filter_input(INPUT_POST, 'tipo_busqueda');
 		switch ($tipo_busqueda) {
@@ -50,7 +44,6 @@ class NotaCreditoProveedorController {
 		require_once 'modules/configuracion/model.php';
 		require_once "core/helpers/file.php";
 		
-
 		$notacreditoproveedor_id = $arg;
 		$this->model->notacreditoproveedor_id = $notacreditoproveedor_id;
 		$this->model->get();
@@ -63,11 +56,8 @@ class NotaCreditoProveedorController {
 		$cm->configuracion_id = 1;
 		$cm->get();
 
-		$select = "ncpd.codigo_producto AS CODIGO, ncpd.descripcion_producto AS DESCRIPCION, ncpd.cantidad AS CANTIDAD,
-				   pu.denominacion AS UNIDAD, ncpd.descuento1 AS DESC1, ncpd.descuento2 AS DESC2 , ncpd.descuento3 AS DESC3,
-				   ncpd.costo_producto AS COSTO, ROUND(ncpd.importe, 2) AS IMPORTE";
-		$from = "notacreditoproveeedordetalle ncpd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN
-				 productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select = "ncpd.codigo_producto AS CODIGO, ncpd.descripcion_producto AS DESCRIPCION, ncpd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ncpd.descuento1 AS DESC1, ncpd.descuento2 AS DESC2 , ncpd.descuento3 AS DESC3, ncpd.costo_producto AS COSTO, ROUND(ncpd.importe, 2) AS IMPORTE";
+		$from = "notacreditoproveeedordetalle ncpd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "ncpd.notacreditoproveedor_id = {$notacreditoproveedor_id}";
 		$notacreditodetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where, 4, $from, $select);
 		

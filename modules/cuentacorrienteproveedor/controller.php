@@ -20,10 +20,7 @@ class CuentaCorrienteProveedorController {
 
 	function panel() {
     	SessionHandler()->check_session();
-    	$select = "ccp.proveedor_id AS PID, p.razon_social AS PROVEEDOR, (SELECT ROUND(SUM(dccp.importe),2) FROM
-    			   cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 1 AND dccp.proveedor_id = ccp.proveedor_id) AS DEUDA,
-				   (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 2 AND
-				   dccp.proveedor_id = ccp.proveedor_id) AS INGRESO";
+    	$select = "ccp.proveedor_id AS PID, p.razon_social AS PROVEEDOR, (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 1 AND dccp.proveedor_id = ccp.proveedor_id) AS DEUDA, (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 2 AND dccp.proveedor_id = ccp.proveedor_id) AS INGRESO";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id";
 		$groupby = "ccp.proveedor_id";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteProveedor', NULL, 4, $from, $select, $groupby);
@@ -195,10 +192,9 @@ class CuentaCorrienteProveedorController {
 	}
 
 	function traer_listado_movimientos_cuentacorriente_ajax($arg) {
+    	SessionHandler()->check_session();
 		$ingreso_id = $arg;
-		$select = "date_format(ccp.fecha, '%d/%m/%Y') AS FECHA, ccp.importe AS IMPORTE, ccp.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccp.ingreso_id AS IID,
-				   ccp.referencia AS REFERENCIA, CASE ccp.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS,
-				   ccp.cuentacorrienteproveedor_id CCPID";
+		$select = "date_format(ccp.fecha, '%d/%m/%Y') AS FECHA, ccp.importe AS IMPORTE, ccp.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccp.ingreso_id AS IID, ccp.referencia AS REFERENCIA, CASE ccp.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ccp.cuentacorrienteproveedor_id CCPID";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN tipomovimientocuenta tmc ON ccp.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
 		$where = "ccp.ingreso_id = {$ingreso_id}";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteProveedor', $where, 4, $from, $select);
@@ -221,11 +217,11 @@ class CuentaCorrienteProveedorController {
 			$cuentacorriente_collection[$clave]['BTN_DISPLAY'] = $array_temp[0]['BTN_DISPLAY'];
 		}
 
-
 		$this->view->traer_listado_movimientos_cuentacorriente_ajax($cuentacorriente_collection);
 	}
 
 	function traer_chequeproveedordetalle_ajax($arg) {
+    	SessionHandler()->check_session();
 		$ids = explode('@', $arg);
 		$chequeproveedordetalle_id = $ids[0];
 		$proveedor_id = $ids[1];
@@ -236,6 +232,7 @@ class CuentaCorrienteProveedorController {
 	}
 
 	function traer_transferenciaproveedordetalle_ajax($arg) {
+    	SessionHandler()->check_session();
 		$transferenciaproveedordetalle_id = $arg;
 		$tpdm = new TransferenciaProveedorDetalle();
 		$tpdm->transferenciaproveedordetalle_id = $transferenciaproveedordetalle_id;
@@ -245,8 +242,7 @@ class CuentaCorrienteProveedorController {
 
 	function buscar() {
     	SessionHandler()->check_session();
-		
-		$argumento = filter_input(INPUT_POST, 'proveedor');
+		$argumento = filter_input(INPUT_POST, 'proveedor');		
 		
 		if ($argumento == 'all') {
 			$prewhere = "";
@@ -275,11 +271,7 @@ class CuentaCorrienteProveedorController {
 	function descargar_cuentacorriente_pdf($arg) {
 		SessionHandler()->check_session();
 		
-		$select = "i.ingreso_id, date_format(i.fecha, '%d/%m/%Y') AS FECHA, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, 
-				   p.razon_social AS PROVEEDOR, p.localidad AS LOCALIDAD, p.domicilio AS DOMICILIO, 
-				   ((IF((SELECT ROUND(SUM(ccpia.importe),2) FROM cuentacorrienteproveedor ccpia WHERE ccpia.tipomovimientocuenta = 2 AND ccpia.ingreso_id = ccp.ingreso_id) IS NULL, 0, (SELECT ROUND(SUM(ccpia.importe),2)
-				   FROM cuentacorrienteproveedor ccpia WHERE ccpia.tipomovimientocuenta = 2 AND ccpia.ingreso_id = ccp.ingreso_id))) - (SELECT ROUND(SUM(ccpd.importe),2) FROM cuentacorrienteproveedor ccpd
-				   WHERE ccpd.tipomovimientocuenta = 1 AND ccpd.ingreso_id = ccp.ingreso_id)) AS BALANCE";
+		$select = "i.ingreso_id, date_format(i.fecha, '%d/%m/%Y') AS FECHA, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, p.razon_social AS PROVEEDOR, p.localidad AS LOCALIDAD, p.domicilio AS DOMICILIO, ((IF((SELECT ROUND(SUM(ccpia.importe),2) FROM cuentacorrienteproveedor ccpia WHERE ccpia.tipomovimientocuenta = 2 AND ccpia.ingreso_id = ccp.ingreso_id) IS NULL, 0, (SELECT ROUND(SUM(ccpia.importe),2) FROM cuentacorrienteproveedor ccpia WHERE ccpia.tipomovimientocuenta = 2 AND ccpia.ingreso_id = ccp.ingreso_id))) - (SELECT ROUND(SUM(ccpd.importe),2) FROM cuentacorrienteproveedor ccpd WHERE ccpd.tipomovimientocuenta = 1 AND ccpd.ingreso_id = ccp.ingreso_id)) AS BALANCE";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN ingreso i ON ccp.ingreso_id = i.ingreso_id INNER JOIN 
 				 proveedor p ON ccp.proveedor_id = p.proveedor_id";
 		$groupby = "ccp.ingreso_id ORDER BY i.fecha ASC";
@@ -289,21 +281,17 @@ class CuentaCorrienteProveedorController {
 						  ccpia.ingreso_id = ccp.ingreso_id) IS NULL, 0, (SELECT ROUND(SUM(ccpia.importe),2) FROM cuentacorrienteproveedor ccpia
 						  WHERE ccpia.tipomovimientocuenta = 2 AND ccpia.ingreso_id = ccp.ingreso_id))) - (SELECT ROUND(SUM(ccpd.importe),2)
 						  FROM cuentacorrienteproveedor ccpd WHERE ccpd.tipomovimientocuenta = 1 AND ccpd.ingreso_id = ccp.ingreso_id)) < -0.5";
-				
 				break;
 			default:
 				$proveedor_id = $arg;
 				$where = "((IF((SELECT ROUND(SUM(ccpia.importe),2) FROM cuentacorrienteproveedor ccpia WHERE ccpia.tipomovimientocuenta = 2 AND
 						  ccpia.ingreso_id = ccp.ingreso_id) IS NULL, 0, (SELECT ROUND(SUM(ccpia.importe),2) FROM cuentacorrienteproveedor ccpia
 						  WHERE ccpia.tipomovimientocuenta = 2 AND ccpia.ingreso_id = ccp.ingreso_id))) - (SELECT ROUND(SUM(ccpd.importe),2)
-						  FROM cuentacorrienteproveedor ccpd WHERE ccpd.tipomovimientocuenta = 1 AND ccpd.ingreso_id = ccp.ingreso_id)) < -0.5 AND
-						  p.proveedor_id = {$proveedor_id}";
-				
+						  FROM cuentacorrienteproveedor ccpd WHERE ccpd.tipomovimientocuenta = 1 AND ccpd.ingreso_id = ccp.ingreso_id)) < -0.5 AND p.proveedor_id = {$proveedor_id}";
 				break;
 		}
 
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteProveedor', $where, 4, $from, $select, $groupby);
-
 		$cuentaCorrienteProveedorPDFHelper = new CuentaCorrienteProveedorPDF();
 		$cuentaCorrienteProveedorPDFHelper->descarga_cuentascorrientes($cuentacorriente_collection);
 	}
@@ -393,6 +381,11 @@ class CuentaCorrienteProveedorController {
 				$cpdm->numero = filter_input(INPUT_POST, 'numero_cheque');
 				$cpdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
 				$cpdm->fecha_pago = null;
+				$cpdm->banco = filter_input(INPUT_POST, 'banco');
+				$cpdm->plaza = filter_input(INPUT_POST, 'plaza');
+				$cpdm->titular = filter_input(INPUT_POST, 'titular');
+				$cpdm->documento = filter_input(INPUT_POST, 'documento');
+				$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
 				$cpdm->estado = 1;
 				$cpdm->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
 				$cpdm->save();
