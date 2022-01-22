@@ -393,6 +393,9 @@ class CuentaCorrienteProveedorController {
 			case 2:
 				$tpdm = new TransferenciaProveedorDetalle();
 				$tpdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+				$tpdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+				$tpdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+				$tpdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
 				$tpdm->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
 				$tpdm->save();
 				break;
