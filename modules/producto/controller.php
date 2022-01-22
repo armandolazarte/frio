@@ -6,6 +6,7 @@ require_once "modules/productocategoria/model.php";
 require_once "modules/productounidad/model.php";
 require_once "modules/productodetalle/model.php";
 require_once "modules/proveedor/model.php";
+require_once "modules/stock/model.php";
 
 
 class ProductoController {
@@ -246,6 +247,17 @@ class ProductoController {
 		$pdm->producto_id = $producto_id;
 		$pdm->proveedor_id = filter_input(INPUT_POST, 'proveedor');
 		$pdm->save();
+
+		$sm = new Stock();
+		$sm->fecha = date('Y-m-d');
+		$sm->hora = date('H:i:s');
+		$sm->concepto = 'Stock Inicial';
+		$sm->codigo = filter_input(INPUT_POST, 'codigo');
+		$sm->cantidad_actual = 0.00;
+		$sm->cantidad_movimiento = 0.00;
+		$sm->producto_id = $producto_id;
+		$sm->almacen_id = 1;
+		$sm->save();
 
 		header("Location: " . URL_APP . "/producto/listar");
 	}
