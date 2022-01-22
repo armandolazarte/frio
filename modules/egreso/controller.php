@@ -1339,13 +1339,17 @@ class EgresoController {
 			$cant_cuentacorriente = 0;
 			$cant_contado = 0;
 
-			$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'COND PAGO', 'IMPORTE TOTAL');
+			$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL');
 			$array_exportacion[] = $array_encabezados;
 			$total = 0;
+			$array_clientes = array();
+			$cant_pedidos = count($egreso_ids);
 			foreach ($egreso_ids as $egreso_id) {
 				$em = new Egreso();
 				$em->egreso_id = $egreso_id;
 				$em->get();
+				$cliente_id = $em->cliente->cliente_id;
+				if (!in_array($cliente_id, $array_clientes)) $array_clientes[] = $cliente_id;
 
 				$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
@@ -1387,23 +1391,28 @@ class EgresoController {
 								$em->fecha
 								, $factura
 								, $em->cliente->razon_social
+								, $em->cliente->domicilio
 								, $em->condicionpago->denominacion
 								, $em->importe_total);
 				$array_exportacion[] = $array_temp;
 			}
 
-			$array_exportacion[] = array('','','','','');
-			$array_exportacion[] = array('','','','','');
-			$array_exportacion[] = array('','','','Cuenta Corriente',$cant_cuentacorriente);
-			$array_exportacion[] = array('','','','Contado',$cant_contado);
-			$array_exportacion[] = array('','','','Total',$total);
-			$array_exportacion[] = array('','','','','');
-			$array_exportacion[] = array('','','','Combustible','$.......................');
-			$array_exportacion[] = array('','','','Sencillo','$.......................');
-			$array_exportacion[] = array('','','','Descuentos','$.......................');
-			$array_exportacion[] = array('','','','Cta. Cte.','$.......................');
-			$array_exportacion[] = array('','','','Efectivo','$.......................');
-			$array_exportacion[] = array('','','','Totales','$.......................');
+			$array_exportacion[] = array('','','','','','');
+			$array_exportacion[] = array('','','','','','');
+			$array_exportacion[] = array('','','','','Cant. Clientes',count($array_clientes));
+			$array_exportacion[] = array('','','','','Cant. Pedidos',$cant_pedidos);
+			$array_exportacion[] = array('','','','','','');
+			$array_exportacion[] = array('','','','','','');
+			$array_exportacion[] = array('','','','','Cuenta Corriente',$cant_cuentacorriente);
+			$array_exportacion[] = array('','','','','Contado',$cant_contado);
+			$array_exportacion[] = array('','','','','Total',$total);
+			$array_exportacion[] = array('','','','','','');
+			$array_exportacion[] = array('','','','','Combustible','$.......................');
+			$array_exportacion[] = array('','','','','Sencillo','$.......................');
+			$array_exportacion[] = array('','','','','Descuentos','$.......................');
+			$array_exportacion[] = array('','','','','Cta. Cte.','$.......................');
+			$array_exportacion[] = array('','','','','Efectivo','$.......................');
+			$array_exportacion[] = array('','','','','Totales','$.......................');
 
 			$fecha_actual = date('Y-m-d');
 			$hrm = new HojaRuta();
