@@ -1350,7 +1350,7 @@ class EgresoController {
 				$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
 				$where = "eafip.egreso_id = {$egreso_id}";
-				$eafip = CollectorCondition()->get('EgrasoAFIP', $where, 4, $from, $select);
+				$eafip = CollectorCondition()->get('EgresoAFIP', $where, 4, $from, $select);
 
 				if (is_array($eafip)) {
 					$factura = $eafip[0]['REFERENCIA'];
@@ -1484,6 +1484,20 @@ class EgresoController {
 			$em->egreso_id = $egreso_id;
 			$em->get();
 
+			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
+			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+			$where = "eafip.egreso_id = {$egreso_id}";
+			$eafip = CollectorCondition()->get('EgrasoAFIP', $where, 4, $from, $select);
+
+			if (is_array($eafip)) {
+				$factura = $eafip[0]['REFERENCIA'];
+			} else {
+				$tipofactura_nomenclatura = $em->tipofactura->nomenclatura;
+				$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
+				$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+				$factura = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura}";
+			}
+
 			$condicionpago_id = $em->condicionpago->condicionpago_id;
 			switch ($condicionpago_id) {
 				case 1:
@@ -1499,7 +1513,7 @@ class EgresoController {
 			$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
 			$array_temp = array(
 							$em->fecha
-							, "{$punto_venta}-{$numero_factura}"
+							, $factura
 							, $em->cliente->razon_social
 							, $em->condicionpago->denominacion
 							, $em->importe_total);
