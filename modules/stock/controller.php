@@ -670,6 +670,7 @@ class StockController {
 				$sm->cantidad_actual = $valor;
 				$sm->cantidad_movimiento = $valor;
 				$sm->producto_id = $producto_id;
+				$sm->almacen_id = 1;
 				$sm->save();
 				$i = $i + 1;
 			}
