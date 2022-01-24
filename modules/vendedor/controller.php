@@ -688,27 +688,27 @@ class VendedorController {
 	function guardar() {
 		SessionHandler()->check_session();
 
-		$apellido = (is_null(filter_input(INPUT_POST, 'apellido'))) ? '-' : filter_input(INPUT_POST, 'apellido');
-		$nombre = (is_null(filter_input(INPUT_POST, 'nombre'))) ? '-' : filter_input(INPUT_POST, 'nombre');
-		$documento = (is_null(filter_input(INPUT_POST, 'documento'))) ? 0 : filter_input(INPUT_POST, 'documento');
-		$codigopostal = (is_null(filter_input(INPUT_POST, 'codigopostal'))) ? 0 : filter_input(INPUT_POST, 'codigopostal');
-		$domicilio = (is_null(filter_input(INPUT_POST, 'domicilio'))) ? '-' : filter_input(INPUT_POST, 'domicilio');
-		$localidad = (is_null(filter_input(INPUT_POST, 'localidad'))) ? '-' : filter_input(INPUT_POST, 'localidad');
+		$apellido = filter_input(INPUT_POST, 'apellido');
+		$nombre = filter_input(INPUT_POST, 'nombre');
+		$comision = filter_input(INPUT_POST, 'comision');
+		$documento = filter_input(INPUT_POST, 'documento');
+		$domicilio = filter_input(INPUT_POST, 'domicilio');
+		$localidad = filter_input(INPUT_POST, 'localidad');
 		$provincia = filter_input(INPUT_POST, 'provincia');
 		$documentotipo = filter_input(INPUT_POST, 'documentotipo');
 		
-		$this->model->apellido = $apellido;
-		$this->model->nombre = $nombre;
-		$this->model->comision = filter_input(INPUT_POST, 'comision');
+		$this->model->apellido = (is_null($apellido) OR empty($apellido)) ? '-' : $apellido;
+		$this->model->nombre = (is_null($nombre) OR empty($nombre)) ? '-' : $nombre;
+		$this->model->comision = (is_null($comision) OR empty($comision)) ? 0 : $comision;
 		$this->model->frecuenciaventa = filter_input(INPUT_POST, 'frecuenciaventa');
-		$this->model->documento = $documento;
+		$this->model->documento = (is_null($documento) OR empty($documento)) ? 0 : $documento;
 		$this->model->documentotipo = $documentotipo;
 		$this->model->provincia = $provincia;
-		$this->model->codigopostal = $codigopostal;
-		$this->model->localidad = $localidad;
+		$this->model->codigopostal = (is_null($codigopostal) OR empty($codigopostal)) ? 0 : $codigopostal;
+		$this->model->localidad = (is_null($localidad) OR empty($localidad)) ? '-' : $localidad;
 		$this->model->latitud = filter_input(INPUT_POST, 'latitud');
 		$this->model->longitud = filter_input(INPUT_POST, 'longitud');
-		$this->model->domicilio = $domicilio;
+		$this->model->domicilio = (is_null($domicilio) OR empty($domicilio)) ? '-' : $domicilio;
 		$this->model->observacion = filter_input(INPUT_POST, 'observacion');
 		$this->model->oculto = 0;
 		$this->model->save();
@@ -746,13 +746,13 @@ class VendedorController {
 		}
 
 		$em = new Empleado();
-		$em->apellido = $apellido;
-		$em->nombre = $nombre;
-		$em->documento = $documento;
-		$em->telefono = $telefono;
-		$em->domicilio = $domicilio;
-		$em->codigopostal = $codigopostal;
-		$em->localidad = $localidad;
+		$em->apellido = (is_null($apellido) OR empty($apellido)) ? '-' : $apellido;
+		$em->nombre = (is_null($nombre) OR empty($nombre)) ? '-' : $nombre;
+		$em->documento = (is_null($documento) OR empty($documento)) ? 0 : $documento;
+		$em->telefono = (is_null($telefono) OR empty($telefono)) ? 0 : $telefono;
+		$em->domicilio = (is_null($domicilio) OR empty($domicilio)) ? '-' : $domicilio;
+		$em->codigopostal = (is_null($codigopostal) OR empty($codigopostal)) ? 0 : $codigopostal;
+		$em->localidad = (is_null($localidad) OR empty($localidad)) ? '-' : $localidad;
 		$em->observacion = 'Vendedor';
 		$em->oculto = 0;
 		$em->provincia = $provincia;
@@ -829,6 +829,19 @@ class VendedorController {
 		if ($cobrador_id != 0) {
 			$cm = new Cobrador();
 			$cm->cobrador_id = $cobrador_id;
+			$cm->get();
+			$cm->oculto = 1;
+			$cm->save();
+		}
+
+		$select = "e.empleado_id AS ID";
+		$from = "empleado e";
+		$where = "e.vendedor_id = {$vendedor_id}";
+		$empleado_id = CollectorCondition()->get('Empleado', $where, 4, $from, $select);
+		$empleado_id = (is_array($empleado_id) AND !empty($empleado_id)) ? $empleado_id[0]['ID'] : 0;
+		if ($empleado_id != 0) {
+			$cm = new Empleado();
+			$cm->empleado_id = $empleado_id;
 			$cm->get();
 			$cm->oculto = 1;
 			$cm->save();
