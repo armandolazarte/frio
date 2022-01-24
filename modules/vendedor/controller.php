@@ -834,17 +834,17 @@ class VendedorController {
 			$cm->save();
 		}
 
-		$select = "e.empleado_id AS ID";
-		$from = "empleado e";
-		$where = "e.vendedor_id = {$vendedor_id}";
-		$empleado_id = CollectorCondition()->get('Empleado', $where, 4, $from, $select);
+		$select = "ve.empleado_id AS ID";
+		$from = "vendedorempleado ve";
+		$where = "ve.vendedor_id = {$vendedor_id}";
+		$empleado_id = CollectorCondition()->get('VendedorEmpleado', $where, 4, $from, $select);
 		$empleado_id = (is_array($empleado_id) AND !empty($empleado_id)) ? $empleado_id[0]['ID'] : 0;
 		if ($empleado_id != 0) {
-			$cm = new Empleado();
-			$cm->empleado_id = $empleado_id;
-			$cm->get();
-			$cm->oculto = 1;
-			$cm->save();
+			$em = new Empleado();
+			$em->empleado_id = $empleado_id;
+			$em->get();
+			$em->oculto = 1;
+			$em->save();
 		}
 		
 		header("Location: " . URL_APP . "/vendedor/listar");
