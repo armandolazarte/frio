@@ -17,6 +17,8 @@ class PedidoVendedor extends StandardObject {
 		$this->vendedor_id = 0;
 		$this->cliente_id = 0;
 		$this->egreso_id = 0;
+		$this->tipofactura_id = 0;
+		$this->condicioniva_id = 0;
 	}
 }
 ?>

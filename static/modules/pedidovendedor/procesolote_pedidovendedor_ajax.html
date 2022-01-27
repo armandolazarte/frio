@@ -1,0 +1,44 @@
+<form class="form" method="post" action="{url_app}/pedidovendedor/guardar_linea_lote">
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Pedido: {pedidovendedor-numero_pedido}</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: right;">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="background: #337ab7; color: #fff; font-size: 14px; margin-bottom: 5px; border-right: 1px solid #fff;">
+                    <center>{cliente-razon_social}</center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="background: #337ab7; color: #fff; font-size: 14px; margin-bottom: 5px; border-right: 1px solid #fff;">
+                    <center>Condición Pago: {condicionpago-denominacion}</center>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="background: #337ab7; color: #fff; font-size: 14px; margin-bottom: 5px; ">
+                    <center>Tipo Factura: {tipofactura-nomenclatura}</center>
+                </div>
+                <div class="col-lg-offset-8 col-lg-4 col-md-offset-9 col-md-4 col-sm-12 col-xs-12" style="background: #d9534f; color: #fff; font-size: 14px; margin-bottom: 5px; ">
+                    <center><label id="lbl_ImporteTotal">Monto Total: ${pedidovendedor-importe_total}</label></center>
+                    <input type='hidden' id="importe_total" name="importe_total" value="{pedidovendedor-importe_total}">
+                </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <table class="table">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>Producto</th>
+                            <th>Cant</th>
+                            <th>P.Unit</th>
+                            <th>%Bonif.</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTblProducto">{tbl_pedidovendedordetalle}</tbody>
+                </table>
+            </div>
+            <div class="form-group col-lg-12" align="right">
+                <input type='hidden' id="pedidovendedor_id" name="pedidovendedor_id" value="{pedidovendedor-pedidovendedor_id}">
+                <button type="submit" class="btn btn-app" id="btn_cargar"> <i class="fa fa-level-up"></i> A procesar </button>
+            </div>
+        </div>
+    </div>
+</form>

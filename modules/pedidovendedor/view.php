@@ -4,8 +4,8 @@
 class PedidoVendedorView extends View {
 	function panel($pedidovendedor_collection, $vendedor_collection) {
 		$gui = file_get_contents("static/modules/pedidovendedor/panel.html");
-		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor_array.html");
-		$gui_slt_vendedor = $this->render_regex_dict('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
+		$gui_tbl_vendedor = file_get_contents("static/modules/pedidovendedor/tbl_vendedor_array.html");
+		$gui_tbl_vendedor = $this->render_regex_dict('TBL_VENDEDOR', $gui_tbl_vendedor, $vendedor_collection);
 
 		$user_rol = $_SESSION["data-login-" . APP_ABREV]["usuario-configuracionmenu"];
 		switch ($user_rol) {
@@ -30,25 +30,34 @@ class PedidoVendedorView extends View {
 				break;
 		}
 
-		$tbl_pedidovendedor_array = $this->render_regex_dict('TBL_PEDIDOVENDEDOR', $tbl_pedidovendedor_array, $pedidovendedor_collection);		
+		$tbl_pedidovendedor_array = $this->render_regex_dict('TBL_PEDIDOVENDEDOR', $tbl_pedidovendedor_array, $pedidovendedor_collection);	
 		$render = str_replace('{tbl_pedidovendedor}', $tbl_pedidovendedor_array, $gui);
-		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		$render = str_replace('{slt_vendedor}', $gui_tbl_vendedor, $render);
 		$render = str_replace('{usuario-display_descargar_pedidos}', $display_descargar, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
 	}
 
-	function agregar($producto_collection, $cliente_collection) {
+	function agregar($producto_collection, $cliente_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection) {
 		$gui = file_get_contents("static/modules/pedidovendedor/agregar.html");
 		$tbl_producto_array = file_get_contents("static/modules/pedidovendedor/tbl_producto_array.html");
 		$tbl_cliente_array = file_get_contents("static/modules/pedidovendedor/tbl_cliente_array.html");
+		$slt_tipofactura = file_get_contents("static/common/slt_tipofactura.html");
+		$slt_condicionpago = file_get_contents("static/common/slt_condicionpago.html");
+		$slt_condicioniva = file_get_contents("static/common/slt_condicioniva.html");
 		
+		$slt_tipofactura = $this->render_regex('SLT_TIPOFACTURA', $slt_tipofactura, $tipofactura_collection);
+		$slt_condicionpago = $this->render_regex('SLT_CONDICIONPAGO', $slt_condicionpago, $condicionpago_collection);
+		$slt_condicioniva = $this->render_regex('SLT_CONDICIONIVA', $slt_condicioniva, $condicioniva_collection);
 		$tbl_producto_array = $this->render_regex_dict('TBL_PRODUCTO', $tbl_producto_array, $producto_collection);
 		$tbl_cliente_array = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente_array, $cliente_collection);
 		
 		$render = str_replace('{hora}', date('H:i:s'), $gui);
 		$render = str_replace('{fecha}', date('Y-m-d'), $render);
+		$render = str_replace('{slt_tipofactura}', $slt_tipofactura, $render);
+		$render = str_replace('{slt_condicionpago}', $slt_condicionpago, $render);
+		$render = str_replace('{slt_condicioniva}', $slt_condicioniva, $render);
 		$render = str_replace('{tbl_producto}', $tbl_producto_array, $render);
 		$render = str_replace('{tbl_cliente}', $tbl_cliente_array, $render);
 		$render = $this->render_breadcrumb($render);
@@ -177,12 +186,10 @@ class PedidoVendedorView extends View {
 			$array_producto_ids = implode(',', $array_producto_ids);
 			$obj_pedidovendedor->array_producto_ids = $array_producto_ids;
 
-			$tbl_editar_pedidovendedordetalle_array = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_editar_pedidovendedordetalle_array, 
-																			   $pedidovendedordetalle_collection);
+			$tbl_editar_pedidovendedordetalle_array = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_editar_pedidovendedordetalle_array, $pedidovendedordetalle_collection);
 			$tbl_editar_pedidovendedordetalle_array = str_replace('<!--TBL_PEDIDOVENDEDORDETALLE-->', '', $tbl_editar_pedidovendedordetalle_array);
 			
-			$hidden_editar_pedidovendedordetalle_array = $this->render_regex_dict('HDN_PEDIDOVENDEDORDETALLE', $hidden_editar_pedidovendedordetalle_array, 
-																		   		  $pedidovendedordetalle_collection);
+			$hidden_editar_pedidovendedordetalle_array = $this->render_regex_dict('HDN_PEDIDOVENDEDORDETALLE', $hidden_editar_pedidovendedordetalle_array, $pedidovendedordetalle_collection);
 			$hidden_editar_pedidovendedordetalle_array = str_replace('<!--HDN_PEDIDOVENDEDORDETALLE-->', '', $hidden_editar_pedidovendedordetalle_array);
 			$costo_base = 0;
 			foreach ($pedidovendedordetalle_collection as $clave=>$valor) $costo_base = $costo_base + $valor['IMPORTE'];
@@ -210,6 +217,63 @@ class PedidoVendedorView extends View {
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
+	}
+
+	function prepara_lote_vendedor($pedidovendedor_collection, $obj_vendedor) {
+		$gui = file_get_contents("static/modules/pedidovendedor/prepara_lote_vendedor.html");
+		$tbl_pedidovendedor = file_get_contents("static/modules/pedidovendedor/tbl_prepara_lote_pedidovendedor_array.html");
+		$tbl_pedidovendedor = $this->render_regex_dict('TBL_PEDIDOVENDEDOR', $tbl_pedidovendedor, $pedidovendedor_collection);
+
+		unset($obj_vendedor->infocontacto_collection);
+		$obj_vendedor = $this->set_dict($obj_vendedor);
+		$render = str_replace('{tbl_pedidovendedor}', $tbl_pedidovendedor, $gui);
+		$render = $this->render($obj_vendedor, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
+
+	function traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $obj_pedidovendedor, $obj_cliente) {
+		$gui = file_get_contents("static/modules/pedidovendedor/procesolote_pedidovendedor_ajax.html");
+		$tbl_pedidovendedordetalle = file_get_contents("static/modules/pedidovendedor/tbl_procesolote_pedidovendedordetalle.html");
+		
+		if (!empty($pedidovendedordetalle_collection) OR is_array($pedidovendedordetalle_collection)) {
+			$array_producto_ids = array();
+			foreach ($pedidovendedordetalle_collection as $clave=>$valor) {
+				$costo_flete = $valor['COSTO'] + (($valor['COSTO'] * $valor['FLETE']) / 100);
+				$costo_iva = (($costo_flete * $valor['IVA']) / 100) + $costo_flete;
+				$valor_ganancia = $costo_iva * $valor['VALGAN'] / 100;
+				$valor_venta = $costo_iva + $valor_ganancia;
+				$pedidovendedordetalle_collection[$clave]['COSTO'] = round($valor_venta, 2);
+				$array_producto_ids[] = '"' . $valor['PRODUCTO'] . '"';
+			}
+			
+			$array_producto_ids = implode(',', $array_producto_ids);
+			$obj_pedidovendedor->array_producto_ids = $array_producto_ids;
+
+			$tbl_pedidovendedordetalle = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_pedidovendedordetalle, $pedidovendedordetalle_collection);
+			$tbl_pedidovendedordetalle = str_replace('<!--TBL_PEDIDOVENDEDORDETALLE-->', '', $tbl_pedidovendedordetalle);
+			
+			$costo_base = 0;
+			foreach ($pedidovendedordetalle_collection as $clave=>$valor) $costo_base = $costo_base + $valor['IMPORTE'];
+			$obj_pedidovendedor->costo_base = $costo_base;
+		} else {
+			$costo_base = 0;
+			$tbl_pedidovendedordetalle = ''; 
+			$hidden_editar_pedidovendedordetalle_array = '';
+		}
+
+		unset($obj_cliente->infocontacto_collection, $obj_cliente->flete, $obj_cliente->vendedor, $obj_cliente->condicioniva, $obj_cliente->condicionfiscal, $obj_cliente->tipofactura);
+		$obj_cliente = $this->set_dict($obj_cliente);
+
+		$obj_pedidovendedor->numero_pedido = str_pad($obj_pedidovendedor->pedidovendedor_id, 8, '0', STR_PAD_LEFT);
+		$obj_pedidovendedor = $this->set_dict($obj_pedidovendedor);
+
+		$render = str_replace('{tbl_pedidovendedordetalle}', $tbl_pedidovendedordetalle, $gui);
+		$render = $this->render($obj_cliente, $render);
+		$render = $this->render($obj_pedidovendedor, $render);
+		$render = str_replace('{url_app}', URL_APP, $render);
+		print $render;
 	}
 }
 ?>

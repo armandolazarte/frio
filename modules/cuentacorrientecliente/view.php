@@ -26,8 +26,10 @@ class CuentaCorrienteClienteView extends View {
 		$totales_array['TXT_BALANCE'] = ($totales_array['TDEUDA'] <= $totales_array['TINGRESO']) ? "positivo" : "negativo";
 		$totales_array = $this->set_dict_array($totales_array);
 
+		$vendedor_collection = $this->order_collection_objects($vendedor_collection, 'apellido', SORT_ASC);
 		$gui_slt_vendedor = $this->render_regex('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
-		$tbl_cuentacorriente_array = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentacorriente_array, $cuentacorriente_collection);		
+		$tbl_cuentacorriente_array = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentacorriente_array, $cuentacorriente_collection);
+		
 		$render = str_replace('{tbl_cuentacorriente}', $tbl_cuentacorriente_array, $gui);
 		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
 		$render = $this->render($totales_array, $render);

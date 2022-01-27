@@ -196,7 +196,7 @@
         ini_producto_id = producto_id;
         document.getElementById('producto').value = producto_id;
         var form_producto = $.ajax({
-            url: '{url_app}/pedidovendedor/traer_formulario_producto_ajax/' + producto_id,
+            url: '{url_app}/pedidovendedor/traer_formulario_producto_ajax/' + producto_id + "@" + {pedidovendedor-pedidovendedor_id},
                 dataType: 'text',
                 async: false
         }).responseText;

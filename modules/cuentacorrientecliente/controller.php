@@ -31,6 +31,10 @@ class CuentaCorrienteClienteController {
 		$totales_array = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
 
 		$vendedor_collection = Collector()->get('Vendedor');
+		foreach ($vendedor_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($vendedor_collection[$clave]);
+		}
+		
 		$this->view->panel($cuentacorriente_collection, $totales_array, $vendedor_collection);
 	}
 
