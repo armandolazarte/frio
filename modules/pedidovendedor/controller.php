@@ -770,6 +770,7 @@ class PedidoVendedorController {
 
 		$egresos_array = $_POST['egreso'];
 		$egresodetalle_ids = array();
+		$importe_control = 0;
 		foreach ($egresos_array as $egreso) {
 			$producto_id = $egreso['producto_id'];
 			$cantidad = $egreso['cantidad'];
@@ -813,6 +814,8 @@ class PedidoVendedorController {
 			$edm->flete_producto = $flete;
 			$edm->save();
 			$egresodetalle_ids[] = $edm->egresodetalle_id;
+
+			$importe_control = $importe_control + $importe;
 		}
 
 		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
@@ -903,6 +906,22 @@ class PedidoVendedorController {
 				}
 			}
 
+			if ($importe_total == 0) {
+				$importe_control = round($importe_control, 2);
+				$this->model = new Egreso();
+				$this->model->egreso_id = $egreso_id;
+				$this->model->get();
+				$this->model->importe_total = $importe_control;
+				$this->model->save();
+
+				if ($condicionpago == 1) {
+					$cccm = new CuentaCorrienteCliente();
+					$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+					$cccm->get();
+					$cccm->importe = $importe_control;
+					$cccm->save();
+				}
+			}
 			
 			$this->model->pedidovendedor_id = filter_input(INPUT_POST, 'pedidovendedor_id');
 			$this->model->get();
