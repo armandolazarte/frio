@@ -908,11 +908,11 @@ class PedidoVendedorController {
 
 			if ($importe_total == 0) {
 				$importe_control = round($importe_control, 2);
-				$this->model = new Egreso();
-				$this->model->egreso_id = $egreso_id;
-				$this->model->get();
-				$this->model->importe_total = $importe_control;
-				$this->model->save();
+				$tem = new Egreso();
+				$tem->egreso_id = $egreso_id;
+				$tem->get();
+				$tem->importe_total = $importe_control;
+				$tem->save();
 
 				if ($condicionpago == 1) {
 					$cccm = new CuentaCorrienteCliente();
