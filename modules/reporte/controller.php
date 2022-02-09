@@ -1286,9 +1286,9 @@ class ReporteController {
 		$where = "gsc.codigo LIKE 'LI' AND g.fecha BETWEEN '{$desde}' AND '{$hasta}' group by gc.denominacion";
 		$liquidaciones_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
 
-		$select = "CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO,SUM(s.monto) AS IMPORTE";
+		$select = "CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO,ROUND(SUM(s.monto),2) AS IMPORTE";
 		$from = "salario s INNER JOIN empleado e ON s.empleado = e.empleado_id INNER JOIN usuario u ON s.usuario_id = u.usuario_id";
-		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' AND s.tipo_pago IN ('SALARIO', 'ADELANTO')";
 		$groupby = "s.empleado";
 		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select,$groupby);
 
