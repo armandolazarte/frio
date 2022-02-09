@@ -1489,15 +1489,34 @@ class EgresoController {
 			}
 		}
 		
-		$array_encabezados2 = array('CODIGO', 'PRODUCTO', 'CANTIDAD', 'UNIDAD', '', '', '');
+		$array_encabezados2 = array('CODIGO', 'PRODUCTO', 'CANTIDAD', 'BULTOS', 'UNIDADES', '', '');
 		$array_exportacion2[] = $array_encabezados2;
 		foreach ($array_productos as $producto) {
-			print_r($producto);exit;
+			$cantidad = $producto['CANTIDAD'];
+			$unidad_x_bulto = $producto['UNPOBU'];
+			if ($cantidad < $unidad_x_bulto) {
+				$bultos = 0;
+				$unidades = $cantidad;
+			} else {
+				if ($cantidad == $unidad_x_bulto) {
+					$bultos = 1;
+					$unidades = '-';
+				} else {
+					if (($cantidad%$unidad_x_bulto) == 0) {
+						$bultos = $cantidad / $unidad_x_bulto;
+						$unidades = '-';
+					} else {
+						$bultos = intdiv($cantidad, $unidad_x_bulto);
+						$unidades = $cantidad - ($bultos * $unidad_x_bulto);
+					}
+				}
+			}
+			
 			$array_temp = array($producto['COD']
 								, $producto['PRODUCTO']
-								, $producto['CANTIDAD']
-								, $producto['UNIDAD']
-								, ''
+								, $producto['CANTIDAD'] . $producto['UNIDAD']
+								, $bultos
+								, $unidades
 								, ''
 								, '');
 			$array_exportacion2[] = $array_temp;
