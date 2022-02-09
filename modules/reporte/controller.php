@@ -1270,6 +1270,7 @@ class ReporteController {
 							   '{suma_notacredito_per_actual}'=>$suma_notacredito_per_actual,
 							   '{total_ingresos_per_actual}'=>$total_ingresos_per_actual,
 							   '{egreso_comision_per_actual}'=>$egreso_comision_per_actual,
+							   '{egreso_salario}'=>$salario_total,
 							   '{egreso_cuentacorrienteproveedor_per_actual}'=>$egreso_cuentacorrienteproveedor_per_actual,
 							   '{egreso_gasto_per_actual}'=>$egreso_gasto_per_actual,
 							   '{stock_valorizado}'=>$stock_valorizado,
