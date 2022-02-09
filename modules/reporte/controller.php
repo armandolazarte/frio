@@ -1034,10 +1034,7 @@ class ReporteController {
 
 		$periodo_actual = date('Ym');
 		$select = "e.egreso_id AS EGRESO_ID, e.importe_total AS IMPORTETOTAL";
-		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN
-				 condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN
-				 egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN
-				 egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$egresos_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
@@ -1081,7 +1078,7 @@ class ReporteController {
 
 		$select = "ROUND(SUM(g.importe), 2) AS IMPORTETOTAL";
 		$from = "gasto g INNER JOIN gastocategoria gc ON gc.gastocategoria_id = g.gastocategoria INNER JOIN gastosubcategoria gsc ON gsc.gastosubcategoria_id = gc.gastosubcategoria";
-		$where = "gsc.codigo LIKE 'VA' AND g.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$egreso_gasto_per_actual = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
 		$egreso_gasto_per_actual = (is_array($egreso_gasto_per_actual)) ? $egreso_gasto_per_actual[0]['IMPORTETOTAL'] : 0;
 		$egreso_gasto_per_actual = (is_null($egreso_gasto_per_actual)) ? 0 : $egreso_gasto_per_actual;
