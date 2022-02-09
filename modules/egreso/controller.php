@@ -1494,22 +1494,27 @@ class EgresoController {
 		foreach ($array_productos as $producto) {
 			$cantidad = $producto['CANTIDAD'];
 			$unidad_x_bulto = $producto['UNPOBU'];
-			if ($cantidad < $unidad_x_bulto) {
-				$bultos = 0;
-				$unidades = $cantidad;
-			} else {
-				if ($cantidad == $unidad_x_bulto) {
-					$bultos = 1;
-					$unidades = '-';
+			if ($unidad_x_bulto > 0) {
+				if ($cantidad < $unidad_x_bulto) {
+					$bultos = 0;
+					$unidades = $cantidad;
 				} else {
-					if (($cantidad%$unidad_x_bulto) == 0) {
-						$bultos = $cantidad / $unidad_x_bulto;
+					if ($cantidad == $unidad_x_bulto) {
+						$bultos = 1;
 						$unidades = '-';
 					} else {
-						$bultos = intdiv($cantidad, $unidad_x_bulto);
-						$unidades = $cantidad - ($bultos * $unidad_x_bulto);
+						if (($cantidad%$unidad_x_bulto) == 0) {
+							$bultos = $cantidad / $unidad_x_bulto;
+							$unidades = '-';
+						} else {
+							$bultos = intdiv($cantidad, $unidad_x_bulto);
+							$unidades = $cantidad - ($bultos * $unidad_x_bulto);
+						}
 					}
 				}
+			} else {
+				$bultos = '-';
+				$unidades = '-';
 			}
 			
 			$array_temp = array($producto['COD']
