@@ -1348,8 +1348,7 @@ class EgresoController {
 			$egreso_ids = $_POST['objeto'];
 			$egreso_in_ids =  implode('@3,', $egreso_ids);
 			$egreso_in_ids =  "{$egreso_in_ids}@3";
-			$array_exportacion = array();
-
+			
 			$flete_id = filter_input(INPUT_POST, 'flete_id');
 			$fm = new Flete();
 			$fm->flete_id = $flete_id;
