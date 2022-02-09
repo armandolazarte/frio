@@ -1371,6 +1371,7 @@ class EgresoController {
 				$cliente_id = $em->cliente->cliente_id;
 				if (!in_array($cliente_id, $array_clientes)) $array_clientes[] = $cliente_id;
 
+				/*
 				$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
 				$where = "eafip.egreso_id = {$egreso_id}";
@@ -1395,6 +1396,7 @@ class EgresoController {
 				 		$cant_contado = $cant_contado + $em->importe_total;
 				 		break;
 				}
+				*/
 
 				$egresoentrega_id = $em->egresoentrega->egresoentrega_id;
 				$eem = new EgresoEntrega();
@@ -1405,18 +1407,20 @@ class EgresoController {
 				$eem->flete = $flete_id;
 				$eem->save();
 
+				/*
 				$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
 				$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
-				$array_temp = array(
-								$em->fecha
-								, $factura
-								, $em->cliente->razon_social
-								, $em->cliente->domicilio
-								, $em->condicionpago->denominacion
-								, $em->importe_total);
+				$array_temp = array($em->fecha
+									, $factura
+									, $em->cliente->razon_social
+									, $em->cliente->domicilio
+									, $em->condicionpago->denominacion
+									, $em->importe_total);
 				$array_exportacion[] = $array_temp;
+				*/
 			}
 
+			/*
 			$array_exportacion[] = array('','','','','','');
 			$array_exportacion[] = array('','','','','','');
 			$array_exportacion[] = array('','','','','Cant. Clientes',count($array_clientes));
@@ -1431,6 +1435,7 @@ class EgresoController {
 			$array_exportacion[] = array('','','','','Cta. Cte.','$.......................');
 			$array_exportacion[] = array('','','','','Efectivo','$.......................');
 			$array_exportacion[] = array('','','','','Totales','$.......................');
+			*/
 
 			$fecha_actual = date('Y-m-d');
 			$hrm = new HojaRuta();
@@ -1441,11 +1446,14 @@ class EgresoController {
 			$hrm->save();
 			$hrm->get();
 
+			/*
 			$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente,
 									  '{cant_contado}'=>$cant_contado);
 			$subtitulo = "{$hrm->fecha} - FLETE: {$denominacion} - Nº{$hrm->hojaruta_id}";
 
 			ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+			*/
+			header("Location: " . URL_APP . "/hojaruta/panel");
 		} else {
 			header("Location: " . URL_APP . "/egreso/entregas_pendientes/3");
 		}
