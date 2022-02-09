@@ -1273,6 +1273,7 @@ class ReporteController {
 							   '{egreso_salario}'=>$salario_total,
 							   '{egreso_cuentacorrienteproveedor_per_actual}'=>$egreso_cuentacorrienteproveedor_per_actual,
 							   '{egreso_gasto_per_actual}'=>$egreso_gasto_per_actual,
+							   '{egreso_combustible}'=>$vehiculocombustible_total,
 							   '{stock_valorizado}'=>$stock_valorizado,
 							   '{deuda_ccclientes}'=>$estado_cuentacorrientecliente,
 							   '{deuda_ccproveedores}'=>$deuda_cuentacorrienteproveedor,
@@ -1288,11 +1289,8 @@ class ReporteController {
 		$groupby = "s.empleado";
 		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select,$groupby);
 
-		$select = "v.dominio AS DOMINIO, v.denominacion AS REFERENCIA, CONCAT(vma.denominacion, ' ', vm.denominacion) AS VEHICULO,
-				   ROUND(SUM(vc.importe), 2) AS TIMPORTE, ROUND(SUM(vc.cantidad), 2) AS TLITRO";
-		$from = "vehiculocombustible vc INNER JOIN vehiculo v ON vc.vehiculo = v.vehiculo_id INNER JOIN
-				 vehiculomodelo vm ON v.vehiculomodelo = vm.vehiculomodelo_id INNER JOIN
-				 vehiculomarca vma ON vm.vehiculomarca = vma.vehiculomarca_id";
+		$select = "v.dominio AS DOMINIO, v.denominacion AS REFERENCIA, CONCAT(vma.denominacion, ' ', vm.denominacion) AS VEHICULO, ROUND(SUM(vc.importe), 2) AS TIMPORTE, ROUND(SUM(vc.cantidad), 2) AS TLITRO";
+		$from = "vehiculocombustible vc INNER JOIN vehiculo v ON vc.vehiculo = v.vehiculo_id INNER JOIN vehiculomodelo vm ON v.vehiculomodelo = vm.vehiculomodelo_id INNER JOIN vehiculomarca vma ON vm.vehiculomarca = vma.vehiculomarca_id";
 		$where = "vc.fecha BETWEEN '{$desde}' AND '{$hasta}' GROUP BY vc.vehiculo ORDER BY SUM(vc.importe) DESC";
 		$vehiculocombustible_collection = CollectorCondition()->get('VehiculoCombustible', $where, 4, $from, $select);
 
@@ -1569,6 +1567,7 @@ class ReporteController {
 							   '{egreso_salario}'=>$salario_total,
 							   '{egreso_cuentacorrienteproveedor_per_actual}'=>$egreso_cuentacorrienteproveedor_per_actual,
 							   '{egreso_gasto_per_actual}'=>$egreso_gasto_per_actual,
+							   '{egreso_combustible}'=>$vehiculocombustible_total,
 							   '{stock_valorizado}'=>$stock_valorizado,
 							   '{deuda_ccclientes}'=>$estado_cuentacorrientecliente,
 							   '{deuda_ccproveedores}'=>$deuda_cuentacorrienteproveedor,
