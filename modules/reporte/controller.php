@@ -1282,11 +1282,6 @@ class ReporteController {
 							   '{pasivo_corriente}'=>$pasivo_corriente,
 							   '{ganancia_per_actual}'=>round($ganancia_per_actual,2));
 
-		$select = "SUM(g.importe) AS IMPORTE,gc.denominacion AS GASTOCATEGORIA";
-		$from = "gasto g INNER JOIN gastocategoria gc ON gc.gastocategoria_id = g.gastocategoria INNER JOIN gastosubcategoria gsc ON gsc.gastosubcategoria_id = gc.gastosubcategoria";
-		$where = "gsc.codigo LIKE 'LI' AND g.fecha BETWEEN '{$desde}' AND '{$hasta}' group by gc.denominacion";
-		$liquidaciones_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
-
 		$select = "CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO,ROUND(SUM(s.monto),2) AS IMPORTE";
 		$from = "salario s INNER JOIN empleado e ON s.empleado = e.empleado_id INNER JOIN usuario u ON s.usuario_id = u.usuario_id";
 		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' AND s.tipo_pago IN ('SALARIO', 'ADELANTO')";
@@ -1310,8 +1305,7 @@ class ReporteController {
 
 		$productomarca_collection = Collector()->get('ProductoMarca');
 
-		$this->view->balance($array_balance, $pagocomisiones_collection, $periodo_actual, $cbm, $liquidaciones_collection,
-							 $vehiculocombustible_collection,$producto_collection,$productomarca_collection,$salario_collection);
+		$this->view->balance($array_balance, $pagocomisiones_collection, $periodo_actual, $cbm, $vehiculocombustible_collection,$producto_collection,$productomarca_collection,$salario_collection);
 	}
 
 	function generar_balance() {
@@ -1334,10 +1328,7 @@ class ReporteController {
 		$cbm->get();
 
 		$select = "e.egreso_id AS EGRESO_ID, e.importe_total AS IMPORTETOTAL";
-		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN
-				 condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN
-				 egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN
-				 egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$egresos_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
@@ -1381,7 +1372,7 @@ class ReporteController {
 
 		$select = "ROUND(SUM(g.importe), 2) AS IMPORTETOTAL";
 		$from = "gasto g INNER JOIN gastocategoria gc ON gc.gastocategoria_id = g.gastocategoria INNER JOIN gastosubcategoria gsc ON gsc.gastosubcategoria_id = gc.gastosubcategoria";
-		$where = "gsc.codigo LIKE 'VA' AND g.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$egreso_gasto_per_actual = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
 		$egreso_gasto_per_actual = (is_array($egreso_gasto_per_actual)) ? $egreso_gasto_per_actual[0]['IMPORTETOTAL'] : 0;
 		$egreso_gasto_per_actual = (is_null($egreso_gasto_per_actual)) ? 0 : $egreso_gasto_per_actual;
@@ -1564,7 +1555,7 @@ class ReporteController {
 		//SALARIO
 		$select = "ROUND(SUM(s.monto), 2) AS TOTAL";
 		$from = "salario s";
-		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' AND s.tipo_pago IN ('SALARIO', 'ADELANTO')";
 		$salario_total = CollectorCondition()->get('Salario', $where, 4, $from, $select);
 		$salario_total = (is_array($salario_total) AND !empty($salario_total)) ? $salario_total[0]['TOTAL'] : 0;
 		$salario_total = (is_null($salario_total)) ? 0 : $salario_total;
@@ -1575,6 +1566,7 @@ class ReporteController {
 							   '{suma_notacredito_per_actual}'=>$suma_notacredito_per_actual,
 							   '{total_ingresos_per_actual}'=>$total_ingresos_per_actual,
 							   '{egreso_comision_per_actual}'=>$egreso_comision_per_actual,
+							   '{egreso_salario}'=>$salario_total,
 							   '{egreso_cuentacorrienteproveedor_per_actual}'=>$egreso_cuentacorrienteproveedor_per_actual,
 							   '{egreso_gasto_per_actual}'=>$egreso_gasto_per_actual,
 							   '{stock_valorizado}'=>$stock_valorizado,
@@ -1586,14 +1578,9 @@ class ReporteController {
 							   '{pasivo_corriente}'=>$pasivo_corriente,
 							   '{ganancia_per_actual}'=>round($ganancia_per_actual,2));
 
-		$select = "SUM(g.importe) AS IMPORTE,gc.denominacion AS GASTOCATEGORIA";
-		$from = "gasto g INNER JOIN gastocategoria gc ON gc.gastocategoria_id = g.gastocategoria INNER JOIN gastosubcategoria gsc ON gsc.gastosubcategoria_id = gc.gastosubcategoria";
-		$where = "gsc.codigo LIKE 'LI' AND g.fecha BETWEEN '{$desde}' AND '{$hasta}' group by gc.denominacion";
-		$liquidaciones_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
-
 		$select = "CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO,SUM(s.monto) AS IMPORTE";
 		$from = "salario s INNER JOIN empleado e ON s.empleado = e.empleado_id INNER JOIN usuario u ON s.usuario_id = u.usuario_id";
-		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' AND s.tipo_pago IN ('SALARIO', 'ADELANTO')";
 		$groupby = "s.empleado";
 		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select,$groupby);
 
@@ -1614,7 +1601,7 @@ class ReporteController {
 
 		$productomarca_collection = Collector()->get('ProductoMarca');
 
-		$this->view->balance($array_balance, $pagocomisiones_collection, $periodo, $cbm, $liquidaciones_collection, $vehiculocombustible_collection,$producto_collection,$productomarca_collection,$salario_collection);
+		$this->view->balance($array_balance, $pagocomisiones_collection, $periodo, $cbm, $vehiculocombustible_collection,$producto_collection,$productomarca_collection,$salario_collection);
 	}
 
 	function ver_detalle_resultado_ganancia() {

@@ -169,8 +169,7 @@ class ReporteView extends View {
 		print $render;
 	}
 
-	function balance($array_balances, $pagocomisiones_collection, $periodo, $obj_configuracionbalance,$liquidaciones_collection,
-					 $vehiculocombustible_collection,$producto_collection,$productomarca_collection,$salario_collection) {
+	function balance($array_balances, $pagocomisiones_collection, $periodo, $obj_configuracionbalance, $vehiculocombustible_collection,$producto_collection, $productomarca_collection, $salario_collection) {
 		$gui = file_get_contents("static/modules/reporte/balance.html");
 		$gui_lbl_piechart_gasto = file_get_contents("static/modules/reporte/lbl_piechart_gasto.html");
 		$gui_valores_piechart_gasto = file_get_contents("static/modules/reporte/valores_piechart_gasto.html");
@@ -179,14 +178,12 @@ class ReporteView extends View {
 		$gui_tbl_vendedor_pago_comision = file_get_contents("static/modules/reporte/tbl_vendedor_pago_comision.html");
 		$gui_tbl_vendedor_pago_salarios = file_get_contents("static/modules/reporte/tbl_vendedor_pago_salarios.html");
 
-		$gui_tbl_liquidaciones = file_get_contents("static/modules/reporte/tbl_liquidaciones.html");
 		$gui_tbl_vehiculocombustible = file_get_contents("static/modules/reporte/tbl_vehiculocombustible.html");
 		$tbl_producto = file_get_contents("static/modules/reporte/tbl_producto_array.html");
 		$tbl_productomarca = file_get_contents("static/modules/reporte/tbl_productomarca.html");
 
 		$tbl_productomarca = $this->render_regex('TBL_PRODUCTOMARCA', $tbl_productomarca, $productomarca_collection);
 		$tbl_producto = $this->render_regex_dict('TBL_PRODUCTO', $tbl_producto, $producto_collection);
-		$gui_tbl_liquidaciones = $this->render_regex_dict('TBL_LIQUIDACIONES', $gui_tbl_liquidaciones, $liquidaciones_collection);
 		$gui_tbl_vehiculocombustible = $this->render_regex_dict('TBL_VEHICULOCOMBUSTIBLE', $gui_tbl_vehiculocombustible, $vehiculocombustible_collection);
 		$gui_tbl_vendedor_pago_comision = $this->render_regex_dict('TBL_PAGOCOMISION', $gui_tbl_vendedor_pago_comision, $pagocomisiones_collection);
 		$gui_tbl_vendedor_pago_salarios = $this->render_regex_dict('TBL_PAGOSALARIOS', $gui_tbl_vendedor_pago_salarios, $salario_collection);
@@ -211,7 +208,6 @@ class ReporteView extends View {
 		$render = str_replace('{tbl_vendedor_pago_salarios}', $gui_tbl_vendedor_pago_salarios, $render);
 		$render = str_replace('{tbl_vehiculocombustible}', $gui_tbl_vehiculocombustible, $render);
 		$render = str_replace('{periodo_balance}', $periodo, $render);
-		$render = str_replace('{tbl_liquidaciones}', $gui_tbl_liquidaciones, $render);
 		$render = str_replace('{tbl_producto}', $tbl_producto, $render);
 		$render = str_replace('{tbl_productomarca}', $tbl_productomarca, $render);
 		$render = $this->render_breadcrumb($render);
