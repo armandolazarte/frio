@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once "modules/hojaruta/model.php";
 require_once "modules/hojaruta/view.php";
 require_once "modules/egreso/model.php";
