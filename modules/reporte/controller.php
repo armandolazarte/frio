@@ -1260,7 +1260,7 @@ class ReporteController {
 		//SALARIO
 		$select = "ROUND(SUM(s.monto), 2) AS TOTAL";
 		$from = "salario s";
-		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' AND s.tipo_pago IN ('SALARIO', 'ADELANTO')";
 		$salario_total = CollectorCondition()->get('Salario', $where, 4, $from, $select);
 		$salario_total = (is_array($salario_total) AND !empty($salario_total)) ? $salario_total[0]['TOTAL'] : 0;
 		$salario_total = (is_null($salario_total)) ? 0 : $salario_total;
