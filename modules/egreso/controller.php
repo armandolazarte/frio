@@ -1356,47 +1356,13 @@ class EgresoController {
 			$fm->get();
 			$denominacion = $fm->denominacion;
 
-			$cant_cuentacorriente = 0;
-			$cant_contado = 0;
-
-			$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL');
-			$array_exportacion[] = $array_encabezados;
-			$total = 0;
 			$array_clientes = array();
-			$cant_pedidos = count($egreso_ids);
 			foreach ($egreso_ids as $egreso_id) {
 				$em = new Egreso();
 				$em->egreso_id = $egreso_id;
 				$em->get();
 				$cliente_id = $em->cliente->cliente_id;
 				if (!in_array($cliente_id, $array_clientes)) $array_clientes[] = $cliente_id;
-
-				/*
-				$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
-				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
-				$where = "eafip.egreso_id = {$egreso_id}";
-				$eafip = CollectorCondition()->get('EgresoAFIP', $where, 4, $from, $select);
-
-				if (is_array($eafip)) {
-					$factura = $eafip[0]['REFERENCIA'];
-				} else {
-					$tipofactura_nomenclatura = $em->tipofactura->nomenclatura;
-					$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
-					$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
-					$factura = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura}";
-				}
-
-				$total = $total + $em->importe_total;
-				$condicionpago_id = $em->condicionpago->condicionpago_id;
-				switch ($condicionpago_id) {
-				 	case 1:
-				 		$cant_cuentacorriente = $cant_cuentacorriente + $em->importe_total;
-				 		break;
-			 		case 2:
-				 		$cant_contado = $cant_contado + $em->importe_total;
-				 		break;
-				}
-				*/
 
 				$egresoentrega_id = $em->egresoentrega->egresoentrega_id;
 				$eem = new EgresoEntrega();
@@ -1406,36 +1372,7 @@ class EgresoController {
 				$eem->estadoentrega = 3;
 				$eem->flete = $flete_id;
 				$eem->save();
-
-				/*
-				$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
-				$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
-				$array_temp = array($em->fecha
-									, $factura
-									, $em->cliente->razon_social
-									, $em->cliente->domicilio
-									, $em->condicionpago->denominacion
-									, $em->importe_total);
-				$array_exportacion[] = $array_temp;
-				*/
 			}
-
-			/*
-			$array_exportacion[] = array('','','','','','');
-			$array_exportacion[] = array('','','','','','');
-			$array_exportacion[] = array('','','','','Cant. Clientes',count($array_clientes));
-			$array_exportacion[] = array('','','','','Cant. Pedidos',$cant_pedidos);
-			$array_exportacion[] = array('','','','','Cuenta Corriente',$cant_cuentacorriente);
-			$array_exportacion[] = array('','','','','Contado',$cant_contado);
-			$array_exportacion[] = array('','','','','Total',$total);
-			$array_exportacion[] = array('','','','','','');
-			$array_exportacion[] = array('','','','','Combustible','$.......................');
-			$array_exportacion[] = array('','','','','Sencillo','$.......................');
-			$array_exportacion[] = array('','','','','Descuentos','$.......................');
-			$array_exportacion[] = array('','','','','Cta. Cte.','$.......................');
-			$array_exportacion[] = array('','','','','Efectivo','$.......................');
-			$array_exportacion[] = array('','','','','Totales','$.......................');
-			*/
 
 			$fecha_actual = date('Y-m-d');
 			$hrm = new HojaRuta();
@@ -1446,13 +1383,6 @@ class EgresoController {
 			$hrm->save();
 			$hrm->get();
 
-			/*
-			$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente,
-									  '{cant_contado}'=>$cant_contado);
-			$subtitulo = "{$hrm->fecha} - FLETE: {$denominacion} - Nº{$hrm->hojaruta_id}";
-
-			ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
-			*/
 			header("Location: " . URL_APP . "/hojaruta/panel");
 		} else {
 			header("Location: " . URL_APP . "/egreso/entregas_pendientes/3");
