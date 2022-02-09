@@ -653,7 +653,7 @@ class VendedorController {
 	    	$sm->desde = $desde;
 	    	$sm->hasta = $hasta;
 	    	$sm->detalle = "Desde {$fecha_desde} hasta {$fecha_hasta}";
-			$sm->tipo_pago = 'SALARIO';
+			$sm->tipo_pago = 'COMISIÓN';
 			$sm->fecha = date('Y-m-d');
 			$sm->hora = date('H:i:s');
 			$sm->monto = round($importe_salario, 2);
@@ -673,6 +673,7 @@ class VendedorController {
 		$em = new Egreso();
 		$em->egreso_id = $egreso_id;
 		$em->get();
+		$vendedor_id = $em->vendedor->vendedor_id;
 
 		$ecm = new EgresoComision();
 		$ecm->egresocomision_id = $em->egresocomision->egresocomision_id;
@@ -681,6 +682,27 @@ class VendedorController {
 		$ecm->valor_abonado = filter_input(INPUT_POST, 'valor_abonado');
 		$ecm->estadocomision = filter_input(INPUT_POST, 'estadocomision');
 		$ecm->save();
+
+		$select = "ve.empleado_id AS ID";
+	 	$from = "vendedorempleado ve";
+	 	$where = "ve.vendedor_id = {$vendedor_id}";
+	 	$empleado_id = CollectorCondition()->get('VendedorEmpleado', $where, 4, $from, $select);
+	 	$empleado_id = (is_array($empleado_id) AND !empty($empleado_id)) ? $empleado_id[0]['ID'] : 0;
+
+	 	if ($empleado_id != 0) {
+			$sm = new Salario();
+	    	$sm->desde = $desde;
+	    	$sm->hasta = $hasta;
+	    	$sm->detalle = "Desde {$fecha_desde} hasta {$fecha_hasta}";
+			$sm->tipo_pago = 'COMISIÓN PARCIAL';
+			$sm->fecha = date('Y-m-d');
+			$sm->hora = date('H:i:s');
+			$sm->monto = round($importe_salario, 2);
+			$sm->usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+			$sm->empleado = $empleado_id;
+			$sm->save();
+			$salario_id = $sm->salario_id;
+	 	}
 
 		header("Location: " . URL_APP . "/vendedor/ventas_vendedor");
 	}
