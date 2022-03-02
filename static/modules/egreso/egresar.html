@@ -875,6 +875,8 @@
     function verificarEgreso() {
         var array = new Array();
         var flag_array = 0;
+        document.getElementById('btn_cargar').style.display = "none";
+        document.getElementById('btn_cargar').disabled = true;
 
         var numero_factura = document.getElementById("numero_factura").value;
         if (numero_factura == null || numero_factura.length == 0 || numero_factura == "") {
@@ -895,24 +897,29 @@
             var div_array_egresos = document.getElementById("div_array_egresos");
 
             if (array_ids.length > 0) {
+                /*
                 array.push("<strong>[Alerta]</strong> ¿Desea guardar el nuevo registro?.");
                 var mensaje = array.join("<br><br>");
                 $('#sistema_alertas_confirmar').modal('show');
                 document.getElementById("msj_alerta_modal_confirmar").innerHTML = mensaje;
+                */
 
-                btnConfirmar.onclick = function() {
-                  div_productos.removeChild(div_form_producto);
-                  div_array_egresos.removeChild(input_producto);
-                  document.getElementById('btn_cargar').disabled = 'true';
-                  document.getElementById("formulario_guardar").submit();
-                };
+                div_productos.removeChild(div_form_producto);
+                div_array_egresos.removeChild(input_producto);
+                document.getElementById('btn_cargar').style.display = "none";
+                document.getElementById('btn_cargar').disabled = true;
+                document.getElementById("formulario_guardar").submit();
             } else {
                 array.push("<strong>[ERROR]</strong> Cargue al menos un item en el comprobante!.");
                 var mensaje = array.join("<br><br>");
                 $('#sistema_alertas').modal('show');
+                document.getElementById('btn_cargar').style.display = "block";
+                document.getElementById('btn_cargar').disabled = false;
                 document.getElementById("msj_alerta_modal").innerHTML = mensaje;
             }
         } else {
+            document.getElementById('btn_cargar').style.display = "block";
+            document.getElementById('btn_cargar').disabled = false;
             var mensaje = array.join("<br><br>");
             $('#sistema_alertas').modal('show');
             document.getElementById("msj_alerta_modal").innerHTML = mensaje;

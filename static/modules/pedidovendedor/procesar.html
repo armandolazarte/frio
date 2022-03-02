@@ -179,6 +179,7 @@
     var costo_base = {pedidovendedor-costo_base}; 
     var i = 1; 
     var array_ids = [{pedidovendedor-array_producto_ids}];
+    var quitar = /\$/g;
 
     function buscarCliente() {
         document.getElementById('div_form_producto').style.display = "none";
@@ -481,6 +482,46 @@
             document.getElementById('alerta_stock').style.display = 'block';
             return false;
         }
+
+        var tab = document.getElementById('bodyTblProducto');
+        var control_importe_total = 0;
+        var flag = 0;
+        for (i=0; fila = tab.getElementsByTagName('tr')[i]; i++) {
+            var cant_temporal = fila.getElementsByTagName('td')[1].innerHTML;
+            var producto_id_temporal_array = tab.rows[i].getAttribute('id');
+            producto_id_temporal_array = producto_id_temporal_array.split('_');
+            var producto_id_temporal = producto_id_temporal_array[1];
+
+            var cantidad_actual = $.ajax({
+                url: '{url_app}/pedidovendedor/traer_cantidad_actual_ajax/' + producto_id_temporal,
+                    dataType: 'text',
+                    async: false
+            }).responseText;
+
+            if (parseFloat(cant_temporal) > parseFloat(cantidad_actual)) {
+                document.getElementById('btn_cargar').disabled = true;
+                return false;
+            } else {
+                document.getElementById('btn_cargar').disabled = false;
+            }
+
+            //PARA CONTROL DE VALORES
+            var subtotal_tabla = fila.getElementsByTagName('td')[4].innerHTML;
+            subtotal_tabla = subtotal_tabla.replace(quitar, '');
+            control_importe_total = control_importe_total + parseFloat(subtotal_tabla);
+
+            var subtotal_input = document.getElementById('costo_total_' + producto_id_temporal).value;
+            if (parseFloat(subtotal_tabla) != parseFloat(subtotal_input)) {
+                document.getElementById('costo_total_' + producto_id_temporal).value = subtotal_tabla.toFixed(2);
+            }
+        }
+
+        if (parseFloat(control_importe_total.toFixed(2)) != parseFloat(subtotal.toFixed(2))) {
+            document.getElementById('subtotal').innerHTML = 'Subtotal: $' + control_importe_total.toFixed(2);
+            document.getElementById('importe_total').innerHTML = 'Importe Total: $' + control_importe_total.toFixed(2);
+            document.getElementById('input_subtotal').value = control_importe_total.toFixed(2);
+            document.getElementById('input_importe_total').value = control_importe_total.toFixed(2);
+        }
     }
 
     function quitarProducto(producto_id) {
@@ -523,16 +564,100 @@
         div_array_egresos.removeChild(input_importe_descuento);
         div_array_egresos.removeChild(input_costo);
         div_array_egresos.removeChild(input_costo_total);
+
+        var tab = document.getElementById('bodyTblProducto');
+        var control_importe_total = 0;
+        var flag = 0;
+        for (i=0; fila = tab.getElementsByTagName('tr')[i]; i++) {
+            var cant_temporal = fila.getElementsByTagName('td')[1].innerHTML;
+            var producto_id_temporal_array = tab.rows[i].getAttribute('id');
+            producto_id_temporal_array = producto_id_temporal_array.split('_');
+            var producto_id_temporal = producto_id_temporal_array[1];
+
+            var cantidad_actual = $.ajax({
+                url: '{url_app}/pedidovendedor/traer_cantidad_actual_ajax/' + producto_id_temporal,
+                    dataType: 'text',
+                    async: false
+            }).responseText;
+
+            if (parseFloat(cant_temporal) > parseFloat(cantidad_actual)) {
+                document.getElementById('btn_cargar').disabled = true;
+                return false;
+            } else {
+                document.getElementById('btn_cargar').disabled = false;
+            }
+
+            //PARA CONTROL DE VALORES
+            var subtotal_tabla = fila.getElementsByTagName('td')[4].innerHTML;
+            subtotal_tabla = subtotal_tabla.replace(quitar, '');
+            control_importe_total = control_importe_total + parseFloat(subtotal_tabla);
+
+            var subtotal_input = document.getElementById('costo_total_' + producto_id_temporal).value;
+            if (parseFloat(subtotal_tabla) != parseFloat(subtotal_input)) {
+                document.getElementById('costo_total_' + producto_id_temporal).value = subtotal_tabla.toFixed(2);
+            }
+        }
+
+        if (parseFloat(control_importe_total.toFixed(2)) != parseFloat(subtotal.toFixed(2))) {
+            document.getElementById('subtotal').innerHTML = 'Subtotal: $' + control_importe_total.toFixed(2);
+            document.getElementById('importe_total').innerHTML = 'Importe Total: $' + control_importe_total.toFixed(2);
+            document.getElementById('input_subtotal').value = control_importe_total.toFixed(2);
+            document.getElementById('input_importe_total').value = control_importe_total.toFixed(2);
+        }
     }
 
     function verificarPedido() {
         var array = new Array();
         var flag_array = 0;
+        document.getElementById('btn_cargar').style.display = "none";
+        document.getElementById('btn_cargar').disabled = true;
 
         var cliente = document.getElementById("cliente").value;
         if (cliente == null || cliente.length == 0 || cliente == "") {
             flag_array = 1;
             array.push("<strong>[ERROR]</strong> Por favor seleccione el CLIENTE.");
+        }
+
+        var subtotal = document.getElementById('input_importe_total').value;
+        var tab = document.getElementById('bodyTblProducto');
+        var control_importe_total = 0;
+        var flag = 0;
+        for (i=0; fila = tab.getElementsByTagName('tr')[i]; i++) {
+            var cant_temporal = fila.getElementsByTagName('td')[1].innerHTML;
+            var producto_id_temporal_array = tab.rows[i].getAttribute('id');
+            producto_id_temporal_array = producto_id_temporal_array.split('_');
+            var producto_id_temporal = producto_id_temporal_array[1];
+
+            var cantidad_actual = $.ajax({
+                url: '{url_app}/pedidovendedor/traer_cantidad_actual_ajax/' + producto_id_temporal,
+                    dataType: 'text',
+                    async: false
+            }).responseText;
+
+            if (parseFloat(cant_temporal) > parseFloat(cantidad_actual)) {
+                document.getElementById('btn_cargar').disabled = true;
+                return false;
+            } else {
+                document.getElementById('btn_cargar').disabled = false;
+            }
+
+            //PARA CONTROL DE VALORES
+            var subtotal_tabla = fila.getElementsByTagName('td')[4].innerHTML;
+            subtotal_tabla = subtotal_tabla.replace(quitar, '');
+            control_importe_total = control_importe_total + parseFloat(subtotal_tabla);
+
+            var subtotal_input = document.getElementById('costo_total_' + producto_id_temporal).value;
+            if (parseFloat(subtotal_tabla) != parseFloat(subtotal_input)) {
+                document.getElementById('costo_total_' + producto_id_temporal).value = subtotal_tabla.toFixed(2);
+            }
+        }
+
+        control_importe_total = control_importe_total.toFixed(2);
+        if (parseFloat(control_importe_total) != parseFloat(subtotal)) {
+            document.getElementById('subtotal').innerHTML = 'Subtotal: $' + control_importe_total;
+            document.getElementById('importe_total').innerHTML = 'Importe Total: $' + control_importe_total;
+            document.getElementById('input_subtotal').value = control_importe_total;
+            document.getElementById('input_importe_total').value = control_importe_total;
         }
 
         if (flag_array == 0) {
@@ -542,17 +667,29 @@
             var div_array_egresos = document.getElementById("div_array_egresos");
 
             if (array_ids.length > 0) {
+                /*
+                array.push("<strong>[Alerta]</strong> ¿Desea guardar el nuevo registro?.");
+                var mensaje = array.join("<br><br>");
+                $('#sistema_alertas_confirmar').modal('show');
+                document.getElementById("msj_alerta_modal_confirmar").innerHTML = mensaje;
+                */
+
                 div_productos.removeChild(div_form_producto);
-                div_array_egresos.removeChild(input_producto);   
-                document.getElementById('btn_cargar').disabled = 'true';   
+                div_array_egresos.removeChild(input_producto);
+                document.getElementById('btn_cargar').style.display = "none";
+                document.getElementById('btn_cargar').disabled = true;
                 document.getElementById("formulario_guardar").submit();
             } else {
                 array.push("<strong>[ERROR]</strong> Cargue al menos un item en el comprobante!.");
                 var mensaje = array.join("<br><br>");
                 $('#sistema_alertas').modal('show');
+                document.getElementById('btn_cargar').style.display = "block";
+                document.getElementById('btn_cargar').disabled = false;
                 document.getElementById("msj_alerta_modal").innerHTML = mensaje;
-            }            
+            }
         } else {
+            document.getElementById('btn_cargar').style.display = "block";
+            document.getElementById('btn_cargar').disabled = false;
             var mensaje = array.join("<br><br>");
             $('#sistema_alertas').modal('show');
             document.getElementById("msj_alerta_modal").innerHTML = mensaje;
