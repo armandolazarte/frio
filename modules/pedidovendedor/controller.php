@@ -340,7 +340,7 @@ class PedidoVendedorController {
 
     	$desde = filter_input(INPUT_POST, 'desde');
     	$hasta = filter_input(INPUT_POST, 'hasta');
-    	$select = "pv.pedidovendedor_id AS PEDVENID, CONCAT(date_format(pv.fecha, '%d/%m/%Y'), ' ', LEFT(pv.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, UPPER(cl.nombre_fantasia) AS FANTASIA, pv.subtotal AS SUBTOTAL, pv.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, CASE pv.estadopedido WHEN 1 THEN 'inline-block' WHEN 2 THEN 'none' WHEN 3 THEN 'none' END AS DSPBTN, CASE pv.estadopedido WHEN 1 THEN 'SOLICITADO' WHEN 2 THEN 'PROCESADO' WHEN 3 THEN 'CANCELADO' END AS LBLEST, CASE pv.estadopedido WHEN 1 THEN 'primary' WHEN 2 THEN 'success' WHEN 3 THEN 'danger' END AS CLAEST, LPAD(pv.pedidovendedor_id, 8, 0) AS NUMPED";
+    	$select = "pv.pedidovendedor_id AS PEDVENID, CONCAT(date_format(pv.fecha, '%d/%m/%Y'), ' ', LEFT(pv.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, UPPER(cl.nombre_fantasia) AS FANTASIA, pv.subtotal AS SUBTOTAL, pv.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, CASE pv.estadopedido WHEN 1 THEN 'inline-block' WHEN 2 THEN 'none' WHEN 3 THEN 'none' END AS DSPBTN, CASE pv.estadopedido WHEN 1 THEN 'SOLICITADO' WHEN 2 THEN 'PROCESADO' WHEN 3 THEN 'CANCELADO' WHEN 4 THEN 'A PROCESAR' WHEN 5 THEN 'ERROR AFIP' END AS LBLEST, CASE pv.estadopedido WHEN 1 THEN 'primary' WHEN 2 THEN 'success' WHEN 3 THEN 'danger' WHEN 4 THEN 'warning' WHEN 5 THEN 'danger' END AS CLAEST, LPAD(pv.pedidovendedor_id, 8, 0) AS NUMPED, cl.cliente_id AS CLIID, pv.egreso_id AS EGRID";
 		$from = "pedidovendedor pv INNER JOIN cliente cl ON pv.cliente_id = cl.cliente_id INNER JOIN vendedor ve ON pv.vendedor_id = ve.vendedor_id INNER JOIN estadopedido ep ON pv.estadopedido = ep.estadopedido_id";
 		if ($usuario_rol == 5) {
 			$vendedor_id = $usuariovendedor_id[0]['VENID'];
@@ -352,9 +352,59 @@ class PedidoVendedorController {
 		$pedidovendedor_collection = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select);
 		$pedidovendedor_collection = (is_array($pedidovendedor_collection) AND !empty($pedidovendedor_collection)) ? $pedidovendedor_collection : array();
 
+		foreach ($pedidovendedor_collection as $clave=>$valor) {
+			$cliente_id = $valor['CLIID'];
+			$estado = $valor['LBLEST'];
+			$cm = new Cliente();
+			$cm->cliente_id = $cliente_id;
+			$cm->get();
+			$dias_vencimiento_cuenta_corriente = $cm->dias_vencimiento_cuenta_corriente;
+			
+			$select = "COUNT(ccc.egreso_id) AS CANT";
+			$from = "cuentacorrientecliente ccc";
+			$where = "ccc.fecha < date_add(NOW(), INTERVAL -{$dias_vencimiento_cuenta_corriente} DAY) AND ccc.cliente_id = {$cliente_id} AND ccc.estadomovimientocuenta != 4 AND (ccc.importe > 0 OR ccc.ingreso > 0)";
+			$groupby = "ccc.egreso_id ORDER BY ccc.cliente_id ASC, ccc.egreso_id ASC, ccc.fecha DESC, ccc.estadomovimientocuenta DESC";
+			$vencimiento_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
+			$cant_facturas_vencidas = (is_array($vencimiento_collection) AND !empty($vencimiento_collection)) ? $vencimiento_collection[0]['CANT'] : 0;
+
+			$pedidovendedor_collection[$clave]["DSPBTN"] = ($cant_facturas_vencidas > 0) ? 'none' : $pedidovendedor_collection[$clave]["DSPBTN"];
+			if ($estado == 'PROCESADO') {
+				$pedidovendedor_collection[$clave]["DISPLAY_ESTADO_CCC_VENCIDA"] = 'none';
+			} else {
+				$pedidovendedor_collection[$clave]["DISPLAY_ESTADO_CCC_VENCIDA"] = ($cant_facturas_vencidas > 0) ? 'inline-block': 'none';
+			}
+
+			$egreso_id = $valor['EGRID'];
+			if (!is_null($egreso_id) AND $egreso_id > 0) {
+				$em = new Egreso();
+				$em->egreso_id = $egreso_id;
+				$em->get();
+
+				$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+				$where = "eafip.egreso_id = {$egreso_id}";
+				$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+
+				if (is_array($egresoafip) AND !empty($egresoafip)) {
+					$em->punto_venta = $egresoafip[0]['PUNTO_VENTA'];
+					$em->numero_factura = $egresoafip[0]['NUMERO_FACTURA'];
+					$em->tipofactura->nomenclatura = $egresoafip[0]['TIPOFACTURA'];
+				}
+
+				$tipofactura = $em->tipofactura->nomenclatura;
+				$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
+        		$numero_factura = "{$tipofactura} {$punto_venta}-" . str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+			} else {
+				$numero_factura = 'Sin Información';
+			}
+
+			$pedidovendedor_collection[$clave]["EGRESO"] = $numero_factura;
+		}
+
 		$select = "v.vendedor_id AS ID, CONCAT(v.apellido, ' ', v.nombre) AS DENOMINACION";
-		$from = "vendedor v ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC";
-		$vendedor_collection = CollectorCondition()->get('Vendedor', NULL, 4, $from, $select);
+		$from = "vendedor v";
+		$where = "v.oculto = 0 ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC";
+		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
 		$this->view->panel($pedidovendedor_collection, $vendedor_collection);
 	}
 
@@ -402,6 +452,8 @@ class PedidoVendedorController {
     	SessionHandler()->check_session();
     	$usuario_rol = $_SESSION["data-login-" . APP_ABREV]["usuario-configuracionmenu"];
     	$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+    	$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+
     	$select = "uv.usuario_id AS USUID, uv.vendedor_id AS VENID";
 		$from = "usuariovendedor uv";
 		$where = "uv.usuario_id = {$usuario_id}";
@@ -409,6 +461,7 @@ class PedidoVendedorController {
 
 		$this->model->pedidovendedor_id = $arg;
 		$this->model->get();
+		$importe_total = $this->model->importe_total;
 		$cliente_id = $this->model->cliente_id;
 
 		$cm = new Cliente();
@@ -435,6 +488,79 @@ class PedidoVendedorController {
 		$where = "pvd.pedidovendedor_id = {$arg}";
 		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
 
+		$importe_total_control = 0;
+		$flag_error = 0;
+		foreach ($pedidovendedordetalle_collection as $clave=>$valor) {
+			$producto_id = $valor['PRODUCTO'];
+			$costo = $valor['COSTO'];
+			$flete = $valor['FLETE'];
+			$ganancia = $valor['VALGAN'];
+			$cantidad = $valor['CANTIDAD'];
+			$descuento = $valor['DESCUENTO'];
+			$iva = $valor['IVA'];
+
+			$pm = new Producto();
+			$pm->producto_id = $producto_id;
+			$pm->get();
+
+			$iva = $pm->iva;
+			$neto = $pm->costo;
+			$flete = $pm->flete;
+			$porcentaje_ganancia = $pm->porcentaje_ganancia;
+			
+			//PRECIO NETO
+			$valor_neto = $neto + ($iva * $neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+			//PRECIO VENTA
+			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+			
+			//IMPORTE NETO
+			$total_neto = $valor_neto * $cantidad;
+			//IMPORTE VENTA
+			$total_pvp = $pvp * $cantidad;
+
+			//DESCUENTO
+			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
+
+			//GANANCIA FINAL
+			$ganancia = round(($total_pvp - $total_neto),2);
+			$ganancia_final = $ganancia - $valor_descuento_recalculado;
+			$ganancia_final = round($ganancia_final, 2);
+
+			//IMPORTE FINAL
+			$importe_final = $total_pvp - $valor_descuento_recalculado;
+			$importe_final = round($importe_final, 2);
+
+        	$pedidovendedordetalle_collection[$clave]['IMPORTE'] = $importe_final;
+        	$pedidovendedordetalle_collection[$clave]['VD'] = $valor_descuento_recalculado;
+
+        	$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
+			$groupby = "s.producto_id";
+			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
+
+			$sm = new Stock();
+			$sm->stock_id = $stockid_collection[0]['STOCK_ID'];
+			$sm->get();
+			
+			$cantidad_actual = $sm->cantidad_actual;
+
+			if ($cantidad > $cantidad_actual) {
+				$pedidovendedordetalle_collection[$clave]["CLASS_ROW"] = 'danger';
+				$flag_error = 1;
+			} else {
+				$pedidovendedordetalle_collection[$clave]["CLASS_ROW"] = '';
+			}
+
+			$importe_total_control = $importe_total_control + $importe_final;
+		}
+
+		if ($importe_total != $importe_total_control) {
+			$this->model->importe_total = $importe_total_control;
+			$this->model->subtotal = $importe_total_control;
+		}
+
 		$condicionpago_collection = Collector()->get('CondicionPago');
 		$condicioniva_collection = Collector()->get('CondicionIVA');
 		$tipofactura_collection = Collector()->get('TipoFactura');
@@ -444,7 +570,7 @@ class PedidoVendedorController {
 			if (!in_array($valor->tipofactura_id, $array_ids)) unset($tipofactura_collection[$clave]);
 		}
 
-		$this->view->procesar($producto_collection, $cliente_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $this->model, $cm);
+		$this->view->procesar($producto_collection, $cliente_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $this->model, $cm, $flag_error);
 	}
 
 	function actualizar() {
@@ -777,47 +903,59 @@ class PedidoVendedorController {
 			$costo_producto = $egreso['costo'];
 			$valor_descuento = $egreso['importe_descuento'];
 			$importe = $egreso['costo_total'];
+			$descuento = $egreso['descuento'];
 
 			$pm = new Producto();
 			$pm->producto_id = $producto_id;
 			$pm->get();
 
+			$iva = $pm->iva;
 			$neto = $pm->costo;
 			$flete = $pm->flete;
 			$porcentaje_ganancia = $pm->porcentaje_ganancia;
-
-			if ($tipofactura == 2) {
-				$valor_neto = $neto + ($iva * $neto / 100);
-				$valor_neto = $valor_neto + ($flete * $valor_neto / 100);
-			} else {
-				$valor_neto = $neto + ($flete * $neto / 100);
-			}
 			
+			//PRECIO NETO
+			$valor_neto = $neto + ($iva * $neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+			//PRECIO VENTA
+			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+			
+			//IMPORTE NETO
 			$total_neto = $valor_neto * $cantidad;
-			$ganancia_temp = $total_neto * ($porcentaje_ganancia / 100 + 1);
-			$ganancia = round(($ganancia_temp - $total_neto),2);
-			$ganancia_final = $ganancia - $valor_descuento;
+			//IMPORTE VENTA
+			$total_pvp = $pvp * $cantidad;
+
+			//DESCUENTO
+			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
+
+			//GANANCIA FINAL
+			$ganancia = round(($total_pvp - $total_neto),2);
+			$ganancia_final = $ganancia - $valor_descuento_recalculado;
 			$ganancia_final = round($ganancia_final, 2);
+
+			//IMPORTE FINAL
+			$importe_final = $total_pvp - $valor_descuento_recalculado;
+			$importe_final = round($importe_final, 2);
 
 			$edm = new EgresoDetalle();
 			$edm->codigo_producto = $egreso['codigo'];
 			$edm->descripcion_producto = $egreso['descripcion'];
 			$edm->cantidad = $cantidad;
-			$edm->valor_descuento = $valor_descuento;
-			$edm->descuento = $egreso['descuento'];
+			$edm->valor_descuento = round($valor_descuento_recalculado, 2);
+			$edm->descuento = $descuento;
 			$edm->neto_producto = $neto;
-			$edm->costo_producto = $costo_producto;
-			$edm->iva = $egreso['iva'];
-			$edm->importe = $importe;
+			$edm->costo_producto = round($pvp, 2);
+			$edm->iva = $iva;
+			$edm->importe = $importe_final;
 			$edm->valor_ganancia = $ganancia_final;
-			$edm->producto_id = $egreso['producto_id'];
+			$edm->producto_id = $producto_id;
 			$edm->egreso_id = $egreso_id;
 			$edm->egresodetalleestado = 1;
 			$edm->flete_producto = $flete;
 			$edm->save();
 			$egresodetalle_ids[] = $edm->egresodetalle_id;
 
-			$importe_control = $importe_control + $importe;
+			$importe_control = $importe_control + $importe_final;
 		}
 
 		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
@@ -908,8 +1046,8 @@ class PedidoVendedorController {
 				}
 			}
 
+			$importe_control = round($importe_control, 2);
 			if ($importe_total == 0) {
-				$importe_control = round($importe_control, 2);
 				$tem = new Egreso();
 				$tem->egreso_id = $egreso_id;
 				$tem->get();
@@ -923,8 +1061,25 @@ class PedidoVendedorController {
 					$cccm->importe = $importe_control;
 					$cccm->save();
 				}
+			} else {
+				if ($importe_control != $importe_total) {
+					$tem = new Egreso();
+					$tem->egreso_id = $egreso_id;
+					$tem->get();
+					$tem->importe_total = $importe_control;
+					$tem->save();
+
+					if ($condicionpago == 1) {
+						$cccm = new CuentaCorrienteCliente();
+						$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+						$cccm->get();
+						$cccm->importe = $importe_control;
+						$cccm->save();
+					}
+				}	
 			}
-			
+
+
 			$this->model->pedidovendedor_id = filter_input(INPUT_POST, 'pedidovendedor_id');
 			$this->model->get();
 			$this->model->estadopedido = 2;
@@ -1079,6 +1234,24 @@ class PedidoVendedorController {
 		}
 
 		header("Location: " . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}");
+	}
+
+	function traer_cantidad_actual_ajax($arg) {
+		SessionHandler()->check_session();
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+		$producto_id = $arg;
+
+		$select = "MAX(s.stock_id) AS STOCK_ID";
+		$from = "stock s";
+		$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
+		$groupby = "s.producto_id";
+		$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
+
+		$sm = new Stock();
+		$sm->stock_id = $stockid_collection[0]['STOCK_ID'];
+		$sm->get();
+		$cantidad_actual = $sm->cantidad_actual;
+		print $cantidad_actual;			
 	}
 
 	function proceso_lote($arg) {
@@ -1278,7 +1451,6 @@ class PedidoVendedorController {
 		if ($tipofactura == 1 OR $tipofactura == 3) {
 			try {
 			    //$this->facturar_afip_argumento($egreso_id);			    
-				$egreso_id = $egreso_id;
 				$em = new Egreso();
 				$em->egreso_id = $egreso_id;
 				$em->get();
@@ -1353,11 +1525,12 @@ class PedidoVendedorController {
 			}
 		}
 
-		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
-		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
-		$where = "ed.egreso_id = {$egreso_id}";
-		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 		if ($flag_error == 0) {
+			$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
+			$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
+			$where = "ed.egreso_id = {$egreso_id}";
+			$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+			
 			foreach ($egresodetalle_collection as $egreso) {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";
@@ -1396,7 +1569,26 @@ class PedidoVendedorController {
 					$sm->save();
 				}
 			}
-			
+
+			$em = new Egreso();
+			$em->egreso_id = $egreso_id;
+			$em->get();
+			$tipofactura_id = $em->tipofactura->tipofactura_id;
+
+			require_once 'tools/facturaPDFPorcesoLoteTool.php';
+			$facturaPDFHelper = new FacturaPDFProcesoLote();			
+			switch ($tipofactura_id) {
+				case 1:
+					$facturaPDFHelper->facturaAPL($egresodetalle_collection, $com, $em);
+					break;
+				case 2:
+					$facturaPDFHelper->remitoRPL($egresodetalle_collection, $com, $em);
+					break;
+				case 3:
+					$facturaPDFHelper->facturaBPL($egresodetalle_collection, $com, $em);
+					break;
+			}
+
 			$pvm = new PedidoVendedor();
 			$pvm->pedidovendedor_id = $pedidovendedor_id;
 			$pvm->get();
@@ -1411,12 +1603,28 @@ class PedidoVendedorController {
 			$pvm->egreso_id = 0;
 			$pvm->save();
 		}
+
+
 	}
 
 	function ejecuta_proceso_lote() {
-		//$out = shell_exec("modules/scripting/prueba.sh");
-		//print_r($out);exit;
-		shell_exec("modules/scripting/prueba.sh");
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+		$prueba = 'FEderico';
+		$out = shell_exec("modules/scripting/prueba.sh {$usuario_id} {$prueba}");
+		print_r($out);exit;
+
+		/*
+		$plm = new ProcesoLote();
+		$plm->fecha = date('Y-m-d');
+		$plm->hora = date('H:i:s');
+		$plm->usuario_id = $usuario_id;
+		$plm->almacen_id = $almacen_id;
+		$plm->save();
+		$procesolote_id = $plm->procesolote_id;
+		*/
+
+		//shell_exec("modules/scripting/prueba.sh $usuario_id $prueba");
 		header("Location: " . URL_APP . "/pedidovendedor/prepara_lote_vendedor/2");
 	}
 }

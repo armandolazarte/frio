@@ -40,7 +40,7 @@ class EgresoController {
     	$dias_minimo = date("Y-m-d", strtotime("-15 days", $fecha_sys));
     	$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
-		$where = "e.fecha >= {$dias_minimo} ORDER BY e.fecha DESC";
+		$where = "e.fecha >= '{$dias_minimo}' ORDER BY e.fecha DESC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
 		$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
@@ -693,48 +693,59 @@ class EgresoController {
 			$costo_producto = $egreso['costo'];
 			$valor_descuento = $egreso['importe_descuento'];
 			$importe = $egreso['costo_total'];
-			$iva = $egreso['iva'];
-			
+			$descuento = $egreso['descuento'];
+
 			$pm = new Producto();
 			$pm->producto_id = $producto_id;
 			$pm->get();
 
+			$iva = $pm->iva;
 			$neto = $pm->costo;
 			$flete = $pm->flete;
 			$porcentaje_ganancia = $pm->porcentaje_ganancia;
-
-			if ($tipofactura == 2) {
-				$valor_neto = $neto + ($iva * $neto / 100);
-				$valor_neto = $valor_neto + ($flete * $valor_neto / 100);
-			} else {
-				$valor_neto = $neto + ($flete * $neto / 100);
-			}
 			
+			//PRECIO NETO
+			$valor_neto = $neto + ($iva * $neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+			//PRECIO VENTA
+			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+			
+			//IMPORTE NETO
 			$total_neto = $valor_neto * $cantidad;
-			$ganancia_temp = $total_neto * ($porcentaje_ganancia / 100 + 1);
-			$ganancia = round(($ganancia_temp - $total_neto),2);
-			$ganancia_final = $ganancia - $valor_descuento;
+			//IMPORTE VENTA
+			$total_pvp = $pvp * $cantidad;
+
+			//DESCUENTO
+			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
+
+			//GANANCIA FINAL
+			$ganancia = round(($total_pvp - $total_neto),2);
+			$ganancia_final = $ganancia - $valor_descuento_recalculado;
 			$ganancia_final = round($ganancia_final, 2);
+
+			//IMPORTE FINAL
+			$importe_final = $total_pvp - $valor_descuento_recalculado;
+			$importe_final = round($importe_final, 2);
 
 			$edm = new EgresoDetalle();
 			$edm->codigo_producto = $egreso['codigo'];
 			$edm->descripcion_producto = $egreso['descripcion'];
 			$edm->cantidad = $cantidad;
-			$edm->valor_descuento = $valor_descuento;
-			$edm->descuento = $egreso['descuento'];
+			$edm->valor_descuento = round($valor_descuento_recalculado, 2);
+			$edm->descuento = $descuento;
 			$edm->neto_producto = $neto;
-			$edm->costo_producto = $costo_producto;
-			$edm->iva = $egreso['iva'];
-			$edm->importe = $importe;
+			$edm->costo_producto = round($pvp, 2);
+			$edm->iva = $iva;
+			$edm->importe = $importe_final;
 			$edm->valor_ganancia = $ganancia_final;
-			$edm->producto_id = $egreso['producto_id'];
+			$edm->producto_id = $producto_id;
 			$edm->egreso_id = $egreso_id;
 			$edm->egresodetalleestado = 1;
 			$edm->flete_producto = $flete;
 			$edm->save();
 			$egresodetalle_ids[] = $edm->egresodetalle_id;
 
-			$importe_control = $importe_control + $importe;
+			$importe_control = $importe_control + $importe_final;
 		}
 
 		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";

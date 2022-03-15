@@ -154,7 +154,7 @@ class PedidoVendedorView extends View {
 		print $template;
 	}
 
-	function procesar($producto_collection, $cliente_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $obj_pedidovendedor, $obj_cliente) {
+	function procesar($producto_collection, $cliente_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $obj_pedidovendedor, $obj_cliente, $flag_error) {
 		$gui = file_get_contents("static/modules/pedidovendedor/procesar.html");
 		$tbl_producto_array = file_get_contents("static/modules/pedidovendedor/tbl_producto_array.html");
 		$tbl_cliente_array = file_get_contents("static/modules/pedidovendedor/tbl_cliente_array.html");
@@ -172,6 +172,7 @@ class PedidoVendedorView extends View {
 		$tbl_producto_array = str_replace('<!--TBL_PRODUCTO-->', '', $tbl_producto_array);
 		$tbl_cliente_array = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente_array, $cliente_collection);
 		$tbl_cliente_array = str_replace('<!--TBL_CLIENTE-->', '', $tbl_cliente_array);
+		
 		if (!empty($pedidovendedordetalle_collection) OR is_array($pedidovendedordetalle_collection)) {
 			$array_producto_ids = array();
 			foreach ($pedidovendedordetalle_collection as $clave=>$valor) {
@@ -200,9 +201,12 @@ class PedidoVendedorView extends View {
 			$hidden_editar_pedidovendedordetalle_array = '';
 		}
 
+		$obj_vendedor = $obj_cliente->vendedor;
 		unset($obj_cliente->infocontacto_collection, $obj_cliente->vendedor->infocontacto_collection, $obj_cliente->flete->infocontacto_collection);
+		
 		$obj_pedidovendedor = $this->set_dict($obj_pedidovendedor);
 		$obj_cliente = $this->set_dict($obj_cliente);
+		$btn_disabled = ($flag_error == 1) ? 'disabled' : '';
 		
 		$render = str_replace('{tbl_producto}', $tbl_producto_array, $gui);
 		$render = str_replace('{tbl_cliente}', $tbl_cliente_array, $render);
@@ -212,6 +216,7 @@ class PedidoVendedorView extends View {
 		$render = str_replace('{pedidovendedor-costobase}', $costo_base, $render);
 		$render = str_replace('{tbl_editar_pedidovendedordetalle_array}', $tbl_editar_pedidovendedordetalle_array, $render);
 		$render = str_replace('{hidden_editar_pedidovendedordetalle_array}', $hidden_editar_pedidovendedordetalle_array, $render);
+		$render = str_replace('{btn_disabled}', $btn_disabled, $render);
 		$render = $this->render($obj_pedidovendedor, $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render_breadcrumb($render);
