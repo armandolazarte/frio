@@ -23,7 +23,7 @@ class FacturaPDF extends View {
                           'cae'=>$obj_egreso->cae);
 
         $cod_qr = $this->qrAFIP($array_qr);
-
+        $obj_egreso->cod_qr = $cod_qr;
         $obj_egreso->punto_venta = str_pad($obj_egreso->punto_venta, 4, '0', STR_PAD_LEFT);
         $obj_egreso->numero_factura = str_pad($obj_egreso->numero_factura, 8, '0', STR_PAD_LEFT);
         $egreso_id = $obj_egreso->egreso_id;
@@ -39,7 +39,7 @@ class FacturaPDF extends View {
             $valor_alicuota_importe = round(($valor['IMPORTE'] - $subtotal),2);
 
             $valor_alicuota_costo = round($valor['COSTO'] / $alicuota, 2);
-	        $importe_neto = round(($valor['COSTO'] / $alicuota), 2);
+            $importe_neto = round(($valor['COSTO'] / $alicuota), 2);
 
             $egresodetalle_collection[$clave]['COSTO'] = "$" . $importe_neto;
             $egresodetalle_collection[$clave]['SUBTOTAL'] = "$" . $subtotal;
@@ -61,8 +61,10 @@ class FacturaPDF extends View {
         $obj_configuracion = $this->set_dict($obj_configuracion);
         $obj_cliente = $this->set_dict($obj_cliente);
 
-        $new_array = array_chunk($egresodetalle_collection, 10);
+        $new_array = array_chunk($egresodetalle_collection, 17);
         $contenido = '';
+        $cantidad_hojas = count($new_array);
+        $i = 1;
         foreach ($new_array as $egresodetalle_array) {
             $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA.html");
             $gui_tbl_facturaA = file_get_contents("static/common/plantillas_facturas/tbl_facturaA.html");
@@ -72,7 +74,10 @@ class FacturaPDF extends View {
             $gui_facturaA = $this->render($obj_configuracion, $gui_facturaA);
             $gui_facturaA = $this->render($obj_cliente, $gui_facturaA);
             $gui_facturaA = str_replace('{tbl_egresodetalle}', $gui_tbl_facturaA, $gui_facturaA);
+            $gui_facturaA = str_replace('{cantidad_hojas}', $cantidad_hojas, $gui_facturaA);
+            $gui_facturaA = str_replace('{numero_hoja}', $i, $gui_facturaA);
             $contenido .= $gui_facturaA;
+            $i = $i + 1;
         }
 
         $contenido = str_replace('{flete}', $flete, $contenido);
@@ -84,9 +89,10 @@ class FacturaPDF extends View {
                 chmod($directorio, 0777);
         }
 
+
         $gui_html = str_replace('{contenido}', $contenido, $gui_html);
         $output = $directorio . $nombre_PDF;
-        $mipdf = new Dompdf();
+        $mipdf = new DOMPDF();
         $mipdf ->set_paper("A4", "landscape");
         $mipdf ->load_html($gui_html);
         $mipdf->render();
@@ -116,9 +122,10 @@ class FacturaPDF extends View {
                           'cae'=>$obj_egreso->cae);
 
         $cod_qr = $this->qrAFIP($array_qr);
+        $obj_egreso->cod_qr = $cod_qr;
 
-	    $condicionfiscal_id = $obj_cliente->condicionfiscal->condicionfiscal_id;
-	    $condicioniva_id = $obj_cliente->condicioniva->condicioniva_id;
+        $condicionfiscal_id = $obj_cliente->condicionfiscal->condicionfiscal_id;
+        $condicioniva_id = $obj_cliente->condicioniva->condicioniva_id;
 
         $obj_egreso->punto_venta = str_pad($obj_egreso->punto_venta, 4, '0', STR_PAD_LEFT);
         $obj_egreso->numero_factura = str_pad($obj_egreso->numero_factura, 8, '0', STR_PAD_LEFT);
@@ -129,17 +136,15 @@ class FacturaPDF extends View {
         $suma_alicuota_iva = 0;
         $descuento_por_producto = 0;
         foreach ($egresodetalle_collection as $clave=>$valor) {
-
             $importe_total = $importe_total + $valor['IMPORTE'];
             $alicuota = (100 + $valor['IVA']) / 100;
             $subtotal = round($valor['IMPORTE'] / $alicuota, 2);
             $valor_alicuota_importe = round(($valor['IMPORTE'] - $subtotal),2);
 
             $valor_alicuota_costo = round($valor['COSTO'] / $alicuota, 2);
-	        $iva = round(($valor['IVA'] * $valor['NETPRO'] / 100), 2);
+            $iva = round(($valor['IVA'] * $valor['NETPRO'] / 100), 2);
             $importe_neto = round(($valor['NETPRO'] + $iva), 2);
 
-            $egresodetalle_collection[$clave]['COSTO'] = "$" . $importe_neto;
             $egresodetalle_collection[$clave]['SUBTOTAL'] = "$" . $subtotal;
             $egresodetalle_collection[$clave]['IMPORTE'] = "$" . $valor['IMPORTE'];
 
@@ -158,8 +163,10 @@ class FacturaPDF extends View {
         $obj_egreso = $this->set_dict($obj_egreso);
         $obj_configuracion = $this->set_dict($obj_configuracion);
         $obj_cliente = $this->set_dict($obj_cliente);
-        $new_array = array_chunk($egresodetalle_collection, 10);
+        $new_array = array_chunk($egresodetalle_collection, 16);
         $contenido = '';
+        $cantidad_hojas = count($new_array);
+        $i = 1;
         foreach ($new_array as $egresodetalle_array) {
             $gui_facturaB = file_get_contents("static/common/plantillas_facturas/facturaB.html");
             $gui_tbl_facturaB = file_get_contents("static/common/plantillas_facturas/tbl_facturaB.html");
@@ -169,8 +176,10 @@ class FacturaPDF extends View {
             $gui_facturaB = $this->render($obj_configuracion, $gui_facturaB);
             $gui_facturaB = $this->render($obj_cliente, $gui_facturaB);
             $gui_facturaB = str_replace('{tbl_egresodetalle}', $gui_tbl_facturaB, $gui_facturaB);
-
+            $gui_facturaB = str_replace('{cantidad_hojas}', $cantidad_hojas, $gui_facturaB);
+            $gui_facturaB = str_replace('{numero_hoja}', $i, $gui_facturaB);
             $contenido .= $gui_facturaB;
+            $i = $i + 1;
         }
 
         $contenido = str_replace('{flete}', $flete, $contenido);
@@ -184,7 +193,7 @@ class FacturaPDF extends View {
 
         $gui_html = str_replace('{contenido}', $contenido, $gui_html);
         $output = $directorio . $nombre_PDF;
-        $mipdf = new Dompdf();
+        $mipdf = new DOMPDF();
         $mipdf ->set_paper("A4", "landscape");
         $mipdf ->load_html($gui_html);
         $mipdf->render();
@@ -222,8 +231,10 @@ class FacturaPDF extends View {
         $obj_egreso = $this->set_dict($obj_egreso);
         $obj_configuracion = $this->set_dict($obj_configuracion);
         $obj_cliente = $this->set_dict($obj_cliente);
-        $new_array = array_chunk($egresodetalle_collection, 14);
+        $new_array = array_chunk($egresodetalle_collection, 24);
         $contenido = '';
+        $cantidad_hojas = count($new_array);
+        $i = 1;
         foreach ($new_array as $egresodetalle_array) {
             $gui_remitoR = file_get_contents("static/common/plantillas_facturas/remitoR.html");
             $gui_tbl_remitoR = file_get_contents("static/common/plantillas_facturas/tbl_remitoR.html");
@@ -233,8 +244,10 @@ class FacturaPDF extends View {
             $gui_remitoR = $this->render($obj_egreso, $gui_remitoR);
             $gui_remitoR = $this->render($obj_cliente, $gui_remitoR);
             $gui_remitoR = str_replace('{tbl_egresodetalle}', $gui_tbl_remitoR, $gui_remitoR);
-
+            $gui_remitoR = str_replace('{cantidad_hojas}', $cantidad_hojas, $gui_remitoR);
+            $gui_remitoR = str_replace('{numero_hoja}', $i, $gui_remitoR);
             $contenido .= $gui_remitoR;
+            $i = $i + 1;
         }
 
         $contenido = str_replace('{flete}', $flete, $contenido);
@@ -248,7 +261,7 @@ class FacturaPDF extends View {
 
         $gui_html = str_replace('{contenido}', $contenido, $gui_html);
         $output = $directorio . $nombre_PDF;
-        $mipdf = new Dompdf();
+        $mipdf = new DOMPDF();
         $mipdf ->set_paper("A4", "landscape");
         $mipdf ->load_html($gui_html);
         $mipdf->render();
@@ -261,7 +274,6 @@ class FacturaPDF extends View {
 
     public function presupuestoP($presupuestodetalle_collection, $obj_configuracion, $obj_presupuesto, $vendedor) {
         $gui_html = file_get_contents("static/common/plantillas_facturas/plantilla_html.html");
-
         $obj_cliente = $obj_presupuesto->cliente;
         $obj_vendedor = $obj_presupuesto->vendedor;
         unset($obj_presupuesto->cliente, $obj_presupuesto->vendedor, $obj_cliente->infocontacto_collection,
@@ -311,7 +323,7 @@ class FacturaPDF extends View {
         $gui_html = str_replace('{contenido}', $contenido, $gui_html);
 
         $output = $directorio . $nombre_PDF;
-        $mipdf = new Dompdf();
+        $mipdf = new DOMPDF();
         $mipdf ->set_paper("A4", "portrait");
         $mipdf ->load_html($gui_html);
         $mipdf->render();
@@ -352,12 +364,11 @@ class FacturaPDF extends View {
             $gui_notacreditoNC = $this->render($obj_cliente, $gui_notacreditoNC);
             $gui_notacreditoNC = $this->render($obj_notacredito, $gui_notacreditoNC);
             $gui_notacreditoNC = str_replace('{tbl_notacreditodetalle}', $gui_tbl_notacreditoNC, $gui_notacreditoNC);
-
             $contenido .= $gui_notacreditoNC;
         }
 
         $gui_html = str_replace('{contenido}', $contenido, $gui_html);
-        $dompdf = new Dompdf();
+        $dompdf = new DOMPDF();
         $dompdf->set_paper("A4", "landscape");
         $dompdf->load_html($gui_html);
         $dompdf->render();
@@ -375,7 +386,7 @@ class FacturaPDF extends View {
         $flete = $obj_flete->denominacion;
         $nombre_PDF = "HojaRuta-{$flete}";
         $gui_html = str_replace('{tbl_hoja_ruta_flete_pdf}', $gui_tbl_hoja_ruta_flete_pdf, $gui_html);
-        $dompdf = new Dompdf();
+        $dompdf = new DOMPDF();
         $dompdf->set_paper("A4", "landscape");
         $dompdf->load_html($gui_html);
         $dompdf->render();
