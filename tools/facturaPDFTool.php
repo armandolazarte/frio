@@ -32,30 +32,48 @@ class FacturaPDF extends View {
         $importe_total = 0;
         $suma_alicuota_iva = 0;
         $descuento_por_producto = 0;
+        $subtotal = 0;
         foreach ($egresodetalle_collection as $clave=>$valor) {
             $importe_total = $importe_total + $valor['IMPORTE'];
-            $alicuota = (100 + $valor['IVA']) / 100;
-            $subtotal = round($valor['IMPORTE'] / $alicuota, 2);
-            $valor_alicuota_importe = round(($valor['IMPORTE'] - $subtotal),2);
 
-            $valor_alicuota_costo = round($valor['COSTO'] / $alicuota, 2);
-            $importe_neto = round(($valor['COSTO'] / $alicuota), 2);
+            //UNITARIO SIN IVA
+            $unitario_sin_iva = $valor['NETPRO'] + ($valor['FLETE'] * 100 / $valor['NETPRO']);
+            $unitario_sin_iva = $unitario_sin_iva + $valor['GANANCIA'];
 
-            $egresodetalle_collection[$clave]['COSTO'] = "$" . $importe_neto;
-            $egresodetalle_collection[$clave]['SUBTOTAL'] = "$" . $subtotal;
-            $egresodetalle_collection[$clave]['IMPORTE'] = "$" . $valor['IMPORTE'];
+            //UNITARIO SIN IVA MENOS DESCUENTO
+            $unitario_sin_iva_descuento = $unitario_sin_iva - $valor['VD'];
 
-            $egresodetalle_collection[$clave]["DESCUENTO"] = $valor["DESCUENTO"] . "%";
-            $descuento_por_producto = $descuento_por_producto + $valor["VD"];
-            $suma_alicuota_iva = $suma_alicuota_iva + $valor_alicuota_importe;
+            //TOTAL POR LINEA POR UNITARIO
+            $total_unitario_cantidad = $unitario_sin_iva_descuento * $valor['CANTIDAD'];
+
+            //SUBTOTAL
+            $subtotal = $subtotal + $total_unitario_cantidad;
+
+            //VALORES NUEVOS
+            $egresodetalle_collection[$clave]['UNITARIO'] = $unitario_sin_iva;
+            $egresodetalle_collection[$clave]['UNICONDES'] = $unitario_sin_iva_descuento;
+            $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
+
+            //POR LAS DUDAS
+            //$alicuota = (100 + $valor['IVA']) / 100;
+            //$subtotal = round($valor['IMPORTE'] / $alicuota, 2);
+            //$valor_alicuota_importe = round(($valor['IMPORTE'] - $subtotal),2);
+
+            //$valor_alicuota_costo = round($valor['COSTO'] / $alicuota, 2);
+            //$iva = round(($valor['IVA'] * $valor['NETPRO'] / 100), 2);
+            //$importe_neto = round(($valor['NETPRO'] + $iva), 2);
+
+            //$egresodetalle_collection[$clave]['SUBTOTAL'] = "$" . $subtotal;
+            //$egresodetalle_collection[$clave]['IMPORTE'] = "$" . $valor['IMPORTE'];
+
+            //$egresodetalle_collection[$clave]["DESCUENTO"] = $valor["DESCUENTO"] . "%";
+            //$descuento_por_producto = $descuento_por_producto + $valor["VD"];
+            //$suma_alicuota_iva = $suma_alicuota_iva + $valor_alicuota_importe;
         }
 
-        $descuento_por_factura = $obj_egreso->descuento * $importe_total / 100;
-        $obj_egreso->valor_descuento_total = round(($descuento_por_producto + $descuento_por_factura),2);
-
-        $obj_egreso->importe_iva = $suma_alicuota_iva;
-        $obj_egreso->subtotal = round($obj_egreso->importe_total - $obj_egreso->importe_iva,2);
-        $obj_egreso->subtotal = round($obj_egreso->subtotal - $obj_egreso->valor_descuento_total,2);
+        $obj_egreso->importe_iva = round($obj_egreso->importe_total - $subtotal, 2);
+        $obj_egreso->subtotal = round($subtotal, 2);
+        //$obj_egreso->subtotal = round($obj_egreso->importe_total - $obj_egreso->importe_iva,2);
 
         $obj_egreso = $this->set_dict($obj_egreso);
         $obj_configuracion = $this->set_dict($obj_configuracion);

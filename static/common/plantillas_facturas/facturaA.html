@@ -1,64 +1,57 @@
-<table style=" width: 100% !important;" cellspacing="0">
+<table style=" width: 100% !important; margin-bottom: 5px;" cellspacing="0">
     <tr>
-        <td style=" width: 49% !important; padding-right: 1%;">
-            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
-                <tr style=" text-align: center; font-size: 16px; border: 1px #000 solid; width: 100% !important;">
-                    <td style="border-bottom: 1px #000 solid; width: 100% !important;" colspan="3">ORIGINAL</td>
-                </tr>
+        <td style=" width: 100% !important; padding-right: 1%;">
+            <table style="border: 1px #000 solid; width: 100% !important" cellspacing="1">
                 <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 48% !important; text-align: center; font-size: 18px;">
-                        <strong>{configuracion-razon_social}</strong>
+                    <td style="width: 49% !important; text-align: center; font-size: 16px; padding-top: 15px;">
+                        <img width="110" height="30" src='static/template/images/logoFrio.jpg' class="text-align-center"/><br>
+                        <strong>{configuracion-razon_social} S.R.L.</strong>
                     </td>
-                    <td style="width: 4% !important; border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; text-align: center; font-size: 20px;"><strong>{tipofactura-nomenclatura}</strong></td>
-                    <td style="width: 48% !important; text-align: left; font-size: 15px; padding-left: 15px;"><strong>FACTURA</strong></td>
+                    <td style="width: 2% !important; border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; text-align: center; font-size: 30px;">
+                        <strong>A</strong><br>
+                        <font style="font-size: 12px;">Código N° 01</font>
+                    </td>
+                    <td style="width: 49% !important; text-align: right; padding-right: 10px;">
+                        <strong style="font-size: 20px;">FACTURA</strong><br>
+                        <strong style="font-size: 15px;">N°: {egreso-punto_venta}-{egreso-numero_factura} A</strong>
+                    </td>
                 </tr>
                 <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 45% !important; text-align: center; font-size: 25px; " colspan="3">
+                    <td style="width: 45% !important; text-align: center;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 16px; width: 100% !important;">                                
-                                <td style="width: 50% !important; text-align: left; font-size: 13px;">
+                            <tr style=" text-align: center;width: 100% !important;">                                
+                                <td style="width: 50% !important; text-align: left;">
                                     <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                CUIT: {configuracion-cuit}
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 50% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                {configuracion-domicilio_comercial}<br>
+                                                La Rioja
                                             </td>
                                         </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Dir. Comercial: {configuracion-domicilio_comercial}
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 50% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                Tel.: 0380-4420964
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; font-size: 15px; padding-left: 15px;">
+                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; padding-left: 15px;">
                                     <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                <strong>Comp. Nro: {egreso-punto_venta}-{egreso-numero_factura}</strong>
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                <b>CUIT:<b> {configuracion-cuit}
+                                            </td>
+                                            <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px">
+                                                <b>Fecha:</b> {egreso-fecha}
                                             </td>
                                         </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Fecha de Emisión: {egreso-fecha}
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                <b>IIBB:</b> {configuracion-ingresos_brutos}<br>
+                                                <b>Inicio de Actividades:</b> {configuracion-fecha_inicio_actividad}<br>
                                             </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr style=" text-align: center; font-size: 16px; width: 100% !important;">                                
-                                <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                    <strong>Cond. IVA: {condicioniva-denominacion}</strong>
-                                </td>
-                                <td style="width: 50% !important; text-align: left; font-size: 15px; padding-left: 15px; border-left: 1px #000 solid;">
-                                    <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Ingresos Brutos: {configuracion-ingresos_brutos}
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Fecha Inicio Actividad: {configuracion-fecha_inicio_actividad}
+                                            <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px">
+                                                <b>Resp. Inscripto</b>
                                             </td>
                                         </tr>
                                     </table>
@@ -68,71 +61,118 @@
                     </td>
                 </tr>
                 <tr style="height: 1px; border-top: 1px #000 solid; width: 100% !important;"><td colspan="3" style="width: 100% !important;"></td></tr>
-                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center; font-size: 25px; " colspan="3">
+                <tr style="padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Sres: {cliente-razon_social} - {egreso-cliente_documentotipo}: {cliente-documento}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Sres: <b>{cliente-razon_social}</b> - [{cliente-codigo}]
+                                </td>
+                                <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px;">
+                                    {egreso-cliente_documentotipo}: {cliente-documento}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Cond. Venta: {condicionpago-denominacion} - Cond. IVA: {cliente-condicioniva}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Dom.: {cliente-domicilio} - {cliente-barrio} - Loc.: {cliente-localidad}
+                                </td>
+                                <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px;">
+                                    I.V.A.: {cliente-condicioniva}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px; ">
-                                    Domicilio: {cliente-domicilio}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Prov.: {provincia-denominacion} - Teléfonos: {cliente-telefono}
+                                </td>
+                                <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px;">
+                                    IIBB: 
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 100% !important; text-align: center; font-size: 25px; height: 360px!important; vertical-align: top;" colspan="3">
+                <tr style="padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 12px;">
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Producto/Servicio</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Cant</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">$ Unit. sin IVA</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">%</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Subtotal <br> sin IVA</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">IVA</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Subtotal <br> con IVA</td>
+                            <tr style="width: 100% !important;">
+                                <td style="width: 33% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    C. Venta: <b>{condicionpago-denominacion}
+                                </td>
+                                <td style="width: 33% !important; text-align: center; font-size: 12px;">
+                                    Vendedor: {vendedor}
+                                </td>
+                                <td style="width: 33% !important; text-align: right; font-size: 12px; padding-right: 10px;">
+                                    Flete: {flete}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="padding: 5px 0 8px 0; width: 100% !important">
+                    <td style="width: 100% !important; height: 220px !important; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style="width: 100% !important; background-color: #ccc; font-size: 13px; font-weight: bold;">
+                                <td style="text-align: right; width: 10% !important; padding: 2px 4px 1px 4px;">CANTIDAD</td>
+                                <td style="text-align: left; width: 10% !important; padding: 2px 4px 1px 4px;">CÓDIGO</td>
+                                <td style="text-align: left; width: 48% !important; padding: 2px 4px 1px 4px;">DESCRIPCIÓN</td>
+                                <td style="text-align: right; width: 10% !important; padding: 2px 4px 1px 4px;">UNITARIO</td>
+                                <td style="text-align: right; width: 12% !important; padding: 2px 4px 1px 4px;">UNI. C/DTO</td>
+                                <td style="text-align: right; width: 10% !important; padding: 2px 4px 1px 4px;">TOTAL</td>
                             </tr>
                             {tbl_egresodetalle}
                         </table>
                     </td>
                 </tr>
             </table>
-            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                      {cliente-cliente_frecuencia}
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; width: 100% !important;">
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold; background-color: #ccc;">
+                    <td style="border-right: 1px solid;">
+                      Subtotal
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Descuento: ${egreso-valor_descuento_total}</strong>
+                    <td style="border-right: 1px solid;">
+                      Impuesto
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Subtotal
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA No Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Per. Ing.Br.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Total
                     </td>
                 </tr>
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Vendedor: {vendedor}
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold;">
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe IVA: ${egreso-importe_iva}</strong>
+                    <td style="border-right: 1px solid;">
+                      0,00
                     </td>
-                </tr>
-                <tr style="font-size: 13px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Flete: {flete}
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe Total: ${egreso-importe_total}</strong>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_iva}
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_total}
                     </td>
                 </tr>
             </table>
-            <table style="border: none; width: 100% !important;" cellspacing="1">
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; width: 100% !important;">
                 <tr>
                     <td style="text-align: left; width: 20% !important;">
                         <img src="data:image/gif;base64,{egreso-cod_qr}" width="75" height="75">
@@ -149,65 +189,62 @@
                 </tr>
             </table>
         </td>
-        <td style=" width: 49% !important; padding-right: 1%;">
-            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
-                <tr style=" text-align: center; font-size: 16px; border: 1px #000 solid; width: 100% !important;">
-                    <td style="border-bottom: 1px #000 solid; width: 100% !important;" colspan="3">DUPLICADO</td>
-                </tr>
+    </tr>
+</table>
+<table style=" width: 100% !important;" cellspacing="0">
+    <tr>
+        <td style=" width: 100% !important; padding-right: 1%;">
+            <table style="border: 1px #000 solid; width: 100% !important" cellspacing="1">
                 <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 48% !important; text-align: center; font-size: 18px;">
-                        <strong>{configuracion-razon_social}</strong>
+                    <td style="width: 49% !important; text-align: center; font-size: 16px; padding-top: 15px;">
+                        <img width="110" height="30" src='static/template/images/logoFrio.jpg' class="text-align-center"/><br>
+                        <strong>{configuracion-razon_social} S.R.L.</strong>
                     </td>
-                    <td style="width: 4% !important; border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; text-align: center; font-size: 20px;"><strong>{tipofactura-nomenclatura}</strong></td>
-                    <td style="width: 48% !important; text-align: left; font-size: 15px; padding-left: 15px;"><strong>FACTURA</strong></td>
+                    <td style="width: 2% !important; border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; text-align: center; font-size: 30px;">
+                        <strong>A</strong><br>
+                        <font style="font-size: 12px;">Código N° 01</font>
+                    </td>
+                    <td style="width: 49% !important; text-align: right; padding-right: 10px;">
+                        <strong style="font-size: 20px;">FACTURA</strong><br>
+                        <strong style="font-size: 15px;">N°: {egreso-punto_venta}-{egreso-numero_factura} A</strong>
+                    </td>
                 </tr>
                 <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 45% !important; text-align: center; font-size: 25px; " colspan="3">
+                    <td style="width: 45% !important; text-align: center;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 16px; width: 100% !important;">                                
-                                <td style="width: 50% !important; text-align: left; font-size: 13px;">
+                            <tr style=" text-align: center;width: 100% !important;">                                
+                                <td style="width: 50% !important; text-align: left;">
                                     <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                CUIT: {configuracion-cuit}
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 50% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                {configuracion-domicilio_comercial}<br>
+                                                La Rioja
                                             </td>
                                         </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Dir. Comercial: {configuracion-domicilio_comercial}
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 50% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                Tel.: 0380-4420964
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
-                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; font-size: 15px; padding-left: 15px;">
+                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; padding-left: 15px;">
                                     <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                <strong>Comp. Nro: {egreso-punto_venta}-{egreso-numero_factura}</strong>
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                <b>CUIT:<b> {configuracion-cuit}
+                                            </td>
+                                            <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px">
+                                                <b>Fecha:</b> {egreso-fecha}
                                             </td>
                                         </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Fecha de Emisión: {egreso-fecha}
+                                        <tr style="width: 100% !important;">
+                                            <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                                <b>IIBB:</b> {configuracion-ingresos_brutos}<br>
+                                                <b>Inicio de Actividades:</b> {configuracion-fecha_inicio_actividad}<br>
                                             </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr style=" text-align: center; font-size: 16px; width: 100% !important;">                                
-                                <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                    <strong>Cond. IVA: {condicioniva-denominacion}</strong>
-                                </td>
-                                <td style="width: 50% !important; text-align: left; font-size: 15px; padding-left: 15px; border-left: 1px #000 solid;">
-                                    <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Ingresos Brutos: {configuracion-ingresos_brutos}
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Fecha Inicio Actividad: {configuracion-fecha_inicio_actividad}
+                                            <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px">
+                                                <b>Resp. Inscripto</b>
                                             </td>
                                         </tr>
                                     </table>
@@ -217,71 +254,118 @@
                     </td>
                 </tr>
                 <tr style="height: 1px; border-top: 1px #000 solid; width: 100% !important;"><td colspan="3" style="width: 100% !important;"></td></tr>
-                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center; font-size: 25px; " colspan="3">
+                <tr style="padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Sres: {cliente-razon_social} - {egreso-cliente_documentotipo}: {cliente-documento}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Sres: <b>{cliente-razon_social}</b> - [{cliente-codigo}]
+                                </td>
+                                <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px;">
+                                    {egreso-cliente_documentotipo}: {cliente-documento}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Cond. Venta: {condicionpago-denominacion} - Cond. IVA: {cliente-condicioniva}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Dom.: {cliente-domicilio} - {cliente-barrio} - Loc.: {cliente-localidad}
+                                </td>
+                                <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px;">
+                                    I.V.A.: {cliente-condicioniva}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px; ">
-                                    Domicilio: {cliente-domicilio}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Prov.: {provincia-denominacion} - Teléfonos: {cliente-telefono}
+                                </td>
+                                <td style="width: 30% !important; text-align: left; font-size: 12px; padding-right: 10px;">
+                                    IIBB: 
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 100% !important; text-align: center; font-size: 25px; height: 360px!important; vertical-align: top;" colspan="3">
+                <tr style="padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 12px;">
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Producto/Servicio</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Cant</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">$ Unit. sin IVA</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">%</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Subtotal <br> sin IVA</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">IVA</td>
-                                <td style="text-align: left; font-size: 12px; border: 1px #000 solid; background-color: #ccc;">Subtotal <br> con IVA</td>
+                            <tr style="width: 100% !important;">
+                                <td style="width: 33% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    C. Venta: <b>{condicionpago-denominacion}
+                                </td>
+                                <td style="width: 33% !important; text-align: center; font-size: 12px;">
+                                    Vendedor: {vendedor}
+                                </td>
+                                <td style="width: 33% !important; text-align: right; font-size: 12px; padding-right: 10px;">
+                                    Flete: {flete}
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="padding: 5px 0 8px 0; width: 100% !important">
+                    <td style="width: 100% !important; height: 220px !important; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style="width: 100% !important; background-color: #ccc; font-size: 13px; font-weight: bold;">
+                                <td style="text-align: right; width: 10% !important; padding: 2px 4px 1px 4px;">CANTIDAD</td>
+                                <td style="text-align: left; width: 10% !important; padding: 2px 4px 1px 4px;">CÓDIGO</td>
+                                <td style="text-align: left; width: 48% !important; padding: 2px 4px 1px 4px;">DESCRIPCIÓN</td>
+                                <td style="text-align: right; width: 10% !important; padding: 2px 4px 1px 4px;">UNITARIO</td>
+                                <td style="text-align: right; width: 12% !important; padding: 2px 4px 1px 4px;">UNI. C/DTO</td>
+                                <td style="text-align: right; width: 10% !important; padding: 2px 4px 1px 4px;">TOTAL</td>
                             </tr>
                             {tbl_egresodetalle}
                         </table>
                     </td>
                 </tr>
             </table>
-            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                      {cliente-cliente_frecuencia}
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; width: 100% !important;">
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold; background-color: #ccc;">
+                    <td style="border-right: 1px solid;">
+                      Subtotal
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Descuento: ${egreso-valor_descuento_total}</strong>
+                    <td style="border-right: 1px solid;">
+                      Impuesto
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Subtotal
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA No Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Per. Ing.Br.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Total
                     </td>
                 </tr>
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Vendedor: {vendedor}
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold;">
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe IVA: ${egreso-importe_iva}</strong>
+                    <td style="border-right: 1px solid;">
+                      0,00
                     </td>
-                </tr>
-                <tr style="font-size: 13px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Flete: {flete}
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe Total: ${egreso-importe_total}</strong>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_iva}
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_total}
                     </td>
                 </tr>
             </table>
-            <table style="border: none; width: 100% !important;" cellspacing="1">
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; width: 100% !important;">
                 <tr>
                     <td style="text-align: left; width: 20% !important;">
                         <img src="data:image/gif;base64,{egreso-cod_qr}" width="75" height="75">
