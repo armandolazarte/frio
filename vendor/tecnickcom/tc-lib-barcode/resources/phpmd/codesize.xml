@@ -16,7 +16,7 @@
 <rule ref="rulesets/codesize.xml/TooManyMethods"/>
 <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
     <properties>
-        <property name="maximum" value="40"/>
+        <property name="maximum" value="60"/>
     </properties>
 </rule>
 </ruleset>

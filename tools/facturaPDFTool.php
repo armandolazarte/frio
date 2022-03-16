@@ -163,7 +163,7 @@ class FacturaPDF extends View {
         $obj_egreso = $this->set_dict($obj_egreso);
         $obj_configuracion = $this->set_dict($obj_configuracion);
         $obj_cliente = $this->set_dict($obj_cliente);
-        $new_array = array_chunk($egresodetalle_collection, 16);
+        $new_array = array_chunk($egresodetalle_collection, 10);
         $contenido = '';
         $cantidad_hojas = count($new_array);
         $i = 1;
