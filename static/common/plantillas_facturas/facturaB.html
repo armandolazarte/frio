@@ -23,13 +23,13 @@
                                 <td style="width: 50% !important; text-align: left;">
                                     <table cellspacing="0" style="width: 100% !important;">
                                         <tr style="width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 12px;">
+                                            <td style="width: 50% !important; text-align: left; font-size: 12px; padding-left: 10px;">
                                                 {configuracion-domicilio_comercial}<br>
                                                 La Rioja
                                             </td>
                                         </tr>
                                         <tr style="width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 12px;">
+                                            <td style="width: 50% !important; text-align: left; font-size: 12px; padding-left: 10px;">
                                                 Tel.: 0380-4420964
                                             </td>
                                         </tr>
@@ -59,22 +59,48 @@
                     </td>
                 </tr>
                 <tr style="height: 1px; border-top: 1px #000 solid; width: 100% !important;"><td colspan="3" style="width: 100% !important;"></td></tr>
-                <tr style="font-size: 18px; padding:5px 0 8px 0; width: 100% !important;">
-                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center; font-size: 25px; " colspan="3">
+                <tr style="padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Sres: {cliente-razon_social} - {egreso-cliente_documentotipo}: {cliente-documento}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Sres: <b>{cliente-razon_social}</b> - [{cliente-codigo}]
+                                </td>
+                                <td style="width: 30% !important; text-align: right; font-size: 12px; padding-right: 10px;">
+                                    {egreso-cliente_documentotipo}: {cliente-documento}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Cond. Venta: {condicionpago-denominacion} - Cond. IVA: {cliente-condicioniva}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Dom.: {cliente-domicilio} - {cliente-barrio} - Loc.: {cliente-localidad}
+                                </td>
+                                <td style="width: 30% !important; text-align: right; font-size: 12px; padding-right: 10px;">
+                                    I.V.A.: {cliente-condicioniva}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px; ">
-                                    Domicilio: {cliente-domicilio}
+                            <tr style="width: 100% !important;">
+                                <td style="width: 70% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    Prov.: {provincia-denominacion} - Teléfonos: {cliente-telefonos}
+                                </td>
+                                <td style="width: 30% !important; text-align: right; font-size: 12px; padding-right: 10px;">
+                                    IIBB: 
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style="width: 100% !important;">
+                                <td style="width: 33% !important; text-align: left; font-size: 12px; padding-left: 10px;">
+                                    C. Venta: <b>{condicionpago-denominacion}
+                                </td>
+                                <td style="width: 33% !important; text-align: center; font-size: 12px;">
+                                    Vendedor: {vendedor}
+                                </td>
+                                <td style="width: 33% !important; text-align: right; font-size: 12px; padding-right: 10px;">
+                                    Flete: {flete}
                                 </td>
                             </tr>
                         </table>
