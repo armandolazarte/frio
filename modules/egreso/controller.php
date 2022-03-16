@@ -214,20 +214,6 @@ class EgresoController {
 			$this->model->cliente->telefono = '';
 		}
 
-		if ($condicionpago_id == 1) {
-			if (!empty($this->model->cliente->entregaminima)) {
-				$porcentaje_entregaminima = $this->model->cliente->entregaminima;
-				$importe_total = $this->model->importe_total;
-				$monto_entrega = ($porcentaje_entregaminima * $importe_total)/100;
-				$monto_entrega = round($monto_entrega, 0);
-				$this->model->cliente->monto_entrega = 'Entrega Minima: $' . $monto_entrega;
-			} else {
-				$this->model->cliente->monto_entrega = '';
-			}
-		} else {
-			$this->model->cliente->monto_entrega = '';
-		}
-
 		$this->model->cliente->cliente_frecuencia = $this->model->cliente->frecuenciaventa->denominacion." (".$this->model->cliente->frecuenciaventa->dia_1."-".$this->model->cliente->frecuenciaventa->dia_2.")";
 
 		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, ed.neto_producto AS NETPRO";
@@ -253,20 +239,8 @@ class EgresoController {
 		$where = "eafip.egreso_id = {$egreso_id}";
 		$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
 
-		$telefono_vendedor = '';
-		$infocontacto_vendedor = $this->model->vendedor->infocontacto_collection;
-		foreach ($infocontacto_vendedor as $c=>$v) {
-			if($v->denominacion == 'Celular') $telefono_vendedor = 'Cel: ' . $v->valor;
-		}
-
-		$telefono_flete = '';
-		$infocontacto_flete = $this->model->cliente->flete->infocontacto_collection;
-		foreach ($infocontacto_flete as $c=>$v) {
-			if($v->denominacion == 'Celular') $telefono_flete = 'Cel: ' . $v->valor;
-		}
-
-		$vendedor = $this->model->vendedor->apellido . ' ' . $this->model->vendedor->nombre . ' (' . $telefono_vendedor .')';
-		$flete = $this->model->cliente->flete->denominacion  . ' (' . $telefono_flete .')';
+		$vendedor = $this->model->vendedor->apellido . ' ' . $this->model->vendedor->nombre;
+		$flete = $this->model->cliente->flete->denominacion;
 		$facturaPDFHelper = new FacturaPDF();
 		if (!is_array($egresoafip)) {
 			$egresoafip = array();
