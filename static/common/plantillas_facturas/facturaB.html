@@ -129,33 +129,55 @@
                     </td>
                 </tr>
             </table>
-            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; width: 100% !important;" cellspacing="1">
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important">
-                    <td style="width: 70% !important; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                      {cliente-cliente_frecuencia}
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-right: 1px #000 solid; width: 100% !important;">
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold; background-color: #ccc;">
+                    <td style="border-right: 1px solid;">
+                      Subtotal
                     </td>
-                    <td style="width: 30% !important; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Descuento: ${egreso-valor_descuento_total}</strong>
+                    <td style="border-right: 1px solid;">
+                      Impuesto
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Subtotal
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA No Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Per. Ing.Br.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Total
                     </td>
                 </tr>
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Vendedor: {vendedor}
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold; background-color: #ccc;">
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe IVA: ${egreso-importe_iva}</strong>
+                    <td style="border-right: 1px solid;">
+                      0,00
                     </td>
-                </tr>
-                <tr style="font-size: 13px; padding:5px 0 8px 0; width: 100% !important">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Flete: {flete}
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
                     </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe Total: ${egreso-importe_total}</strong>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_iva}
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_total}
                     </td>
                 </tr>
             </table>
-            <table style="border: none; width: 100% !important;" cellspacing="1">
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-right: 1px #000 solid; width: 100% !important;">
                 <tr>
                     <td style="text-align: left; width: 20% !important;">
                         <img src="data:image/gif;base64,{egreso-cod_qr}" width="75" height="75">
@@ -299,34 +321,61 @@
                         </table>
                     </td>
                 </tr>
-            </table>
-            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                      {cliente-cliente_frecuencia}
-                    </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Descuento: ${egreso-valor_descuento_total}</strong>
-                    </td>
-                </tr>
-                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Vendedor: {vendedor}
-                    </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe IVA: ${egreso-importe_iva}</strong>
-                    </td>
-                </tr>
-                <tr style="font-size: 13px; padding:5px 0 8px 0; width: 100% !important">
-                    <td style="width: 70% !important; border-top: 1px #000 solid; border-right: 1px solid; text-align: left; font-size: 11px;" colspan="2">
-                        Flete: {flete}
-                    </td>
-                    <td style="width: 30% !important; border-top: 1px #000 solid; text-align: right; font-size: 13px; background-color: #ccc;">
-                        <strong>Importe Total: ${egreso-importe_total}</strong>
+                <tr style="padding: 5px 0 8px 0; width: 100% !important">
+                    <td style="width: 100% !important; vertical-align: top; font-size: 11px; text-align: center;" colspan="3">
+                        El crédito fiscal discriminado en el presente comprobante, sólo podrá ser computado a efectos del Régimen de Sostenimiento e Inclusipon Fiscal para Pequeños Contribuyentes de la Ley N° 27.618.
                     </td>
                 </tr>
             </table>
-            <table style="border: none; width: 100% !important;" cellspacing="1">
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-right: 1px #000 solid; width: 100% !important;">
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold; background-color: #ccc;">
+                    <td style="border-right: 1px solid;">
+                      Subtotal
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Impuesto
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Subtotal
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA No Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      IVA Insc.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Per. Ing.Br.
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      Total
+                    </td>
+                </tr>
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important; font-weight: bold; background-color: #ccc;">
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-subtotal}
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_iva}
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      0,00
+                    </td>
+                    <td style="border-right: 1px solid;">
+                      {egreso-importe_total}
+                    </td>
+                </tr>
+            </table>
+            <table style="border-left: 1px #000 solid; border-right: 1px #000 solid; border-right: 1px #000 solid; width: 100% !important;">
                 <tr>
                     <td style="text-align: left; width: 20% !important;">
                         <img src="data:image/gif;base64,{egreso-cod_qr}" width="75" height="75">
