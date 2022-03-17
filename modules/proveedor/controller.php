@@ -206,10 +206,21 @@ class ProveedorController {
 					$pm = new Producto();
 					$pm->producto_id = $producto_id;
 					$pm->get();
+					$iva = $pm->iva;
+					$neto = $pm->costo;
+					$flete = $pm->flete;
 
 					$costo = $pm->costo;
 					$new_costo = (($porcentaje * $costo) /100) + $costo;
+
+					//PRECIO NETO
+					$valor_neto = $new_costo + ($iva * $new_costo / 100);
+					$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+					//PRECIO VENTA
+					$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+					
 					$pm->costo = $new_costo;
+					$pm->precio_venta = $pvp;
 					$pm->save();
 
 					$pdm = new ProductoDetalle();
