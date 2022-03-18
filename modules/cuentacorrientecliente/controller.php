@@ -574,6 +574,7 @@ class CuentaCorrienteClienteController {
 				$cpdm->estado = 1;
 				$cpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
 				$cpdm->egreso_id = $egreso_id;
+				print_r($cpdm);exit;
 				$cpdm->save();
 				break;
 			case 2:
