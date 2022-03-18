@@ -6,6 +6,8 @@ require_once "modules/egreso/model.php";
 require_once "modules/cobrador/model.php";
 require_once "modules/tipomovimientocuenta/model.php";
 require_once "modules/ingresotipopago/model.php";
+require_once "modules/creditoclientedetalle/model.php";
+require_once "modules/transferenciaclientedetalle/model.php";
 require_once "tools/cuentaCorrienteClientePDFTool.php";
 
 
@@ -547,6 +549,7 @@ class CuentaCorrienteClienteController {
 		$comprobante = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
 		$comprobante .= str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
 		
+		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
 		$this->model = new CuentaCorrienteCliente();
 		$this->model->fecha = filter_input(INPUT_POST, 'fecha');
 		$this->model->hora = date('H:i:s');
@@ -555,6 +558,7 @@ class CuentaCorrienteClienteController {
 		$this->model->ingreso = $importe;
 		$this->model->cliente_id = $cliente_id;
 		$this->model->egreso_id = $egreso_id;
+		$this->model->ingresotipopago = $ingresotipopago_id;
 		$this->model->tipomovimientocuenta = 2;
 		$this->model->estadomovimientocuenta = $estadomovimientocuenta;
 		$this->model->cobrador = $cobrador;
