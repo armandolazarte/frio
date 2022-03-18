@@ -12,7 +12,7 @@ class CuentaContablePlanView extends View {
 	}
 
 	function configurar() {
-		$gui = file_get_contents("static/modules/cuentacontable/configurar.html");
+		$gui = file_get_contents("static/modules/cuentacontableplan/configurar.html");
 		/*
 		$obj_cuentacontable = $this->set_dict($obj_cuentacontable);
 		$render = $this->render_regex('TBL_CUENTACONTABLE', $gui, $cuentacontable_collection);
