@@ -86,7 +86,7 @@ class CuentaCorrienteClienteController {
     	$cm->cliente_id = $arg;
     	$cm->get();
     	
-		$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ccc.cuentacorrientecliente_id CCCID";
+		$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ingresotipopago AS ING_TIP_PAG, ccc.cuentacorrientecliente_id CCCID";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
 		$where = "ccc.cliente_id = {$arg} AND ccc.estadomovimientocuenta != 4 AND ccc.importe != 0";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -95,6 +95,7 @@ class CuentaCorrienteClienteController {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$temp_cuentacorrientecliente_id = $valor['CCCID'];
 			$egreso_id = $valor['EID'];
+			$ingresotipopago_id = $valor['ING_TIP_PAG'];
 			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
 			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
 				  	  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE,
@@ -176,8 +177,6 @@ class CuentaCorrienteClienteController {
 			$cuentacorriente_collection[$clave]['BTN_TIPOPAGO_ID'] = $btn_tipopago_id;
 			$cuentacorriente_collection[$clave]['MOVID'] = $btn_movimiento_id;
 		}
-
-		print_r($cuentacorriente_collection);exit;
 
 		$max_cuentacorrientecliente_ids = array();
 		foreach ($egreso_ids as $egreso_id) {
