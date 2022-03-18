@@ -609,6 +609,7 @@ class CuentaCorrienteClienteController {
 		$this->model->estadomovimientocuenta = $estadomovimientocuenta;
 		$this->model->cobrador = $cobrador;
 		$this->model->save();
+		$cuentacorrientecliente_id = $this->model->cuentacorrientecliente_id;
 
 		switch ($ingresotipopago_id) {
 			case 1:
