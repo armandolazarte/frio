@@ -271,7 +271,7 @@ class CuentaCorrienteClienteView extends View {
 		$render = str_replace('{fecha_sys}', $fecha_sys, $gui);
 		$render = str_replace('{balance}', $balance, $render);
 		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
-		$gui = str_replace('{slt_ingresotipopago}', $gui_slt_ingresotipopago, $gui);
+		$render = str_replace('{slt_ingresotipopago}', $gui_slt_ingresotipopago, $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($obj_cuentacorrientecliente, $render);
 		$render = str_replace('{url_app}', URL_APP, $render);
