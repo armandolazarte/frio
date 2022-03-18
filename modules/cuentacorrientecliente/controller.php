@@ -560,6 +560,34 @@ class CuentaCorrienteClienteController {
 		$this->model->cobrador = $cobrador;
 		$this->model->save();
 
+		switch ($ingresotipopago_id) {
+			case 1:
+				$cpdm = new ChequeClienteDetalle();
+				$cpdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+				$cpdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
+				$cpdm->fecha_pago = null;
+				$cpdm->banco = filter_input(INPUT_POST, 'banco');
+				$cpdm->plaza = filter_input(INPUT_POST, 'plaza');
+				$cpdm->titular = filter_input(INPUT_POST, 'titular');
+				$cpdm->documento = filter_input(INPUT_POST, 'documento');
+				$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
+				$cpdm->estado = 1;
+				$cpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+				$cpdm->egreso_id = $egreso_id;
+				$cpdm->save();
+				break;
+			case 2:
+				$tpdm = new TransferenciaClienteDetalle();
+				$tpdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+				$tpdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+				$tpdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+				$tpdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+				$tpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+				$cpdm->egreso_id = $egreso_id;
+				$tpdm->save();
+				break;
+		}
+
 		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
 	}
 
@@ -590,6 +618,26 @@ class CuentaCorrienteClienteController {
 		}
 
 		$this->view->traer_formulario_abonar_ajax($cobrador_collection, $ingresotipopago_collection, $this->model, $cm, $balance);
+	}
+
+	function traer_chequeclientedetalle_ajax($arg) {
+    	SessionHandler()->check_session();
+		$ids = explode('@', $arg);
+		$chequeclientedetalle_id = $ids[0];
+		$cliente_id = $ids[1];
+		$cpdm = new ChequeClienteDetalle();
+		$cpdm->chequeclientedetalle_id = $chequeclientedetalle_id;
+		$cpdm->get();
+		$this->view->traer_chequeclientedetalle_ajax($cpdm, $cliente_id);
+	}
+
+	function traer_transferenciaclientedetalle_ajax($arg) {
+    	SessionHandler()->check_session();
+		$transferenciaclientedetalle_id = $arg;
+		$tpdm = new TransferenciaClienteDetalle();
+		$tpdm->transferenciaclientedetalle_id = $transferenciaclientedetalle_id;
+		$tpdm->get();
+		$this->view->traer_transferenciaclientedetalle_ajax($tpdm);
 	}
 
 	function traer_listado_movimientos_cuentacorriente_ajax($arg) {
@@ -697,6 +745,19 @@ class CuentaCorrienteClienteController {
 		}
 		
 		header("Location: " . URL_APP . "/cuentacorrientecliente/listar_cuentas/{$cliente_id}");
+	}
+
+	function abonar_chequecliente() {
+		$chequeclientedetalle_id = filter_input(INPUT_POST, 'chequeclientedetalle_id');
+		$cliente_id = filter_input(INPUT_POST, 'cliente_id');
+		$cpdm = new ChequeClienteDetalle();
+		$cpdm->chequeclientedetalle_id = $chequeclientedetalle_id;
+		$cpdm->get();
+		$cpdm->estado = 2;
+		$cpdm->fecha_pago = date('Y-m-d');
+		$cpdm->save();
+
+		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
 	}
 }
 ?>

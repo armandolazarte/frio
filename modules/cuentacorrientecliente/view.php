@@ -295,5 +295,33 @@ class CuentaCorrienteClienteView extends View {
 		$gui = str_replace('{url_app}', URL_APP, $gui);
 		print $gui;
 	}
+
+	function traer_chequeclientedetalle_ajax($obj_chequeclientedetalle, $cliente_id) {
+		if ($obj_chequeclientedetalle->estado == 1 AND is_null($obj_chequeclientedetalle->fecha_pago)) {
+			$gui = file_get_contents("static/modules/cuentacorrientecliente/form_abonar_chequeclientedetalle_ajax.html");
+			$gui = str_replace('{cliente-cliente_id}', $cliente_id, $gui);
+		} else {
+			$gui = file_get_contents("static/modules/cuentacorrientecliente/traer_chequeclientedetalle_ajax.html");
+
+			$estado_denominacion = ($obj_chequeclientedetalle->estado == 1) ? 'PENDIENTE' : '';
+			$estado_denominacion = ($obj_chequeclientedetalle->estado == 2) ? 'ABONADO' : $estado_denominacion;
+			$estado_denominacion = ($obj_chequeclientedetalle->estado == 3) ? 'ANULADO' : $estado_denominacion;
+			$obj_chequeclientedetalle->estado_denominacion = $estado_denominacion;
+		}
+
+		$obj_chequeclientedetalle = $this->set_dict($obj_chequeclientedetalle);
+		$gui = $this->render($obj_chequeclientedetalle, $gui);
+		$gui = str_replace('{url_app}', URL_APP, $gui);
+		print $gui;
+	}
+
+	function traer_transferenciaclientedetalle_ajax($obj_transferenciaclientedetalle) {
+		$gui = file_get_contents("static/modules/cuentacorrientecliente/traer_transferenciaclientedetalle_ajax.html");
+		$estado_denominacion = 'ABONADO';
+		$obj_transferenciaclientedetalle->estado_denominacion = $estado_denominacion;
+		$obj_transferenciaclientedetalle = $this->set_dict($obj_transferenciaclientedetalle);
+		$gui = $this->render($obj_transferenciaclientedetalle, $gui);
+		print $gui;
+	}
 }
 ?>

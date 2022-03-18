@@ -1,0 +1,52 @@
+<form class="form" id="formulario_guardar" method="post" action="{url_app}/cuentacorrientecliente/abonar_chequecliente">
+    <div class="form-group col-lg-12" style="padding-left: 0px;">
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-8">
+                <label>N° Cheque</label>
+                <input type="text" class="form-control" name="numero" value="{chequeclientedetalle-numero}" readonly>
+            </div>
+            <div class="form-group col-lg-4">
+                <label>Fecha Vencimiento</label>
+                <input type="date" class="form-control" name="fecha_vencimiento" value="{chequeclientedetalle-fecha_vencimiento}" readonly>
+            </div>
+        </div>
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-4">
+                <label>Banco</label>
+                <input type="text" class="form-control" name="banco" value="{chequeclientedetalle-banco}" readonly>
+            </div>
+            <div class="form-group col-lg-4">
+                <label>Plaza</label>
+                <input type="text" class="form-control" name="plaza" value="{chequeclientedetalle-plaza}" readonly>
+            </div>
+            <div class="form-group col-lg-4">
+                <label>Cuenta Corriente</label>
+                <input type="text" class="form-control" name="cuenta_corriente" value="{chequeclientedetalle-cuenta_corriente}" readonly>
+            </div>
+        </div>
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-6">
+                <label>Nombre</label>
+                <input type="text" class="form-control" name="titular" value="{chequeclientedetalle-titular}" readonly>
+            </div>
+            <div class="form-group col-lg-6">
+                <label>Documento</label>
+                <input type="text" class="form-control" name="documento" value="{chequeclientedetalle-documento}" readonly>
+            </div>
+        </div>
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-4 col-lg-offset-8">
+                <label>Fecha Pago</label>
+                <input type="date" class="form-control" name="fecha_pago" value="{fecha_sys}" required>
+            </div>
+        </div>
+        <div class="form-group col-lg-12" align="right">
+            <div class="form-group col-lg-12" align="right">
+                <input type="hidden" name="cuentacorrientecliente_id" id="cuentacorrientecliente_id" value="{chequeclientedetalle-cuentacorrientecliente_id}">
+                <input type="hidden" name="chequeclientedetalle_id" id="chequeclientedetalle_id" value="{chequeclientedetalle-chequeclientedetalle_id}">
+                <input type="hidden" name="cliente_id" id="cliente_id" value="{cliente-cliente_id}">
+                <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Abonar cheque </button>
+            </div>
+        </div>
+    </div>
+</form>
