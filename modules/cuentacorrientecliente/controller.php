@@ -585,6 +585,9 @@ class CuentaCorrienteClienteController {
 		}
 
 		$ingresotipopago_collection = Collector()->get('IngresoTipoPago');
+		foreach ($ingresotipopago_collection as $clave=>$valor) {
+			if($valor->ingresotipopago_id == 4) unset($ingresotipopago_collection[$clave]);
+		}
 
 		$this->view->traer_formulario_abonar_ajax($cobrador_collection, $ingresotipopago_collection, $this->model, $cm, $balance);
 	}
