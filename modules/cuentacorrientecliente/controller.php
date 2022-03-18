@@ -6,7 +6,7 @@ require_once "modules/egreso/model.php";
 require_once "modules/cobrador/model.php";
 require_once "modules/tipomovimientocuenta/model.php";
 require_once "modules/ingresotipopago/model.php";
-require_once "modules/creditoclientedetalle/model.php";
+require_once "modules/chequeclientedetalle/model.php";
 require_once "modules/transferenciaclientedetalle/model.php";
 require_once "tools/cuentaCorrienteClientePDFTool.php";
 
