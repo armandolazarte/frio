@@ -5,6 +5,7 @@ require_once "modules/cliente/model.php";
 require_once "modules/egreso/model.php";
 require_once "modules/cobrador/model.php";
 require_once "modules/tipomovimientocuenta/model.php";
+require_once "modules/ingresotipopago/model.php";
 require_once "tools/cuentaCorrienteClientePDFTool.php";
 
 
@@ -583,7 +584,9 @@ class CuentaCorrienteClienteController {
 			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);
 		}
 
-		$this->view->traer_formulario_abonar_ajax($cobrador_collection, $this->model, $cm, $balance);
+		$ingresotipopago_collection = Collector()->get('IngresoTipoPago');
+
+		$this->view->traer_formulario_abonar_ajax($cobrador_collection, $ingresotipopago_collection, $this->model, $cm, $balance);
 	}
 
 	function traer_listado_movimientos_cuentacorriente_ajax($arg) {

@@ -240,10 +240,12 @@ class CuentaCorrienteClienteView extends View {
 		print $template;
 	}
 
-	function traer_formulario_abonar_ajax($cobrador_collection, $obj_cuentacorrientecliente, $obj_cliente, $balance) {
+	function traer_formulario_abonar_ajax($cobrador_collection, $ingresotipopago_collection, $obj_cuentacorrientecliente, $obj_cliente, $balance) {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/abonar_cuentacorrientecliente_ajax.html");		
 		$gui_slt_cobrador = file_get_contents("static/modules/cuentacorrientecliente/slt_cobrador.html");
 		$gui_slt_cobrador = $this->render_regex('SLT_COBRADOR', $gui_slt_cobrador, $cobrador_collection);
+		$gui_slt_ingresotipopago = file_get_contents("static/modules/ingresotipopago/slt_ingresotipopago.html");
+		$gui_slt_ingresotipopago = $this->render_regex('SLT_INGRESOTIPOPAGO', $gui_slt_ingresotipopago, $ingresotipopago_collection);
 
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		switch ($user_level) {
@@ -269,6 +271,7 @@ class CuentaCorrienteClienteView extends View {
 		$render = str_replace('{fecha_sys}', $fecha_sys, $gui);
 		$render = str_replace('{balance}', $balance, $render);
 		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
+		$gui = str_replace('{slt_ingresotipopago}', $gui_slt_ingresotipopago, $gui);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($obj_cuentacorrientecliente, $render);
 		$render = str_replace('{url_app}', URL_APP, $render);
