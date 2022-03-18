@@ -8,6 +8,74 @@
             <label>Fecha</label>
             <input type="date" class="form-control" name="fecha" value="{fecha_sys}" required {readonly-fecha}>
         </div>
+        <div class="form-group col-lg-12">
+            <div class="form-group col-lg-3">
+                <label>Tipo Pago</label>
+                <select class="form-control m-bot15" name="ingresotipopago" id="ingresotipopago" onChange="verificaMetodoPago();" required>
+                    {slt_ingresotipopago}
+                </select>
+            </div>
+            <div class="form-group col-lg-5" id="div_numero_cheque">
+                <label>N° Cheque</label>
+                <input type="text" class="form-control" name="numero_cheque" id="numero_cheque">
+            </div>
+            <div class="form-group col-lg-5" id="div_numero_transferencia" style="display: none;">
+                <label>N° Transferencia</label>
+                <input type="text" class="form-control" name="numero_transferencia" id="numero_transferencia">
+            </div>
+            <div class="form-group col-lg-4" id="div_banco_transferencia" style="display: none;">
+                <label>Banco</label>
+                <input type="text" class="form-control" name="banco_transferencia" id="banco_transferencia">
+            </div>
+            <div class="form-group col-lg-offset-3 col-lg-5" id="div_numero_cuenta_transferencia" style="display: none;">
+                <label>Número Cuenta</label>
+                <input type="text" class="form-control" name="numero_cuenta_transferencia" id="numero_cuenta_transferencia">
+            </div>
+            <div class="form-group col-lg-4" id="div_plaza_transferencia" style="display: none;">
+                <label>Plaza</label>
+                <input type="text" class="form-control" name="plaza_transferencia" id="plaza_transferencia">
+            </div>
+            <div class="form-group col-lg-4" id="div_fecha_vencimiento">
+                <label>Fecha Vencimiento</label>
+                <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+            </div>
+            <div class="form-group col-lg-6" id="div_titular">
+                <label>Nombre</label>
+                <input type="text" class="form-control" name="titular" id="titular">
+            </div>
+            <div class="form-group col-lg-6" id="div_documento">
+                <label>Documento</label>
+                <input type="text" class="form-control" name="documento" id="documento">
+            </div>
+            <div class="form-group col-lg-4" id="div_banco">
+                <label>Banco</label>
+                <input type="text" class="form-control" name="banco" id="banco">
+            </div>
+            <div class="form-group col-lg-4" id="div_plaza">
+                <label>Plaza</label>
+                <input type="text" class="form-control" name="plaza" id="plaza">
+            </div>
+            <div class="form-group col-lg-4" id="div_cuenta_corriente">
+                <label>Cuenta Corriente</label>
+                <input type="text" class="form-control" name="cuenta_corriente" id="cuenta_corriente">
+            </div>
+            <div class="form-group col-lg-2" id="div_tipo_nc" style="display: none;">
+                <label>Tipo</label>
+                <select class="form-control" name="tipofactura_nc">
+                    <option value="4">NCA</option>
+                    <option value="5">NCB</option>
+                    <option value="6">NCR</option>
+                </select>
+            </div>
+            <div class="form-group col-lg-3" id="div_numero_nc" style="display: none;">
+                <label>Número</label>
+                <input type="number" class="form-control" name="numero_nc" id="numero_nc">
+            </div>
+            <div class="form-group col-lg-4" id="div_fecha_nc" style="display: none;">
+                <label>Fecha</label>
+                <input type="date" class="form-control" name="fecha_nc" id="fecha_nc">
+            </div>
+        </div>
         <div class="form-group col-lg-8">
             <label>Entrega</label>
             <select class="form-control" name="cobrador" id="cobrador">

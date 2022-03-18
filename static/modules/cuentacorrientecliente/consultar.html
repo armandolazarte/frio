@@ -197,6 +197,98 @@
         document.getElementById("btn_movimientos").style.display = "none";  
     }
 
+    function verificaMetodoPago() {
+        var ingresotipopago = document.getElementById("ingresotipopago");
+        var ingresotipopago_id = ingresotipopago.options[ingresotipopago.selectedIndex].value;
+        
+        switch(parseInt(ingresotipopago_id)) {
+            case 1:
+                console.log(ingresotipopago_id);
+                document.getElementById("div_numero_cheque").style.display = "inline-block";
+                document.getElementById("div_fecha_vencimiento").style.display = "inline-block";
+                document.getElementById("div_banco").style.display = "inline-block";
+                document.getElementById("div_plaza").style.display = "inline-block";
+                document.getElementById("div_cuenta_corriente").style.display = "inline-block";
+                document.getElementById("div_titular").style.display = "inline-block";
+                document.getElementById("div_documento").style.display = "inline-block";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                break;
+            case 2:
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "inline-block";
+                document.getElementById("div_banco_transferencia").style.display = "inline-block";
+                document.getElementById("div_plaza_transferencia").style.display = "inline-block";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "inline-block";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                break;
+            case 3:
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                break;
+            case 4:
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "inline-block";
+                document.getElementById("div_numero_nc").style.display = "inline-block";
+                document.getElementById("div_fecha_nc").style.display = "inline-block";
+                break;
+        }
+    }
+
+    function verTipoPagoDetalle(movimiento_id, tipopago_id, cliente_id) {
+        if (tipopago_id == 1) {
+            var tipopagodetalle = $.ajax({
+                url: '{url_app}/cuentacorrientecliente/traer_chequeclientedetalle_ajax/' + movimiento_id + '@' + cliente_id,
+                dataType: 'text',
+                async: false
+            }).responseText;
+        } else {
+            var tipopagodetalle = $.ajax({
+                url: '{url_app}/cuentacorrientecliente/traer_transferenciaclientedetalle_ajax/' + movimiento_id,
+                dataType: 'text',
+                async: false
+            }).responseText;
+        }
+
+        document.getElementById("div_contenido").innerHTML = tipopagodetalle;
+        $('#sistema_alertas').modal('show');
+    }
+
     function checkSubmit() {
         if (!enviando) {
             var cobrador = document.getElementById("cobrador");
