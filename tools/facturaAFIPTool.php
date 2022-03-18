@@ -1,8 +1,8 @@
 <?php
 require_once "modules/configuracion/model.php";
 require_once "modules/egresoafip/model.php";
-require_once "common/libs/desa_afip.php-master/src/Afip.php";
-//require_once "common/libs/afip.php-master/src/Afip.php";
+//require_once "common/libs/desa_afip.php-master/src/Afip.php";
+require_once "common/libs/afip.php-master/src/Afip.php";
 
 
 class FacturaAFIPTool {
