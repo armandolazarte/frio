@@ -86,15 +86,14 @@ class CuentaCorrienteClienteController {
     	$cm->cliente_id = $arg;
     	$cm->get();
     	
-		$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID,
-				   ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS,
-				   ccc.cuentacorrientecliente_id CCCID";
+		$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ccc.cuentacorrientecliente_id CCCID";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
 		$where = "ccc.cliente_id = {$arg} AND ccc.estadomovimientocuenta != 4 AND ccc.importe != 0";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 
 		$egreso_ids = array();
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
+			$temp_cuentacorrientecliente_id = $valor['CCCID'];
 			$egreso_id = $valor['EID'];
 			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
 			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
@@ -133,10 +132,10 @@ class CuentaCorrienteClienteController {
 
 			switch ($ingresotipopago_id) {
 				case 1:
-					$select = "cpd.chequeclientedetalle_id AS ID";
-					$from = "chequeclientedetalle cpd";
-					$where = "cpd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
-					$chequeclientedetalle_id = CollectorCondition()->get('ChequeclienteDetalle', $where, 4, $from, $select);
+					$select = "ccd.chequeclientedetalle_id AS ID";
+					$from = "chequeclientedetalle ccd";
+					$where = "ccd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
+					$chequeclientedetalle_id = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select);
 					$chequeclientedetalle_id = (is_array($chequeclientedetalle_id) AND !empty($chequeclientedetalle_id)) ? $chequeclientedetalle_id[0]['ID'] : 0;
 
 					if ($chequeclientedetalle_id != 0) {
@@ -150,10 +149,10 @@ class CuentaCorrienteClienteController {
 					}
 					break;
 				case 2:
-					$select = "tpd.transferenciaclientedetalle_id AS ID";
-					$from = "transferenciaclientedetalle tpd";
-					$where = "tpd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
-					$transferenciaclientedetalle_id = CollectorCondition()->get('TransferenciaclienteDetalle', $where, 4, $from, $select);
+					$select = "tcd.transferenciaclientedetalle_id AS ID";
+					$from = "transferenciaclientedetalle tcd";
+					$where = "tcd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
+					$transferenciaclientedetalle_id = CollectorCondition()->get('TransferenciaClienteDetalle', $where, 4, $from, $select);
 					$transferenciaclientedetalle_id = (is_array($transferenciaclientedetalle_id) AND !empty($transferenciaclientedetalle_id)) ? $transferenciaclientedetalle_id[0]['ID'] : 0;
 
 					if ($transferenciaclientedetalle_id != 0) {
