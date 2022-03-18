@@ -177,6 +177,8 @@ class CuentaCorrienteClienteController {
 			$cuentacorriente_collection[$clave]['MOVID'] = $btn_movimiento_id;
 		}
 
+		print_r($cuentacorriente_collection);exit;
+
 		$max_cuentacorrientecliente_ids = array();
 		foreach ($egreso_ids as $egreso_id) {
 			$select = "ccc.cuentacorrientecliente_id AS ID";
