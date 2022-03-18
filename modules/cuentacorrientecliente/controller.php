@@ -130,6 +130,52 @@ class CuentaCorrienteClienteController {
 				$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
 				$cuentacorriente_collection[$clave]['REFERENCIA'] = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura}";
 			}
+
+			switch ($ingresotipopago_id) {
+				case 1:
+					$select = "cpd.chequeclientedetalle_id AS ID";
+					$from = "chequeclientedetalle cpd";
+					$where = "cpd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
+					$chequeclientedetalle_id = CollectorCondition()->get('ChequeclienteDetalle', $where, 4, $from, $select);
+					$chequeclientedetalle_id = (is_array($chequeclientedetalle_id) AND !empty($chequeclientedetalle_id)) ? $chequeclientedetalle_id[0]['ID'] : 0;
+
+					if ($chequeclientedetalle_id != 0) {
+						$btn_display_ver_tipopago = 'inline-block';
+						$btn_tipopago_id = $ingresotipopago_id;
+						$btn_movimiento_id = $chequeclientedetalle_id;
+					} else {
+						$btn_display_ver_tipopago = 'none';
+						$btn_tipopago_id = '#';
+						$btn_movimiento_id = '#';
+					}
+					break;
+				case 2:
+					$select = "tpd.transferenciaclientedetalle_id AS ID";
+					$from = "transferenciaclientedetalle tpd";
+					$where = "tpd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
+					$transferenciaclientedetalle_id = CollectorCondition()->get('TransferenciaclienteDetalle', $where, 4, $from, $select);
+					$transferenciaclientedetalle_id = (is_array($transferenciaclientedetalle_id) AND !empty($transferenciaclientedetalle_id)) ? $transferenciaclientedetalle_id[0]['ID'] : 0;
+
+					if ($transferenciaclientedetalle_id != 0) {
+						$btn_display_ver_tipopago = 'inline-block';
+						$btn_tipopago_id = $ingresotipopago_id;
+						$btn_movimiento_id = $transferenciaclientedetalle_id;
+					} else {
+						$btn_display_ver_tipopago = 'none';
+						$btn_tipopago_id = '#';
+						$btn_movimiento_id = '#';
+					}
+					break;
+				default:
+					$btn_display_ver_tipopago = 'none';
+					$btn_tipopago_id = '#';
+					$btn_movimiento_id = '#';
+					break;
+			}
+
+			$cuentacorriente_collection[$clave]['DISPLAY_VER_TIPOPAGO'] = $btn_display_ver_tipopago;
+			$cuentacorriente_collection[$clave]['BTN_TIPOPAGO_ID'] = $btn_tipopago_id;
+			$cuentacorriente_collection[$clave]['MOVID'] = $btn_movimiento_id;
 		}
 
 		$max_cuentacorrientecliente_ids = array();
@@ -587,7 +633,7 @@ class CuentaCorrienteClienteController {
 				$tpdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
 				$tpdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
 				$tpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
-				$cpdm->egreso_id = $egreso_id;
+				$tpdm->egreso_id = $egreso_id;
 				$tpdm->save();
 				break;
 		}
