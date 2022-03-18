@@ -11,7 +11,7 @@
 <div class="col-md-4 col-sm-4 col-xs-4">
     <div class="x_panel">
         <div class="x_title">
-            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp; Editar cuenta contable</h2>
+            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp; Ventas</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                 <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -22,15 +22,23 @@
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/cuentacontable/guardar">
                     <div class="form-group">
-                        <label>Detalle</label>
-                        <input type="text" class="form-control" id="codigo" name="codigo" value="{cuentacontable-codigo}" required>
+                        <label>Código</label>
+                        <input type="text" class="form-control" id="codigo" name="codigo" required>
                     </div>
-                    <div class="form-group">
-                        <label>Denominación</label>
-                        <input type="text" class="form-control" id="denominacion" name="denominacion" value="{cuentacontable-denominacion}" required>
+                    <div class="form-group col-lg-1">
+                        <label>Cuenta Debe</label>
+                        <select class="form-control m-bot15" name="debecuentacontable_id" id="debecuentacontable_id" required>
+                            {slt_cuentacontable}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-1">
+                        <label>Cuenta Haber</label>
+                        <select class="form-control m-bot15" name="debecuentacontable_id" id="debecuentacontable_id" required>
+                            {slt_cuentacontable}
+                        </select>
                     </div>
                     <div class="col-lg-12" style="margin-top: 2%;" align="right">
-                        <input type="hidden" name="cuentacontable_id" id="cuentacontable_id" value="{cuentacontable-cuentacontable_id}">
+                        <input type="hidden" name="tipomovimiento" id="tipomovimiento" value="1">
                         <a href="#" class="btn btn-app" onclick="confirma_formulario(2, '')"><i class="fa fa-edit"></i> Editar</a>
                     </div>
                 </form>
