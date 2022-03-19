@@ -45,6 +45,7 @@ class CuentaContablePlanController {
 		$ingresotipopago = filter_input(INPUT_POST, 'ingresotipopago');
 		$debecuentacontable_id = filter_input(INPUT_POST, 'debecuentacontable_id');
 		$habercuentacontable_id = filter_input(INPUT_POST, 'habercuentacontable_id');
+		$tipomovimiento = filter_input(INPUT_POST, 'tipomovimiento');
 
 		$itpm = new IngresoTipoPago();
 		$itpm->ingresotipopago_id = $ingresotipopago;
@@ -54,7 +55,7 @@ class CuentaContablePlanController {
 		$this->model->fecha = date('Y-m-d');
 		$this->model->codigo = $codigo;
 		$this->model->denominacion = "Venta {$denominacion}";
-		$this->model->tipomovimiento = 1;		
+		$this->model->tipomovimiento = $tipomovimiento;		
 		$this->model->debe_cuenta_id = $debecuentacontable_id;
 		$this->model->haber_cuenta_id = $habercuentacontable_id;
 		$this->model->referencia_id = $ingresotipopago;
