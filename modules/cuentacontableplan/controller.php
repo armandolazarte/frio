@@ -2,7 +2,7 @@
 //require_once "modules/cuentacontableplan/model.php";
 require_once "modules/cuentacontableplan/view.php";
 require_once "modules/cuentacontable/model.php";
-require_once "modules/condicionpago/model.php";
+require_once "modules/ingresotipopago/model.php";
 
 
 class CuentaContablePlanController {
@@ -30,12 +30,12 @@ class CuentaContablePlanController {
 			if ($valor->oculto == 1) unset($cuentacontable_collection[$clave]);
 		}
 
-		$condicionpago_collection = Collector()->get('CondicionPago');
-		foreach ($condicionpago_collection as $clave=>$valor) {
-			if ($valor->oculto == 1) unset($condicionpago_collection[$clave]);
+		$ingresotipopago_collection = Collector()->get('IngresoTipoPago');
+		foreach ($ingresotipopago_collection as $clave=>$valor) {
+			if ($valor->oculto == 1 OR $valor->ingresotipopago_id == 4) unset($ingresotipopago_collection[$clave]);
 		}
 		
-		$this->view->configurar($cuentacontable_collection);
+		$this->view->configurar($cuentacontable_collection, $ingresotipopago_collection);
 	}
 
 	function guardar() {
