@@ -1,5 +1,5 @@
 <?php
-//require_once "modules/cuentacontableplan/model.php";
+require_once "modules/cuentacontableplan/model.php";
 require_once "modules/cuentacontableplan/view.php";
 require_once "modules/cuentacontable/model.php";
 require_once "modules/ingresotipopago/model.php";
@@ -8,7 +8,7 @@ require_once "modules/ingresotipopago/model.php";
 class CuentaContablePlanController {
 
 	function __construct() {
-		//$this->model = new CuentaContablePlan();
+		$this->model = new CuentaContablePlan();
 		$this->view = new CuentaContablePlanView();
 	}
 
@@ -38,13 +38,43 @@ class CuentaContablePlanController {
 		$this->view->configurar($cuentacontable_collection, $ingresotipopago_collection);
 	}
 
-	function guardar() {
-		SessionHandler()->check_session();		
-		foreach ($_POST as $clave=>$valor) $this->model->$clave = $valor;
-		$this->model->oculto = 0;
-        $this->model->save();
-		header("Location: " . URL_APP . "/cuentacontable/panel");
+	function guardar_plan_venta() {
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$codigo = filter_input(INPUT_POST, 'codigo');
+		$ingresotipopago = filter_input(INPUT_POST, 'ingresotipopago');
+		$debecuentacontable_id = filter_input(INPUT_POST, 'debecuentacontable_id');
+		$habercuentacontable_id = filter_input(INPUT_POST, 'habercuentacontable_id');
+
+		$itpm = new IngresoTipoPago();
+		$itpm->ingresotipopago_id = $ingresotipopago;
+		$itpm->get();
+		$denominacion = $itpm->denominacion;
+
+		$this->model->fecha = date('Y-m-d');
+		$this->model->codigo = $codigo;
+		$this->model->denominacion = "Venta {$denominacion}";
+		$this->model->tipomovimiento = 1;		
+		$this->model->debe_cuenta_id = $debecuentacontable_id;
+		$this->model->haber_cuenta_id = $habercuentacontable_id;
+		$this->model->referencia_id = $ingresotipopago;
+		$this->model->usuario_id = $usuario_id;
+		$this->model->save();
+
+		header("Location: " . URL_APP . "/cuentacontableplan/panel");
 	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	function editar($arg) {
 		SessionHandler()->check_session();
