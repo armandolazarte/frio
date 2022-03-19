@@ -1,6 +1,7 @@
 <?php
 //require_once "modules/cuentacontableplan/model.php";
 require_once "modules/cuentacontableplan/view.php";
+require_once "modules/cuentacontable/model.php";
 
 
 class CuentaContablePlanController {
@@ -22,13 +23,13 @@ class CuentaContablePlanController {
 
 	function configurar() {
     	SessionHandler()->check_session();
-		/*
+		
 		$cuentacontable_collection = Collector()->get('CuentaContable');
 		foreach ($cuentacontable_collection as $clave=>$valor) {
 			if ($valor->oculto == 1) unset($cuentacontable_collection[$clave]);
 		}
-		*/
-		$this->view->configurar();
+		
+		$this->view->configurar($cuentacontable_collection);
 	}
 
 	function guardar() {
