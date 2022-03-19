@@ -2,6 +2,7 @@
 //require_once "modules/cuentacontableplan/model.php";
 require_once "modules/cuentacontableplan/view.php";
 require_once "modules/cuentacontable/model.php";
+require_once "modules/condicionpago/model.php";
 
 
 class CuentaContablePlanController {
@@ -27,6 +28,11 @@ class CuentaContablePlanController {
 		$cuentacontable_collection = Collector()->get('CuentaContable');
 		foreach ($cuentacontable_collection as $clave=>$valor) {
 			if ($valor->oculto == 1) unset($cuentacontable_collection[$clave]);
+		}
+
+		$condicionpago_collection = Collector()->get('CondicionPago');
+		foreach ($condicionpago_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($condicionpago_collection[$clave]);
 		}
 		
 		$this->view->configurar($cuentacontable_collection);
