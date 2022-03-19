@@ -18,6 +18,11 @@ class CuentaContablePlan extends StandardObject {
 	/*
 	TIPOS MOVIMIENTOS
 	1 - VENTAS
+	2 - COMPRAS
+	3 - SALARIO
+    4 - COMISIÓN
+    5 - GASTO
+    6 - COMBUSTIBLE
 
 	REFERENCIA ID
 	1 - VENTAS

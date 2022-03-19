@@ -14,12 +14,10 @@ class CuentaContablePlanController {
 
 	function panel() {
     	SessionHandler()->check_session();
-		$cuentacontable_collection = Collector()->get('CuentaContable');
-		foreach ($cuentacontable_collection as $clave=>$valor) {
-			if ($valor->oculto == 1) unset($cuentacontable_collection[$clave]);
-		}
-		
-		$this->view->panel($cuentacontable_collection);
+    	$select = "date_format(ccp.fecha, '%d/%m/%Y') AS FECHA, ccp.codigo AS COD, ccp.denominacion AS DENOMINACION, ccd.denominacion AS DEBE, cch.denominacion AS HABER, CASE ccp.tipomovimiento WHEN 1 THEN 'VENTA' WHEN 2 THEN 'COMPRA' WHEN 3 THEN 'SALARIO' WHEN 4 THEN 'COMISIÓN' WHEN 5 THEN 'GASTO' WHEN 6 THEN 'COMBUSTIBLE' ELSE 'SIN DEFINIR' END AS ACCION";
+    	$from = "cuentacontableplan ccp INNER JOIN cuentacontable ccd ON ccd.cuentacontable_id = ccp.debe_cuenta_id INNER JOIN cuentacontable cch ON cch.cuentacontable_id = ccp.haber_cuenta_id";
+		$cuentacontableplan_collection = CollectorCondition()->get('CuentaContable', NULL, 4, $from, $select);		
+		$this->view->panel($cuentacontableplan_collection);
 	}
 
 	function configurar() {

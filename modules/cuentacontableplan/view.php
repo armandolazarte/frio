@@ -3,9 +3,12 @@
 
 class CuentaContablePlanView extends View {
 	
-	function panel($cuentacontable_collection) {
-		$gui = file_get_contents("static/modules/cuentacontable/panel.html");
-		$render = $this->render_regex('TBL_CUENTACONTABLE', $gui, $cuentacontable_collection);
+	function panel($cuentacontableplan_collection) {
+		$gui = file_get_contents("static/modules/cuentacontableplan/panel.html");
+		$gui_tbl_cuentacontableplan = file_get_contents("static/modules/cuentacontableplan/tbl_cuentacontableplan.html");
+		$gui_tbl_cuentacontableplan = $this->render_regex('TBL_CUENTACONTABLEPLAN', $gui_tbl_cuentacontableplan, $cuentacontableplan_collection);
+
+		$render = str_replace('{tbl_cuentacontableplan}', $gui_tbl_cuentacontableplan, $gui);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
