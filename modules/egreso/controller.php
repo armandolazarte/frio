@@ -1587,6 +1587,17 @@ class EgresoController {
 		$pm = new Producto();
 		$pm->producto_id = $producto_id;
 		$pm->get();
+
+		$iva = $pm->iva;
+		$neto = $pm->costo;
+		$flete = $pm->flete;
+		$porcentaje_ganancia = $pm->porcentaje_ganancia;
+		
+		$valor_neto = $neto + ($flete * $neto / 100);
+		$valor_con_iva = $valor_neto + ($iva * $valor_neto / 100);
+		$pvp = $valor_con_iva + ($porcentaje_ganancia * $valor_con_iva / 100);
+		$pm->precio_venta = round($pvp, 2);
+
 		$select = "MAX(s.stock_id) AS MAXID";
 		$from = "stock s";
 		$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
@@ -1660,6 +1671,20 @@ class EgresoController {
 		} else {
 			print "1";
 		}
+	}
+
+	function traer_formulario_reingreso_producto_ajax($arg) {
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];		
+		$edm = new EgresoDetalle();
+		$edm->egresodetalle_id = $arg;
+		$edm->get();
+		$producto_id = $edm->producto_id;
+		
+		$pm = new Producto();
+		$pm->producto_id = $producto_id;
+		$pm->get();
+
+		$this->view->traer_formulario_reingreso_producto_ajax($pm, $edm);
 	}
 
 	function traer_costo_producto_ajax($arg) {
