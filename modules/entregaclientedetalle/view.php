@@ -62,14 +62,19 @@ class EntregaClienteDetalleView extends View {
     print $render;
   }
 
-  function editar_ajax($obj_entregacliente, $obj_entregaclientedetalle) {
+  function editar_ajax($ingresotipopago_collection, $obj_entregacliente, $obj_entregaclientedetalle) {
     $gui = file_get_contents("static/modules/entregaclientedetalle/editar_ajax.html");
+    $gui_slt_ingresotipopago = file_get_contents("static/common/slt_ingresotipopago.html");
+
+    $gui_slt_ingresotipopago = $this->render_regex('SLT_INGRESOTIPOPAGO', $gui_slt_ingresotipopago, $ingresotipopago_collection);
     $obj_entregaclientedetalle->selected_parcial = ($obj_entregaclientedetalle->parcial == 1) ? 'selected' : '';
     $obj_entregaclientedetalle->selected_total = ($obj_entregaclientedetalle->parcial == 1) ? '' : 'selected';
+    $obj_entregaclientedetalle->monto = round($obj_entregaclientedetalle->monto, 2);
     $obj_entregacliente = $this->set_dict($obj_entregacliente);
     $obj_entregaclientedetalle = $this->set_dict($obj_entregaclientedetalle);
     $render = $this->render($obj_entregacliente, $gui);
     $render = $this->render($obj_entregaclientedetalle, $render);
+    $render = str_replace('{slt_ingresotipopago}', $gui_slt_ingresotipopago, $render);
     $render = str_replace('{url_app}', URL_APP, $render);
     print $render;
   }

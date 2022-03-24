@@ -7,10 +7,10 @@ class EntregaCliente  extends StandardObject {
 		$this->entregacliente_id = 0;
 		$this->fecha = '';
 		$this->monto = 0;
-		$this->estado	 = 0;
-		$this->vendedor_id	= 0;
-		$this->cliente_id	 = 0;
-		$this->anulada	 = 0;		
+		$this->estado = 0;
+		$this->vendedor_id= 0;
+		$this->cliente_id = 0;
+		$this->anulada = 0;		
 	}
 
 	function getDetalles() {

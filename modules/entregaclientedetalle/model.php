@@ -11,6 +11,7 @@ class EntregaClienteDetalle  extends StandardObject {
 		$this->monto = 0;
 		$this->entregacliente_id = 0;
 		$this->parcial = 0;
+		$this->ingresotipopago_id = 0;
 	}
 }
 ?>

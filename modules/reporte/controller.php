@@ -537,8 +537,8 @@ class ReporteController {
 		$cajadiaria = (is_null($cajadiaria)) ? 0 : $cajadiaria;
 
     	$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
-		$from = "egreso e";
-		$where = "e.condicionpago = 2 AND e.fecha = CURDATE()";
+		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
+		$where = "e.condicionpago = 2 AND ee.fecha = CURDATE() AND esen.estadoentrega_id = 4";
 		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
@@ -786,8 +786,8 @@ class ReporteController {
 		$cajadiaria = (is_null($cajadiaria)) ? 0 : $cajadiaria;
 
     	$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
-		$from = "egreso e";
-		$where = "e.condicionpago = 2 AND e.fecha = '{$fecha_filtro}'";
+		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
+		$where = "e.condicionpago = 2 AND ee.fecha = '{$fecha_filtro}' AND esen.estadoentrega_id = 4";
 		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
@@ -1236,8 +1236,8 @@ class ReporteController {
 		$ingreso_cuentacorriente_per_actual = (is_null($ingreso_cuentacorriente_per_actual)) ? 0 : $ingreso_cuentacorriente_per_actual;
 
 		$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
-		$from = "egreso e";
-		$where = "e.condicionpago = 2 AND date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
+		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
+		$where = "e.condicionpago = 2 AND date_format(ee.fecha, '%Y%m') = '{$periodo_actual}' AND esen.estadoentrega_id = 4";
 		$sum_contado_per_actual = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado_per_actual = (is_array($sum_contado_per_actual) AND !empty($sum_contado_per_actual)) ? $sum_contado_per_actual[0]['CONTADO'] : 0;
 		$sum_contado_per_actual = (is_null($sum_contado_per_actual)) ? 0 : $sum_contado_per_actual;
@@ -1521,8 +1521,8 @@ class ReporteController {
 		$ingreso_cuentacorriente_per_actual = (is_null($ingreso_cuentacorriente_per_actual)) ? 0 : $ingreso_cuentacorriente_per_actual;
 
 		$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
-		$from = "egreso e";
-		$where = "e.condicionpago = 2 AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
+		$where = "e.condicionpago = 2 AND ee.fecha BETWEEN '{$desde}' AND '{$hasta}' AND esen.estadoentrega_id = 4";
 		$sum_contado_per_actual = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado_per_actual = (is_array($sum_contado_per_actual) AND !empty($sum_contado_per_actual)) ? $sum_contado_per_actual[0]['CONTADO'] : 0;
 		$sum_contado_per_actual = (is_null($sum_contado_per_actual)) ? 0 : $sum_contado_per_actual;
@@ -1732,8 +1732,8 @@ class ReporteController {
 		$fecha_cajadiaria = $cdm->fecha;
 
     	$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
-		$from = "egreso e";
-		$where = "e.condicionpago = 2 AND e.fecha = '{$fecha_sys}'";
+		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
+		$where = "e.condicionpago = 2 AND ee.fecha = '{$fecha_sys}' AND esen.estadoentrega_id = 4";
 		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
