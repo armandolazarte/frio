@@ -52,15 +52,16 @@ class FleteController {
 		SessionHandler()->check_session();
 
 		$denominacion = filter_input(INPUT_POST, 'denominacion');	
+		$documento = filter_input(INPUT_POST, 'documento');
 		$this->model->denominacion = $denominacion;	
-		$this->model->documento = filter_input(INPUT_POST, 'documento');	
-		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');	
+		$this->model->documento = (is_null($documento) OR empty($documento)) ? 0 : $documento;
+		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');	
 		$this->model->localidad = filter_input(INPUT_POST, 'localidad');	
 		$this->model->latitud = filter_input(INPUT_POST, 'latitud');	
 		$this->model->longitud = filter_input(INPUT_POST, 'longitud');	
-		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');	
 		$this->model->observacion = filter_input(INPUT_POST, 'observacion');
 		$this->model->oculto = 0;
+		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');	
 		$this->model->save();
 		$flete_id = $this->model->flete_id;
 
