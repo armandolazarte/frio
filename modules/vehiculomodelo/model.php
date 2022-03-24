@@ -8,6 +8,7 @@ class VehiculoModelo extends StandardObject {
 		$this->vehiculomodelo_id = 0;
 		$this->denominacion = '';
 		$this->capacidad_tanque = 0;
+		$this->oculto = 0;
 		$this->vehiculomarca = $vehiculomarca;
 	}
 }
