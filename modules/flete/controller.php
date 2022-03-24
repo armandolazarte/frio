@@ -19,6 +19,7 @@ class FleteController {
 	}
 
 	function listar() {
+    	SessionHandler()->check_session();		
 		$select = "f.flete_id AS FLETE_ID, f.localidad AS LOCALIDAD, f.denominacion AS DENOMINACION, 
 				   CONCAT(dt.denominacion, ' ', f.documento) AS DOCUMENTO";
 		$from = "flete f INNER JOIN documentotipo dt ON f.documentotipo = dt.documentotipo_id";
@@ -158,9 +159,9 @@ class FleteController {
 	}
 
 	function buscar() {
+    	SessionHandler()->check_session();		
 		$buscar = filter_input(INPUT_POST, 'buscar');
-		$select = "f.flete_id AS FLETE_ID, f.localidad AS LOCALIDAD, f.denominacion AS DENOMINACION, 
-				   CONCAT(dt.denominacion, ' ', f.documento) AS DOCUMENTO";
+		$select = "f.flete_id AS FLETE_ID, f.localidad AS LOCALIDAD, f.denominacion AS DENOMINACION, CONCAT(dt.denominacion, ' ', f.documento) AS DOCUMENTO";
 		$from = "flete f INNER JOIN documentotipo dt ON f.documentotipo = dt.documentotipo_id";
 		$where = "f.denominacion LIKE '%{$buscar}%' OR f.documento LIKE '%{$buscar}%'";
 		$flete_collection = CollectorCondition()->get('Flete', $where, 4, $from, $select);
@@ -168,6 +169,7 @@ class FleteController {
 	}
 
 	function verifica_documento_ajax($arg) {
+    	SessionHandler()->check_session();		
 		$select = "COUNT(*) AS DUPLICADO";
 		$from = "flete f";
 		$where = "f.documento = {$arg}";
