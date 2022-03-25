@@ -754,6 +754,7 @@ class ApiController {
                             $group_by = "pvd.producto_id"; 
                             $sugerido = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select, $group_by);
                             $sugerido = (is_array($sugerido) AND !empty($sugerido)) ? $sugerido[0]['SUGERIDO'] : 0;
+                            $sugerido = (!empty($sugerido) AND !is_null($sugerido) AND $sugerido != '') ? $sugerido : 0;
 
                             $cantidad_disponible = $valor['CANTIDAD'];
                             $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
