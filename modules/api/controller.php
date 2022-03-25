@@ -748,7 +748,7 @@ class ApiController {
                         $pm->get();
 
                         
-                            $select = "SUM(pvd.cantidad) AS SUGERIDO ";
+                            $select = "SUM(pvd.cantidad) AS SUGERIDO";
                             $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
                             $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
                             $group_by = "pvd.producto_id"; 
@@ -820,7 +820,7 @@ class ApiController {
                         $pm->get();
 
                         
-                            $select = "CASE WHEN SUM(pvd.cantidad) AS SUGERIDO ";
+                            $select = "SUM(pvd.cantidad) AS SUGERIDO";
                             $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
                             $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
                             $group_by = "pvd.producto_id"; 
