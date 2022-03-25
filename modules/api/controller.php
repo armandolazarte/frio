@@ -747,7 +747,7 @@ class ApiController {
                         $pm->producto_id = $producto_id;
                         $pm->get();
 
-                        if ($pm->oculto == 0) {
+                        
                             $select = "SUM(pvd.cantidad) AS SUGERIDO ";
                             $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
                             $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
@@ -758,6 +758,7 @@ class ApiController {
 
                             $cantidad_disponible = $valor['CANTIDAD'];
                             $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
+                            $stock_sugerido = ($stock_sugerido <= 0) ? 0 : $stock_sugerido;
 
                             $producto = new stdClass();
                             $producto->producto_id = $pm->producto_id;
@@ -782,7 +783,7 @@ class ApiController {
                             $producto->cantidad_disponible = $cantidad_disponible;
                             $producto->cantidad_sugerida = $stock_sugerido;
                             array_push($respuesta, $producto);
-                        }
+                        
                     }
                 }
 
@@ -818,7 +819,7 @@ class ApiController {
                         $pm->producto_id = $producto_id;
                         $pm->get();
 
-                        if ($pm->oculto == 0) {
+                        
                             $select = "CASE WHEN SUM(pvd.cantidad) AS SUGERIDO ";
                             $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
                             $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
@@ -829,6 +830,7 @@ class ApiController {
 
                             $cantidad_disponible = $valor['CANTIDAD'];
                             $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
+                            $stock_sugerido = ($stock_sugerido <= 0) ? 0 : $stock_sugerido;
 
                             $producto = new stdClass();
                             $producto->producto_id = $pm->producto_id;
@@ -853,7 +855,7 @@ class ApiController {
                             $producto->cantidad_disponible = $cantidad_disponible;
                             $producto->cantidad_sugerida = $stock_sugerido;
                             array_push($respuesta, $producto);
-                        }
+                        
                     }
                 }
 
