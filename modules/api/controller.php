@@ -735,7 +735,8 @@ class ApiController {
             if ($jwt->autenticar($token)) {
                 $select = "p.producto_id AS ID, s.cantidad_actual AS CANTIDAD";
                 $from = "stock s INNER JOIN (SELECT MAX(s1.stock_id) AS MAXID, s1.producto_id AS PROID FROM stock s1 WHERE s1.almacen_id = 1 GROUP BY s1.producto_id) ultimo ON ultimo.MAXID = s.stock_id AND ultimo.PROID = s.producto_id INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-                $where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
+                //$where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
+                $where = "p.oculto = 0 AND s.almacen_id = 1";
                 $stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
                 $respuesta = array();
@@ -804,7 +805,8 @@ class ApiController {
             if ($jwt->autenticar($token)) {
                 $select = "p.producto_id AS ID, s.cantidad_actual AS CANTIDAD";
                 $from = "stock s INNER JOIN (SELECT MAX(s1.stock_id) AS MAXID, s1.producto_id AS PROID FROM stock s1 WHERE s1.almacen_id = 1 GROUP BY s1.producto_id) ultimo ON ultimo.MAXID = s.stock_id AND ultimo.PROID = s.producto_id INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-                $where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
+                //$where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
+                $where = "p.oculto = 0 AND s.almacen_id = 1";
                 $stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
                 $respuesta = array();
