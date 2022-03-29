@@ -542,8 +542,7 @@ class ReporteController {
 		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
-		print_r($sum_contado);exit;
-
+		
 		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
 		$where = "ccc.fecha = '{$fecha_sys}' AND ccc.ingresotipopago = 3";
