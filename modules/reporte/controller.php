@@ -535,7 +535,6 @@ class ReporteController {
 		$cajadiaria = CollectorCondition()->get('CajaDiaria', NULL, 4, $from, $select);
 		$cajadiaria = (is_array($cajadiaria) AND !empty($cajadiaria)) ? $cajadiaria[0]['CAJA'] : 0;
 		$cajadiaria = (is_null($cajadiaria)) ? 0 : $cajadiaria;
-		print_r($cajadiaria);exit;
 
     	$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
 		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
@@ -543,6 +542,7 @@ class ReporteController {
 		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
+		print_r($sum_contado);exit;
 
 		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
