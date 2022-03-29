@@ -535,6 +535,7 @@ class ReporteController {
 		$cajadiaria = CollectorCondition()->get('CajaDiaria', NULL, 4, $from, $select);
 		$cajadiaria = (is_array($cajadiaria) AND !empty($cajadiaria)) ? $cajadiaria[0]['CAJA'] : 0;
 		$cajadiaria = (is_null($cajadiaria)) ? 0 : $cajadiaria;
+		print_r($cajadiaria);exit;
 
     	$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
 		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
