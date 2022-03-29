@@ -292,6 +292,7 @@ class HojaRutaController {
 		$monto_total=0;
 		$array_formulario = array();
 		$egreso_ids = explode(',', $this->model->egreso_ids);
+		$monto_contado = 0;
 		foreach ($egreso_ids as $egreso) {
 			$ids = explode('@', $egreso);
 			$egreso_id = $ids[0];
@@ -336,7 +337,7 @@ class HojaRutaController {
 					case 1:
 						$chk_abonado_check = '';
 						$chk_abonado_display = 'block';
-						$chk_abonado_msj = 'Debe';
+						$chk_abonado_msj = 'Paga';
 						$txt_abonado_msj = '';
 						$txt_abonado_display = 'none';
 						break;
@@ -358,12 +359,13 @@ class HojaRutaController {
 
 				$txt_tipopago_msj = 'Cuenta Corriente';
 			} else {
-				$chk_abonado_check = '';
-				$chk_abonado_display = 'none';
-				$chk_abonado_msj = '';
-				$txt_abonado_msj = 'Comprobante contado.';
+				$chk_abonado_check = 'checked';
+				$chk_abonado_display = 'block';
+				$chk_abonado_msj = 'Paga';
+				$txt_abonado_msj = '';
 				$txt_tipopago_msj = 'Contado';
 				$txt_abonado_display = 'block';
+				$monto_contado = $monto_contado + $monto;
 			}
 
 			$array_temp = array('{formulario-egreso_id}'=>$egreso_id,
@@ -387,7 +389,7 @@ class HojaRutaController {
 			if ($valor->flete_id == 0) unset($cobrador_collection[$clave]);
 		}
 
-		$this->view->entregas($array_formulario, $this->model,$flete,$cobrador_collection,$monto_total);
+		$this->view->entregas($array_formulario, $this->model, $flete, $cobrador_collection, $monto_total, $monto_contado);
 	}
 
 	function editar_hojaruta($arg){

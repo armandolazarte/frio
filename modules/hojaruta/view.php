@@ -26,7 +26,7 @@ class HojaRutaView extends View {
 
 	}
 
-	function entregas($array_formulario, $obj_hojaruta,$flete,$cobrador_collection,$monto_total) {
+	function entregas($array_formulario, $obj_hojaruta,$flete,$cobrador_collection,$monto_total, $monto_contado) {
 		$gui = file_get_contents("static/modules/hojaruta/entregas.html");
 		$gui_tbl_entregas = file_get_contents("static/modules/hojaruta/tbl_entregas.html");
 		$gui_slt_cobrador = file_get_contents("static/modules/entregaclientedetalle/slt_cobrador.html");
@@ -41,6 +41,7 @@ class HojaRutaView extends View {
 		$render = str_replace('{flete}',$flete, $render);
 		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
 		$render = str_replace('{monto_total}', $monto_total, $render);
+		$render = str_replace('{monto_contado}', $monto_contado, $render);
 		$render = str_replace('{url_app}', URL_APP, $render);
 		$render = str_replace('{url_static}', URL_STATIC, $render);
 		$render = $this->render_breadcrumb($render);
