@@ -57,7 +57,7 @@
       <div class="animated flipInY col-lg-3 col-md-3 col-sm-12 col-xs-12">
         <div class="tile-stats" style="padding: 20px 5px 20px 5px;">
           <div class="icon" style="padding-top: 20px; padding-right: 35px;"><i class="fa fa-money"></i></div>
-          <div class="count blue" style="font-size: 30px;"><input id="total" type="text" placeholder="0.00" style="border: 0; width: 70%;"/></div>
+          <div class="count blue" style="font-size: 30px;"><input id="total" type="text" placeholder="{monto_contado}" style="border: 0; width: 70%;"/></div>
           <h3>Total Facturado</h3>
           <button onclick="calcular();" class="btn btn-xs btn-success" style="width: 100%; font-size: 14px;" > <i class="fa fa-check"></i> Calcular </button>
         </div>
@@ -81,6 +81,7 @@
                 <th>FECHA</th>
                 <th>MONTO</th>
                 <th>ESTADO</th>
+                <th>TIPO PAGO</th>
                 <th>PAGO</th>
                 <th>
                   <div style="float: right;">
@@ -196,7 +197,7 @@
     for (i=0;i<document.f1.elements.length;i++)
       if(document.f1.elements[i].type == "checkbox")
         document.f1.elements[i].checked=1
-        $(".checkboxtext").text("Abonar");
+        $(".checkboxtext").text("Paga");
   }
 
   function deseleccionar_todo() {
@@ -206,16 +207,16 @@
     for (i=0;i<document.f1.elements.length;i++)
       if(document.f1.elements[i].type == "checkbox")
         document.f1.elements[i].checked=0
-        $(".checkboxtext").text("Debe");
+        $(".checkboxtext").text("Paga");
   }
 
   $('input[type=checkbox]').on('change', function() {
     var classname = $(this).prop("name").replace("[", '');
     classname = classname.replace("]", '');
     if ($(this).is(':checked') ) {
-      $("p.checkboxtext."+classname).text("Abonar");
+      $("p.checkboxtext."+classname).text("Paga");
     } else {
-      $("p.checkboxtext."+classname).text("Debe");
+      $("p.checkboxtext."+classname).text("Paga");
     }
   });
 </script>

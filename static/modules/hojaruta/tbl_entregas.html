@@ -19,6 +19,13 @@
             <option value="2">PENDIENTE</option>
         </select>
     </th>
+    <th class="blue">
+        <select class="form-control col-lg-3" name="egreso_ingresotipopago[{formulario-egreso_id}]" required>
+            <option value="3" selected>EFECTIVO</option>
+            <option value="2">DEPÓSITO</option>
+            <option value="1">CHEQUE</option>
+        </select>
+    </th>
     <th>
       <select class="form-control col-lg-3" name="egreso_pagoentrega[{formulario-egreso_id}]" id="egreso_pagoentrega[{formulario-egreso_id}]" onchange="showInp({formulario-egreso_id})" required>
           <option value="4" selected>TOTAL</option>
