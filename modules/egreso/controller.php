@@ -126,7 +126,7 @@ class EgresoController {
 			$producto_id = $valor['PRODUCTO_ID'];
 			$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
-			$where = "s.producto_id = {$producto_id}";
+			$where = "s.producto_id = {$producto_id} AND s.almacen_id = 1";
 			$groupby = "s.producto_id";
 			$stock_id = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 			$stock_id = (is_array($stock_id) AND !empty($stock_id)) ? $stock_id[0]['STOCK_ID'] : 0;
