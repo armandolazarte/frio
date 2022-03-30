@@ -875,7 +875,6 @@ class PedidoVendedorController {
 		$mem->egresocomision = $egresocomision_id;
 		$mem->egresoentrega = $egresoentrega_id;		
 		$mem->save();
-		print_r($mem);exit;
 		$egreso_id = $mem->egreso_id;
 		
 		$mem->egreso_id = $egreso_id;

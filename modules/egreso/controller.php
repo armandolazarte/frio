@@ -558,6 +558,7 @@ class EgresoController {
 	function guardar() {
 		SessionHandler()->check_session();
 		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		
 		$com = new Configuracion();
 		$com->configuracion_id = 1;
@@ -631,6 +632,7 @@ class EgresoController {
 		$this->model->emitido = 0;
 		$this->model->dias_alerta_comision = $dias_alerta_comision;
 		$this->model->dias_vencimiento = $dias_vencimiento;
+		$this->model->usuario_id = $usuario_id;
 		$this->model->cliente = $cliente_id;
 		$this->model->vendedor = $vendedor_id;
 		$this->model->tipofactura = $tipofactura;
@@ -854,6 +856,7 @@ class EgresoController {
 
 	function actualizar() {
 		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$egreso_id = filter_input(INPUT_POST, 'egreso_id');
 		$this->model->egreso_id = $egreso_id;
