@@ -295,10 +295,10 @@ class ExcelReport extends View {
                                     'name'=>'Bookman Old Style',
                                     'bold'=>true,
                                     'size'=>13,
-                                    'color'=>array('rgb'=>'FFFFFF')),
+                                    'color'=>array('rgb'=>'000000')),
                                 'fill'=>array(
                                     'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                    'color'=>array('rgb' => '635C50')),
+                                    'color'=>array('rgb' => 'FFFFFF')),
                                 'alignment'=>array(
                                     'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
                                     'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
@@ -308,10 +308,10 @@ class ExcelReport extends View {
                                     'name'=>'Bookman Old Style',
                                     'bold'=>true,
                                     'size'=>10,
-                                    'color'=>array('rgb'=>'FFFFFF')),
+                                    'color'=>array('rgb'=>'000000')),
                                 'fill'=>array(
                                     'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                    'color'=>array('rgb' => '635C50')),
+                                    'color'=>array('rgb' => 'FFFFFF')),
                                 'alignment'=>array(
                                     'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
                                     'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
@@ -321,10 +321,10 @@ class ExcelReport extends View {
                                     'name'=>'Bookman Old Style',
                                     'bold'=>true,
                                     'size'=>10,
-                                    'color'=>array('rgb'=>'FFFFFF')),
+                                    'color'=>array('rgb'=>'000000')),
                                 'fill'=>array(
                                     'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                    'color'=>array('rgb' => '635C50')),
+                                    'color'=>array('rgb' => 'FFFFFF')),
                                 'alignment'=>array(
                                     'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
                                     'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
@@ -346,7 +346,7 @@ class ExcelReport extends View {
                                             'name'=>'Arial',
                                             'size'=>9,
                                             'bold'=>false,
-                                            'color'=>array('rgb' => '635C50')),
+                                            'color'=>array('rgb' => '000000')),
                                         'fill'=>array(
                                             'type'=>PHPExcel_Style_Fill::FILL_SOLID,
                                             'color'=>array('rgb' => 'FFFFFF')),
@@ -372,18 +372,18 @@ class ExcelReport extends View {
                                               'name'=>'Arial',
                                               'size'=>8,
                                               'bold'=>false,
-                                              'color'=>array('rgb'=>'FFFFFF')),
+                                              'color'=>array('rgb'=>'000000')),
                                           'fill'=>array(
                                               'type'=>PHPExcel_Style_Fill::FILL_SOLID,
                                               'rotation'=>90,
-                                              'color'=>array('rgb' => '635C50')),
+                                              'color'=>array('rgb' => 'FFFFFF')),
                                           'borders'=>array(
                                               'top'=>array(
                                                   'style'=>PHPExcel_Style_Border::BORDER_MEDIUM,
-                                                  'color'=>array('rgb' => 'FFFFFF')),
+                                                  'color'=>array('rgb' => 'C3C3C3')),
                                               'bottom'=>array(
                                                   'style'=>PHPExcel_Style_Border::BORDER_MEDIUM,
-                                                  'color'=>array('rgb' => 'FFFFFF'))),
+                                                  'color'=>array('rgb' => 'C3C3C3'))),
                                           'alignment' =>  array(
                                               'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
                                               'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
@@ -397,11 +397,11 @@ class ExcelReport extends View {
                                       'color'=>array('rgb'=>'000000')),
                                   'fill'=>array(
                                       'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                      'color'=>array('rgb'=>'E8E7EF')),
+                                      'color'=>array('rgb'=>'FFFFFF')),
                                   'borders'=>array(
                                       'allborders'=>array(
                                           'style'=>PHPExcel_Style_Border::BORDER_THIN,
-                                          'color'=>array('rgb' => 'FFFFFF')))) );
+                                          'color'=>array('rgb' => 'C3C3C3')))) );
 
         $this->second_info_style = new PHPExcel_Style();
         $this->second_info_style->applyFromArray(
@@ -416,7 +416,7 @@ class ExcelReport extends View {
                                   'borders'=>array(
                                       'allborders'=>array(
                                           'style'=>PHPExcel_Style_Border::BORDER_THIN,
-                                          'color'=>array('rgb' => 'FFFFFF')))) );
+                                          'color'=>array('rgb' => 'C3C3C3')))) );
     }
 }
 
