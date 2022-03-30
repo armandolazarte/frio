@@ -2478,6 +2478,38 @@ class ReporteController {
 		exit;
 	}
 
+	function generar_libro_iibb_ventas() {
+		SessionHandler()->check_session();
+		require_once 'core/helpers/libroIIBBVentas.php';
+		//PARAMETROS
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+
+		$libro_iibb_ventas = LibroIIBBVentas::get_libro_iibb_ventas($desde, $hasta);
+		$directorio = URL_PRIVATE . "percepcion/";
+		$archivo = 'SAP-LARIOJA.txt';
+		$fp = fopen($directorio . $archivo, "a" )or die("Unable to open file!");
+
+		foreach ($libro_iibb_ventas as $clave=>$valor) {
+			$linea = '';
+			$linea = $valor['DOC'] . $valor['IIBB'] . $valor['CLIENTE'] . $valor['DOMICILIO'] . $valor['FECHA'] . $valor['IMPORTE_TOTAL'] . $valor['BASE_IMPONIBLE'] . $valor['ALICUOTA'] . $valor['PERCEPCION'] . $valor['COMPROBANTE'];
+			fwrite($fp, $linea);
+			fwrite($fp, "\r\n");
+		}
+
+		fclose($fp);
+		header('Content-Description: File Transfer');
+		header('Content-Disposition: attachment; filename='.$archivo);
+		header('Expires: 0');
+		header('Cache-Control: must-revalidate');
+		header('Pragma: public');
+		header('Content-Length: ' . filesize($directorio . $archivo));
+		header("Content-Type: text/plain");
+		readfile($directorio . $archivo);
+		unlink($directorio . $archivo);
+		exit;
+	}
+
 	function generar_libro_iva_ventas() {
 		SessionHandler()->check_session();
 		require_once 'core/helpers/libroIVAVentas.php';
@@ -2519,6 +2551,97 @@ class ReporteController {
 		}
 
 		$array_exportacion[] = array('', '', '', '', '', '', '', '', '', $total_iva, $total_iva_21, $total_iva_10, '');
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+		exit;
+	}
+
+	function generar_libro_iva_compras() {
+		SessionHandler()->check_session();
+		require_once 'core/helpers/libroIVACompras.php';
+		require_once "tools/excelreport.php";
+		//PARAMETROS
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+
+		$libro_iva_compras = LibroIvaCompras::get_libro_iva_compras($desde, $hasta);
+		$subtitulo = "LIBRO IVA COMPRAS: {$desde} - {$hasta}";
+		$array_encabezados = array('Fecha', 'Cla', 'Comprobante', 'Proveedor', 'CUIT', 'Neto', 'Exento', 'I.V.A.', 'IVa D/10.5', 'IVA D/27', 'Imp.Internos', 'Ret.IVA', 'Ret.IIBB', 'Per.IVA', 'Per.IIBB', 'Per.GAN', 'C.No Gravado', 'Imp TEM', 'Per IIBB CF', 'Total');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		$total_neto = 0;
+		$total_exento = 0;
+		$total_iva = 0;
+		$total_iva_10 = 0;
+		$total_iva_27 = 0;
+		$total_impint = 0;
+		$total_retiva = 0;
+		$total_retiibb = 0;
+		$total_periva = 0;
+		$total_periibb = 0;
+		$total_pergan = 0;
+		$total_nogravado = 0;
+		$total_imptem = 0;
+		$total_periibbcf = 0;
+		$total = 0;
+		foreach ($libro_iva_compras as $clave=>$valor) {
+			$total_neto = $total_neto + $valor['NETO'];
+			$total_exento = $total_exento + $valor['EXENTO'];
+			$total_iva = $total_iva + $valor['IVA'];
+			$total_iva_10 = $total_iva_10 + $valor['IVA10'];
+			$total_iva_27 = $total_iva_27 + $valor['IVA27'];
+			$total_impint = $total_impint + $valor['IMPINTERNO'];
+			$total_retiva = $total_retiva + $valor['RETIVA'];
+			$total_retiibb = $total_retiibb + $valor['RETIIBB'];
+			$total_periva = $total_periva + $valor['PERIVA'];
+			$total_periibb = $total_periibb + $valor['PERIIBB'];
+			$total_pergan = $total_pergan + $valor['PERGANANCIA'];
+			$total_nogravado = $total_nogravado + $valor['CNOGRAVADO'];
+			$total_imptem = $total_imptem + $valor['IMPTEM'];
+			$total_periibbcf = $total_periibbcf + $valor['PERIIBBCF'];
+			$total = $total + $valor['TOTAL'];
+			$array_temp = array();
+			$array_temp = array($valor["FECHA"]
+								, $valor["CLA"]
+								, $valor["COMPROBANTE"]
+								, $valor["PROVEEDOR"]
+								, $valor["CUIT"]
+								, $valor["NETO"]
+								, $valor["EXENTO"]
+								, $valor["IVA"]
+								, $valor["IVA10"]
+								, $valor["IVA27"]
+								, $valor["IMPINTERNO"]
+								, $valor["RETIVA"]
+								, $valor["RETIIBB"]
+								, $valor["PERIVA"]
+								, $valor["PERIIBB"]
+								, $valor["PERGANANCIA"]
+								, $valor["CNOGRAVADO"]
+								, $valor["IMPTEM"]
+								, $valor["PERIIBBCF"]
+								, $valor["TOTAL"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		$array_exportacion[] = array('TOTALES', '', '', '', '', $total_neto, $total_exento, $total_iva, $total_iva_10, $total_iva_27, $total_impint, $total_retiva, $total_retiibb, $total_periva, $total_periibb, $total_pergan, $total_nogravado, $total_imptem, $total_periibbcf, $total);
+		$array_exportacion[] = array('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Neto', $total_neto, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Exento', $total_exento, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'I.v.a.', $total_iva, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Iva D/10.5', $total_iva_10, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Iva D/27', $total_iva_27, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Impuestos', $total_impint, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Retencion Iva', $total_retiva, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Retencion IIBB', $total_retiibb, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Percepcion Iva', $total_periva, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Percepcion Ing.Brutos', $total_periibb, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Percepcion Ganancia', $total_pergan, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Conceptos No Gravados', $total_nogravado, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Impuestos TEM', $total_imptem, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Per IIBB Cap Fed', $total_periibbcf, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'Total General', $total, '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;
 	}
