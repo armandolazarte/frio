@@ -667,6 +667,7 @@ class ApiController {
                         $cuenta = new CuentaCorrienteCliente();
                         $cuenta->cuentacorrientecliente_id = $value['cuentacorrientecliente_id'];
                         $cuenta->get();
+                        unset($cuenta->ingresotipopago);
 
                         $egreso_id = $cuenta->egreso_id;
                         if ($egreso_id == 0) {
