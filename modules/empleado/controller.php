@@ -53,17 +53,29 @@ class EmpleadoController {
 
 	function guardar() {
 		SessionHandler()->check_session();
-		$this->model->apellido = filter_input(INPUT_POST, 'apellido');
-		$this->model->nombre = filter_input(INPUT_POST, 'nombre');
-		$this->model->documento = filter_input(INPUT_POST, 'documento');
-		$this->model->telefono = filter_input(INPUT_POST, 'telefono');
-		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');
-		$this->model->codigopostal = filter_input(INPUT_POST, 'codigopostal');
-		$this->model->localidad = filter_input(INPUT_POST, 'localidad');
-		$this->model->observacion = filter_input(INPUT_POST, 'observacion');
+
+		$apellido = filter_input(INPUT_POST, 'apellido');
+		$nombre = filter_input(INPUT_POST, 'nombre');
+		$documento = filter_input(INPUT_POST, 'documento');
+		$telefono = filter_input(INPUT_POST, 'telefono');
+		$domicilio = filter_input(INPUT_POST, 'domicilio');
+		$codigopostal = filter_input(INPUT_POST, 'codigopostal');
+		$localidad = filter_input(INPUT_POST, 'localidad');
+		$observacion = filter_input(INPUT_POST, 'observacion');
+		$provincia = filter_input(INPUT_POST, 'provincia');
+		$documentotipo = filter_input(INPUT_POST, 'documentotipo');
+
+		$this->model->apellido = (is_null($apellido) OR empty($apellido)) ? '-' : $apellido;
+		$this->model->nombre = (is_null($nombre) OR empty($nombre)) ? '-' : $nombre;
+		$this->model->documento = (is_null($documento) OR empty($documento)) ? 0 : $documento;
+		$this->model->telefono = (is_null($telefono) OR empty($telefono)) ? 0 : $telefono;
+		$this->model->domicilio = (is_null($domicilio) OR empty($domicilio)) ? '-' : $domicilio;
+		$this->model->codigopostal = (is_null($codigopostal) OR empty($codigopostal)) ? 0 : $codigopostal;
+		$this->model->localidad = (is_null($localidad) OR empty($localidad)) ? '-' : $localidad;
+		$this->model->observacion = (is_null($observacion) OR empty($observacion)) ? '-' : $observacion;
 		$this->model->oculto = 0;
-		$this->model->provincia = filter_input(INPUT_POST, 'provincia');
-		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');
+		$this->model->provincia = $provincia;
+		$this->model->documentotipo = $documentotipo;
 		$this->model->save();
 		header("Location: " . URL_APP . "/empleado/listar");
 	}
