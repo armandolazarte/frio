@@ -12,11 +12,11 @@
     <h3 style="margin-left: 1%; margin-top: 0px;">
         Balance de Situación: {periodo_balance}
         <ul class="nav navbar-right panel_toolbox hidden-print">
-            <li><a class="hidden-print" onClick="print();"><i class="fa fa-print blue"></i></a></li>
+            <li><a class="btn btn-danger btn-xs hidden-print" onClick="print();" style="color: #fff;"><i class="fa fa-print"></i> Imprimir Balance</a></li>
         </ul>
     </h3>
     <div class="col-md-3 col-sm-3 col-xs-12">
-        <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
             <div class="x_content" align="right" style="padding-right: 5%;">
                 <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
                     <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
@@ -26,6 +26,120 @@
                 </div>
             </div>
         </div>
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Resúmen ingresos</h2>
+                <ul class="nav navbar-right panel_toolbox hidden-print">
+                    <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-up green"></i> Ventas Registradas</th>
+                            <th class="green">${suma_ingresos_per_actual}</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-down red"></i> Notas de Crédito</th>
+                            <th class="red">${suma_notacredito_per_actual}</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-up green"></i> Facturación</th>
+                            <th class="green">${total_ingresos_per_actual}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Resúmen egresos</h2>
+                <ul class="nav navbar-right panel_toolbox hidden-print">
+                    <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-down red"></i> Pagos Comisiones</th>
+                            <th class="red">${egreso_comision_per_actual}</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-down red"></i> Salarios</th>
+                            <th class="red">${egreso_salario}</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-down red"></i> Pagos CC Proveedores</th>
+                            <th class="red">${egreso_cuentacorrienteproveedor_per_actual}</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-down red"></i> Gastos Varios</th>
+                            <th class="red">${egreso_gasto_per_actual}</th>
+                        </tr>
+                        <tr style="font-size: 12px;">
+                            <th><i class="fa fa-arrow-circle-down red"></i> Gastos Combustible</th>
+                            <th class="red">${egreso_combustible}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="x_panel hidden-print">
+            <div class="x_title">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Configurar</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracionbalance/guardar">
+                        <div class="col-lg-12">
+                            <h4>Activos</h4>
+                            <label class="checkbox">
+                                <input type="checkbox" name="activo_stock_valorizado" value="checked" {configuracionbalance-activo_stock_valorizado}>
+                                <span class="checkbox__icon"></span> Stock Valorizado
+                            </label>
+                            <label class="checkbox">
+                                <input type="checkbox" name="activo_cuenta_corriente_cliente" value="checked" {configuracionbalance-activo_cuenta_corriente_cliente}>
+                                <span class="checkbox__icon"></span> Cta Cte Clientes
+                            </label>
+                            <label class="checkbox">
+                                <input type="checkbox" name="activo_carga_pendiente" value="checked" {configuracionbalance-activo_carga_pendiente}>
+                                <span class="checkbox__icon"></span> Cargas Pendientes
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <h4>Pasivos</h4>
+                            <label class="checkbox">
+                                <input type="checkbox" name="pasivo_cuenta_corriente_proveedor" value="checked" {configuracionbalance-pasivo_cuenta_corriente_proveedor}>
+                                <span class="checkbox__icon"></span> Cta Cte Proveedores
+                            </label>
+                            <label class="checkbox">
+                                <input type="checkbox" name="pasivo_comisiones_pendientes" value="checked" {configuracionbalance-pasivo_comisiones_pendientes}>
+                                <span class="checkbox__icon"></span> Comisiones Pendientes
+                            </label>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                                <input type="hidden" name="configuracionbalance_id" value="1">
+                                <button class="btn btn-xs btn-primary" style="width: 100%;" type="submit"> <i class="fa fa-cogs"></i> Configurar </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>        
+    </div>    
+    <div class="col-md-12 col-sm-6 col-xs-6 visible-print" style="display: none;">
         <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
             <div class="x_title" style="padding-left: 2%;">
                 <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Resúmen ingresos</h2>
@@ -54,6 +168,8 @@
                 </table>
             </div>
         </div>
+    </div>
+    <div class="col-md-12 col-sm-6 col-xs-6 visible-print" style="display: none;">
         <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
             <div class="x_title" style="padding-left: 2%;">
                 <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Resúmen egresos</h2>
@@ -92,38 +208,26 @@
         </div>
     </div>
     <div class="col-md-9 col-sm-9 col-xs-12">
-        <div class="col-md-12 col-sm-12 col-xs-12 visible-print" style="padding-left: 0%; padding-right: 0%; background-color: #ededed; display: none;">
-            <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1%; padding-right: 0%;">
-                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
-                    <div class="x_content" align="right" style="padding-right: 5%;">
+        <div class="col-md-12 col-sm-12 col-xs-12 visible-print" style="padding-left: 0%; padding-right: 0%; background-color: #ededed; display: none;">            
+            <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                <div class="x_content" align="right" style="padding-right: 5%;">
+                    <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
+                        <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                            <span class="count_top green"><i class="fa fa-info-circle"></i> Resultado %Ganancia</span>
+                            <div class="count green" style="font-size: 30px;">${ganancia_per_actual}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-md-5 col-sm-5 col-xs-5">
+                <div class="x_panel" style="margin-bottom: 2%;">
+                    <div class="x_content" align="right">
                         <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
                             <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
                                 <span class="count_top green"><i class="fa fa-plus-circle"></i> Activo Corriente</span>
                                 <div class="count green" style="font-size: 30px;">${activo_corriente}</div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1%; padding-right: 0%;">
-                <div class="x_panel" style="padding-left: 2px; padding-right: 2px; margin-bottom: 2%;">
-                    <div class="x_content" align="right" style="padding-right: 5%;">
-                        <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
-                            <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
-                                <span class="count_top red"><i class="fa fa-minus-circle"></i> Pasivo Corriente</span>
-                                <div class="count red" style="font-size: 30px;">${pasivo_corriente}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1%; padding-right: 0%;">
-                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
-                    <div class="x_title" style="padding-left: 2%;">
-                        <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Activos Corrientes</h2>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr style="font-size: 12px;">
@@ -134,19 +238,35 @@
                                     <th><i class="fa fa-usd green"></i> Deuda CC Clientes</th>
                                     <th class="green">${deuda_ccclientes}</th>
                                 </tr>
+                                <tr style="font-size: 12px;">
+                                    <th><i class="fa fa-usd green"></i> Monto Carga Pendiente</th>
+                                    <th class="green">${carga_pendiente}</th>
+                                </tr>
                             </thead>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7 col-sm-7 col-xs-7" style="padding-left: 1%; padding-right: 0%;">
+                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                    <div class="x_title" style="padding-left: 2%;">
+                        <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Activos Corrientes</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">                        
                         <div id="graphActivosPrint" style="width:600%; height:300px;"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-12" style="padding-left: 1%; padding-right: 1%;">
-                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
-                    <div class="x_title" style="padding-left: 2%;">
-                        <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Pasivos Corrientes</h2>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
+            <div class="col-md-5 col-sm-5 col-xs-5">
+                <div class="x_panel" style="margin-bottom: 2%;">
+                    <div class="x_content" align="right">
+                        <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
+                            <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                                <span class="count_top red"><i class="fa fa-minus-circle"></i> Pasivo Corriente</span>
+                                <div class="count red" style="font-size: 30px;">${pasivo_corriente}</div>
+                            </div>
+                        </div>
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr style="font-size: 12px;">
@@ -159,6 +279,16 @@
                                 </tr>
                             </thead>
                         </table>
+                    </div>
+                </div>
+            </div>            
+            <div class="col-md-7 col-sm-7 col-xs-7" style="padding-left: 1%; padding-right: 1%;">
+                <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                    <div class="x_title" style="padding-left: 2%;">
+                        <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Pasivos Corrientes</h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
                         <div id="graphPasivosPrint" style="width:600%; height:300px;" ></div>
                     </div>
                 </div>
@@ -205,6 +335,10 @@
                                 <tr style="font-size: 12px;  text-decoration: {configuracionbalance-activo_cuenta_corriente_cliente_tachado};">
                                     <th><i class="fa fa-usd green"></i> Deuda CC Clientes</th>
                                     <th class="green">${deuda_ccclientes}</th>
+                                </tr>
+                                <tr style="font-size: 12px; text-decoration: {configuracionbalance-activo_carga_pendiente_tachado};">
+                                    <th><i class="fa fa-usd green"></i> Monto Carga Pendiente</th>
+                                    <th class="green">${carga_pendiente}</th>
                                 </tr>
                             </thead>
                         </table>
@@ -261,7 +395,7 @@
             </div>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
                 <div class="x_content" align="right" style="padding-right: 5%;">
                     <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
@@ -298,75 +432,38 @@
                     </div>
                 </div>
             </div>
-            <div class="x_panel hidden-print">
-                <div class="x_title">
-                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Configurar</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+                <div class="x_title" style="padding-left: 2%;">
+                    <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Ganancia Diaria</h2>
+                    <ul class="nav navbar-right panel_toolbox hidden-print">
+                        <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <div class=" form">
-                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/configuracionbalance/guardar">
-                            <div class="col-lg-12">
-                                <h4>Activos</h4>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="activo_stock_valorizado" value="checked" {configuracionbalance-activo_stock_valorizado}>
-                                    <span class="checkbox__icon"></span> Stock Valorizado
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="activo_cuenta_corriente_cliente" value="checked" {configuracionbalance-activo_cuenta_corriente_cliente}>
-                                    <span class="checkbox__icon"></span> Cta Cte Clientes
-                                </label>
-                            </div>
-                            <div class="col-lg-12">
-                                <h4>Pasivos</h4>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="pasivo_cuenta_corriente_proveedor" value="checked" {configuracionbalance-pasivo_cuenta_corriente_proveedor}>
-                                    <span class="checkbox__icon"></span> Cta Cte Proveedores
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="pasivo_comisiones_pendientes" value="checked" {configuracionbalance-pasivo_comisiones_pendientes}>
-                                    <span class="checkbox__icon"></span> Comisiones Pendientes
-                                </label>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                                    <input type="hidden" name="configuracionbalance_id" value="1">
-                                    <button class="btn btn-xs btn-primary" style="width: 100%;" type="submit"> <i class="fa fa-cogs"></i> Configurar </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            {tbl_vendedor_ganancia}                            
+                        </thead>
+                    </table>
                 </div>
             </div>
-            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; background: #d9534f; color: #FFF;">
+            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
                 <div class="x_title" style="padding-left: 2%;">
-                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Libro IVA Ventas</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Créditos Proveedores</h2>
+                    <ul class="nav navbar-right panel_toolbox hidden-print">
+                        <li><a class="collapse-link hidden-print"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link hidden-print"><i class="fa fa-close"></i></a></li>
                     </ul>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
-                    <div class=" form">
-                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/generar_libro_iva_ventas">
-                            <div class="form-group col-lg-6">
-                                <label>Desde</label>
-                                <input type="date" class="form-control" id="desde" name="desde" required>
-                            </div>
-                            <div class="form-group col-lg-6">
-                                <label>Hasta</label>
-                                <input type="date" class="form-control" id="hasta" name="hasta" required>
-                            </div>
-                            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                                <button class="btn btn-xs btn-primary" type="submit" style="width: 100%; background: #2a8a2a; border-color: #2a8a2a;"> <i class="fa fa-download"></i> Generar </button>
-                            </div>
-                        </form>
-                    </div>
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            {tbl_proveedor_credito}
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>
@@ -374,7 +471,96 @@
 </div>
 <div class="col-md-12 col-sm-12 col-xs-12">
     <div class="col-md-4 col-sm-4 col-xs-12">
-        <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; background: #d9534f; color: #FFF;">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Libro IVA Ventas</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/generar_libro_iva_ventas">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%; background: #2a8a2a; border-color: #2a8a2a;"> <i class="fa fa-download"></i> Generar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; background: #d9534f; color: #FFF;">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Libro IVA Compras</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/generar_libro_iva_compras">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%; background: #2a8a2a; border-color: #2a8a2a;"> <i class="fa fa-download"></i> Generar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; background: #d9534f; color: #FFF;">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Libro IIBB Ventas</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/generar_libro_iibb_ventas">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%; background: #2a8a2a; border-color: #2a8a2a;"> <i class="fa fa-download"></i> Generar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 col-xs-12">
+    <div class="col-md-4 col-sm-4 col-xs-12">
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
             <div class="x_title" style="padding-left: 2%;">
                 <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Pago de comisiones</h2>
                 <div class="clearfix"></div>
@@ -387,7 +573,7 @@
                 </table>
             </div>
         </div>
-        <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
             <div class="x_title" style="padding-left: 2%;">
                 <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Pago de Salarios</h2>
                 <div class="clearfix"></div>
@@ -403,7 +589,7 @@
     </div>
     <div class="col-md-8 col-sm-8 col-xs-12">
         <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_panel">
+            <div class="x_panel hidden-print">
                 <div class="x_title">
                     <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Generar</h2>
                     <div class="clearfix"></div>
@@ -504,6 +690,43 @@
         </div>
     </div>
 </div>
+<div class="col-md-12 col-sm-12 col-xs-12 visible-print" style="display: none;">
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-briefcase"></i>&nbsp;&nbsp; Pago de Salarios</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    {tbl_vendedor_pago_salarios}
+                </thead>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+        <div class="x_title" style="padding-left: 2%;">
+            <h2><i class="fa fa-truck"></i>&nbsp;&nbsp; Gastos Combustible</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_vehiculocombustible" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>Dominio</th>
+                        <th>Referencia</th>
+                        <th>Vehículo</th>
+                        <th>Importe</th>
+                        <th>Litros</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_vehiculocombustible}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 <!-- Datatables -->
 <script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -581,12 +804,12 @@
     if ($('#graphActivos').length ){
         Morris.Bar({
             element: 'graphActivos',
-            data: [{x: 'Activos Corrientes', y: {deuda_ccclientes}, z: {stock_valorizado}}],
+            data: [{x: 'Activos Corrientes', y: {deuda_ccclientes_graph}, z: {stock_valorizado_graph}, a: {carga_pendiente_graph}}],
             xkey: 'x',
-            ykeys: ['y', 'z'],
-            barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+            ykeys: ['y', 'z','a'],
+            barColors: ['#26B99A', '#34495E', '#3498DB'],
             hideHover: 'auto',
-            labels: ['CC Clientes', 'Stock Valorizado'],
+            labels: ['CC Clientes', 'Stock Valorizado', 'Cargas Pendientes'],
             resize: true
         }).on('click', function (i, row) {
             console.log(i, row);
@@ -597,7 +820,7 @@
         Morris.Bar({
             element: 'graphPasivos',
             data: [
-                {x: 'Pasivos Corrientes', y: {deuda_ccproveedores}, z: {deuda_comisiones}},
+                {x: 'Pasivos Corrientes', y: {deuda_ccproveedores_graph}, z: {deuda_comisiones_graph}},
             ],
             xkey: 'x',
             ykeys: ['y', 'z', 'a'],
@@ -613,12 +836,12 @@
     if ($('#graphActivosPrint').length ){
         Morris.Bar({
             element: 'graphActivosPrint',
-            data: [{x: 'Activos Corrientes', y: {caja_mensual}, z: {stock_valorizado}, a: {deuda_ccclientes}}],
+            data: [{x: 'Activos Corrientes', y: {deuda_ccclientes_graph}, z: {stock_valorizado_graph}, a: {carga_pendiente_graph}}],
             xkey: 'x',
             ykeys: ['y', 'z', 'a'],
             barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
             hideHover: 'auto',
-            labels: ['Caja Mensual', 'Stock Valorizado', 'CC Clientes'],
+            labels: ['CC Clientes', 'Stock Valorizado', 'Cargas Pendientes'],
             resize: true
         }).on('click', function (i, row) {
             console.log(i, row);
@@ -629,7 +852,7 @@
         Morris.Bar({
             element: 'graphPasivosPrint',
             data: [
-                {x: 'Pasivos Corrientes', y: {deuda_ccproveedores}, z: {deuda_comisiones}},
+                {x: 'Pasivos Corrientes', y: {deuda_ccproveedores_graph}, z: {deuda_comisiones_graph}},
             ],
             xkey: 'x',
             ykeys: ['y', 'z'],
@@ -778,5 +1001,4 @@ function quitarMarca(marca_id) {
     var index = array_marca_ids.indexOf(marca_id);
     array_marca_ids.splice(index, 1);
 }
-
 </script>

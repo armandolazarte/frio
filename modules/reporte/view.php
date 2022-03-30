@@ -169,7 +169,7 @@ class ReporteView extends View {
 		print $render;
 	}
 
-	function balance($array_balances, $pagocomisiones_collection, $periodo, $obj_configuracionbalance, $vehiculocombustible_collection,$producto_collection, $productomarca_collection, $salario_collection) {
+	function balance($array_balances, $pagocomisiones_collection, $periodo, $obj_configuracionbalance, $vehiculocombustible_collection, $producto_collection, $productomarca_collection, $salario_collection, $ganancia_vendedor_dia, $creditoproveedordetalle_collection) {
 		$gui = file_get_contents("static/modules/reporte/balance.html");
 		$gui_lbl_piechart_gasto = file_get_contents("static/modules/reporte/lbl_piechart_gasto.html");
 		$gui_valores_piechart_gasto = file_get_contents("static/modules/reporte/valores_piechart_gasto.html");
@@ -177,7 +177,8 @@ class ReporteView extends View {
 		$gui_valores_piechart_pago_comision = file_get_contents("static/modules/reporte/valores_piechart_pago_comision.html");
 		$gui_tbl_vendedor_pago_comision = file_get_contents("static/modules/reporte/tbl_vendedor_pago_comision.html");
 		$gui_tbl_vendedor_pago_salarios = file_get_contents("static/modules/reporte/tbl_vendedor_pago_salarios.html");
-
+		$gui_tbl_vendedor_ganancia = file_get_contents("static/modules/reporte/tbl_vendedor_ganancia.html");
+		$gui_tbl_proveedor_credito = file_get_contents("static/modules/reporte/tbl_proveedor_credito.html");
 		$gui_tbl_vehiculocombustible = file_get_contents("static/modules/reporte/tbl_vehiculocombustible.html");
 		$tbl_producto = file_get_contents("static/modules/reporte/tbl_producto_array.html");
 		$tbl_productomarca = file_get_contents("static/modules/reporte/tbl_productomarca.html");
@@ -187,6 +188,8 @@ class ReporteView extends View {
 		$gui_tbl_vehiculocombustible = $this->render_regex_dict('TBL_VEHICULOCOMBUSTIBLE', $gui_tbl_vehiculocombustible, $vehiculocombustible_collection);
 		$gui_tbl_vendedor_pago_comision = $this->render_regex_dict('TBL_PAGOCOMISION', $gui_tbl_vendedor_pago_comision, $pagocomisiones_collection);
 		$gui_tbl_vendedor_pago_salarios = $this->render_regex_dict('TBL_PAGOSALARIOS', $gui_tbl_vendedor_pago_salarios, $salario_collection);
+		$gui_tbl_vendedor_ganancia = $this->render_regex_dict('TBL_VENDEDOR', $gui_tbl_vendedor_ganancia, $ganancia_vendedor_dia);
+		$gui_tbl_proveedor_credito = $this->render_regex_dict('TBL_CREDITOPROVEEDORDETALLE', $gui_tbl_proveedor_credito, $creditoproveedordetalle_collection);
 
 		$gui_lbl_piechart_pago_comision = $this->render_regex_dict('LBL_PIECHART_PAGO_COMISION', $gui_lbl_piechart_pago_comision, $pagocomisiones_collection);
 		$gui_valores_piechart_pago_comision = $this->render_regex_dict('VALORES_PIECHART_PAGO_COMISION', $gui_valores_piechart_pago_comision, $pagocomisiones_collection);
@@ -199,7 +202,7 @@ class ReporteView extends View {
 			$nuevo_valor = ($valor == 'checked') ? 'none' : 'line-through';
 			$obj_configuracionbalance["{$nueva_propiedad}"] = $nuevo_valor;
 		}
-
+		
 		$render = $this->render($array_balances, $gui);
 		$render = $this->render($obj_configuracionbalance, $render);
 		$render = str_replace('{valores_piechart_pago_comision}', $gui_valores_piechart_pago_comision, $render);
@@ -210,6 +213,8 @@ class ReporteView extends View {
 		$render = str_replace('{periodo_balance}', $periodo, $render);
 		$render = str_replace('{tbl_producto}', $tbl_producto, $render);
 		$render = str_replace('{tbl_productomarca}', $tbl_productomarca, $render);
+		$render = str_replace('{tbl_vendedor_ganancia}', $gui_tbl_vendedor_ganancia, $render);
+		$render = str_replace('{tbl_proveedor_credito}', $gui_tbl_proveedor_credito, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
