@@ -374,7 +374,7 @@ class ApiController {
                                 $notacreditodetalles = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
                                 
                             if(is_array($notacreditodetalles)){
-                                    foreach ($notacreditodetalles as $value) {
+                                foreach ($notacreditodetalles as $value) {
                                     $detallenota = new NotaCreditoDetalle();
                                     $detallenota->notacreditodetalle_id = $value['notacreditodetalle_id'];
                                     $detallenota->get();
@@ -424,6 +424,177 @@ class ApiController {
                             array_push($clienteAux->facturas, $facturaAux);
                         }
                     }
+                    array_push($clientes, $clienteAux);
+                }
+                
+                $respuesta = $clientes;
+                $json = new stdClass();
+                $json->resultados = $respuesta;
+                echo Util::respuestaJSON($json);
+            } else {
+                $error_texto = Util::getTextoCodigo(72);
+                echo $error_texto;
+            }
+        } else {
+            $error_texto = Util::getTextoCodigo(77);
+            echo $error_texto;
+        }
+    }
+
+    function newcliente() {
+        if (isset($_POST['token']) && !empty($_POST['token'])) {
+            $token = $_POST['token'];
+            $vendedor_id = $_POST['vendedor_id'];
+            $jwt = new JwtProtocolo();
+            if ($jwt->autenticar($token)) {
+                $select = "cliente_id";
+                $from = "cliente";
+                $where = "vendedor = {$vendedor_id} AND oculto = 0";
+                $ids = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+                $arrayClientes = array();
+                if (is_array($ids)) {
+                    foreach ($ids as $value) {
+                        $cliente = new Cliente();
+                        $cliente->cliente_id = $value['cliente_id'];
+                        $cliente->get();
+                        array_push($arrayClientes, $cliente);
+                    }
+                }
+                $clientes = array();
+                for ($index = 0; $index < count($arrayClientes); $index++) {
+                    $clienteAux = new stdClass();
+                    
+                    $clienteAux->cliente = $arrayClientes[$index];
+                    $clienteAux->facturas =  array();
+                    /*Obtengo Egresos del Cliente*/
+                    $select = "egreso_id";
+                    $from = "egreso";
+                    $where = "cliente = {$arrayClientes[$index]->cliente_id} ORDER BY fecha DESC LIMIT 10";
+                    $egresos = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+                    /*--------------------*/
+                    if(is_array($egresos)){
+                        foreach ($egresos as $obj) {
+                            $facturaAux = new stdClass();
+                            $facturaDetalleArray = array();
+                            $egreso = new Egreso();
+                            $egreso->egreso_id = $obj['egreso_id'];
+                            $egreso__id = $obj['egreso_id'];
+                            $egreso->get();
+                            if($egreso->tipofactura->tipofactura_id==2){
+                                $comprobante = str_pad($egreso->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+                                $comprobante .= str_pad($egreso->numero_factura, 8, '0', STR_PAD_LEFT);
+                            } else {
+                                $select_egresoafip = "CONCAT(LPAD(eafip.punto_venta, 4, 0), '-', LPAD (eafip.numero_factura, 8, 0)) AS nro";
+                                $from_egresoafip = "egresoafip eafip ";
+                                $where_egresoafip = "eafip.egreso_id = {$egreso__id}";
+                                $egresoafip = CollectorCondition()->get('EgresoAfip', $where_egresoafip, 4, $from_egresoafip, $select_egresoafip);
+                                $comprobante = (is_array($egresoafip))?$egresoafip[0]['nro']:0;
+                            }
+                            $facturaAux->egreso_id = $egreso->egreso_id;
+                            $facturaAux->nro_comprobante = $comprobante;
+                            /* Obtengo Detalles del Egresos del Cliente */
+                            $select = "egresodetalle_id";
+                            $from = "egresodetalle";
+                            $where = "egreso_id = {$egreso->egreso_id}";
+                            $detallesegreso = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+                            $arrayDetalleEgreso = array();                            
+                            if(is_array($detallesegreso)){
+                                foreach ($detallesegreso as $value) {
+                                    $detalleegreso = new EgresoDetalle();
+                                    $detalleegreso->egresodetalle_id = $value['egresodetalle_id'];
+                                    $detalleegreso->get();
+                                    array_push($arrayDetalleEgreso, $detalleegreso);
+                                }
+                            }
+                            /* -------------------- */
+                            /* Obtengo Nota de Credito del Egreso */
+                            $select = "notacredito_id";
+                            $from = "notacredito";
+                            $where = "egreso_id = {$egreso->egreso_id}";
+                            $notacredito_id = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+                            
+                            /* -------------------- */
+                            $notacredito = NULL;
+                            $detalleNotaCredito = array();
+                            if(is_array($notacredito_id)){ 
+                                $notacredito = new NotaCredito();
+                                $notacredito->notacredito_id = $notacredito_id[0]['notacredito_id'];
+                                $notacredito->get();
+                                /* Obtengo Detalle Nota de Credito del Egreso */
+                                $select = "notacreditodetalle_id";
+                                $from = "notacreditodetalle";
+                                $where = "notacredito_id = {$notacredito->notacredito_id}";
+                                $notacreditodetalles = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+                                
+                            if(is_array($notacreditodetalles)){
+                                foreach ($notacreditodetalles as $value) {
+                                    $detallenota = new NotaCreditoDetalle();
+                                    $detallenota->notacreditodetalle_id = $value['notacreditodetalle_id'];
+                                    $detallenota->get();
+                                    array_push($detalleNotaCredito, $detallenota);
+                                    }
+                                } 
+                                /* -------------------- */
+                            }
+                           
+                            if($notacredito==NULL){
+                                $facturaAux->fecha = $egreso->fecha;
+                                $facturaAux->importe = $egreso->importe_total;
+                                foreach ($arrayDetalleEgreso as $detalleegresoaux) {
+                                    $detalleFactura = new stdClass();
+                                    $detalleFactura->producto = $detalleegresoaux->producto_id;
+                                    $detalleFactura->cantidad = $detalleegresoaux->cantidad;
+                                    $detalleFactura->importe = $detalleegresoaux->importe;
+                                    $detalleFactura->precio_unitario = $detalleegresoaux->importe/$detalleegresoaux->cantidad;
+                                    array_push($facturaDetalleArray, $detalleFactura);
+                                }
+                                $facturaAux->detalle = $facturaDetalleArray;
+                            } else {
+                                $facturaAux->fecha = $egreso->fecha;
+                                $facturaAux->importe = $egreso->importe_total - $notacredito->importe_total;
+                                foreach ($arrayDetalleEgreso as $detalleegresoaux) {
+                                    $detalleFactura = new stdClass();
+                                    $restado = false;
+                                    foreach ($detalleNotaCredito as $detallenotaAux) {
+                                        if ($detalleegresoaux->producto_id == $detallenotaAux->producto_id) {
+                                            $detalleFactura->producto = $detalleegresoaux->producto_id;
+                                            $detalleFactura->cantidad = $detalleegresoaux->cantidad - $detallenotaAux->cantidad;
+                                            $detalleFactura->importe = $detalleegresoaux->importe - $detallenotaAux->cantidad;
+                                            $detalleFactura->precio_unitario = $detalleegresoaux->importe / $detalleegresoaux->cantidad;
+                                            $restado = true;
+                                        }
+                                    }
+                                    if (!$restado) {
+                                        $detalleFactura->producto = $detalleegresoaux->producto_id;
+                                        $detalleFactura->cantidad = $detalleegresoaux->cantidad;
+                                        $detalleFactura->importe = $detalleegresoaux->importe;
+                                        $detalleFactura->precio_unitario = $detalleegresoaux->importe / $detalleegresoaux->cantidad;
+                                    }
+                                    array_push($facturaDetalleArray, $detalleFactura);                                    
+                                }
+                                $facturaAux->detalle = $facturaDetalleArray;
+                            }
+                            array_push($clienteAux->facturas, $facturaAux);
+                        }
+                    }
+                    
+                    /*--------------------*/
+                    $select = "ccc.importe AS IMPORTE, ccc.fecha AS FECHA";
+                    $from = "cuentacorrientecliente ccc";
+                    $where = "ccc.cliente_id = {$arrayClientes[$index]->cliente_id} AND ccc.egreso_id = 0";
+                    $ctacte_migracion = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+                    if (is_array($ctacte_migracion) AND !empty($ctacte_migracion)) {
+                        $facturaAux = new stdClass();
+                        $facturaDetalleArray = array();
+
+                        $facturaAux->egreso_id = 0;
+                        $facturaAux->nro_comprobante = 'Migración cta cte';
+                        $facturaAux->fecha = $ctacte_migracion[0]['FECHA'];
+                        $facturaAux->importe = $ctacte_migracion[0]['IMPORTE'];
+                        $facturaAux->detalle = array();
+                        array_push($clienteAux->facturas, $facturaAux);
+                    }
+                    /*--------------------*/
                     array_push($clientes, $clienteAux);
                 }
                 
@@ -496,11 +667,17 @@ class ApiController {
                         $cuenta = new CuentaCorrienteCliente();
                         $cuenta->cuentacorrientecliente_id = $value['cuentacorrientecliente_id'];
                         $cuenta->get();
-                        $egreso = new Egreso();
-                        $egreso->egreso_id = $cuenta->egreso_id;
-                        $egreso->get();
-                        $egreso__id = $egreso->egreso_id;
-                            if($egreso->tipofactura->tipofactura_id==2){
+
+                        $egreso_id = $cuenta->egreso_id;
+                        if ($egreso_id == 0) {
+                            $comprobante = 'Migración de cuenta corriente';
+                        } else {
+                            $egreso = new Egreso();
+                            $egreso->egreso_id = $cuenta->egreso_id;
+                            $egreso->get();
+                            $egreso__id = $egreso->egreso_id;
+
+                            if ($egreso->tipofactura->tipofactura_id == 2) {
                                 $comprobante = str_pad($egreso->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
                                 $comprobante .= str_pad($egreso->numero_factura, 8, '0', STR_PAD_LEFT);
                             } else {
@@ -510,6 +687,8 @@ class ApiController {
                                 $egresoafip = CollectorCondition()->get('EgresoAfip', $where_egresoafip, 4, $from_egresoafip, $select_egresoafip);
                                 $comprobante = (is_array($egresoafip))?$egresoafip[0]['nro']:0;
                             }
+                        }
+
                         $cuenta->referencia = $comprobante;    
                         array_push($respuesta, $cuenta);
                     }
@@ -735,8 +914,7 @@ class ApiController {
             if ($jwt->autenticar($token)) {
                 $select = "p.producto_id AS ID, s.cantidad_actual AS CANTIDAD";
                 $from = "stock s INNER JOIN (SELECT MAX(s1.stock_id) AS MAXID, s1.producto_id AS PROID FROM stock s1 WHERE s1.almacen_id = 1 GROUP BY s1.producto_id) ultimo ON ultimo.MAXID = s.stock_id AND ultimo.PROID = s.producto_id INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-                //$where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
-                $where = "p.oculto = 0 AND s.almacen_id = 1";
+                $where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
                 $stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
                 $respuesta = array();
@@ -747,18 +925,16 @@ class ApiController {
                         $pm->producto_id = $producto_id;
                         $pm->get();
 
-                        
-                            $select = "SUM(pvd.cantidad) AS SUGERIDO";
+                        if ($pm->oculto == 0) {
+                            $select = "SUM(pvd.cantidad) AS SUGERIDO ";
                             $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
                             $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
                             $group_by = "pvd.producto_id"; 
                             $sugerido = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select, $group_by);
                             $sugerido = (is_array($sugerido) AND !empty($sugerido)) ? $sugerido[0]['SUGERIDO'] : 0;
-                            $sugerido = (!is_null($sugerido) AND $sugerido != '') ? $sugerido : 0;
 
                             $cantidad_disponible = $valor['CANTIDAD'];
                             $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
-                            $stock_sugerido = ($stock_sugerido <= 0) ? 0 : $stock_sugerido;
 
                             $producto = new stdClass();
                             $producto->producto_id = $pm->producto_id;
@@ -783,7 +959,7 @@ class ApiController {
                             $producto->cantidad_disponible = $cantidad_disponible;
                             $producto->cantidad_sugerida = $stock_sugerido;
                             array_push($respuesta, $producto);
-                        
+                        }
                     }
                 }
 
@@ -807,8 +983,7 @@ class ApiController {
             if ($jwt->autenticar($token)) {
                 $select = "p.producto_id AS ID, s.cantidad_actual AS CANTIDAD";
                 $from = "stock s INNER JOIN (SELECT MAX(s1.stock_id) AS MAXID, s1.producto_id AS PROID FROM stock s1 WHERE s1.almacen_id = 1 GROUP BY s1.producto_id) ultimo ON ultimo.MAXID = s.stock_id AND ultimo.PROID = s.producto_id INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-                //$where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
-                $where = "p.oculto = 0 AND s.almacen_id = 1";
+                $where = "s.cantidad_actual > 0  AND p.oculto = 0 AND s.almacen_id = 1";
                 $stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 
                 $respuesta = array();
@@ -819,18 +994,16 @@ class ApiController {
                         $pm->producto_id = $producto_id;
                         $pm->get();
 
-                        
-                            $select = "SUM(pvd.cantidad) AS SUGERIDO";
+                        if ($pm->oculto == 0) {
+                            $select = "SUM(pvd.cantidad) AS SUGERIDO ";
                             $from = "pedidovendedor pv INNER JOIN pedidovendedordetalle pvd ON pv.pedidovendedor_id = pvd.pedidovendedor_id";
                             $where = "pv.estadopedido = 1 AND pvd.producto_id = {$producto_id}"; 
                             $group_by = "pvd.producto_id"; 
                             $sugerido = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select, $group_by);
                             $sugerido = (is_array($sugerido) AND !empty($sugerido)) ? $sugerido[0]['SUGERIDO'] : 0;
-                            $sugerido = (!is_null($sugerido) AND $sugerido != '') ? $sugerido : 0;
 
                             $cantidad_disponible = $valor['CANTIDAD'];
                             $stock_sugerido = round(($cantidad_disponible - $sugerido),2);
-                            $stock_sugerido = ($stock_sugerido <= 0) ? 0 : $stock_sugerido;
 
                             $producto = new stdClass();
                             $producto->producto_id = $pm->producto_id;
@@ -855,7 +1028,7 @@ class ApiController {
                             $producto->cantidad_disponible = $cantidad_disponible;
                             $producto->cantidad_sugerida = $stock_sugerido;
                             array_push($respuesta, $producto);
-                        
+                        }
                     }
                 }
 
