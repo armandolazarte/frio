@@ -186,8 +186,8 @@ class ExcelReport extends View {
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(300);
 
-        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(32);
-        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(53);
+        $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
+        $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
 
         foreach ($this->abecedario as $clave=>$valor) {
           if ($clave <= $cantidadColumnas) $objPHPExcel->getActiveSheet()->getStyle("{$valor}3")->applyFromArray($this->estilo_titulo_columnas);
