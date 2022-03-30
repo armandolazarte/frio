@@ -1534,7 +1534,7 @@ class EgresoController {
 
 		$array_exportacion[] = array('','','','','','','');
 		$array_exportacion[] = array('','','','','','','');
-		$array_exportacion[] = array('','Clientes: ' . count($array_clientes),'Pedidos: ' . $cant_pedidos ,'Combustible: $.......................','Totales: $.......................','','Total:' . $total);
+		$array_exportacion[] = array('Clientes: ' . count($array_clientes),'Pedidos: ' . $cant_pedidos ,'Combustible: $.......................','Totales: $.......................','','Total:' . $total,'');
 		$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente, '{cant_contado}'=>$cant_contado);
 
 		ExcelReport()->extraer_informe_conjunto_remanente($subtitulo, $array_exportacion,$array_exportacion2, $fecha_hoja_ruta);
