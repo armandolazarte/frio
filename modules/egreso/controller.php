@@ -1483,7 +1483,7 @@ class EgresoController {
 
 		$fecha_hoja_ruta = $hrm->fecha;
 		$subtitulo = "FLETE: {$denominacion} - Nº{$arg}";
-		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL');
+		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL', 'OBSERVACIONES');
 		$array_exportacion[] = $array_encabezados;
 		$total = 0;
 		$array_clientes = array();
@@ -1522,30 +1522,20 @@ class EgresoController {
 			$total = $total + $em->importe_total;
 			$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
 			$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
-			$array_temp = array(
-							$em->fecha
-							, $factura
-							, $em->cliente->razon_social
-							, $em->cliente->domicilio
-							, $em->condicionpago->denominacion
-							, $em->importe_total);
+			$array_temp = array($em->fecha
+				  				, $factura
+				  				, $em->cliente->razon_social
+				  				, $em->cliente->domicilio
+				  				, $em->condicionpago->denominacion
+				  				, $em->importe_total
+				  				, '....................................................................');
 			$array_exportacion[] = $array_temp;
 		}
 
-		$array_exportacion[] = array('','','','','');
-		$array_exportacion[] = array('','','','','');
-		$array_exportacion[] = array('','','','','Cant. Clientes',count($array_clientes));
-		$array_exportacion[] = array('','','','','Cant. Pedidos',$cant_pedidos);
-		$array_exportacion[] = array('','','','','Cuenta Corriente',$cant_cuentacorriente);
-		$array_exportacion[] = array('','','','','Contado',$cant_contado);
-		$array_exportacion[] = array('','','','','Total',$total);
-		$array_exportacion[] = array('','','','','','');
-		$array_exportacion[] = array('','','','','Combustible','$.......................');
-		$array_exportacion[] = array('','','','','Sencillo','$.......................');
-		$array_exportacion[] = array('','','','','Descuentos','$.......................');
-		$array_exportacion[] = array('','','','','Cuenta Corriente','$.......................');
-		$array_exportacion[] = array('','','','','Efectivo','$.......................');
-		$array_exportacion[] = array('','','','','Totales','$.......................');
+		$array_exportacion[] = array('','','','','','','');
+		$array_exportacion[] = array('','','','','','','');
+		$array_exportacion[] = array('','Clientes: ' . count($array_clientes),'Pedidos: ' . $cant_pedidos ,'','','','Total:' . $total);
+		$array_exportacion[] = array('','','','','','Combustible: $.......................','Totales: $.......................');
 		$array_cantidades = array('{cant_cuentacorriente}'=>$cant_cuentacorriente, '{cant_contado}'=>$cant_contado);
 
 		ExcelReport()->extraer_informe_conjunto_remanente($subtitulo, $array_exportacion,$array_exportacion2, $fecha_hoja_ruta);
