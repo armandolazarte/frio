@@ -38,21 +38,30 @@
                 </tr>
                 <tr style="height: 1px; border-top: 1px #000 solid; width: 100% !important;"><td colspan="3"></td></tr>
                 <tr style="padding:5px 0 8px 0;">
-                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center; font-size: 25px; " colspan="3">
+                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center;" colspan="3">
                         <table cellspacing="0" style="width: 100% !important;">
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Sres: {cliente-razon_social} - {egreso-cliente_documentotipo}: {cliente-documento}
+                            <tr style=" text-align: center; font-size: 12px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Sres: <b>{cliente-razon_social}</b> - [{cliente-codigo}]
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    {egreso-cliente_documentotipo}: {cliente-documento}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px;">
-                                    Cond. Venta: {condicionpago-denominacion} - Cond. IVA: {cliente-condicioniva}
+                            <tr style=" text-align: center; font-size: 12px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Dom.: {cliente-domicilio} - {cliente-barrio} - Loc.: {cliente-localidad}
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    I.V.A.: {cliente-condicioniva}
                                 </td>
                             </tr>
-                            <tr style=" text-align: center; font-size: 14px; width: 100% !important;">
-                                <td style="width: 100% !important; text-align: left; font-size: 14px; ">
-                                    Domicilio: {cliente-domicilio}
+                            <tr style=" text-align: center; font-size: 12px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Prov.: {provincia-denominacion} - Teléfonos: {cliente-telefono}
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    IIBB:
                                 </td>
                             </tr>
                         </table>
