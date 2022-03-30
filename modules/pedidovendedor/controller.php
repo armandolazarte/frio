@@ -848,8 +848,7 @@ class PedidoVendedorController {
 		$eem->fecha = $fecha_entrega;
 		$eem->flete = $flete_id;
 		$eem->estadoentrega = 2;
-		print_r($eem);exit;
-		//$eem->save();
+		$eem->save();
 		$egresoentrega_id = $eem->egresoentrega_id;
 
 		$condicionpago = filter_input(INPUT_POST, 'condicionpago');
@@ -876,6 +875,7 @@ class PedidoVendedorController {
 		$mem->egresocomision = $egresocomision_id;
 		$mem->egresoentrega = $egresoentrega_id;		
 		$mem->save();
+		print_r($mem);exit;
 		$egreso_id = $mem->egreso_id;
 		
 		$mem->egreso_id = $egreso_id;
