@@ -88,8 +88,8 @@ class ExcelReportTipo2 extends View {
     $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
     $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(300);
     
-    $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(32);
-    $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(53);
+    $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
+    $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
     
     foreach ($this->abecedario as $clave=>$valor) {
       if ($clave <= $cantidadColumnas) $objPHPExcel->getActiveSheet()->getStyle("{$valor}3")->applyFromArray($this->estilo_titulo_columnas);
@@ -111,136 +111,136 @@ class ExcelReportTipo2 extends View {
   }
 
   /* ESTILO DE EXCEL */
-  function estilo() {
-    
-    $this->estilo_titulo = array(
-                            'font'=>array(
-                                'name'=>'Bookman Old Style',
-                                'bold'=>true,
-                                'size'=>13,
-                                'color'=>array('rgb'=>'FFFFFF')),
-                            'fill'=>array(
-                                'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                'color'=>array('rgb' => '635C50')),
-                            'alignment'=>array(
-                                'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-                                'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
+    function estilo() {
 
-    $this->estilo_fecha = array(
-                            'font'=>array(
-                                'name'=>'Bookman Old Style',
-                                'bold'=>true,
-                                'size'=>11,
-                                'color'=>array('rgb'=>'FFFFFF')),
-                            'fill'=>array(
-                                'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                'color'=>array('rgb' => '635C50')),
-                            'alignment'=>array(
-                                'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
-                                'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
+        $this->estilo_titulo = array(
+                                'font'=>array(
+                                    'name'=>'Bookman Old Style',
+                                    'bold'=>true,
+                                    'size'=>13,
+                                    'color'=>array('rgb'=>'000000')),
+                                'fill'=>array(
+                                    'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color'=>array('rgb' => 'FFFFFF')),
+                                'alignment'=>array(
+                                    'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                                    'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
 
-    $this->estilo_soft = array(
-                            'font'=>array(
-                                'name'=>'Bookman Old Style',
-                                'bold'=>true,
-                                'size'=>10,
-                                'color'=>array('rgb'=>'FFFFFF')),
-                            'fill'=>array(
-                                'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                'color'=>array('rgb' => '635C50')),
-                            'alignment'=>array(
-                                'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-                                'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
-    
-    $this->estilo_subtitulo = array(
-                                    'font'=>array(
-                                        'name'=>'Bookman Old Style',
-                                        'size'=>17,
-                                        'color'=>array('rgb' => '000000')),
-                                    'fill'=>array(
-                                        'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                        'color'=>array('rgb' => 'FFFFFF')), 
-                                    'alignment'=>array(
-                                        'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-                                        'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
+        $this->estilo_fecha = array(
+                                'font'=>array(
+                                    'name'=>'Bookman Old Style',
+                                    'bold'=>true,
+                                    'size'=>10,
+                                    'color'=>array('rgb'=>'000000')),
+                                'fill'=>array(
+                                    'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color'=>array('rgb' => 'FFFFFF')),
+                                'alignment'=>array(
+                                    'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                                    'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
 
-    $this->estilo_titulo_legajo = array(
-                                    'font'=>array(
-                                        'name'=>'Arial',
-                                        'size'=>9,
-                                        'bold'=>false,
-                                        'color'=>array('rgb' => '635C50')),
-                                    'fill'=>array(
-                                        'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                        'color'=>array('rgb' => 'FFFFFF')), 
-                                    'alignment'=>array(
-                                        'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
-                                        'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER));
+        $this->estilo_soft = array(
+                                'font'=>array(
+                                    'name'=>'Bookman Old Style',
+                                    'bold'=>true,
+                                    'size'=>10,
+                                    'color'=>array('rgb'=>'000000')),
+                                'fill'=>array(
+                                    'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color'=>array('rgb' => 'FFFFFF')),
+                                'alignment'=>array(
+                                    'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                                    'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
 
-    $this->estilo_legajo = array(
-                                    'font'=>array(
-                                        'name'=>'Arial',
-                                        'size'=>10,
-                                        'bold'=>true,
-                                        'color'=>array('rgb' => '808080')),
-                                    'fill'=>array(
-                                        'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                        'color'=>array('rgb' => 'FFFFFF')), 
-                                    'alignment'=>array(
-                                        'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-                                        'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER));
-    
-    $this->estilo_titulo_columnas = array(
-                                      'font'=>array(
-                                          'name'=>'Arial',
-                                          'size'=>8,
-                                          'bold'=>false,                          
-                                          'color'=>array('rgb'=>'FFFFFF')),
-                                      'fill'=>array(
-                                          'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                          'rotation'=>90,
-                                          'color'=>array('rgb' => '635C50')),
-                                      'borders'=>array(
-                                          'top'=>array(
-                                              'style'=>PHPExcel_Style_Border::BORDER_MEDIUM,
+        $this->estilo_subtitulo = array(
+                                        'font'=>array(
+                                            'name'=>'Bookman Old Style',
+                                            'size'=>13,
+                                            'color'=>array('rgb' => '000000')),
+                                        'fill'=>array(
+                                            'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color'=>array('rgb' => 'FFFFFF')),
+                                        'alignment'=>array(
+                                            'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                                            'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
+
+        $this->estilo_titulo_legajo = array(
+                                        'font'=>array(
+                                            'name'=>'Arial',
+                                            'size'=>9,
+                                            'bold'=>false,
+                                            'color'=>array('rgb' => '000000')),
+                                        'fill'=>array(
+                                            'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color'=>array('rgb' => 'FFFFFF')),
+                                        'alignment'=>array(
+                                            'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_RIGHT,
+                                            'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER));
+
+        $this->estilo_legajo = array(
+                                        'font'=>array(
+                                            'name'=>'Arial',
+                                            'size'=>10,
+                                            'bold'=>true,
+                                            'color'=>array('rgb' => '808080')),
+                                        'fill'=>array(
+                                            'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                            'color'=>array('rgb' => 'FFFFFF')),
+                                        'alignment'=>array(
+                                            'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
+                                            'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER));
+
+        $this->estilo_titulo_columnas = array(
+                                          'font'=>array(
+                                              'name'=>'Arial',
+                                              'size'=>8,
+                                              'bold'=>false,
+                                              'color'=>array('rgb'=>'000000')),
+                                          'fill'=>array(
+                                              'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                              'rotation'=>90,
                                               'color'=>array('rgb' => 'FFFFFF')),
-                                          'bottom'=>array(
-                                              'style'=>PHPExcel_Style_Border::BORDER_MEDIUM,
-                                              'color'=>array('rgb' => 'FFFFFF'))),
-                                      'alignment' =>  array(
-                                          'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
-                                          'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
+                                          'borders'=>array(
+                                              'top'=>array(
+                                                  'style'=>PHPExcel_Style_Border::BORDER_MEDIUM,
+                                                  'color'=>array('rgb' => 'C3C3C3')),
+                                              'bottom'=>array(
+                                                  'style'=>PHPExcel_Style_Border::BORDER_MEDIUM,
+                                                  'color'=>array('rgb' => 'C3C3C3'))),
+                                          'alignment' =>  array(
+                                              'horizontal'=>PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+                                              'vertical'=>PHPExcel_Style_Alignment::VERTICAL_CENTER) );
 
-    $this->first_info_style = new PHPExcel_Style();
-    $this->first_info_style->applyFromArray(
-                            array(
-                              'font'=>array(
-                                  'name'=>'Arial',               
-                                  'size'=>9,               
-                                  'color'=>array('rgb'=>'000000')),
-                              'fill'=>array(
-                                  'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                  'color'=>array('rgb'=>'E8E7EF')),
-                              'borders'=>array(
-                                  'allborders'=>array(
-                                      'style'=>PHPExcel_Style_Border::BORDER_THIN,
-                                      'color'=>array('rgb' => 'FFFFFF')))) );
+        $this->first_info_style = new PHPExcel_Style();
+        $this->first_info_style->applyFromArray(
+                                array(
+                                  'font'=>array(
+                                      'name'=>'Arial',
+                                      'size'=>9,
+                                      'color'=>array('rgb'=>'000000')),
+                                  'fill'=>array(
+                                      'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                      'color'=>array('rgb'=>'FFFFFF')),
+                                  'borders'=>array(
+                                      'allborders'=>array(
+                                          'style'=>PHPExcel_Style_Border::BORDER_THIN,
+                                          'color'=>array('rgb' => 'C3C3C3')))) );
 
-    $this->second_info_style = new PHPExcel_Style();
-    $this->second_info_style->applyFromArray(
-                            array(
-                              'font'=>array(
-                                  'name'=>'Arial',               
-                                  'size'=>9,               
-                                  'color'=>array('rgb'=>'000000')),
-                              'fill'=>array(
-                                  'type'=>PHPExcel_Style_Fill::FILL_SOLID,
-                                  'color'=>array('rgb'=>'D9D9D9')),
-                              'borders'=>array(
-                                  'allborders'=>array(
-                                      'style'=>PHPExcel_Style_Border::BORDER_THIN,
-                                      'color'=>array('rgb' => 'FFFFFF')))) );
-  }
+        $this->second_info_style = new PHPExcel_Style();
+        $this->second_info_style->applyFromArray(
+                                array(
+                                  'font'=>array(
+                                      'name'=>'Arial',
+                                      'size'=>9,
+                                      'color'=>array('rgb'=>'000000')),
+                                  'fill'=>array(
+                                      'type'=>PHPExcel_Style_Fill::FILL_SOLID,
+                                      'color'=>array('rgb'=>'D9D9D9')),
+                                  'borders'=>array(
+                                      'allborders'=>array(
+                                          'style'=>PHPExcel_Style_Border::BORDER_THIN,
+                                          'color'=>array('rgb' => 'C3C3C3')))) );
+    }
 }
 
 function ExcelReportTipo2() { return new ExcelReportTipo2(); }
