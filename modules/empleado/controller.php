@@ -53,7 +53,6 @@ class EmpleadoController {
 
 	function guardar() {
 		SessionHandler()->check_session();
-
 		$this->model->apellido = filter_input(INPUT_POST, 'apellido');
 		$this->model->nombre = filter_input(INPUT_POST, 'nombre');
 		$this->model->documento = filter_input(INPUT_POST, 'documento');
@@ -65,10 +64,9 @@ class EmpleadoController {
 		$this->model->oculto = 0;
 		$this->model->provincia = filter_input(INPUT_POST, 'provincia');
 		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');
+		print_r($this->model);exit;
 		$this->model->save();
-		$empleado_id = $this->model->empleado_id;
-
-		
+		$empleado_id = $this->model->empleado_id;		
 		header("Location: " . URL_APP . "/empleado/listar");
 	}
 
