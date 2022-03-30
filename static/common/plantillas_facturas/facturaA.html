@@ -11,10 +11,10 @@
                         <strong>A</strong><br>
                         <font style="font-size: 10px;">Código N° 01</font>
                     </td>
-                    <td style="width: 48% !important; text-align: left; font-size: 15px; padding-left: 15px;">
+                    <td style="width: 48% !important; text-align: right; font-size: 15px; padding-left: 15px;">
                         <strong>FACTURA</strong><br>
                         <strong>N°: {egreso-punto_venta}-{egreso-numero_factura} A</strong><br>
-                        <font style="font-size: 10px;">Fecha: {egreso-fecha}</font>
+                        <font style="font-size: 11px;">Fecha: {egreso-fecha}</font>
                     </td>
                 </tr>
                 <tr style="padding:5px 0 8px 0;">
@@ -23,35 +23,14 @@
                             <tr>                                
                                 <td style="width: 50% !important;">
                                     {configuracion-domicilio_comercial}<br>
-                                    CUIT: {configuracion-cuit}
+                                    La Rioja
+                                    Tel: 0380-4420964
                                 </td>
-                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; font-size: 15px; padding-left: 15px;">
-                                    <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Fecha de Emisión: {egreso-fecha}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </td>
-                            </tr>
-                            <tr style=" text-align: center; font-size: 16px; width: 100% !important;">                                
-                                <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                    <strong>Cond. IVA: {condicioniva-denominacion}</strong>
-                                </td>
-                                <td style="width: 50% !important; text-align: left; font-size: 15px; padding-left: 15px; border-left: 1px #000 solid;">
-                                    <table cellspacing="0" style="width: 100% !important;">
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Ingresos Brutos: {configuracion-ingresos_brutos}
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size: 16px; width: 100% !important;">
-                                            <td style="width: 50% !important; text-align: left; font-size: 15px;">
-                                                Fecha Inicio Actividad: {configuracion-fecha_inicio_actividad}
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; padding-left: 15px;">
+                                    <strong>CUIT: {configuracion-cuit}</strong><br>
+                                    <strong>IIBB: </strong>{configuracion-ingresos_brutos}<br>
+                                    <strong>Inicio Actividades: </strong>{configuracion-fecha_inicio_actividad}<br>
+                                    <strong>Resp. Inscripto</strong>                                    
                                 </td>
                             </tr>
                         </table>
