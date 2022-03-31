@@ -230,7 +230,7 @@ class FacturaPDF extends View {
         $gui_html = str_replace('{contenido}', $contenido, $gui_html);
         $output = $directorio . $nombre_PDF;
         $mipdf = new DOMPDF();
-        $mipdf ->set_paper("A4", "portrait");
+        $mipdf ->set_paper("A4", "landscape");
         $mipdf ->load_html($gui_html);
         $mipdf->render();
         $pdfoutput = $mipdf->output();
