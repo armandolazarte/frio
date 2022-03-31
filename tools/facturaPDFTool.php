@@ -79,7 +79,7 @@ class FacturaPDF extends View {
         $obj_configuracion = $this->set_dict($obj_configuracion);
         $obj_cliente = $this->set_dict($obj_cliente);
 
-        $new_array = array_chunk($egresodetalle_collection, 17);
+        $new_array = array_chunk($egresodetalle_collection, 15);
         $contenido = '';
         $cantidad_hojas = count($new_array);
         $i = 1;
@@ -199,7 +199,7 @@ class FacturaPDF extends View {
         $obj_egreso = $this->set_dict($obj_egreso);
         $obj_configuracion = $this->set_dict($obj_configuracion);
         $obj_cliente = $this->set_dict($obj_cliente);
-        $new_array = array_chunk($egresodetalle_collection, 10);
+        $new_array = array_chunk($egresodetalle_collection, 12);
         $contenido = '';
         $cantidad_hojas = count($new_array);
         $i = 1;
