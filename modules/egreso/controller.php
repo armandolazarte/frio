@@ -1056,6 +1056,7 @@ class EgresoController {
 		$this->model->egreso_id = $egreso_id;
 		$this->model->get();
 		$vendedor_id = $this->model->vendedor->vendedor_id;
+		$cliente_id = $this->model->cliente->cliente_id;
 		$condicionpago_egreso = $this->model->condicionpago->condicionpago_id;
 		$tipofactura_egreso = $this->model->tipofactura->tipofactura_id;
 
@@ -1101,6 +1102,8 @@ class EgresoController {
 		$ncm->hora = $hora;
 		$ncm->subtotal = filter_input(INPUT_POST, 'subtotal');
 		$ncm->importe_total = $importe_total;
+		$ncm->numero_cae = 0;
+		$ncm->vencimiento_cae = NULL;
 		$ncm->egreso_id = $egreso_id;
 		$ncm->tipofactura = $tipofactura_nc;
 
@@ -1160,7 +1163,7 @@ class EgresoController {
 			$pm = new Producto();
 			$pm->producto_id = $producto_id;
 			$pm->get();
-			
+
 			$neto = $pm->costo;
 			$flete = $pm->flete;
 			$porcentaje_ganancia = $pm->porcentaje_ganancia;
@@ -1242,7 +1245,7 @@ class EgresoController {
 		if ($condicionpago_egreso == 1) {
 			$select = "ccc.cuentacorrientecliente_id CCCID";
 			$from = "cuentacorrientecliente ccc";
-			$where = "ccc.egreso_id = {$egreso_id}";
+			$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id} ORDER BY ccc.cuentacorrientecliente_id ASC";
 			$cuentacorrientecliente_id = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 			$cuentacorrientecliente_id = $cuentacorrientecliente_id[0]['CCCID'];
 			$cccm = new CuentaCorrienteCliente();
@@ -1253,7 +1256,7 @@ class EgresoController {
 			$cccm->save();
 		}
 
-		header("Location: " . URL_APP . "/egreso/consultar/{$egreso_id}");
+		header("Location: " . URL_APP . "/notacredito/consultar/{$notacredito_id}");
 	}
 
 	function entregas_pendientes($arg) {
