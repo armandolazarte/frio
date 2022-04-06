@@ -125,16 +125,9 @@
                 <button type="button" class="btn btn-xs btn-danger" onClick="prepararFacturaNCAfip();" style="width: 100%; display: {notacredito-btn_presentarafip_nc}"><i class="fa fa-file-text-o"></i> PRESENTAR NC AFIP</button>
             </form>
         </div>
-        <!--
-        <div class="form-group col-lg-4">
-            <button type="button" class="btn btn-xs btn-danger" onClick="location.href='{url_app}/egreso/reingreso/{egreso-egreso_id}'" style="width: 100%; display: {egreso-btn_generar_nc};"><i class="fa fa-file-text-o"></i> GENERAR NOTA CRÉDITO</button>
-            <button type="button" class="btn btn-xs btn-danger" onClick="location.href='{url_app}/notacredito/consultar/{egreso-egreso_id}'" style="width: 100%; display: {egreso-btn_consultar_nc};"><i class="fa fa-file-text-o"></i> CONSULTAR NOTA DE CRÉDITO</button>
-        </div>
         <div class="form-group col-lg-4" style="padding-right: 0px;">
-            <a type="button" class="btn btn-xs btn-dark" href="file.php?f=facturas_egresos_Factura-{egreso-egreso_id}&a=d" style="width: 100%; display: {egreso-btn_imprimir_comprobante};" target="_blank"><i class="fa fa-print"></i> IMPRIMIR</a>
-            <button type="button" class="btn btn-xs btn-dark" onClick="location.href='{url_app}/egreso/cerrar_comprobante/{egreso-egreso_id}'" style="width: 100%; display: {egreso-btn_cerrar_comprobante};"><i class="fa fa-check"></i> CERRAR COMPROBANTE</button>
+            <a type="button" class="btn btn-xs btn-dark" href="file.php?f=facturas_notascreditos_NotaCredito-{notacredito-notacredito_id}&a=d" style="width: 100%;" target="_blank"><i class="fa fa-print"></i> IMPRIMIR</a>
         </div>
-        -->
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px; " id="div_pdf_factura">
         <iframe src="file.php?f=facturas_notascreditos_NotaCredito-{notacredito-notacredito_id}&a=v#toolbar=0&navpanes=0" style="width:100%; height:580px;" frameborder="0"></iframe>

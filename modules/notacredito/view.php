@@ -28,7 +28,6 @@ class NotaCreditoView extends View {
 		$gui = file_get_contents("static/modules/notacredito/consultar.html");
 		$tbl_notacreditodetalle_array = file_get_contents("static/modules/notacredito/tbl_notacreditodetalle_array.html");
 		$tbl_notacreditodetalle_array = $this->render_regex_dict('TBL_NOTACREDITODETALLE', $tbl_notacreditodetalle_array, $notacreditodetalle_collection);
-		
 
 		if (is_object($obj_egreso)) {
 			$tipofactura_cliente_nomenclatura = $obj_egreso->cliente->tipofactura->nomenclatura;

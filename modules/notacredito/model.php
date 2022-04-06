@@ -12,6 +12,8 @@ class NotaCredito extends StandardObject {
 		$this->hora = '';
 		$this->subtotal = 0.00;
 		$this->importe_total = 0.00;
+		$this->numero_cae = 0;
+		$this->vencimiento_cae = '';
 		$this->egreso_id = 0;
 		$this->emitido_afip = 0;
 		$this->tipofactura = $tipofactura;
