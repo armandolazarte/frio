@@ -32,8 +32,8 @@ abstract class View {
                       "{nivel-denominacion}"=>$_SESSION["data-login-" . APP_ABREV]["nivel-denominacion"],
                       "{contenido}"=>$contenido);
 
-        $display_operador = ($user_level == 1) ? 'inline-block' : 'none';
-        $display_admin = ($user_level < 3) ? 'none' : 'inline-block';
+        $display_operador = ($user_level == 1) ? 'block' : 'none';
+        $display_admin = ($user_level < 3) ? 'none' : 'block';
         $plantilla = file_get_contents(TEMPLATE);
         $plantilla = $this->render($dict, $plantilla);
         $plantilla = str_replace('{display_operador}', $display_operador, $plantilla);
