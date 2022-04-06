@@ -18,7 +18,6 @@ abstract class View {
         $configuracionmenu = $_SESSION["data-login-" . APP_ABREV]["usuario-configuracionmenu"];
 
         $sidebar = $this->render_menu($configuracionmenu);
-        $sidebar = str_replace('{display_operador}', $display_operador, $sidebar);
         $sidebar = str_replace('{display_balance}', $display_balance, $sidebar);
 
         $dict = array("{app_nombre}"=>APP_TITTLE,
