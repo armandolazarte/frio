@@ -22,7 +22,7 @@ class Cliente extends StandardObject {
         $this->descuento = 0.00;
 		$this->iva = 0.00;
 		$this->documento = 0;
-        $this->ingresos_brutos = '';
+        $this->ingresos_brutos = 0;
         $this->departamento = '';
         $this->localidad = '';
         $this->domicilio = '';
