@@ -328,7 +328,7 @@ class StockController {
     	
 		$select = "s.producto_id AS PROD_ID";
 		$from = "stock s";
-		$where = "s.almacen_id = {$almacen_id}";
+		$where = "s.almacen_id = 1";
 		$groupby = "s.producto_id";
 		$productoid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 		$stock_valorizado = 0;
@@ -341,7 +341,7 @@ class StockController {
 
 			$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
-			$where = "s.producto_id IN ({$producto_ids}) AND s.almacen = {$almacen_id}";
+			$where = "s.producto_id IN ({$producto_ids}) AND s.almacen = 1";
 			$groupby = "s.producto_id";
 			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 
