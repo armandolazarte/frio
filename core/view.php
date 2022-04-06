@@ -33,7 +33,7 @@ abstract class View {
                       "{contenido}"=>$contenido);
 
         $display_operador = ($user_level == 1) ? 'inline-block' : 'none';
-        $display_admin = ($user_level < 3) ? 'none' : 'block';
+        $display_admin = ($user_level < 3) ? 'none' : 'inline-block';
         $plantilla = file_get_contents(TEMPLATE);
         $plantilla = $this->render($dict, $plantilla);
         $plantilla = str_replace('{display_operador}', $display_operador, $plantilla);
