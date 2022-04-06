@@ -339,6 +339,7 @@ class StockController {
 			foreach ($productoid_collection as $producto_id) $producto_ids[] = $producto_id['PROD_ID'];
 			$producto_ids = implode(',', $producto_ids);
 
+		print_r($producto_ids);exit;
 			$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
 			$where = "s.producto_id IN ({$producto_ids}) AND s.almacen = 1";
@@ -372,7 +373,6 @@ class StockController {
 				}
 			}
 		}
-		print_r($stock_collection);exit;
 		$this->view->vdr_stock($stock_collection, $am);
 	}
 
