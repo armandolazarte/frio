@@ -41,6 +41,10 @@ abstract class View {
                 $display_operador = 'none';
                 $display_admin = 'block';
                 break;
+            case 9:
+                $display_operador = 'none';
+                $display_admin = 'block';
+                break;
         }
         
         $plantilla = file_get_contents(TEMPLATE);
