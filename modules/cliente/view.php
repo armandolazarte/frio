@@ -104,6 +104,8 @@ class ClienteView extends View {
 		$obj_cliente->txt_impacto_ganancia = ($obj_cliente->impacto_ganancia == 1) ? 'SI' : 'NO';
 		$obj_cliente->checked_habilita_cuenta_corriente_si = ($obj_cliente->habilita_cuenta_corriente == 1) ? 'checked' : '';
 		$obj_cliente->checked_habilita_cuenta_corriente_no = ($obj_cliente->habilita_cuenta_corriente == 1) ? '' : 'checked';
+		$obj_cliente->checked_ingresosbrutos_si = ($obj_cliente->ingresosbrutos == 1) ? 'checked' : '';
+		$obj_cliente->checked_ingresosbrutos_no = ($obj_cliente->ingresosbrutos == 1) ? '' : 'checked';
 		$obj_cliente->documentotipo_id = $obj_cliente->documentotipo->documentotipo_id;
 		$obj_cliente->documento_denominacion = $obj_cliente->documentotipo->denominacion;
 		$obj_cliente = $this->set_dict($obj_cliente);
