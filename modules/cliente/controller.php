@@ -100,7 +100,7 @@ class ClienteController {
 		$nombre_fantasia = filter_input(INPUT_POST, 'nombre_fantasia');
 		$iva = filter_input(INPUT_POST, 'iva');
 		$documento = filter_input(INPUT_POST, 'documento');
-		$ingresos_brutos = filter_input(INPUT_POST, 'ingresos_brutos');
+		$ingresos_brutos = filter_input(INPUT_POST, 'ingresosbrutos');
 		$departamento = filter_input(INPUT_POST, 'departamento');
 		$localidad = filter_input(INPUT_POST, 'localidad');
 		$documentotipo = filter_input(INPUT_POST, 'documentotipo');
@@ -196,7 +196,7 @@ class ClienteController {
 		$this->model->nombre_fantasia = filter_input(INPUT_POST, 'nombre_fantasia');
 		$this->model->iva = filter_input(INPUT_POST, 'iva');
 		$this->model->documento = filter_input(INPUT_POST, 'documento');
-		$this->model->ingresos_brutos = filter_input(INPUT_POST, 'ingresos_brutos');
+		$this->model->ingresos_brutos = filter_input(INPUT_POST, 'ingresosbrutos');
 		$this->model->departamento = filter_input(INPUT_POST, 'departamento');
 		$this->model->localidad = filter_input(INPUT_POST, 'localidad');
 		$this->model->documentotipo = filter_input(INPUT_POST, 'documentotipo');
