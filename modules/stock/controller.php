@@ -339,10 +339,9 @@ class StockController {
 			foreach ($productoid_collection as $producto_id) $producto_ids[] = $producto_id['PROD_ID'];
 			$producto_ids = implode(',', $producto_ids);
 
-		print_r($producto_ids);exit;
 			$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
-			$where = "s.producto_id IN ({$producto_ids}) AND s.almacen = 1";
+			$where = "s.producto_id IN ({$producto_ids}) AND s.almacen_id = 1";
 			$groupby = "s.producto_id";
 			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 
