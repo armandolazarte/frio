@@ -372,7 +372,7 @@ class StockController {
 				}
 			}
 		}
-		
+		print_r($stock_collection);exit;
 		$this->view->vdr_stock($stock_collection, $am);
 	}
 
