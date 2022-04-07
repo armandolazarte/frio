@@ -265,6 +265,8 @@ class EgresoController {
 			$tipofactura_id = $this->model->tipofactura->tipofactura_id;
 		}
 
+		print_r($egresodetalle_collection);exit;
+
 		switch ($tipofactura_id) {
 			case 1:
 				$facturaPDFHelper->facturaA($egresodetalle_collection, $cm, $this->model, $vendedor, $flete);
