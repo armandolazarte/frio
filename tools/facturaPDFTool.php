@@ -51,10 +51,10 @@ class FacturaPDF extends View {
             //SUBTOTAL
             $subtotal = $subtotal + $total_unitario_cantidad;
 
-            $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
-            $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
             //VALORES NUEVOS
             $egresodetalle_collection[$clave]['UNITARIO'] = round($unitario_sin_iva, 2);
+            $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
+            $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
             
 
             //POR LAS DUDAS
@@ -164,7 +164,7 @@ class FacturaPDF extends View {
 
             //UNITARIO SIN IVA
             $unitario_sin_iva = $valor['NETPRO'] + ($valor['FLETE'] * 100 / $valor['NETPRO']);
-            $unitario_sin_iva = $unitario_sin_iva + $valor['GANANCIA'];
+            $unitario_sin_iva = $unitario_sin_iva + ($valor['GANANCIA'] / $valor['CANTIDAD']);
 
             //UNITARIO SIN IVA MENOS DESCUENTO
             $unitario_sin_iva_descuento = $unitario_sin_iva - $valor['VD'];
