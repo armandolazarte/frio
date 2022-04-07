@@ -38,8 +38,9 @@ class FacturaPDF extends View {
 
             //UNITARIO SIN IVA
             $unitario_sin_iva = $valor['NETPRO'] + ($valor['FLETE'] * 100 / $valor['NETPRO']);
-            $unitario_sin_iva = $unitario_sin_iva + $valor['GANANCIA'];
+            $unitario_sin_iva = $unitario_sin_iva + ($valor['GANANCIA'] / $valor['CANTIDAD']);
             /*
+            */
 
             //UNITARIO SIN IVA MENOS DESCUENTO
             $unitario_sin_iva_descuento = $unitario_sin_iva - $valor['VD'];
@@ -52,7 +53,6 @@ class FacturaPDF extends View {
 
             $egresodetalle_collection[$clave]['UNICONDES'] = $unitario_sin_iva_descuento;
             $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
-            */
             //VALORES NUEVOS
             $egresodetalle_collection[$clave]['UNITARIO'] = $unitario_sin_iva;
             //POR LAS DUDAS
