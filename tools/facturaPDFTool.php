@@ -36,10 +36,10 @@ class FacturaPDF extends View {
         foreach ($egresodetalle_collection as $clave=>$valor) {
             $importe_total = $importe_total + $valor['IMPORTE'];
 
-            /*
             //UNITARIO SIN IVA
             $unitario_sin_iva = $valor['NETPRO'] + ($valor['FLETE'] * 100 / $valor['NETPRO']);
             $unitario_sin_iva = $unitario_sin_iva + $valor['GANANCIA'];
+            /*
 
             //UNITARIO SIN IVA MENOS DESCUENTO
             $unitario_sin_iva_descuento = $unitario_sin_iva - $valor['VD'];
@@ -50,11 +50,11 @@ class FacturaPDF extends View {
             //SUBTOTAL
             $subtotal = $subtotal + $total_unitario_cantidad;
 
-            //VALORES NUEVOS
-            $egresodetalle_collection[$clave]['UNITARIO'] = $unitario_sin_iva;
             $egresodetalle_collection[$clave]['UNICONDES'] = $unitario_sin_iva_descuento;
             $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
             */
+            //VALORES NUEVOS
+            $egresodetalle_collection[$clave]['UNITARIO'] = $unitario_sin_iva;
             //POR LAS DUDAS
             $alicuota = (100 + $valor['IVA']) / 100;
             $subtotal = round($valor['IMPORTE'] / $alicuota, 2);
