@@ -265,7 +265,7 @@ class EgresoController {
 			$tipofactura_id = $this->model->tipofactura->tipofactura_id;
 		}
 
-		print_r($egresodetalle_collection);exit;
+		//print_r($egresodetalle_collection);exit;
 
 		switch ($tipofactura_id) {
 			case 1:
