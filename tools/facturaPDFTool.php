@@ -54,7 +54,7 @@ class FacturaPDF extends View {
             $egresodetalle_collection[$clave]['UNICONDES'] = $unitario_sin_iva_descuento;
             $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
             //VALORES NUEVOS
-            $egresodetalle_collection[$clave]['UNITARIO'] = $unitario_sin_iva;
+            $egresodetalle_collection[$clave]['UNITARIO'] = round($unitario_sin_iva, 2);
             //POR LAS DUDAS
             $alicuota = (100 + $valor['IVA']) / 100;
             $subtotal = round($valor['IMPORTE'] / $alicuota, 2);
