@@ -27,6 +27,7 @@ class FacturaPDF extends View {
         $obj_egreso->punto_venta = str_pad($obj_egreso->punto_venta, 4, '0', STR_PAD_LEFT);
         $obj_egreso->numero_factura = str_pad($obj_egreso->numero_factura, 8, '0', STR_PAD_LEFT);
         $egreso_id = $obj_egreso->egreso_id;
+        $obj_egreso->fecha = $this->reacomodar_fecha($obj_egreso->fecha);
         $obj_cliente->condicioniva = $obj_cliente->condicioniva->denominacion;
 
         $importe_total = 0;
@@ -134,6 +135,7 @@ class FacturaPDF extends View {
         $obj_egreso->punto_venta = str_pad($obj_egreso->punto_venta, 4, '0', STR_PAD_LEFT);
         $obj_egreso->numero_factura = str_pad($obj_egreso->numero_factura, 8, '0', STR_PAD_LEFT);
         $egreso_id = $obj_egreso->egreso_id;
+        $obj_egreso->fecha = $this->reacomodar_fecha($obj_egreso->fecha);
         $obj_cliente->condicioniva = $obj_cliente->condicioniva->denominacion;
 
         $importe_total = 0;
