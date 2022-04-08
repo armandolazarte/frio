@@ -50,7 +50,8 @@ class FacturaPDF extends View {
             $unitario_sin_iva_descuento = round(($unitario_sin_iva - $valor_descuento), 2);
             //TOTAL POR LINEA POR UNITARIO
             $total_unitario_cantidad = $unitario_sin_iva_descuento * $valor['CANTIDAD'];
-            
+            //SUBTOTAL
+            $subtotal = $subtotal + $unitario_sin_iva_descuento;
             //VALORES FINALES
             $egresodetalle_collection[$clave]['UNITARIO'] = round($unitario_sin_iva, 2);
             $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
@@ -98,7 +99,7 @@ class FacturaPDF extends View {
             */
         }
 
-        $obj_egreso->importe_iva = round($obj_egreso->importe_total - $subtotal, 2);
+        $obj_egreso->importe_iva = round($importe_total, 2);
         $obj_egreso->subtotal = round($subtotal, 2);
         //$obj_egreso->subtotal = round($obj_egreso->importe_total - $obj_egreso->importe_iva,2);
 
