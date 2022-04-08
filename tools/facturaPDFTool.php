@@ -41,7 +41,7 @@ class FacturaPDF extends View {
             //PVP
             $pvp = $valor['COSTO'];
             //IMPORTE TOTAL
-            $importe_total = $importe_total + $pvp;
+            $importe_total = $importe_total + ($pvp * $valor['CANTIDAD']);
             //UNITARIO SIN IVA
             $unitario_sin_iva = round(($pvp / $alicuota_iva), 2);
             //VALOR DESCUENTO
