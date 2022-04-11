@@ -337,6 +337,7 @@ class EgresoView extends View {
 		$btn_entrega_display = ($estadoentrega_id == 1 OR $estadoentrega_id == 2) ? 'block' : 'none';
 		$obj_egreso->egresoentrega->btn_entrega_display = $btn_entrega_display;
 		
+		/*
 		if (!empty($cuentacorrientecliente_collection)) {
 			$obj_egreso->btn_generar_nc = 'none';
 			$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
@@ -349,6 +350,11 @@ class EgresoView extends View {
 				$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
 			}
 		}
+		*/
+
+		$obj_egreso->btn_generar_nc = ($notacredito_id == 0) ? 'block' : 'none';
+		//$obj_egreso->btn_generar_nc = ($user_level < 2) ? 'none' : $obj_egreso->btn_generar_nc;
+		$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
 
 		$obj_egreso->div_facturarafip_display = (empty($egresoafip)) ? 'inline-block' : 'none';
 		$obj_egreso->div_facturarafip_display = ($obj_egreso->tipofactura->tipofactura_id == 2) ? 'none' : $obj_egreso->div_facturarafip_display;
