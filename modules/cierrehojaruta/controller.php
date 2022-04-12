@@ -58,8 +58,6 @@ class CierreHojaRutaController {
 
             if ($importe == 0 AND $estadoentrega == 'ENTREGADO') {
                 $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "FIRMA";
-            } else if ($importe < $importe_egreso AND $estadoentrega == 'ENTREGADO') {
-                $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ENTREGA Y FIRMA";
             }
         }
 
