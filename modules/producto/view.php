@@ -38,6 +38,7 @@ class ProductoView extends View {
 
 		$tbl_producto_array = $this->render_regex_dict('TBL_PRODUCTO', $tbl_producto_array, $producto_collection);
 		$render = str_replace('{tbl_producto}', $tbl_producto_array, $gui);
+		$render = str_replace('{tbl_producto}', $tbl_producto_array, $gui);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
@@ -55,6 +56,7 @@ class ProductoView extends View {
 	}
 
 	function lista_precio($producto_collection, $productomarca_collection, $proveedor_collection) {
+		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		$gui = file_get_contents("static/modules/producto/lista_precio.html");
 		$tbl_listaprecio_array = file_get_contents("static/modules/producto/tbl_listaprecio_array.html");
 		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
@@ -71,6 +73,7 @@ class ProductoView extends View {
 		$render = str_replace('{tbl_listaprecio}', $tbl_listaprecio_array, $gui);
 		$render = str_replace('{slt_proveedor}', $gui_slt_proveedor, $render);
 		$render = str_replace('{slt_productomarca}', $gui_slt_productomarca, $render);
+		$render = str_replace('{display-user_level}', $user_level, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;

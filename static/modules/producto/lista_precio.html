@@ -25,9 +25,9 @@
                         <th>COD</th>
                         <th>Rubro</th>
                         <th>Descripción</th>
-                        <th>IVA</th>
-                        <th>Ganancia</th>
-                        <th>Precio Costo</th>
+                        <th class="remover-info">IVA</th>
+                        <th class="remover-info">Ganancia</th>
+                        <th class="remover-info">Precio Costo</th>
                         <th>Precio Venta</th>
                     </tr>
                 </thead>
@@ -106,6 +106,13 @@
           , "iDisplayLength":50
         } );
     } );
+
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        if (user_level < 3) {
+            $(".remover-info").css("display","none");    
+        }
+    });
 
     function proveedorListaPrecio() {
         var array = new Array();
