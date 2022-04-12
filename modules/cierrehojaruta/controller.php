@@ -36,10 +36,23 @@ class CierreHojaRutaController {
 		$this->model->cierrehojaruta_id = $cierrehojaruta_id;
 		$this->model->get();
 
-		$select = "dchr.detallecierrehojaruta_id AS DCHRID, itp.denominacion AS TIPOPAGO, ee.denominacion AS ESTADOENTREGA, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, FORMAT(dchr.importe, 2,'de_DE') AS IMPORTE";
+		$select = "dchr.detallecierrehojaruta_id AS DCHRID, itp.denominacion AS TIPOPAGO, ee.denominacion AS ESTADOENTREGA, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, FORMAT(dchr.importe, 2,'de_DE') AS IMPORTE, e.egreso_id AS EGRID, e.importe_total AS EGRIMPTOT";
     	$from = "detallecierrehojaruta dchr LEFT JOIN ingresotipopago itp ON dchr.ingresotipopago = itp.ingresotipopago_id LEFT JOIN estadoentrega ee ON dchr.estadoentrega = ee.estadoentrega_id LEFT JOIN egreso e ON dchr.egreso_id = e.egreso_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
     	$where = "dchr.cierrehojaruta_id = {$cierrehojaruta_id}";
     	$detallecierrehojaruta_collection = CollectorCondition()->get('DetalleCierreHojaRuta', $where, 4, $from, $select);
+
+        foreach ($detallecierrehojaruta_collection as $clave=>$valor) {
+            $egreso_id = $valor['EGRID'];
+            $importe_egreso = $valor['EGRIMPTOT'];
+
+            $select = "nc.importe_total AS IMPORTE";
+            $from = "notacredito nc";
+            $where = "nc.egreso_id = {$egreso_id}";
+            $importe_notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+            $importe_notacredito = (is_array($notacredito) AND !empty($notacredito)) ? $importe_notacredito[0]['IMPORTE'] : 0;
+
+            if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
+        }
     	$this->view->consultar($detallecierrehojaruta_collection, $this->model);
 	}
 
