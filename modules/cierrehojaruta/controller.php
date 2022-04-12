@@ -41,7 +41,7 @@ class CierreHojaRutaController {
     	$from = "detallecierrehojaruta dchr LEFT JOIN ingresotipopago itp ON dchr.ingresotipopago = itp.ingresotipopago_id LEFT JOIN estadoentrega ee ON dchr.estadoentrega = ee.estadoentrega_id LEFT JOIN egreso e ON dchr.egreso_id = e.egreso_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
     	$where = "dchr.cierrehojaruta_id = {$cierrehojaruta_id}";
     	$detallecierrehojaruta_collection = CollectorCondition()->get('DetalleCierreHojaRuta', $where, 4, $from, $select);
-
+        print_r($detallecierrehojaruta_collection);exit;
         foreach ($detallecierrehojaruta_collection as $clave=>$valor) {
             $egreso_id = $valor['EGRID'];
             $importe_egreso = $valor['EGRIMPTOT'];
