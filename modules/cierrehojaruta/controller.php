@@ -51,9 +51,10 @@ class CierreHojaRutaController {
             $where = "nc.egreso_id = {$egreso_id}";
             $importe_notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
             $importe_notacredito = (is_array($notacredito) AND !empty($notacredito)) ? $importe_notacredito[0]['IMPORTE'] : 0;
-
+            print_r($importe_notacredito);
             if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
         }
+        exit;
     	$this->view->consultar($detallecierrehojaruta_collection, $this->model);
 	}
 
