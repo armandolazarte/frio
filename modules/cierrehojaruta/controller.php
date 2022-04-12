@@ -45,6 +45,8 @@ class CierreHojaRutaController {
         foreach ($detallecierrehojaruta_collection as $clave=>$valor) {
             $egreso_id = $valor['EGRID'];
             $importe_egreso = $valor['EGRIMPTOT'];
+            $importe = $valor['IMPORTE'];
+            $estadoentrega = $valor['ESTADOENTREGA'];
 
             $select = "nc.importe_total AS IMPORTE";
             $from = "notacredito nc";
@@ -53,6 +55,12 @@ class CierreHojaRutaController {
             $importe_notacredito = (is_array($importe_notacredito) AND !empty($importe_notacredito)) ? $importe_notacredito[0]['IMPORTE'] : 0;
             if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
             if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ANULADO";
+
+            if ($importe == 0 AND $estadoentrega == 'ENTREGADO') {
+                $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "FIRMA";
+            } else if ($importe < $importe_egreso AND $estadoentrega == 'ENTREGADO') {
+                $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ENTREGA Y FIRMA";
+            }
         }
 
     	$this->view->consultar($detallecierrehojaruta_collection, $this->model);
