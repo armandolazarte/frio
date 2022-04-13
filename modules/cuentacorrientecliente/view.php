@@ -96,7 +96,8 @@ class CuentaCorrienteClienteView extends View {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
-		
+		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
+		/*
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		switch ($user_level) {
 			case 1:
@@ -110,9 +111,9 @@ class CuentaCorrienteClienteView extends View {
 				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
 				break;
 			default:
-				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
 				break;
 		}
+		*/
 
 		foreach ($cuentascorrientes_collection as $clave=>$valor) {
 			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
