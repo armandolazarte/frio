@@ -100,7 +100,9 @@ class CuentaCorrienteClienteView extends View {
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		switch ($user_level) {
 			case 1:
-				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array_operador.html");
+				//$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array_operador.html");
+				// HABILITO CTA CTE A OPERADOR
+				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
 				break;
 			case 2:
 				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array_supervisor.html");
