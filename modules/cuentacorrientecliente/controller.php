@@ -113,7 +113,7 @@ class CuentaCorrienteClienteController {
 			$cuentacorriente_collection[$clave]['BALANCE'] = $new_balance;
 			$cuentacorriente_collection[$clave]['BCOLOR'] = $balance_class;
 			$cuentacorriente_collection[$clave]['BTN_DISPLAY'] = $array_temp[0]['BTN_DISPLAY'];
-			if ($_SESSION["data-login-" . APP_ABREV]["usuario-nivel"] == 1) $cuentacorriente_collection[$clave]['BTN_DISPLAY'] = 'none';
+			//if ($_SESSION["data-login-" . APP_ABREV]["usuario-nivel"] == 1) $cuentacorriente_collection[$clave]['BTN_DISPLAY'] = 'none';
 			
 			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
