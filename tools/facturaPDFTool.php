@@ -232,6 +232,15 @@ class FacturaPDF extends View {
         foreach ($egresodetalle_collection as $clave=>$valor) {
             $importe_total = $importe_total + $valor['IMPORTE'];
             $descuento_por_producto = $descuento_por_producto + $valor["VD"];
+
+            //PVP
+            $pvp = $valor['COSTO'];
+            //VALOR DESCUENTO
+            $valor_descuento = $valor['DESCUENTO'] * $pvp / 100;
+            //PVP MENOS DESCUENTO
+            $pvp_descuento = round(($pvp - $valor_descuento), 2);
+
+            $egresodetalle_collection[$clave]['UNICONDES'] = round($pvp_descuento, 2);
         }
 
         $descuento_por_factura = $obj_egreso->descuento * $importe_total / 100;
