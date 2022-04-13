@@ -8,6 +8,7 @@ class DetalleCierreHojaRuta extends StandardObject {
 	function __construct(IngresoTipoPago $ingresotipopago=NULL, EstadoEntrega $estadoentrega=NULL) {
 		$this->detallecierrehojaruta_id = 0;
 		$this->importe = 0.00;
+		$this->tipoentrega = '';
 		$this->egreso_id = 0;
 		$this->cierrehojaruta_id = 0;
 		$this->ingresotipopago = $ingresotipopago;

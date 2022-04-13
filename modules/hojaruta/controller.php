@@ -548,7 +548,15 @@ class HojaRutaController {
 			$em->get();
 			$egresoentrega_id = $em->egresoentrega->egresoentrega_id;
 			$condicionpago_id = $em->condicionpago->condicionpago_id;
-			$importe_total = $em->importe_total;
+			//$importe_total = $em->importe_total;
+			$temp_cliente_id = $em->cliente->cliente_id;
+			$temp_importe_total = $em->importe_total;
+
+			$select = "CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+			$from = "egreso e LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+			$where = "e.egreso_id = {$egreso_id}";
+			$temp_referencia = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+			$temp_referencia = (is_array($temp_referencia) AND !empty($temp_referencia)) ? $temp_referencia[0] : 'Sin referencia';
 
 			$eem = new EgresoEntrega();
 			$eem->egresoentrega_id = $egresoentrega_id;
@@ -560,7 +568,45 @@ class HojaRutaController {
 			if ($estado_abonado == 1) {
 				$detallecierrehojaruta['INGRESOTIPOPAGO_ID'] = $egreso_ingresotipopago_array[$egreso_id];
 				if ($condicionpago_id == 2) {
-					$detallecierrehojaruta['IMPORTE'] = $importe_total;
+					//$detallecierrehojaruta['IMPORTE'] = $importe_total;
+
+					if ($egreso_pagoentrega_array[$egreso_id] == 1) {
+						$tipoentrega = 'PARCIAL';
+						$em = new Egreso();
+						$em->egreso_id = $egreso_id;
+						$em->get();
+						$em->condicionpago = 1;
+						$em->save();
+
+						$cccm = new CuentaCorrienteCliente();
+						$cccm->fecha = date('Y-m-d');
+						$cccm->hora = date('H:i:s');
+						$cccm->referencia = "Pasa de contado a Cta. Cte. - Comprobante venta {$temp_referencia}";
+						$cccm->importe = $temp_importe_total;
+						$cccm->cliente_id = $temp_cliente_id;
+						$cccm->egreso_id = $egreso_id;
+						$cccm->tipomovimientocuenta = 1;
+						$cccm->estadomovimientocuenta = 1;
+						$cccm->cobrador = $cobrador_id;
+						$cccm->save();
+
+						$cccma = new CuentaCorrienteCliente();
+						$cccma->fecha = date('Y-m-d');
+						$cccma->hora = date('H:i:s');
+						$cccma->referencia = "Pago {$temp_referencia}";
+						$cccma->importe = $egreso_monto_parcial_array[$egreso_id];
+						$cccma->ingreso = $egreso_monto_parcial_array[$egreso_id];
+						$cccma->cliente_id = $temp_cliente_id;
+						$cccma->egreso_id = $egreso_id;
+						$cccma->tipomovimientocuenta = 2;
+						$cccma->estadomovimientocuenta = 3;
+						$cccma->cobrador = $cobrador_id;
+						$cccma->save();
+						$detallecierrehojaruta['IMPORTE'] = $egreso_monto_parcial_array[$egreso_id];
+					} else {
+						$tipoentrega = 'TOTAL';
+						$detallecierrehojaruta['IMPORTE'] = $temp_importe_total;
+					}
 				} else {
 					$select = "ccc.cuentacorrientecliente_id AS CCCID";
 					$from = "cuentacorrientecliente ccc";
@@ -573,6 +619,7 @@ class HojaRutaController {
 					$cccm->get();
 
 					if ($egreso_pagoentrega_array[$egreso_id] == 4 OR $egreso_monto_parcial_array[$egreso_id] == $cccm->importe) {
+						$tipoentrega = 'TOTAL';
 						$select = "ccc.cuentacorrientecliente_id AS CCCID";
 						$from = "cuentacorrientecliente ccc";
 						$where = "ccc.egreso_id = {$egreso_id}";
@@ -602,6 +649,7 @@ class HojaRutaController {
 						$cccma->save();
 						$detallecierrehojaruta['IMPORTE'] = $cccm->importe;
 					} else {
+						$tipoentrega = 'PARCIAL';
 						$cccma = new CuentaCorrienteCliente();
 						$cccma->fecha = date('Y-m-d');
 						$cccma->hora = date('H:i:s');
@@ -619,12 +667,14 @@ class HojaRutaController {
 					}
 				}				
 			} else {
+				$tipoentrega = 'FIRMA';
 				$detallecierrehojaruta['INGRESOTIPOPAGO_ID'] = null;
 				$detallecierrehojaruta['IMPORTE'] = 0;
 			}
 
 			$dchrm = new DetalleCierreHojaRuta();
 			$dchrm->importe = $detallecierrehojaruta['IMPORTE'];
+			$dchrm->tipoentrega = $tipoentrega;
 			$dchrm->egreso_id = $detallecierrehojaruta['EGRESO_ID'];
 			$dchrm->cierrehojaruta_id = $cierrehojaruta_id;
 			$dchrm->ingresotipopago = $detallecierrehojaruta['INGRESOTIPOPAGO_ID'];
