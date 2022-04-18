@@ -622,13 +622,13 @@ class EgresoController {
 		$condicionpago = filter_input(INPUT_POST, 'condicionpago');
 		$importe_total = filter_input(INPUT_POST, 'importe_total');
 		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
-		$descuento = filter_input(INPUT_POST, 'descuento');
+		$fact_descuento = filter_input(INPUT_POST, 'descuento');
 		$this->model = new Egreso();
 		$this->model->punto_venta = $punto_venta;
 		$this->model->numero_factura = intval($num_factura);
 		$this->model->fecha = $fecha;
 		$this->model->hora = $hora;
-		$this->model->descuento = (is_null($descuento)) ? 0 : $descuento;
+		$this->model->descuento = (is_null($fact_descuento)) ? 0 : $fact_descuento;
 		$this->model->subtotal = filter_input(INPUT_POST, 'subtotal');
 		$this->model->importe_total = $importe_total;
 		$this->model->emitido = 0;
@@ -816,7 +816,7 @@ class EgresoController {
 			}
 
 			$importe_control = round($importe_control, 2);
-			$valor_descuento = $descuento * 100 / $importe_control;
+			$valor_descuento = $fact_descuento * $importe_control / 100;
 			$valor_descuento = round($valor_descuento, 2);
 			if ($importe_total == 0) {
 				$this->model = new Egreso();
