@@ -277,6 +277,9 @@ class ExcelReport extends View {
         */
 
         $objPHPExcel->getActiveSheet()->getStyle("B4:B".($l-1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle("D4:D".($l-1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle("E4:E".($l-1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle("F4:F".($l-1))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
