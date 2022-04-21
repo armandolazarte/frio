@@ -173,6 +173,7 @@ class ExcelReport extends View {
 
         //ALTOS Y ANCHOS
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
+        /*
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(14);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(14);
@@ -185,12 +186,21 @@ class ExcelReport extends View {
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(300);
+        */
 
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
 
         foreach ($this->abecedario as $clave=>$valor) {
           if ($clave <= $cantidadColumnas) $objPHPExcel->getActiveSheet()->getStyle("{$valor}3")->applyFromArray($this->estilo_titulo_columnas);
+        }
+
+        foreach ($objPHPExcel->getAllSheets() as $sheet) {
+            // Iterating through all the columns
+            // The after Z column problem is solved by using numeric columns; thanks to the columnIndexFromString method
+            for ($col = 1; $col <= PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn()); $col++) {
+                $sheet->getColumnDimensionByColumn($col)->setAutoSize(true);
+            }
         }
 
         //$objPHPExcel->getActiveSheet()->setSharedStyle($this->estilo_informacion, "{$celdas_informacion}");
@@ -267,6 +277,7 @@ class ExcelReport extends View {
         */
 
 
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
 
@@ -277,13 +288,11 @@ class ExcelReport extends View {
         foreach ($objPHPExcel->getAllSheets() as $sheet) {
             // Iterating through all the columns
             // The after Z column problem is solved by using numeric columns; thanks to the columnIndexFromString method
-            for ($col = 0; $col <= PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn()); $col++) {
+            for ($col = 1; $col <= PHPExcel_Cell::columnIndexFromString($sheet->getHighestDataColumn()); $col++) {
                 $sheet->getColumnDimensionByColumn($col)->setAutoSize(true);
             }
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(false);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         $objPHPExcel->getActiveSheet()->setTitle('Consolidado');
         $objPHPExcel->setActiveSheetIndex(1);
         $objPHPExcel->getActiveSheet(1)->freezePaneByColumnAndRow(0,4);
