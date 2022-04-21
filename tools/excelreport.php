@@ -251,7 +251,6 @@ class ExcelReport extends View {
         $objPHPExcel->getActiveSheet()->getStyle('B2')->applyFromArray($this->estilo_subtitulo);
 
         //ALTOS Y ANCHOS
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         /*
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(14);
@@ -283,6 +282,7 @@ class ExcelReport extends View {
             }
         }
         
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         $objPHPExcel->getActiveSheet()->setTitle('Consolidado');
         $objPHPExcel->setActiveSheetIndex(1);
         $objPHPExcel->getActiveSheet(1)->freezePaneByColumnAndRow(0,4);
