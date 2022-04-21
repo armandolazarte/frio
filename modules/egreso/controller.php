@@ -1448,7 +1448,7 @@ class EgresoController {
 			}
 		}
 		
-		$array_encabezados2 = array('CODIGO', 'PRODUCTO', 'CANTIDAD', 'BULTOS', 'UNIDADES', '', '');
+		$array_encabezados2 = array('CODIGO', 'PRODUCTO', 'CANTIDAD', 'BULTOS', 'UNIDADES');
 		$array_exportacion2[] = $array_encabezados2;
 		foreach ($array_productos as $producto) {
 			$cantidad = $producto['CANTIDAD'];
@@ -1480,9 +1480,7 @@ class EgresoController {
 								, $producto['PRODUCTO']
 								, $producto['CANTIDAD'] . $producto['UNIDAD']
 								, $bultos
-								, $unidades
-								, ''
-								, '');
+								, $unidades);
 			$array_exportacion2[] = $array_temp;
 		}
 
