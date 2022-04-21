@@ -1538,7 +1538,7 @@ class EgresoController {
 				  				, $factura
 				  				, $em->cliente->razon_social
 				  				, $em->cliente->domicilio
-				  				, "$" . $em->importe_total
+				  				, $em->importe_total
 				  				, '');
 			$array_exportacion[] = $array_temp;
 		}
