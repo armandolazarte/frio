@@ -282,7 +282,7 @@ class ExcelReport extends View {
             }
         }
 
-        $objPHPExcel->getActiveSheet()->getColumnDimensionByColumn('A')->setAutoSize(false);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(false);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         $objPHPExcel->getActiveSheet()->setTitle('Consolidado');
         $objPHPExcel->setActiveSheetIndex(1);
