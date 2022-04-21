@@ -1488,7 +1488,7 @@ class EgresoController {
 
 		$fecha_hoja_ruta = $hrm->fecha;
 		$subtitulo = "FLETE: {$denominacion} - Nº{$arg}";
-		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'COND PAGO', 'IMPORTE TOTAL', 'OBSERVACIONES');
+		$array_encabezados = array('FECHA', 'COMPROBANTE', 'CLIENTE', 'DOMICILIO', 'IMPORTE TOTAL', 'OBSERVACIONES');
 		$array_exportacion[] = $array_encabezados;
 		$total = 0;
 		$array_clientes = array();
@@ -1499,6 +1499,13 @@ class EgresoController {
 			$em->get();
 			$cliente_id = $em->cliente->cliente_id;
 			if (!in_array($cliente_id, $array_clientes)) $array_clientes[] = $cliente_id;
+
+			$fecha_descompuesta = explode("-", $em->fecha);
+	        $anio = $fecha_descompuesta[0];
+	        $mes = $fecha_descompuesta[1];
+	        $dia = $fecha_descompuesta[2];
+	        $nueva_fecha = "{$dia}/{$mes}/{$anio}";
+	        $em->nueva_fecha = $nueva_fecha
 
 			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
@@ -1527,13 +1534,12 @@ class EgresoController {
 			$total = $total + $em->importe_total;
 			$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
 			$numero_factura = str_pad($em->numero_factura, 4, '0', STR_PAD_LEFT);
-			$array_temp = array($em->fecha
+			$array_temp = array($em->nueva_fecha
 				  				, $factura
 				  				, $em->cliente->razon_social
 				  				, $em->cliente->domicilio
-				  				, $em->condicionpago->denominacion
-				  				, $em->importe_total
-				  				, '....................................................................');
+				  				, "$" . $em->importe_total
+				  				, '');
 			$array_exportacion[] = $array_temp;
 		}
 
