@@ -1537,6 +1537,12 @@ class EgresoController {
 			*/
 		}
 
+		$array_temp = array();
+        foreach ($array_ventas as $array) {
+            $array_temp[] = $array->comprobante_final;
+        }
+        
+        array_multisort($array_temp, SORT_ASC, $array_ventas);
 		foreach ($array_ventas as $obj_egreso) {
 			$total = $total + $obj_egreso->importe_total;
 			$array_temp = array($obj_egreso->nueva_fecha
