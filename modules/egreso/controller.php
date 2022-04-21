@@ -1505,7 +1505,7 @@ class EgresoController {
 	        $mes = $fecha_descompuesta[1];
 	        $dia = $fecha_descompuesta[2];
 	        $nueva_fecha = "{$dia}/{$mes}/{$anio}";
-	        $em->nueva_fecha = $nueva_fecha
+	        $em->nueva_fecha = $nueva_fecha;
 
 			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
 			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
