@@ -1524,24 +1524,13 @@ class EgresoController {
 
 			$em->comprobante_final = $factura;
 			$array_ventas[] = $em;
-			
-			/*
-			$total = $total + $em->importe_total;
-			$array_temp = array($em->nueva_fecha
-				  				, $factura
-				  				, $em->cliente->razon_social
-				  				, $em->cliente->domicilio
-				  				, '$' . $em->importe_total
-				  				, '');
-			$array_exportacion[] = $array_temp;
-			*/
 		}
 
 		$array_temp = array();
         foreach ($array_ventas as $array) {
             $array_temp[] = $array->comprobante_final;
         }
-        
+
         array_multisort($array_temp, SORT_ASC, $array_ventas);
 		foreach ($array_ventas as $obj_egreso) {
 			$total = $total + $obj_egreso->importe_total;

@@ -252,6 +252,7 @@ class ExcelReport extends View {
 
         //ALTOS Y ANCHOS
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
+        /*
         $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(10);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(14);
         $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(14);
@@ -264,6 +265,20 @@ class ExcelReport extends View {
         $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setWidth(30);
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(300);
+        */
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
 
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
