@@ -276,7 +276,7 @@ class ExcelReport extends View {
         $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(300);
         */
 
-
+        $objPHPExcel->getActiveSheet()->getStyle('B')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(2);
         $objPHPExcel->getActiveSheet()->getRowDimension(1)->setRowHeight(25);
         $objPHPExcel->getActiveSheet()->getRowDimension(2)->setRowHeight(30);
