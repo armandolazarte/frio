@@ -35,14 +35,16 @@ class FacturaPDF extends View {
         $descuento_por_producto = 0;
         $subtotal = 0;
         foreach ($egresodetalle_collection as $clave=>$valor) {
-            //$importe_total = $importe_total + $valor['IMPORTE'];
-
             //ALICUOTA IVA
             $alicuota_iva = 1 + ($valor['IVA'] / 100);
             //PVP
             $pvp = $valor['COSTO'];
+            //VALOR DESCUENTO PVP
+            $valor_descuento_pvp = $valor['DESCUENTO'] * $pvp / 100;
+            //PVP CON DESCUENTO
+            $pvp_descuento = round(($pvp - $valor_descuento_pvp), 2);
             //IMPORTE TOTAL
-            $importe_total = $importe_total + ($pvp * $valor['CANTIDAD']);
+            $importe_total = $importe_total + ($pvp_descuento * $valor['CANTIDAD']);
             //UNITARIO SIN IVA
             $unitario_sin_iva = round(($pvp / $alicuota_iva), 2);
             //VALOR DESCUENTO
@@ -147,8 +149,12 @@ class FacturaPDF extends View {
             $alicuota_iva = 1 + ($valor['IVA'] / 100);
             //PVP
             $pvp = $valor['COSTO'];
+            //VALOR DESCUENTO PVP
+            $valor_descuento_pvp = $valor['DESCUENTO'] * $pvp / 100;
+            //PVP CON DESCUENTO
+            $pvp_descuento = round(($pvp - $valor_descuento_pvp), 2);
             //IMPORTE TOTAL
-            $importe_total = $importe_total + ($pvp * $valor['CANTIDAD']);
+            $importe_total = $importe_total + ($pvp_descuento * $valor['CANTIDAD']);
             //UNITARIO SIN IVA
             $unitario_sin_iva = round(($pvp / $alicuota_iva), 2);
             //VALOR DESCUENTO
