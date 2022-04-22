@@ -1555,6 +1555,8 @@ class EgresoController {
 				}
 			}
 		}
+
+		print_r($array_productos);exit;
 		
 		$array_encabezados2 = array('CODIGO', 'PRODUCTO', 'CANTIDAD', 'BULTOS', 'UNIDADES');
 		$array_exportacion2[] = $array_encabezados2;
