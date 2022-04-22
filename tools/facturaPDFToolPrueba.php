@@ -164,7 +164,10 @@ class FacturaPDF extends View {
             $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
             $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
         }
+        print_r($subtotal);
+        print"<hr>";
         print_r($importe_total);
+        exit;
 
         $obj_egreso->importe_iva = round(($importe_total - $subtotal), 2);
         $obj_egreso->subtotal = round($subtotal, 2);
