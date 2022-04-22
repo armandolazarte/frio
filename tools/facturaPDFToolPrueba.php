@@ -155,8 +155,10 @@ class FacturaPDF extends View {
             $valor_descuento = $valor['DESCUENTO'] * $unitario_sin_iva / 100;
             //UNITARIO SIN IVA MENOS DESCUENTO
             $unitario_sin_iva_descuento = round(($unitario_sin_iva - $valor_descuento), 2);
+            print_r("UNITARIO SIN IVA: ".$unitario_sin_iva_descuento."<br>");
             //TOTAL POR LINEA POR UNITARIO
             $total_unitario_cantidad = $unitario_sin_iva_descuento * $valor['CANTIDAD'];
+            print_r("IMPORTE SIN IVA: ".$total_unitario_cantidad."<hr>");
             //SUBTOTAL
             $subtotal = $subtotal + $total_unitario_cantidad;
             //VALORES FINALES
@@ -164,7 +166,6 @@ class FacturaPDF extends View {
             $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
             $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
         }
-        print_r($subtotal);
         print"<hr>";
         print_r($importe_total);
         exit;
