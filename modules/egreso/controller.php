@@ -291,6 +291,114 @@ class EgresoController {
 		$this->view->consultar($egresodetalle_collection, $cuentacorrientecliente_collection, $this->model, $egresoafip, $notacredito_id);
 	}
 
+	function prueba_consultar($arg) {
+    	SessionHandler()->check_session();
+		require_once 'tools/facturaPDFToolPrueba.php';
+		require_once 'modules/configuracion/model.php';
+		require_once "core/helpers/file.php";
+
+		$egreso_id = $arg;
+		$cm = new Configuracion();
+		$cm->configuracion_id = 1;
+		$cm->get();
+
+		$this->model->egreso_id = $egreso_id;
+		$this->model->get();
+		$condicionpago_id = $this->model->condicionpago->condicionpago_id;
+		
+		$cliente_documentotipo = $this->model->cliente->documentotipo->denominacion;
+		$this->model->cliente_documentotipo = $cliente_documentotipo;
+		$infocontacto_collection = $this->model->cliente->infocontacto_collection;
+
+		if (is_array($infocontacto_collection) AND !empty($infocontacto_collection)) {
+			foreach ($infocontacto_collection as $infocontacto) if ($infocontacto->denominacion == 'Teléfono') $telefono = $infocontacto->valor;
+
+			if (!empty($telefono)) {
+				$this->model->cliente->telefono = 'Tel: ' . $telefono;
+			} else {
+				$this->model->cliente->telefono = '';
+			}
+		} else {
+			$this->model->cliente->telefono = '';
+		}
+
+		$this->model->cliente->cliente_frecuencia = $this->model->cliente->frecuenciaventa->denominacion." (".$this->model->cliente->frecuenciaventa->dia_1."-".$this->model->cliente->frecuenciaventa->dia_2.")";
+
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, ed.neto_producto AS NETPRO, ed.valor_ganancia AS GANANCIA";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
+				 productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+
+		$select = "ccc.referencia AS REF, ccc.importe AS IMP, estadomovimientocuenta AS EST";
+		$from = "cuentacorrientecliente ccc";
+		$where = "ccc.egreso_id = {$egreso_id} AND ccc.tipomovimientocuenta = 2 ORDER BY ccc.cuentacorrientecliente_id DESC";
+		$cuentacorrientecliente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+		$cuentacorrientecliente_collection = (is_array($cuentacorrientecliente_collection)) ? $cuentacorrientecliente_collection : array();
+
+		$select = "nc.notacredito_id";
+		$from = "notacredito nc";
+		$where = "nc.egreso_id = {$egreso_id}";
+		$notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+		$notacredito_id = (is_array($notacredito) AND !empty($notacredito)) ? $notacredito[0]['notacredito_id'] : 0;
+
+		$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+		$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+		$where = "eafip.egreso_id = {$egreso_id}";
+		$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+
+		$vendedor = $this->model->vendedor->apellido . ' ' . $this->model->vendedor->nombre;
+		$flete = $this->model->cliente->flete->denominacion;
+		$facturaPDFHelper = new FacturaPDF();
+		if (!is_array($egresoafip)) {
+			$egresoafip = array();
+			$this->model->cae = 0;
+			$this->model->fecha_vencimiento = 0;
+			$tipofactura_id = $this->model->tipofactura->tipofactura_id;
+			$plantilla_tipofactura = $this->model->tipofactura->plantilla_impresion;
+		} else {
+			$egresoafip = $egresoafip[0];
+			$tipofactura_id = $egresoafip['TF_ID'];
+			$tfm = new TipoFactura();
+			$tfm->tipofactura_id = $tipofactura_id;
+			$tfm->get();
+
+			$this->model->punto_venta = $egresoafip['PUNTO_VENTA'];
+			$this->model->numero_factura = $egresoafip['NUMERO_FACTURA'];
+			$this->model->fecha = $egresoafip['FECHA'];
+			$this->model->cae = $egresoafip['CAE'];
+			$this->model->fecha_vencimiento = $egresoafip['FVENCIMIENTO'];
+			unset($this->model->tipofactura);
+			$this->model->tipofactura = $tfm;
+			$tipofactura_id = $this->model->tipofactura->tipofactura_id;
+		}
+
+		//print_r($egresodetalle_collection);exit;
+
+		switch ($tipofactura_id) {
+			case 1:
+				$facturaPDFHelper->facturaA($egresodetalle_collection, $cm, $this->model, $vendedor, $flete);
+				break;
+			case 2:
+				$facturaPDFHelper->remitoR($egresodetalle_collection, $cm, $this->model, $vendedor, $flete);
+				break;
+			case 3:
+				$facturaPDFHelper->facturaB($egresodetalle_collection, $cm, $this->model, $vendedor, $flete);
+				break;
+		}
+
+		$this->model = new Egreso();
+		$this->model->egreso_id = $egreso_id;
+		$this->model->get();
+
+		if (!empty($egresoafip)) {
+			$this->model->punto_venta = $egresoafip['PUNTO_VENTA'];
+			$this->model->numero_factura = $egresoafip['NUMERO_FACTURA'];
+		}
+
+		$this->view->consultar($egresodetalle_collection, $cuentacorrientecliente_collection, $this->model, $egresoafip, $notacredito_id);
+	}
+
 	function configurar($arg) {
     	SessionHandler()->check_session();
 		require_once 'tools/facturaPDFTool.php';
