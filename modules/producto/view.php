@@ -57,16 +57,16 @@ class ProductoView extends View {
 
 	function lista_precio($producto_collection, $productomarca_collection, $proveedor_collection) {
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
-		$gui = file_get_contents("static/modules/producto/lista_precio.html");
-		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
-		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor.html");
-
 		if ($user_level < 3) {
+			$gui = file_get_contents("static/modules/producto/op_lista_precio.html");
 			$tbl_listaprecio_array = file_get_contents("static/modules/producto/op_tbl_listaprecio_array.html");			
 		} else {
+			$gui = file_get_contents("static/modules/producto/lista_precio.html");
 			$tbl_listaprecio_array = file_get_contents("static/modules/producto/tbl_listaprecio_array.html");
 		}
 
+		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
+		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor.html");
 		foreach ($proveedor_collection as $clave=>$valor) unset($proveedor_collection[$clave]->infocontacto_collection);
 
 		$productomarca_collection = $this->order_collection_objects($productomarca_collection, 'denominacion', SORT_ASC);
