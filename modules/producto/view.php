@@ -9,6 +9,18 @@ class ProductoView extends View {
 		print $template;
 	}
 
+	function modificacion_precio_por_lote($producto_collection) {
+		$gui = file_get_contents("static/modules/producto/modificacion_precio_por_lote.html");
+		$tbl_producto_array = file_get_contents("static/modules/producto/tbl_modificacion_precio_producto_array.html");
+
+		$tbl_producto_array = $this->render_regex_dict('TBL_PRODUCTO', $tbl_producto_array, $producto_collection);
+		$render = str_replace('{tbl_producto}', $tbl_producto_array, $gui);
+		$render = str_replace('{tbl_producto}', $tbl_producto_array, $gui);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}	
+
 	function buscar_producto() {
 		$gui = file_get_contents("static/modules/producto/buscar_producto.html");
 		$render = $this->render_breadcrumb($gui);

@@ -1,0 +1,15 @@
+<!--TBL_PRODUCTO-->
+<tr style="font-size: 11px;">
+    <td>CODIGO</td>
+    <td>UBICACION</td>
+    <td>CATEGORIA</td>
+    <td>DENOMINACION</td>
+    <td>$COSTO</td>
+    <td>$VENTA</td>
+    <td align="right">
+        <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/producto/editar/PRODUCTO_ID');" title="Editar producto"><i class="fa fa-edit"></i></button>
+        <button class="btn btn-dark btn-xs" onclick="location.href='{url_app}/producto/consultar/PRODUCTO_ID';" title="Consultar producto"><i class="fa fa-eye"></i></button>
+        <button class="btn btn-danger btn-xs" onclick="confirma_formulario(4, '{url_app}/producto/ocultar/PRODUCTO_ID');" title="Ocultar producto"><i class="fa fa-trash"></i></button>
+    </td>
+</tr>
+<!--TBL_PRODUCTO-->
