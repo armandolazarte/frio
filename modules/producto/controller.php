@@ -304,7 +304,41 @@ class ProductoController {
 
 	function actualizar_precio_por_lote() {
 		SessionHandler()->check_session();
-		print_r($_POST);exit;
+		$array_productos = $_POST['producto'];
+		foreach ($array_productos as $clave=>$valor) {
+			$producto_id = $clave;
+			$flag_actualiza = $valor['modifica'];
+			if ($flag_actualiza == 1) {
+				$costo = $valor['costo'];
+				$flete = $valor['flete'];
+				$iva = $valor['iva'];
+				$ganancia = $valor['ganancia'];
+				$venta = $valor['venta'];
+				//COSTO + FLETE
+		        $valor_flete = $flete * $costo / 100;
+		        $costo_flete = $costo + $valor_flete;
+
+		        //COSTO + FLETE + IVA
+		        $valor_iva = $iva * $costo_flete / 100;
+		        $neto = $costo_flete + $valor_iva;
+
+		        //PVP
+		        $valor_ganancia = $ganancia * $neto / 100;
+		        $pvp = $neto + $valor_ganancia;
+
+				print_r('ID: ' . $clave . '<br>');
+				print_r('Costo: ' . $valor['costo'] . '<br>');
+				print_r('Flete: ' . $valor['flete'] . '<br>');
+				print_r('Iva: ' . $valor['iva'] . '<br>');
+				print_r('Ganancia: ' . $valor['ganancia'] . '<br>');
+				print_r('PVP VIEJO: ' . $valor['venta'] . '<br>');
+				print_r('<hr>');
+				
+
+			}
+		}
+		exit;
+		print_r($_POST);
 	}
 
 	function activar($arg) {
