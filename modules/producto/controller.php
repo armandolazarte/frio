@@ -324,14 +324,15 @@ class ProductoController {
 
 		        //PVP
 		        $valor_ganancia = $ganancia * $neto / 100;
-		        $pvp = $neto + $valor_ganancia;
+		        $pvp = round(($neto + $valor_ganancia), 4);
 
 				print_r('ID: ' . $clave . '<br>');
 				print_r('Costo: ' . $valor['costo'] . '<br>');
 				print_r('Flete: ' . $valor['flete'] . '<br>');
 				print_r('Iva: ' . $valor['iva'] . '<br>');
 				print_r('Ganancia: ' . $valor['ganancia'] . '<br>');
-				print_r('PVP VIEJO: ' . $valor['venta'] . '<br>');
+				print_r('PVP INTER: ' . $valor['venta'] . '<br>');
+				print_r('PVP CONTROL: ' . $pvp . '<br>');
 				print_r('<hr>');
 				
 
