@@ -3,19 +3,19 @@
     <td>CODIGO</td>
     <td>DENOMINACION</td>
     <td>
-        <input type="number" name="costo_PROID" id="costo_PROID" value="COSTO">
+        <input type="number" name="costo_PROID" id="costo_PROID" value="COSTO" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="flete_PROID" id="flete_PROID" value="FLETE">
+        <input type="number" name="flete_PROID" id="flete_PROID" value="FLETE" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="iva_PROID" id="iva_PROID" value="IVA">
+        <input type="number" name="iva_PROID" id="iva_PROID" value="IVA" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="ganancia_PROID" id="ganancia_PROID" value="GANANCIA">
+        <input type="number" name="ganancia_PROID" id="ganancia_PROID" value="GANANCIA" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="venta_PROID" id="venta_PROID" value="VENTA">
+        <input type="number" name="venta_PROID" id="venta_PROID" value="VENTA" onchange="calculaGanancia(PROID);">
     </td>
     <td align="right">
         <button class="btn btn-info btn-xs" onclick="simularEdicion();" title="Simular edición"><i class="fa fa-eye"></i></button>

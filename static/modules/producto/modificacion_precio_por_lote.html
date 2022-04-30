@@ -62,4 +62,25 @@
           , "iDisplayLength":15
         } );
     } );
+
+    function calculaVenta(producto_id) {
+        costo = document.getElementById("costo_" + producto_id).value;
+        flete = document.getElementById("flete_" + producto_id).value;
+        iva = document.getElementById("iva_" + producto_id).value;
+        ganancia = document.getElementById("ganancia_" + producto_id).value;
+
+        //COSTO + FLETE
+        valor_flete = parseFloat(flete) * parseFloat(costo) / 100;
+        costo_flete = parseFloat(costo) + parseFloat(valor_flete);
+
+        //COSTO + FLETE + IVA
+        valor_iva = parseFloat(iva) * parseFloat(costo_flete) / 100;
+        neto = parseFloat(costo_flete) + parseFloat(valor_iva);
+
+        //PVP
+        valor_ganancia = parseFloat(ganancia) * parseFloat(neto) / 100;
+        pvp = parseFloat(neto) + parseFloat(valor_ganancia);
+
+        document.getElementById("venta_" + producto_id).value = pvp.toFixed(4);
+    }
 </script>
