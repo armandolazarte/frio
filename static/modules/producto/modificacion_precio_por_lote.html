@@ -30,24 +30,26 @@
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
-            <table id="tbl_producto" class="table table-striped table-bordered">
-                <thead>
-                    <tr style="font-size: 12px;">
-                        <th>COD</th>
-                        <th>Descripción</th>
-                        <th>Costo <b>$</b></th> 
-                        <th>Flete <b>%</b></th> 
-                        <th>Iva <b>%</b></th> 
-                        <th>Ganancia <b>%</b></th> 
-                        <th>Venta <b>$</b></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {tbl_producto}
-                </tbody>
-            </table>
+            <form class="form" id="formulario_guardar" method="post" action="{url_app}/producto/actualizar_precio_por_lote">
+                <table id="tbl_producto" class="table table-striped table-bordered">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>COD</th>
+                            <th>Descripción</th>
+                            <th>Costo <b>$</b></th> 
+                            <th>Flete <b>%</b></th> 
+                            <th>Iva <b>%</b></th> 
+                            <th>Ganancia <b>%</b></th> 
+                            <th>Venta <b>$</b></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {tbl_producto}
+                    </tbody>
+                </table>
+            </form>
         </div>
     </div>
 </div>
@@ -83,7 +85,6 @@
         pvp = parseFloat(neto) + parseFloat(valor_ganancia);
 
         document.getElementById("venta_" + producto_id).value = pvp.toFixed(4);
-        //document.getElementById("modifica_" + producto_id).setAttribute('checked', 'checked');
         document.getElementById("modifica_" + producto_id).checked = true;
     }
 </script>

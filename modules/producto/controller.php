@@ -302,6 +302,11 @@ class ProductoController {
 		header("Location: " . URL_APP . "/producto/listar");
 	}
 
+	function actualizar_precio_por_lote() {
+		SessionHandler()->check_session();
+		print_r($_POST);exit;
+	}
+
 	function activar($arg) {
 		SessionHandler()->check_session();
 		$producto_id = $arg;
