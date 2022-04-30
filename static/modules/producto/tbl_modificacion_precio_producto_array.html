@@ -3,22 +3,22 @@
     <td>CODIGO</td>
     <td>DENOMINACION</td>
     <td>
-        <input type="number" name="costo_PROID" id="costo_PROID" value="COSTO" step="0.0001" onchange="calculaVenta(PROID);">
+        <input type="number" name="producto[PROID][costo]" id="costo_PROID" value="COSTO" step="0.0001" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="flete_PROID" id="flete_PROID" value="FLETE" step="0.0001" onchange="calculaVenta(PROID);">
+        <input type="number" name="producto[PROID][flete]" id="flete_PROID" value="FLETE" step="0.0001" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="iva_PROID" id="iva_PROID" value="IVA" onchange="calculaVenta(PROID);">
+        <input type="number" name="producto[PROID][iva]" id="iva_PROID" value="IVA" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="ganancia_PROID" id="ganancia_PROID" value="GANANCIA" step="0.0001" onchange="calculaVenta(PROID);">
+        <input type="number" name="producto[PROID][ganancia]" id="ganancia_PROID" value="GANANCIA" step="0.0001" onchange="calculaVenta(PROID);">
     </td>
     <td>
-        <input type="number" name="venta_PROID" id="venta_PROID" value="VENTA" step="0.0001" onchange="calculaGanancia(PROID);">
+        <input type="number" name="producto[PROID][venta]" id="venta_PROID" value="VENTA" step="0.0001" onchange="calculaGanancia(PROID);">
     </td>
     <td>
-        <input type="checkbox" value="1" name="modifica_PROID" id="modifica_PROID">
+        <input type="checkbox" value="1" name="producto[PROID][modifica]" id="modifica_PROID">
     </td>
     <td align="right">
         <button class="btn btn-info btn-xs" onclick="simularEdicion();" title="Simular edición"><i class="fa fa-eye"></i></button>
