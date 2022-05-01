@@ -340,7 +340,7 @@ class ProductoController {
 			}
 		}
 		
-		header("Location: " . URL_APP . "/producto/actualizar_precio_por_lote");
+		header("Location: " . URL_APP . "/producto/modificacion_precio_por_lote");
 	}
 
 	function activar($arg) {
