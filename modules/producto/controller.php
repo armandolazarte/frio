@@ -326,20 +326,21 @@ class ProductoController {
 		        $valor_ganancia = $ganancia * $neto / 100;
 		        $pvp = round(($neto + $valor_ganancia), 4);
 
-				print_r('ID: ' . $clave . '<br>');
-				print_r('Costo: ' . $valor['costo'] . '<br>');
-				print_r('Flete: ' . $valor['flete'] . '<br>');
-				print_r('Iva: ' . $valor['iva'] . '<br>');
-				print_r('Ganancia: ' . $valor['ganancia'] . '<br>');
-				print_r('PVP INTER: ' . $valor['venta'] . '<br>');
-				print_r('PVP CONTROL: ' . $pvp . '<br>');
-				print_r('<hr>');
-				
-
+		        if ($valor['venta'] == $pvp) {
+		        	$pm = new Producto();
+		        	$pm->producto_id = $producto_id;
+		        	$pm->get();
+		        	$pm->costo = round($costo, 2);
+		        	$pm->flete = round($flete, 2);
+		        	$pm->iva = round($iva, 2);
+		        	$pm->porcentaje_ganancia = round($ganancia, 2);
+		        	$pm->precio_venta = round($pvp, 2);
+		        	//$pm->save();
+		        }
 			}
 		}
-		exit;
-		print_r($_POST);
+		
+		header("Location: " . URL_APP . "/producto/actualizar_precio_por_lote");
 	}
 
 	function activar($arg) {
