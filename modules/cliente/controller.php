@@ -61,7 +61,13 @@ class ClienteController {
 			if ($clave->oculto == 1) unset($listaprecio_collection[$clave]);
 		}
 
-		$this->view->agregar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $frecuenciaventa_collection, $vendedor_collection, $flete_collection, $tipofactura_collection,$listaprecio_collection,$categoriacliente_collection);
+		$select = "(c.codigo + 1) AS NEW_CODE";
+		$from = "cliente c";
+		$where = "c.oculto = 0 ORDER BY c.cliente_id DESC LIMIT 1";
+		$new_code = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+		$new_code = (is_array($new_code) AND !empty($new_code)) ? $new_code[0]["NEW_CODE"] : '';
+
+		$this->view->agregar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $frecuenciaventa_collection, $vendedor_collection, $flete_collection, $tipofactura_collection, $listaprecio_collection, $categoriacliente_collection, $new_code);
 	}
 
 	function consultar($arg) {

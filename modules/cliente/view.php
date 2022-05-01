@@ -42,7 +42,7 @@ class ClienteView extends View {
 		print $template;
 	}
 
-	function agregar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $frecuenciaventa_collection, $vendedor_collection, $flete_collection, $tipofactura_collection, $listaprecio_collection,$categoriacliente_collection) {
+	function agregar($provincia_collection, $documentotipo_collection, $condicioniva_collection, $frecuenciaventa_collection, $vendedor_collection, $flete_collection, $tipofactura_collection, $listaprecio_collection, $categoriacliente_collection, $new_code) {
 		$gui = file_get_contents("static/modules/cliente/agregar.html");
 		$gui_slt_provincia = file_get_contents("static/common/slt_provincia.html");
 		$gui_slt_documentotipo = file_get_contents("static/common/slt_documentotipo.html");
@@ -75,6 +75,7 @@ class ClienteView extends View {
 		$render = str_replace('{slt_tipofactura}', $gui_slt_tipofactura, $render);
 		$render = str_replace('{slt_listaprecio}', $gui_slt_listaprecio, $render);
 		$render = str_replace('{slt_categoriacliente}', $gui_slt_categoriacliente, $render);
+		$render = str_replace('{new_code}', $new_code, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
