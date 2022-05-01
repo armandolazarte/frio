@@ -120,6 +120,7 @@
             porcentaje_ganancia = (parseFloat(valor_ganancia) - 1) * 100;
             
             document.getElementById("ganancia_" + producto_id).value = porcentaje_ganancia.toFixed(2);
+            document.getElementById("modifica_" + producto_id).checked = true;
         }
     }
 </script>
