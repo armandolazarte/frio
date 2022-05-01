@@ -32,7 +32,7 @@ class ProductoController {
 	function modificacion_precio_por_lote() {
 		$select = "p.producto_id AS PROID, p.codigo AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.flete AS FLETE, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, p.precio_venta AS VENTA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where = "p.oculto = 0";
+		$where = "p.oculto = 0 ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 		$this->view->modificacion_precio_por_lote($producto_collection);
 	}

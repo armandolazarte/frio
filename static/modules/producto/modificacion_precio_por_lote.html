@@ -1,7 +1,3 @@
-<!--DATA TABLE-->
-<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-<!--DATA TABLE-->
 <div class="col-lg-12">
     <ul class="breadcrumb">
         <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
@@ -32,7 +28,7 @@
         <div class="x_content">
             <form class="form" id="formulario_guardar" method="post" action="{url_app}/producto/actualizar_precio_por_lote">
                 <div class="col-md-12 col-sm-12 col-xs-12">
-                    <table id="tbl_producto" class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr style="font-size: 12px;">
                                 <th>COD</th>
@@ -58,69 +54,3 @@
         </div>
     </div>
 </div>
-<!-- Datatables -->
-<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script type="text/javascript" charset="utf-8">
-    $(document).ready(function() {
-        $('#tbl_producto').dataTable( {
-            "aaSorting": [[ 0, "asc" ]]
-          , "iDisplayLength":15
-        } );
-    } );
-
-    function calculaVenta(producto_id) {
-        costo = document.getElementById("costo_" + producto_id).value;
-        flete = document.getElementById("flete_" + producto_id).value;
-        ganancia = document.getElementById("ganancia_" + producto_id).value;
-        slt_iva = document.getElementById("iva_" + producto_id);
-        iva = slt_iva.options[slt_iva.selectedIndex].value;
-
-        //iva = document.getElementById("iva_" + producto_id).value;
-
-        //COSTO + FLETE
-        valor_flete = parseFloat(flete) * parseFloat(costo) / 100;
-        costo_flete = parseFloat(costo) + parseFloat(valor_flete);
-
-        //COSTO + FLETE + IVA
-        valor_iva = parseFloat(iva) * parseFloat(costo_flete) / 100;
-        neto = parseFloat(costo_flete) + parseFloat(valor_iva);
-
-        //PVP
-        valor_ganancia = parseFloat(ganancia) * parseFloat(neto) / 100;
-        pvp = parseFloat(neto) + parseFloat(valor_ganancia);
-
-        document.getElementById("venta_" + producto_id).value = pvp.toFixed(4);
-        document.getElementById("modifica_" + producto_id).checked = true;
-    }
-
-    function calculaGanancia(producto_id) {
-        costo = document.getElementById("costo_" + producto_id).value;
-        flete = document.getElementById("flete_" + producto_id).value;
-        slt_iva = document.getElementById("iva_" + producto_id);
-        iva = slt_iva.options[slt_iva.selectedIndex].value;
-        var precio_venta = document.getElementById("venta_" + producto_id).value;
-
-        if (costo == 0) {
-            document.getElementById("venta_" + producto_id).value = 0;
-            document.getElementById("ganancia_" + producto_id).value = 0;
-        } else {
-            //COSTO + FLETE
-            valor_flete = parseFloat(flete) * parseFloat(costo) / 100;
-            costo_flete = parseFloat(costo) + parseFloat(valor_flete);
-
-            //COSTO + FLETE + IVA
-            valor_iva = parseFloat(iva) * parseFloat(costo_flete) / 100;
-            neto = parseFloat(costo_flete) + parseFloat(valor_iva);
-
-            //PVP
-            valor_ganancia = parseFloat(precio_venta) / parseFloat(neto);
-            porcentaje_ganancia = (parseFloat(valor_ganancia) - 1) * 100;
-            
-            document.getElementById("ganancia_" + producto_id).value = porcentaje_ganancia.toFixed(2);
-            document.getElementById("modifica_" + producto_id).checked = true;
-        }
-    }
-</script>
