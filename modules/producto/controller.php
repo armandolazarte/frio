@@ -22,6 +22,7 @@ class ProductoController {
 	}
 
 	function listar() {
+		SessionHandler()->check_session();
 		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.iva AS IVA, p.precio_venta AS VENTA, p.ubicacion AS UBICACION";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 0";
@@ -30,6 +31,7 @@ class ProductoController {
 	}
 
 	function modificacion_precio_por_lote() {
+		SessionHandler()->check_session();
 		$select = "p.producto_id AS PROID, p.codigo AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.flete AS FLETE, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, p.precio_venta AS VENTA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 0 ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
@@ -38,6 +40,7 @@ class ProductoController {
 	}
 
 	function ocultos() {
+		SessionHandler()->check_session();
 		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.iva AS IVA, p.precio_venta AS VENTA, p.ubicacion AS UBICACION";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 1";
@@ -46,6 +49,7 @@ class ProductoController {
 	}
 
 	function lista_precio() {
+		SessionHandler()->check_session();
 		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.producto_id AS PRODUCTO_ID, p.precio_venta AS VALOR_VENTA, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 0";
@@ -65,6 +69,7 @@ class ProductoController {
 	}
 
 	function vdr_lista_precio() {
+		SessionHandler()->check_session();
 		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.producto_id AS PRODUCTO_ID, pm.denominacion AS PROMAR, p.precio_venta AS VALOR_VENTA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 0";
@@ -75,6 +80,7 @@ class ProductoController {
 	}
 
 	function descargar_lista_precio() {
+		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
 
 		$filtro_consulta = filter_input(INPUT_POST, 'filtro');
@@ -364,6 +370,7 @@ class ProductoController {
 	}
 
 	function asociar_proveedor() {
+		SessionHandler()->check_session();
 		$producto_id = filter_input(INPUT_POST, 'producto_id');
 		$pdm = new ProductoDetalle();
 		$pdm->fecha = filter_input(INPUT_POST, 'fecha');
@@ -375,6 +382,7 @@ class ProductoController {
 	}
 
 	function proveedor($arg) {
+		SessionHandler()->check_session();
 		$ids = explode('@', $arg);
 		$producto_id = $ids[0];
 		$proveedor_id = $ids[1];
@@ -395,6 +403,7 @@ class ProductoController {
 	}
 
 	function agregar_precio_proveedor() {
+		SessionHandler()->check_session();
 		$producto_id = filter_input(INPUT_POST, 'producto_id');
 		$proveedor_id = filter_input(INPUT_POST, 'proveedor_id');
 
@@ -408,6 +417,7 @@ class ProductoController {
 	}
 
 	function quitar_precio_proveedor($arg) {
+		SessionHandler()->check_session();
 		$pdm = new ProductoDetalle();
 		$pdm->productodetalle_id = $arg;
 		$pdm->get();
@@ -423,6 +433,7 @@ class ProductoController {
 	}
 
 	function buscar() {
+		SessionHandler()->check_session();
 		$buscar = filter_input(INPUT_POST, 'buscar');
 		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.producto_id AS PRODUCTO_ID, p.precio_venta AS VALOR_VENTA, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
@@ -433,6 +444,7 @@ class ProductoController {
 	}
 
 	function verifica_existencia_codigo($arg) {
+		SessionHandler()->check_session();
 		$select = "COUNT(*) AS DUPLICADO";
 		$from = "producto p";
 		$where = "p.codigo = {$arg}";
