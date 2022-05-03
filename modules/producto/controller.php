@@ -340,7 +340,7 @@ class ProductoController {
 		        	$pm->flete = round($flete, 2);
 		        	$pm->iva = $iva;
 		        	$pm->porcentaje_ganancia = round($ganancia, 2);
-		        	$pm->precio_venta = round($pvp, 2);
+		        	$pm->precio_venta = round($venta, 2);
 		        	print_r($pm);
 		        	//$pm->save();
 		        
