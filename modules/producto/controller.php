@@ -338,14 +338,15 @@ class ProductoController {
 		        	$pm->get();
 		        	$pm->costo = round($costo, 2);
 		        	$pm->flete = round($flete, 2);
-		        	$pm->iva = round($iva, 2);
+		        	$pm->iva = $iva;
 		        	$pm->porcentaje_ganancia = round($ganancia, 2);
 		        	$pm->precio_venta = round($pvp, 2);
-		        	$pm->save();
+		        	print_r($pm);
+		        	//$pm->save();
 		        }
 			}
 		}
-		
+		exit;
 		header("Location: " . URL_APP . "/producto/modificacion_precio_por_lote");
 	}
 
