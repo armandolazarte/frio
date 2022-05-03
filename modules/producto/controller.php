@@ -331,22 +331,20 @@ class ProductoController {
 		        //PVP
 		        $valor_ganancia = $ganancia * $neto / 100;
 		        $pvp = round(($neto + $valor_ganancia), 4);
-
 		        
-		        	$pm = new Producto();
-		        	$pm->producto_id = $producto_id;
-		        	$pm->get();
-		        	$pm->costo = round($costo, 2);
-		        	$pm->flete = round($flete, 2);
-		        	$pm->iva = $iva;
-		        	$pm->porcentaje_ganancia = round($ganancia, 2);
-		        	$pm->precio_venta = round($venta, 2);
-		        	print_r($pm);
-		        	//$pm->save();
+	        	$pm = new Producto();
+	        	$pm->producto_id = $producto_id;
+	        	$pm->get();
+	        	$pm->costo = round($costo, 2);
+	        	$pm->flete = round($flete, 2);
+	        	$pm->iva = $iva;
+	        	$pm->porcentaje_ganancia = round($ganancia, 2);
+	        	$pm->precio_venta = round($venta, 2);
+	        	$pm->save();
 		        
 			}
 		}
-		exit;
+		
 		header("Location: " . URL_APP . "/producto/modificacion_precio_por_lote");
 	}
 
