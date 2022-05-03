@@ -332,7 +332,7 @@ class ProductoController {
 		        $valor_ganancia = $ganancia * $neto / 100;
 		        $pvp = round(($neto + $valor_ganancia), 4);
 
-		        if ($valor['venta'] == $pvp) {
+		        
 		        	$pm = new Producto();
 		        	$pm->producto_id = $producto_id;
 		        	$pm->get();
@@ -343,7 +343,7 @@ class ProductoController {
 		        	$pm->precio_venta = round($pvp, 2);
 		        	print_r($pm);
 		        	//$pm->save();
-		        }
+		        
 			}
 		}
 		exit;
