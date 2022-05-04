@@ -38,26 +38,18 @@
             <strong>Desde <font style="font-size: 14px;">{fecha_desde}</font> hasta <font style="font-size: 14px;">{fecha_hasta}</font></strong><hr />
             <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px; margin-left: 1%;">
                 <center>
-                    <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                    <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
                         <span class="count_top"><i class="fa fa-usd blue"></i> Facturación</span>
                         <div class="count blue" style="font-size: 30px;">${valor_total_facturado}</div>
                     </div>
                 </center>
-                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count visible-print" style="display: none;">
+                <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count visible-print" style="display: none;">
                     <span class="count_top">% Comisión</span>
                     <div class="count red" style="font-size: 30px;">{porcentaje_comision}</div>
                 </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
+                <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
                     <span class="count_top"><i class="fa fa-usd red"></i> Comisión a Pagar</span>
                     <div class="count red" style="font-size: 30px;" id="comision_pendiente">${valor_comision_pendiente}</div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count visible-print" style="display: none;">
-                    <span class="count_top">Adelantos</span>
-                    <div class="count red" style="font-size: 30px;">${suma_adelantos}</div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 col-xs-offset-6 tile_stats_count visible-print" style="display: none;">
-                    <span class="count_top">Total a Pagar</span>
-                    <div class="count red" style="font-size: 30px;">${total_pagar}</div>
                 </div>
                 <!--
                 <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
