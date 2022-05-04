@@ -11,7 +11,8 @@ class PedidoVendedorView extends View {
 		switch ($user_rol) {
 			// FACTURADOR
 			case 3:
-				$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array_facturador.html");
+				//$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array_facturador.html");
+				$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array.html");
 				$display_descargar = 'inline-block';
 				break;
 			// SUPERVISOR
