@@ -3082,7 +3082,7 @@ class ReporteController {
 			$cantidad_venta_producto = array();
 		}
 		
-		$subtitulo = "Cant. Productos Vendidos por Vendedor: {$denominacion_vendedor} - ({$fecha_desde} - {$fecha_hasta})";
+		$subtitulo = "Cant. Productos Vendidos por Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
 		$array_encabezados = array('COD', 'PRODUCTO','CANT. VENTA','CANT. NC.', 'CANT. FINAL');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
