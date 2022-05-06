@@ -3033,7 +3033,13 @@ class ReporteController {
 		}
 
 		$egreso_ids = implode(',', $egreso_ids);
-		print_r($egreso_ids);exit;
+
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, SUM(ed.cantidad) AS CANTIDAD";
+		$from = "egresodetalle ed";
+		$where = "ed.egreso_id IN ($egreso_ids)";
+		$group_by = "ed.producto_id";
+		$cantidad_venta_producto = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
+		print_r($cantidad_venta_producto);exit;
 	}
 }
 ?>
