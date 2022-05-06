@@ -2024,104 +2024,7 @@ class ReporteController {
 					}
 				}
 
-				break;			
-			case 4:
-				$select = "gc.denominacion AS DENOMINACION, g.fecha AS FECHA, g.detalle AS DETALLE, g.importe AS IMPORTE";
-				$from = "gastocategoria gc INNER JOIN gasto g ON gc.gastocategoria_id = g.gastocategoria";
-				$where_categoria = ($gastocategoria_id == 'all') ? '' : 'AND gc.gastocategoria_id = ' . $gastocategoria_id;
-				$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}' {$where_categoria}";
-				$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
-
-				$subtitulo = "GASTOS POR RANGO DE FECHA Y CATEGORÍA";
-				$array_encabezados = array('FECHA', 'CATEGORÍA', 'DETALLE', 'IMPORTE', '');
-				$array_exportacion = array();
-				$array_exportacion[] = $array_encabezados;
-				$sum_importe = 0;
-				foreach ($datos_reporte as $clave=>$valor) {
-					$sum_importe = $sum_importe + $valor["IMPORTE"];
-					$array_temp = array();
-					$array_temp = array(
-								  $valor["FECHA"]
-								, $valor["DENOMINACION"]
-								, $valor["DETALLE"]
-								, $valor["IMPORTE"]
-								, '');
-					$array_exportacion[] = $array_temp;
-				}
-
-				$array_exportacion[] = array('', '', '', '');
-				$array_exportacion[] = array('', '', 'TOTAL', $sum_importe);
 				break;
-			case 5:
-				$marca_ids = $_POST['marca_id'];
-				$marca_ids = implode(',', $marca_ids);
-
-				$select = "CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0))
-						   ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA,
-						   c.razon_social AS CLIENTE, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, ed.cantidad AS CANTIDAD, pm.denominacion AS MARCA, ed.producto_id AS PRID, ed.egreso_id AS EGRID,
-						   ed.descuento AS DESCUENTO, ed.importe AS IMPORTE, date_format(e.fecha, '%d/%m/%Y') AS FECHA, ed.descripcion_producto AS PRODUCTO, p.productounidad AS PROUNI";
-				$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN
-						 cliente c ON e.cliente = c.cliente_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
-						 productomarca pm ON p.productomarca = pm.productomarca_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
-
-				$where_vendedor_all = "pm.productomarca_id IN ({$marca_ids}) AND e.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
-				$where_vendedor = "pm.productomarca_id IN ({$marca_ids}) AND e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
-				$where = ($vendedor_id == 'all') ? $where_vendedor_all : $where_vendedor;
-				$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
-
-				foreach ($datos_reporte as $clave=>$valor) {
-					$tmp_producto_id = $valor["PRID"];
-					$tmp_egreso_id = $valor["EGRID"];
-					$tmp_productounidad = $valor["PROUNI"];
-					$select = "ncd.cantidad AS CANTIDAD, ncd.importe AS IMPORTE";
-					$from = "notacreditodetalle ncd";
-					$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id}";
-					$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
-
-					if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
-						$datos_reporte[$clave]['NC_IMPORTE'] = $datos_notacredito[0]['IMPORTE'];
-						$datos_reporte[$clave]['NC_CANTIDAD'] = $datos_notacredito[0]['CANTIDAD'];
-						$datos_reporte[$clave]['CANTIDAD'] = $datos_reporte[$clave]['CANTIDAD'] - $datos_notacredito[0]['CANTIDAD'];
-
-					} else {
-						$datos_reporte[$clave]['NC_IMPORTE'] = 0;
-						$datos_reporte[$clave]['NC_CANTIDAD'] = 0;
-					}
-
-					if ($tmp_productounidad == 5) {
-						$pm = new Producto();
-						$pm->producto_id = $tmp_producto_id;
-						$pm->get();
-						$datos_reporte[$clave]['CANTIDAD'] = $datos_reporte[$clave]['CANTIDAD'] * $pm->peso;
-					}
-				}
-
-				$subtitulo = "VENTAS POR VENDEDOR, RANGO DE FECHA, MARCA Y PRODUCTO";
-				$array_encabezados = array('FECHA', 'FACTURA', 'CLIENTE', 'VENDEDOR', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'DESCUENTO', 'IMPORTE');
-				$array_exportacion = array();
-				$array_exportacion[] = $array_encabezados;
-				$sum_importe = 0;
-				foreach ($datos_reporte as $clave=>$valor) {
-					$temp_importe = 0;
-					$temp_importe = $valor["IMPORTE"] - $valor["NC_IMPORTE"];
-					$sum_importe = $sum_importe + $temp_importe;
-					$array_temp = array();
-					$array_temp = array(
-								  $valor["FECHA"]
-								, $valor["FACTURA"]
-								, $valor["CLIENTE"]
-								, $valor["VENDEDOR"]
-								, $valor["MARCA"]
-								, $valor["PRODUCTO"]
-								, $valor["CANTIDAD"]
-								, $valor["DESCUENTO"]
-								, $temp_importe);
-					$array_exportacion[] = $array_temp;
-				}
-
-				$array_exportacion[] = array('', '', '', '', '', '', '', '', '');
-				$array_exportacion[] = array('', '', '', '', '', '', '', 'TOTAL', $sum_importe);
-				break;			
 		}
 
 		ExcelReportTipo2()->extraer_informe($subtitulo, $array_exportacion);
@@ -3294,6 +3197,44 @@ class ReporteController {
 		}
 
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
+
+	// REPORTES GASTOS
+	function desc_gastos_categoria_fecha() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport_tipo2.php";
+
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+		$gastocategoria_id = filter_input(INPUT_POST, 'gastocategoria');
+		
+		$select = "gc.denominacion AS DENOMINACION, g.fecha AS FECHA, g.detalle AS DETALLE, g.importe AS IMPORTE";
+		$from = "gastocategoria gc INNER JOIN gasto g ON gc.gastocategoria_id = g.gastocategoria";
+		$where_categoria = ($gastocategoria_id == 'all') ? '' : 'AND gc.gastocategoria_id = ' . $gastocategoria_id;
+		$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}' {$where_categoria}";
+		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+
+		$subtitulo = "GASTOS POR RANGO DE FECHA Y CATEGORÍA";
+		$array_encabezados = array('FECHA', 'CATEGORÍA', 'DETALLE', 'IMPORTE', '');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		$sum_importe = 0;
+		foreach ($datos_reporte as $clave=>$valor) {
+			$sum_importe = $sum_importe + $valor["IMPORTE"];
+			$array_temp = array();
+			$array_temp = array($valor["FECHA"]
+								, $valor["DENOMINACION"]
+								, $valor["DETALLE"]
+								, $valor["IMPORTE"]
+								, '');
+			$array_exportacion[] = $array_temp;
+		}
+
+		$array_exportacion[] = array('', '', '', '');
+		$array_exportacion[] = array('', '', 'TOTAL', $sum_importe);
+
+		ExcelReportTipo2()->extraer_informe($subtitulo, $array_exportacion);
+		exit;
 	}
 }
 ?>
