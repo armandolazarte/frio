@@ -3018,11 +3018,24 @@ class ReporteController {
 		exit;
 	}
 
-	function prueba() {
+
+	// REPORTES PRODUCTOS
+	function desc_cantidad_producto_vendedor_fecha() {
 		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+		$vendedor = filter_input(INPUT_POST, 'vendedor');
+
+		$vm = new Vendedor();
+		$vm->vendedor_id = $vendedor;
+		$vm->get();
+		$denominacion_vendedor = $vm->apellido . ' ' .$vm->nombre;
+
 		$select = "e.egreso_id AS EGRESO_ID";
 		$from = "egreso e";
-		$where = "e.fecha BETWEEN '2022-04-01' AND '2022-04-30' AND e.vendedor = 2";
+		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}' AND e.vendedor = {$vendedor}";
 		$egreso_ids_array = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$egreso_ids_array = (is_array($egreso_ids_array) AND !empty($egreso_ids_array)) ? $egreso_ids_array : array();
 
@@ -3034,7 +3047,7 @@ class ReporteController {
 
 		if (!empty($egreso_ids)) {
 			$egreso_ids = implode(',', $egreso_ids);
-			$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ed.cantidad), 2) AS CANTIDAD";
+			$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ed.cantidad), 2) AS CANTIDAD";
 			$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 			$where = "ed.egreso_id IN ($egreso_ids)";
 			$group_by = "ed.producto_id";
@@ -3069,7 +3082,22 @@ class ReporteController {
 			$cantidad_venta_producto = array();
 		}
 		
-		print_r($cantidad_venta_producto);exit;
+		$subtitulo = "Cant. Productos Vendidos por Vendedor: {$denominacion_vendedor} - ({$fecha_desde} - {$fecha_hasta})";
+		$array_encabezados = array('COD', 'PRODUCTO','CANT. VENTA','CANT. NC.', 'CANT. FINAL');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+
+		foreach ($cantidad_venta_producto as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["CODIGO"]
+								, $valor["PRODUCTO"]
+								, $valor["CANTIDAD"]
+								, $valor["CANTIDAD_NC"]
+								, $valor["CANTIDAD_FINAL"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 }
 ?>
