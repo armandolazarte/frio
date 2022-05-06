@@ -3032,14 +3032,22 @@ class ReporteController {
 			if(!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
 		}
 
-		$egreso_ids = implode(',', $egreso_ids);
+		if (!empty($egreso_ids)) {
+			$egreso_ids = implode(',', $egreso_ids);
+			$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ed.cantidad), 2) AS CANTIDAD";
+			$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+			$where = "ed.egreso_id IN ($egreso_ids)";
+			$group_by = "ed.producto_id";
+			$cantidad_venta_producto = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
 
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ed.cantidad), 2) AS CANTIDAD";
-		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-		$where = "ed.egreso_id IN ($egreso_ids)";
-		$group_by = "ed.producto_id";
-		$cantidad_venta_producto = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
-		print_r($cantidad_venta_producto);exit;
+			$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ncd.cantidad), 2) AS CANTIDAD";
+			$from = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+			$where = "ncd.egreso_id IN ($egreso_ids)";
+			$group_by = "ncd.producto_id";
+			$cantidad_nc_producto = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select, $group_by);
+			print_r($cantidad_nc_producto);exit;
+			
+		}
 	}
 }
 ?>
