@@ -3018,6 +3018,86 @@ class ReporteController {
 		exit;
 	}
 
+	// PANELES REPORTES
+	function reportes_productos() {
+		SessionHandler()->check_session();
+		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
+    	$fecha_sys = strtotime(date('Y-m-d'));
+		$periodo_minimo = date("Ym", strtotime("-6 month", $fecha_sys));
+    	$periodo_actual = date('Ym');
+
+    	$select = "ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, ROUND(SUM(ed.importe),2) AS IMPORTE,
+				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
+		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id";
+		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
+		
+		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.importe),2) DESC";
+		$sum_importe_producto = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
+
+		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
+		$sum_cantidad_producto = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
+
+		$select = "ROUND(SUM(ncd.importe),2) AS IMPORTE, ROUND(SUM(ncd.cantidad),2) AS CANTIDAD";
+		$from = "notacreditodetalle ncd INNER JOIN notacredito nc ON ncd.notacredito_id = nc.notacredito_id";
+		foreach ($sum_importe_producto as $clave=>$valor) {
+			$tmp_producto_id = $valor["PRID"];
+			$where = "ncd.producto_id = {$tmp_producto_id} AND date_format(nc.fecha, '%Y%m') = '{$periodo_actual}'";
+			$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+			if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
+				$nuevo_valor_importe = $sum_importe_producto[$clave]['IMPORTE'] - $datos_notacredito[0]['IMPORTE'];
+				$nuevo_valor_cantidad = $sum_importe_producto[$clave]['CANTIDAD'] - $datos_notacredito[0]['CANTIDAD'];
+			} else {
+				$nuevo_valor_importe = 0;
+				$nuevo_valor_cantidad = 0;
+			}
+
+			$sum_importe_producto[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
+			$sum_importe_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
+		}
+
+		foreach ($sum_cantidad_producto as $clave=>$valor) {
+			$tmp_producto_id = $valor["PRID"];
+			$where = "ncd.producto_id = {$tmp_producto_id} AND date_format(nc.fecha, '%Y%m') = '{$periodo_actual}'";
+			$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+			if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
+				$nuevo_valor_importe = $sum_cantidad_producto[$clave]['IMPORTE'] - $datos_notacredito[0]['IMPORTE'];
+				$nuevo_valor_cantidad = $sum_cantidad_producto[$clave]['CANTIDAD'] - $datos_notacredito[0]['CANTIDAD'];
+			} else {
+				$nuevo_valor_importe = 0;
+				$nuevo_valor_cantidad = 0;
+			}
+
+			$sum_cantidad_producto[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
+			$sum_cantidad_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
+		}
+
+		$select = "v.vendedor_id AS ID, CONCAT(v.apellido, ' ', v.nombre) AS DENOMINACION";
+		$from = "vendedor v";
+		$where = "v.oculto = 0 ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC";
+		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
+
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "p.oculto = 0";
+		$groupby = "p.producto_id ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
+		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
+		$productomarca_collection = Collector()->get('ProductoMarca');
+		$gastocategoria_collection = Collector()->get('GastoCategoria');
+
+		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION";
+		$from = "proveedor p";
+		$where = "p.oculto = 0 ORDER BY p.razon_social ASC";
+		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
+
+		$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA";
+		$from = "cliente cl";
+		$where = "cl.oculto = 0 ORDER BY c.razon_social ASC";
+		$clientes_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+
+		$this->view->reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $gastocategoria_collection, $productomarca_collection, $proveedor_collection,$user_level,$clientes_collection);
+	}
 
 	// REPORTES PRODUCTOS
 	function desc_cantidad_producto_vendedor_fecha() {

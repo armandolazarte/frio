@@ -333,5 +333,86 @@ class ReporteView extends View {
 		$render = $this->render($array_titulo, $render);
  		print $render;
 	}
+
+	//PANELES REPORTES
+	function reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $gastocategoria_collection, $productomarca_collection, $proveedor_collection,$user_level,$clientes_collection) {
+		$gui = file_get_contents("static/modules/reporte/reportes_productos.html");
+		$tbl_proveedor = file_get_contents("static/modules/reporte/tbl_proveedor.html");
+		$tbl_productos = file_get_contents("static/modules/reporte/tbl_productos_array.html");
+		$tbl_productomarcas = file_get_contents("static/modules/reporte/tbl_productomarcas.html");
+		$tbl_vendedor = file_get_contents("static/modules/reporte/tbl_vendedor.html");
+
+		$tbl_producto = file_get_contents("static/modules/reporte/tbl_producto_array.html");
+		$tbl_productomarca = file_get_contents("static/modules/reporte/tbl_productomarca.html");
+		$slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
+		$tbl_productomarca_grafico = file_get_contents("static/modules/reporte/tbl_productomarcagrafico.html");
+		$tbl_sum_importe_producto = file_get_contents("static/modules/reporte/tbl_sum_importe_producto.html");
+		$tbl_sum_cantidad_producto = file_get_contents("static/modules/reporte/tbl_sum_cantidad_producto.html");
+		
+		$tbl_producto = $this->render_regex_dict('TBL_PRODUCTO', $tbl_producto, $producto_collection);
+		$tbl_productomarca = $this->render_regex('TBL_PRODUCTOMARCA', $tbl_productomarca, $productomarca_collection);
+		$slt_productomarca = $this->render_regex('SLT_PRODUCTOMARCA', $slt_productomarca, $productomarca_collection);
+		$tbl_productomarca_grafico = $this->render_regex('TBL_PRODUCTOMARCAGRAFICO', $tbl_productomarca_grafico, $productomarca_collection);
+		
+		$tbl_productos = $this->render_regex_dict('TBL_PRODUCTOS', $tbl_productos, $producto_collection);
+		$tbl_productomarcas = $this->render_regex('TBL_PRODUCTOMARCAS', $tbl_productomarcas, $productomarca_collection);
+		$tbl_proveedor = $this->render_regex_dict('TBL_PROVEEDOR', $tbl_proveedor, $proveedor_collection);
+		$tbl_vendedor = $this->render_regex_dict('TBL_VENDEDOR', $tbl_vendedor, $vendedor_collection);
+
+		$sum_importe_producto = $this->order_collection_array($sum_importe_producto, 'IMPORTE', SORT_DESC);
+		$sum_cantidad_producto = $this->order_collection_array($sum_cantidad_producto, 'CANTIDAD', SORT_DESC);
+
+		$i = 0;
+		foreach ($sum_importe_producto as $clave=>$valor) {
+			if ($i > 4) unset($sum_importe_producto[$clave]);
+			$i = $i + 1;
+		}
+
+		$j = 0;
+		foreach ($sum_cantidad_producto as $clave=>$valor) {
+			if ($j > 4) unset($sum_cantidad_producto[$clave]);
+			$j = $j + 1;
+		}
+
+		$tbl_sum_importe_producto = $this->render_regex_dict('TBL_SUM_IMPORTE_PRODUCTO', $tbl_sum_importe_producto, $sum_importe_producto);
+		$tbl_sum_cantidad_producto = $this->render_regex_dict('TBL_SUM_CANTIDAD_PRODUCTO', $tbl_sum_cantidad_producto, $sum_cantidad_producto);
+
+		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor_array.html");
+		$gui_slt_vendedor = $this->render_regex_dict('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
+
+		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor_array.html");
+		$gui_slt_proveedor = $this->render_regex_dict('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
+
+		$gui_slt_gastocategoria = file_get_contents("static/common/slt_gastocategoria.html");
+		$gui_slt_gastocategoria = $this->render_regex('SLT_GASTOCATEGORIA', $gui_slt_gastocategoria, $gastocategoria_collection);
+
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		if($usuario_id == 13){
+			$display_perfil = '';
+		} else {
+			$display_perfil = ($user_level == 2) ? 'none' : '';
+		}
+
+		$render = str_replace('{fecha_sys}', date('d/m/Y'), $gui);
+		$render = str_replace('{periodo_actual}', date('Ym'), $render);
+		$render = str_replace('{tbl_sum_importe_producto}', $tbl_sum_importe_producto, $render);
+		$render = str_replace('{tbl_sum_cantidad_producto}', $tbl_sum_cantidad_producto, $render);
+		$render = str_replace('{tbl_producto}', $tbl_producto, $render);
+		$render = str_replace('{tbl_productomarca}', $tbl_productomarca, $render);
+		$render = str_replace('{tbl_productomarca_grafico}', $tbl_productomarca_grafico, $render);
+		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		$render = str_replace('{slt_productomarca}', $slt_productomarca, $render);
+		$render = str_replace('{slt_proveedor}', $gui_slt_proveedor, $render);
+		$render = str_replace('{slt_gastocategoria}', $gui_slt_gastocategoria, $render);
+		$render = str_replace('{display_perfil}', $display_perfil, $render);
+		$render = str_replace('{tbl_vendedor}', $tbl_vendedor, $render);
+		$render = str_replace('{tbl_proveedor}', $tbl_proveedor, $render);
+		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		$render = str_replace('{tbl_productos}', $tbl_productos, $render);
+		$render = str_replace('{tbl_productomarcas}', $tbl_productomarcas, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
 }
 ?>
