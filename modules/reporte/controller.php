@@ -3105,9 +3105,12 @@ class ReporteController {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
 
-		$desde = filter_input(INPUT_POST, 'desde');
-		$hasta = filter_input(INPUT_POST, 'hasta');
-		$vendedor = filter_input(INPUT_POST, 'vendedor');
+		//$desde = filter_input(INPUT_POST, 'desde');
+		//$hasta = filter_input(INPUT_POST, 'hasta');
+		//$vendedor = filter_input(INPUT_POST, 'vendedor');
+		$desde = '2022-04-01';
+		$hasta = '2022-04-30';
+		$vendedor = 2;
 
 		$vm = new Vendedor();
 		$vm->vendedor_id = $vendedor;
