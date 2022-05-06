@@ -3034,7 +3034,7 @@ class ReporteController {
 
 		$egreso_ids = implode(',', $egreso_ids);
 
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, SUM(ed.cantidad) AS CANTIDAD";
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ed.cantidad), 2) AS CANTIDAD";
 		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "ed.egreso_id IN ($egreso_ids)";
 		$group_by = "ed.producto_id";
