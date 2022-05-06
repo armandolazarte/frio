@@ -3162,8 +3162,7 @@ class ReporteController {
 		} else {
 			$importe_venta_cliente = array();
 		}
-			print_r($importe_nc_cliente);exit;
-		
+			
 		$subtitulo = "Importes de Venta por Cliente y Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
 		$array_encabezados = array('COD', 'CLIENTE', 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
 		$array_exportacion = array();
