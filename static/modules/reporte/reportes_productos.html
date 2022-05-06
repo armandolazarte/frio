@@ -152,7 +152,6 @@
                         <div class="form-group col-lg-6">
                             <label>Vendedor</label>
                             <select class="form-control m-bot15" name="vendedor_grafico" id="vendedor_grafico" required>
-                                <option value="all" selected>TODOS</option>
                                 {slt_vendedor}
                             </select>
                         </div>
@@ -600,7 +599,7 @@
             arrayInput.push(dataInput.value);
         });
 
-        var path = "{url_app}/reporte/post_generar/" + desde + "@" + hasta + "@" + vendedor + "@" + tipo_grafico + "@" + arrayInput;
+        var path = "{url_app}/reporte/ajax_cobertura_marca/" + desde + "@" + hasta + "@" + vendedor + "@" + tipo_grafico + "@" + arrayInput;
         var vinculo = path;
         miPeticion.open("GET", vinculo, true);
         miPeticion.onreadystatechange = miPeticion.onreadystatechange = function() {

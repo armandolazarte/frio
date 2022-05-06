@@ -2708,103 +2708,7 @@ class ReporteController {
 		exit;
 	}
 
-	function post_generar($arg){
-		SessionHandler()->check_session();
-		//PARAMETROS
-		$var = explode("@", $arg);
-		$desde = $var[0];
-		$hasta = $var[1];
-		$vendedor_id = $var[2];
-		$tipo_grafico = $var[3];
-		$marca_ids = $var[4];
-
-		$pmm = new ProductoMarca();
-		$pmm->productomarca_id = $marca_ids;
-		$pmm->get();
-		$marca = $pmm->denominacion;
-		
-		$select = "CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, c.razon_social AS CLIENTE, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, ed.cantidad AS CANTIDAD, pm.denominacion AS MARCA, ed.producto_id AS PRID, ed.egreso_id AS EGRID, ed.descuento AS DESCUENTO, ed.importe AS IMPORTE, date_format(e.fecha, '%d/%m/%Y') AS FECHA, ed.descripcion_producto AS PRODUCTO";
-		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN cliente c ON e.cliente = c.cliente_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
-		$where_vendedor_all = "pm.productomarca_id IN ({$marca_ids}) AND e.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY v.vendedor_id DESC, pm.productomarca_id DESC";
-		$where_vendedor = "pm.productomarca_id IN ({$marca_ids}) AND e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY v.vendedor_id DESC, pm.productomarca_id DESC";
-		$where = ($vendedor_id == 'all') ? $where_vendedor_all : $where_vendedor;
-		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
-		$array_titulo = array('{fecha_desde}'=>$desde, '{fecha_hasta}'=>$hasta, '{marca}'=>$marca);
-
-		if (is_array($datos_reporte)) {
-			foreach ($datos_reporte as $clave=>$valor) {
-				$tmp_producto_id = $valor["PRID"];
-				$tmp_egreso_id = $valor["EGRID"];
-				$select = "ncd.cantidad AS CANTIDAD, ncd.importe AS IMPORTE";
-				$from = "notacreditodetalle ncd";
-				$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id}";
-				$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
-
-				if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
-					$datos_reporte[$clave]['NC_IMPORTE'] = $datos_notacredito[0]['IMPORTE'];
-					$datos_reporte[$clave]['NC_CANTIDAD'] = $datos_notacredito[0]['CANTIDAD'];
-				} else {
-					$datos_reporte[$clave]['NC_IMPORTE'] = 0;
-					$datos_reporte[$clave]['NC_CANTIDAD'] = 0;
-				}
-			}
-
-			$array_exportacion = array();
-			$sum_importe = 0;
-			foreach ($datos_reporte as $clave=>$valor) {
-				$temp_importe = 0;
-				$temp_importe = $valor["IMPORTE"] - $valor["NC_IMPORTE"];
-				$sum_importe = $sum_importe + $temp_importe;
-				$array_temp = array();
-				$array_temp = array(
-					'VENDEDOR' => $valor["VENDEDOR"]
-					,'MARCA' => $valor["MARCA"]
-					,'CANTIDAD' => $valor["CANTIDAD"] - $valor["NC_CANTIDAD"]
-					,'IMPORTE' => $temp_importe);
-					$array_exportacion[] = $array_temp;
-				}
-
-				$array_temp = array();
-				if ($vendedor_id == 'all') {
-					foreach ($array_exportacion as $key => $value) {
-						if (array_search($value['VENDEDOR'], array_column($array_temp, 'VENDEDOR')) === FALSE) {
-							$array_temp[] = array('VENDEDOR' => $value['VENDEDOR']
-							,'MARCA' => $value['MARCA']
-							,'CANTIDAD' => $value['CANTIDAD']
-							,'IMPORTE' => $value['IMPORTE']);
-						} else {
-							$key = array_search($value['VENDEDOR'], array_column($array_temp, 'VENDEDOR'));
-							if ($array_temp[$key]['MARCA'] == $value['MARCA']) {
-								$array_temp[$key]['IMPORTE'] = $value['IMPORTE'] + $array_temp[$key]['IMPORTE'];
-								$array_temp[$key]['CANTIDAD'] = $value['CANTIDAD'] + $array_temp[$key]['CANTIDAD'];
-							} else {
-								$array_temp[] = array('VENDEDOR' => $value['VENDEDOR']
-								,'MARCA' => $value['MARCA']
-								,'CANTIDAD' => $value['CANTIDAD']
-								,'IMPORTE' => $value['IMPORTE']);
-							}
-						}
-					}
-				} else {
-					foreach ($array_exportacion as $key => $value) {
-						if (array_search($value['MARCA'], array_column($array_temp, 'MARCA')) === FALSE) {
-							$array_temp[] = array('VENDEDOR' => $value['VENDEDOR']
-							,'MARCA' => $value['MARCA']
-							,'CANTIDAD' => $value['CANTIDAD']
-							,'IMPORTE' => $value['IMPORTE']);
-						} else {
-							$key = array_search($value['MARCA'], array_column($array_temp, 'MARCA'));
-							$array_temp[$key]['IMPORTE'] = $value['IMPORTE'] + $array_temp[$key]['IMPORTE'];
-							$array_temp[$key]['CANTIDAD'] = $value['CANTIDAD'] + $array_temp[$key]['CANTIDAD'];
-						}
-					}
-				}
-		} else {
-			$array_temp = array();
-		}
-
-		$this->view->post_generar($array_temp, $array_titulo, $tipo_grafico);
-	}
+	
 
 	function reporte_balance_producto() {
 		SessionHandler()->check_session();
@@ -3100,6 +3004,103 @@ class ReporteController {
 	}
 
 	// REPORTES PRODUCTOS
+	function ajax_cobertura_marca($arg){
+		SessionHandler()->check_session();
+		
+		$var = explode("@", $arg);
+		$desde = $var[0];
+		$hasta = $var[1];
+		$vendedor_id = $var[2];
+		$tipo_grafico = $var[3];
+		$marca_ids = $var[4];
+
+		$pmm = new ProductoMarca();
+		$pmm->productomarca_id = $marca_ids;
+		$pmm->get();
+		$marca = $pmm->denominacion;
+		
+		$select = "CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, c.razon_social AS CLIENTE, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, ed.cantidad AS CANTIDAD, pm.denominacion AS MARCA, ed.producto_id AS PRID, ed.egreso_id AS EGRID, ed.descuento AS DESCUENTO, ed.importe AS IMPORTE, date_format(e.fecha, '%d/%m/%Y') AS FECHA, ed.descripcion_producto AS PRODUCTO";
+		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN cliente c ON e.cliente = c.cliente_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+		$where_vendedor_all = "pm.productomarca_id IN ({$marca_ids}) AND e.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY v.vendedor_id DESC, pm.productomarca_id DESC";
+		$where_vendedor = "pm.productomarca_id IN ({$marca_ids}) AND e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY v.vendedor_id DESC, pm.productomarca_id DESC";
+		$where = ($vendedor_id == 'all') ? $where_vendedor_all : $where_vendedor;
+		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+		$array_titulo = array('{fecha_desde}'=>$desde, '{fecha_hasta}'=>$hasta, '{marca}'=>$marca);
+
+		if (is_array($datos_reporte)) {
+			foreach ($datos_reporte as $clave=>$valor) {
+				$tmp_producto_id = $valor["PRID"];
+				$tmp_egreso_id = $valor["EGRID"];
+				$select = "ncd.cantidad AS CANTIDAD, ncd.importe AS IMPORTE";
+				$from = "notacreditodetalle ncd";
+				$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id}";
+				$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+				if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
+					$datos_reporte[$clave]['NC_IMPORTE'] = $datos_notacredito[0]['IMPORTE'];
+					$datos_reporte[$clave]['NC_CANTIDAD'] = $datos_notacredito[0]['CANTIDAD'];
+				} else {
+					$datos_reporte[$clave]['NC_IMPORTE'] = 0;
+					$datos_reporte[$clave]['NC_CANTIDAD'] = 0;
+				}
+			}
+
+			$array_exportacion = array();
+			$sum_importe = 0;
+			foreach ($datos_reporte as $clave=>$valor) {
+				$temp_importe = 0;
+				$temp_importe = $valor["IMPORTE"] - $valor["NC_IMPORTE"];
+				$sum_importe = $sum_importe + $temp_importe;
+				$array_temp = array();
+				$array_temp = array('VENDEDOR' => $valor["VENDEDOR"]
+									,'MARCA' => $valor["MARCA"]
+									,'CANTIDAD' => $valor["CANTIDAD"] - $valor["NC_CANTIDAD"]
+									,'IMPORTE' => $temp_importe);
+				$array_exportacion[] = $array_temp;
+			}
+
+			$array_temp = array();
+			if ($vendedor_id == 'all') {
+				foreach ($array_exportacion as $key => $value) {
+					if (array_search($value['VENDEDOR'], array_column($array_temp, 'VENDEDOR')) === FALSE) {
+						$array_temp[] = array('VENDEDOR' => $value['VENDEDOR']
+											  ,'MARCA' => $value['MARCA']
+											  ,'CANTIDAD' => $value['CANTIDAD']
+											  ,'IMPORTE' => $value['IMPORTE']);
+					} else {
+						$key = array_search($value['VENDEDOR'], array_column($array_temp, 'VENDEDOR'));
+						if ($array_temp[$key]['MARCA'] == $value['MARCA']) {
+							$array_temp[$key]['IMPORTE'] = $value['IMPORTE'] + $array_temp[$key]['IMPORTE'];
+							$array_temp[$key]['CANTIDAD'] = $value['CANTIDAD'] + $array_temp[$key]['CANTIDAD'];
+						} else {
+							$array_temp[] = array('VENDEDOR' => $value['VENDEDOR']
+												  ,'MARCA' => $value['MARCA']
+												  ,'CANTIDAD' => $value['CANTIDAD']
+												  ,'IMPORTE' => $value['IMPORTE']);
+						}
+					}
+				}
+			} else {
+				foreach ($array_exportacion as $key => $value) {
+					if (array_search($value['MARCA'], array_column($array_temp, 'MARCA')) === FALSE) {
+						$array_temp[] = array('VENDEDOR' => $value['VENDEDOR']
+											  ,'MARCA' => $value['MARCA']
+											  ,'CANTIDAD' => $value['CANTIDAD']
+											  ,'IMPORTE' => $value['IMPORTE']);
+					} else {
+						$key = array_search($value['MARCA'], array_column($array_temp, 'MARCA'));
+						$array_temp[$key]['IMPORTE'] = $value['IMPORTE'] + $array_temp[$key]['IMPORTE'];
+						$array_temp[$key]['CANTIDAD'] = $value['CANTIDAD'] + $array_temp[$key]['CANTIDAD'];
+					}
+				}
+			}
+		} else {
+			$array_temp = array();
+		}
+
+		$this->view->ajax_cobertura_marca($array_temp, $array_titulo, $tipo_grafico);
+	}
+
 	function desc_cantidad_producto_vendedor_fecha() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";

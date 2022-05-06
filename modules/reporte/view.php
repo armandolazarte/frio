@@ -315,24 +315,7 @@ class ReporteView extends View {
 		print $template;
 	}
 
-	function post_generar($obj_resultado, $array_titulo, $tipo_grafico) {
-		if ($tipo_grafico == 1) {
-			$gui = file_get_contents("static/modules/reporte/generar_grafico_importe.html");
-			$gui_tbl_cobertura_vendedor_marca = file_get_contents("static/modules/reporte/tbl_cobertura_vendedor_marca_importe.html");
-			$obj_resultado = $this->order_collection_array($obj_resultado, 'IMPORTE', SORT_DESC);
-			$gui_tbl_cobertura_vendedor_marca = $this->render_regex_dict('TBL_COBERTURA_VENDEDOR_MARCA', $gui_tbl_cobertura_vendedor_marca, $obj_resultado);
-		} else {
-			$gui = file_get_contents("static/modules/reporte/generar_grafico_cantidad.html");
-			$gui_tbl_cobertura_vendedor_marca = file_get_contents("static/modules/reporte/tbl_cobertura_vendedor_marca_cantidad.html");
-			$obj_resultado = $this->order_collection_array($obj_resultado, 'CANTIDAD', SORT_DESC);
-			$gui_tbl_cobertura_vendedor_marca = $this->render_regex_dict('TBL_COBERTURA_VENDEDOR_MARCA', $gui_tbl_cobertura_vendedor_marca, $obj_resultado);
-		}
-		
-		$render = str_replace('{tbl_cobertura_vendedor_marca}', $gui_tbl_cobertura_vendedor_marca, $gui);
-		$render = $this->render_regex_dict('DATOS_GRAFICO', $render, $obj_resultado);
-		$render = $this->render($array_titulo, $render);
- 		print $render;
-	}
+	
 
 	//PANELES REPORTES
 	function reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $gastocategoria_collection, $productomarca_collection, $proveedor_collection,$user_level,$clientes_collection) {
@@ -413,6 +396,26 @@ class ReporteView extends View {
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
+	}
+
+	// REPORTES PRODUCTOS
+	function ajax_cobertura_marca($obj_resultado, $array_titulo, $tipo_grafico) {
+		if ($tipo_grafico == 1) {
+			$gui = file_get_contents("static/modules/reporte/generar_grafico_importe.html");
+			$gui_tbl_cobertura_vendedor_marca = file_get_contents("static/modules/reporte/tbl_cobertura_vendedor_marca_importe.html");
+			$obj_resultado = $this->order_collection_array($obj_resultado, 'IMPORTE', SORT_DESC);
+			$gui_tbl_cobertura_vendedor_marca = $this->render_regex_dict('TBL_COBERTURA_VENDEDOR_MARCA', $gui_tbl_cobertura_vendedor_marca, $obj_resultado);
+		} else {
+			$gui = file_get_contents("static/modules/reporte/generar_grafico_cantidad.html");
+			$gui_tbl_cobertura_vendedor_marca = file_get_contents("static/modules/reporte/tbl_cobertura_vendedor_marca_cantidad.html");
+			$obj_resultado = $this->order_collection_array($obj_resultado, 'CANTIDAD', SORT_DESC);
+			$gui_tbl_cobertura_vendedor_marca = $this->render_regex_dict('TBL_COBERTURA_VENDEDOR_MARCA', $gui_tbl_cobertura_vendedor_marca, $obj_resultado);
+		}
+		
+		$render = str_replace('{tbl_cobertura_vendedor_marca}', $gui_tbl_cobertura_vendedor_marca, $gui);
+		$render = $this->render_regex_dict('DATOS_GRAFICO', $render, $obj_resultado);
+		$render = $this->render($array_titulo, $render);
+ 		print $render;
 	}
 }
 ?>
