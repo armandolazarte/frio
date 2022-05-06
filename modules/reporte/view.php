@@ -318,7 +318,7 @@ class ReporteView extends View {
 	
 
 	//PANELES REPORTES
-	function reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $gastocategoria_collection, $productomarca_collection, $proveedor_collection,$user_level,$clientes_collection) {
+	function reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $productomarca_collection, $proveedor_collection, $user_level) {
 		$gui = file_get_contents("static/modules/reporte/reportes_productos.html");
 		$tbl_proveedor = file_get_contents("static/modules/reporte/tbl_proveedor.html");
 		$tbl_productos = file_get_contents("static/modules/reporte/tbl_productos_array.html");
@@ -366,9 +366,6 @@ class ReporteView extends View {
 		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor_array.html");
 		$gui_slt_proveedor = $this->render_regex_dict('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
 
-		$gui_slt_gastocategoria = file_get_contents("static/common/slt_gastocategoria.html");
-		$gui_slt_gastocategoria = $this->render_regex('SLT_GASTOCATEGORIA', $gui_slt_gastocategoria, $gastocategoria_collection);
-
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		if($usuario_id == 13){
 			$display_perfil = '';
@@ -386,7 +383,6 @@ class ReporteView extends View {
 		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
 		$render = str_replace('{slt_productomarca}', $slt_productomarca, $render);
 		$render = str_replace('{slt_proveedor}', $gui_slt_proveedor, $render);
-		$render = str_replace('{slt_gastocategoria}', $gui_slt_gastocategoria, $render);
 		$render = str_replace('{display_perfil}', $display_perfil, $render);
 		$render = str_replace('{tbl_vendedor}', $tbl_vendedor, $render);
 		$render = str_replace('{tbl_proveedor}', $tbl_proveedor, $render);

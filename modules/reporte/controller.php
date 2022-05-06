@@ -2988,19 +2988,13 @@ class ReporteController {
 		$groupby = "p.producto_id ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
 		$productomarca_collection = Collector()->get('ProductoMarca');
-		$gastocategoria_collection = Collector()->get('GastoCategoria');
-
+		
 		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION";
 		$from = "proveedor p";
 		$where = "p.oculto = 0 ORDER BY p.razon_social ASC";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
 
-		$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA";
-		$from = "cliente cl";
-		$where = "cl.oculto = 0 ORDER BY c.razon_social ASC";
-		$clientes_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
-
-		$this->view->reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $gastocategoria_collection, $productomarca_collection, $proveedor_collection,$user_level,$clientes_collection);
+		$this->view->reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $productomarca_collection, $proveedor_collection, $user_level);
 	}
 
 	// REPORTES PRODUCTOS
