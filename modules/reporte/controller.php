@@ -3014,6 +3014,11 @@ class ReporteController {
 		$tipo_grafico = $var[3];
 		$marca_ids = $var[4];
 
+		$vm = new Vendedor();
+		$vm->vendedor_id = $vendedor_id;
+		$vm->get();
+		$vendedor = $vm->apellido . ' ' . $vm->nombre;
+
 		$pmm = new ProductoMarca();
 		$pmm->productomarca_id = $marca_ids;
 		$pmm->get();
@@ -3098,7 +3103,7 @@ class ReporteController {
 			$array_temp = array();
 		}
 
-		$this->view->ajax_cobertura_marca($array_temp, $array_titulo, $tipo_grafico);
+		$this->view->ajax_cobertura_marca($array_temp, $array_titulo, $tipo_grafico, $vendedor);
 	}
 
 	function desc_cantidad_producto_vendedor_fecha() {

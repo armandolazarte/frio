@@ -399,7 +399,7 @@ class ReporteView extends View {
 	}
 
 	// REPORTES PRODUCTOS
-	function ajax_cobertura_marca($obj_resultado, $array_titulo, $tipo_grafico) {
+	function ajax_cobertura_marca($obj_resultado, $array_titulo, $tipo_grafico, $vendedor) {
 		if ($tipo_grafico == 1) {
 			$gui = file_get_contents("static/modules/reporte/generar_grafico_importe.html");
 			$gui_tbl_cobertura_vendedor_marca = file_get_contents("static/modules/reporte/tbl_cobertura_vendedor_marca_importe.html");
@@ -413,6 +413,7 @@ class ReporteView extends View {
 		}
 		
 		$render = str_replace('{tbl_cobertura_vendedor_marca}', $gui_tbl_cobertura_vendedor_marca, $gui);
+		$render = str_replace('{vendedor}', $vendedor, $render);
 		$render = $this->render_regex_dict('DATOS_GRAFICO', $render, $obj_resultado);
 		$render = $this->render($array_titulo, $render);
  		print $render;
