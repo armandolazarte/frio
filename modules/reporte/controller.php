@@ -453,79 +453,6 @@ class ReporteController {
 		$this->view->vdr_panel($pedidovendedor_collection, $array_totales);
 	}
 
-
-	function descarga_stock_valorizado() {
-		SessionHandler()->check_session();
-		require_once "tools/excelreport.php";
-
-		$proveedor_id = filter_input(INPUT_POST, "proveedor");
-		$pvm = new Proveedor();
-		$pvm->proveedor_id = $proveedor_id;
-		$pvm->get();
-		$proveedor = $pvm->razon_social;
-
-		$select = "s.producto_id AS PROD_ID";
-		$from = "stock s INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN
-				 productodetalle pd ON p.producto_id = pd.producto_id";
-		$where = "pd.proveedor_id = {$proveedor_id}";
-		$groupby = "s.producto_id";
-		$productoid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
-
-		$stock_valorizado = 0;
-		$array_exportacion = array();
-		$subtitulo = "STOCK VALORIZADO - PROVEEDOR: {$proveedor}";
-		$array_encabezados = array('CODIGO', 'PRODUCTO', '$ COSTO', 'CANT ACTUAL', 'VALORIZADO');
-		$array_exportacion[] = $array_encabezados;
-		$valor_stock_total = 0;
-		if ($productoid_collection != 0 || !empty($productoid_collection) || is_array($productoid_collection)) {
-			$producto_ids = array();
-			foreach ($productoid_collection as $producto_id) $producto_ids[] = $producto_id['PROD_ID'];
-			$producto_ids = implode(',', $producto_ids);
-
-			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-			$from_stock = "stock s";
-			$where_stock = "s.producto_id IN ({$producto_ids})";
-			$groupby_stock = "s.producto_id";
-			$stockid_collection = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock, $groupby_stock);
-
-			foreach ($stockid_collection as $stock_id) {
-				$array_temp = array();
-				$sm = new Stock();
-				$sm->stock_id = $stock_id['STOCK_ID'];
-				$sm->get();
-				$producto_cantidad_actual = $sm->cantidad_actual;
-
-				$pm = new Producto();
-				$pm->producto_id = $sm->producto_id;
-				$pm->get();
-				$costo_producto = $pm->costo;
-				$flete_producto = $pm->flete;
-				$iva_producto = $pm->iva;
-
-				$costo_iva = (($costo_producto * $iva_producto) / 100) + $costo_producto;
-				$valor_stock_producto = round(($costo_iva * $sm->cantidad_actual),2);
-				$stock_valorizado = $stock_valorizado + $valor_stock_producto;
-
-				$array_temp = array($pm->codigo,
-									$pm->denominacion,
-									round($costo_iva, 2),
-									round($producto_cantidad_actual, 2),
-									$valor_stock_producto);
-
-				$array_exportacion[] = $array_temp;
-				$valor_stock_total = $valor_stock_total + $valor_stock_producto;
-			}
-		}
-
-		$array_linea_blanco = array('', '', '', '', '');
-		$array_valorizado_total = array('', '', '', 'TOTAL', $valor_stock_total);
-		$array_exportacion[] = $array_linea_blanco;
-		$array_exportacion[] = $array_valorizado_total;
-
-		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
-		exit;
-	}
-
 	function resumen_diario() {
     	SessionHandler()->check_session();
     	$fecha_sys = date('Y-m-d');
@@ -3240,6 +3167,77 @@ class ReporteController {
 		}
 
 		ExcelReportTipo2()->extraer_informe($subtitulo, $array_exportacion);
+		exit;
+	}
+
+	function desc_stock_valorizado() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$proveedor_id = filter_input(INPUT_POST, "proveedor");
+		$pvm = new Proveedor();
+		$pvm->proveedor_id = $proveedor_id;
+		$pvm->get();
+		$proveedor = $pvm->razon_social;
+
+		$select = "s.producto_id AS PROD_ID";
+		$from = "stock s INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id";
+		$where = "pd.proveedor_id = {$proveedor_id}";
+		$groupby = "s.producto_id";
+		$productoid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
+
+		$stock_valorizado = 0;
+		$array_exportacion = array();
+		$subtitulo = "STOCK VALORIZADO - PROVEEDOR: {$proveedor}";
+		$array_encabezados = array('CODIGO', 'PRODUCTO', '$ COSTO', 'CANT ACTUAL', 'VALORIZADO');
+		$array_exportacion[] = $array_encabezados;
+		$valor_stock_total = 0;
+		if ($productoid_collection != 0 || !empty($productoid_collection) || is_array($productoid_collection)) {
+			$producto_ids = array();
+			foreach ($productoid_collection as $producto_id) $producto_ids[] = $producto_id['PROD_ID'];
+			$producto_ids = implode(',', $producto_ids);
+
+			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
+			$from_stock = "stock s";
+			$where_stock = "s.producto_id IN ({$producto_ids})";
+			$groupby_stock = "s.producto_id";
+			$stockid_collection = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock, $groupby_stock);
+
+			foreach ($stockid_collection as $stock_id) {
+				$array_temp = array();
+				$sm = new Stock();
+				$sm->stock_id = $stock_id['STOCK_ID'];
+				$sm->get();
+				$producto_cantidad_actual = $sm->cantidad_actual;
+
+				$pm = new Producto();
+				$pm->producto_id = $sm->producto_id;
+				$pm->get();
+				$costo_producto = $pm->costo;
+				$flete_producto = $pm->flete;
+				$iva_producto = $pm->iva;
+
+				$costo_iva = (($costo_producto * $iva_producto) / 100) + $costo_producto;
+				$valor_stock_producto = round(($costo_iva * $sm->cantidad_actual),2);
+				$stock_valorizado = $stock_valorizado + $valor_stock_producto;
+
+				$array_temp = array($pm->codigo,
+									$pm->denominacion,
+									round($costo_iva, 2),
+									round($producto_cantidad_actual, 2),
+									$valor_stock_producto);
+
+				$array_exportacion[] = $array_temp;
+				$valor_stock_total = $valor_stock_total + $valor_stock_producto;
+			}
+		}
+
+		$array_linea_blanco = array('', '', '', '', '');
+		$array_valorizado_total = array('', '', '', 'TOTAL', $valor_stock_total);
+		$array_exportacion[] = $array_linea_blanco;
+		$array_exportacion[] = $array_valorizado_total;
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;
 	}
 
