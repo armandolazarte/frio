@@ -3099,5 +3099,90 @@ class ReporteController {
 
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
+
+	// REPORTES CLIENTES
+	function desc_importe_venta_cliente_vendedor_fecha() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+		$vendedor = filter_input(INPUT_POST, 'vendedor');
+
+		$vm = new Vendedor();
+		$vm->vendedor_id = $vendedor;
+		$vm->get();
+		$denominacion_vendedor = $vm->apellido . ' ' .$vm->nombre;
+
+		$select = "e.egreso_id AS EGRESO_ID";
+		$from = "egreso e";
+		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}' AND e.vendedor = {$vendedor}";
+		$egreso_ids_array = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+		$egreso_ids_array = (is_array($egreso_ids_array) AND !empty($egreso_ids_array)) ? $egreso_ids_array : array();
+
+		$egreso_ids = array();
+		foreach ($egreso_ids_array as $clave=>$valor) {
+			$egreso_id = $valor['EGRESO_ID'];
+			if(!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
+		}
+
+		if (!empty($egreso_ids)) {
+			$egreso_ids = implode(',', $egreso_ids);
+			$select = "c.cliente_id AS CLIENTE_ID, c.codigo AS CODIGO, c.razon_social AS CLIENTE, ROUND(SUM(e.importe_total), 2) AS IMPORTETOTAL";
+			$from = "egreso e INNER JOIN cliente c ON e.cliente = c.cliente_id";
+			$where = "e.egreso_id IN ($egreso_ids)";
+			$group_by = "e.cliente";
+			$importe_venta_cliente = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $group_by);
+			print_r($importe_venta_cliente);exit;
+
+
+
+
+			$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS PRODUCTO, ROUND(SUM(ncd.cantidad), 2) AS CANTIDAD";
+			$from = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+			$where = "ncd.egreso_id IN ($egreso_ids)";
+			$group_by = "ncd.producto_id";
+			$cantidad_nc_producto = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select, $group_by);
+
+			foreach ($cantidad_venta_producto as $clave=>$valor) {
+				$venta_producto_id = $valor['PRODUCTO_ID'];
+				$venta_cantidad = $valor['CANTIDAD'];
+				$nc_cantidad_temp = 0;
+
+				foreach ($cantidad_nc_producto as $c=>$v) {
+					$nc_producto_id = $v['PRODUCTO_ID'];
+					$nc_cantidad = $v['CANTIDAD'];
+
+					if ($venta_producto_id == $nc_producto_id) {
+						$venta_cantidad = $venta_cantidad - $nc_cantidad;
+						$nc_cantidad_temp = $nc_cantidad;
+					}
+				}
+
+				$cantidad_venta_producto[$clave]['CANTIDAD_NC'] = $nc_cantidad_temp;
+				$cantidad_venta_producto[$clave]['CANTIDAD_FINAL'] = $venta_cantidad;
+			}
+			
+		} else {
+			$cantidad_venta_producto = array();
+		}
+		
+		$subtitulo = "Cant. Productos Vendidos por Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
+		$array_encabezados = array('COD', 'PRODUCTO','CANT. VENTA','CANT. NC.', 'CANT. FINAL');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+
+		foreach ($cantidad_venta_producto as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["CODIGO"]
+								, $valor["PRODUCTO"]
+								, $valor["CANTIDAD"]
+								, $valor["CANTIDAD_NC"]
+								, $valor["CANTIDAD_FINAL"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
 }
 ?>
