@@ -3103,15 +3103,12 @@ class ReporteController {
 	// REPORTES CLIENTES
 	function desc_importe_venta_cliente_vendedor_fecha() {
 		SessionHandler()->check_session();
-		//require_once "tools/excelreport.php";
+		require_once "tools/excelreport.php";
 
-		//$desde = filter_input(INPUT_POST, 'desde');
-		//$hasta = filter_input(INPUT_POST, 'hasta');
-		//$vendedor = filter_input(INPUT_POST, 'vendedor');
-		$desde = '2022-04-01';
-		$hasta = '2022-04-30';
-		$vendedor = 2;
-
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+		$vendedor = filter_input(INPUT_POST, 'vendedor');
+		
 		$vm = new Vendedor();
 		$vm->vendedor_id = $vendedor;
 		$vm->get();
@@ -3142,47 +3139,43 @@ class ReporteController {
 			$where = "nc.egreso_id IN ($egreso_ids)";
 			$group_by = "e.cliente";
 			$importe_nc_cliente = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select, $group_by);
-			print_r($importe_nc_cliente);exit;
 
+			foreach ($importe_venta_cliente as $clave=>$valor) {
+				$venta_cliente_id = $valor['CLIENTE_ID'];
+				$venta_importetotal = $valor['IMPORTETOTAL'];
+				$nc_importetotal_temp = 0;
 
+				foreach ($importe_nc_cliente as $c=>$v) {
+					$nc_cliente_id = $v['CLIENTE_ID'];
+					$nc_importotal = $v['IMPORTETOTAL'];
 
-
-
-			foreach ($cantidad_venta_producto as $clave=>$valor) {
-				$venta_producto_id = $valor['PRODUCTO_ID'];
-				$venta_cantidad = $valor['CANTIDAD'];
-				$nc_cantidad_temp = 0;
-
-				foreach ($cantidad_nc_producto as $c=>$v) {
-					$nc_producto_id = $v['PRODUCTO_ID'];
-					$nc_cantidad = $v['CANTIDAD'];
-
-					if ($venta_producto_id == $nc_producto_id) {
-						$venta_cantidad = $venta_cantidad - $nc_cantidad;
-						$nc_cantidad_temp = $nc_cantidad;
+					if ($venta_cliente_id == $nc_cliente_id) {
+						$venta_importetotal = $venta_importetotal - $nc_importotal;
+						$nc_importetotal_temp = $nc_importotal;
 					}
 				}
 
-				$cantidad_venta_producto[$clave]['CANTIDAD_NC'] = $nc_cantidad_temp;
-				$cantidad_venta_producto[$clave]['CANTIDAD_FINAL'] = $venta_cantidad;
+				$importe_venta_cliente[$clave]['IMPORTETOTAL_NC'] = $nc_importetotal_temp;
+				$importe_venta_cliente[$clave]['IMPORTETOTAL_FINAL'] = $venta_importetotal;
 			}
 			
 		} else {
-			$cantidad_venta_producto = array();
+			$importe_venta_cliente = array();
 		}
+			print_r($importe_nc_cliente);exit;
 		
-		$subtitulo = "Cant. Productos Vendidos por Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
-		$array_encabezados = array('COD', 'PRODUCTO','CANT. VENTA','CANT. NC.', 'CANT. FINAL');
+		$subtitulo = "Importes de Venta por Cliente y Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
+		$array_encabezados = array('COD', 'CLIENTE', 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
-		foreach ($cantidad_venta_producto as $clave=>$valor) {
+		foreach ($importe_venta_cliente as $clave=>$valor) {
 			$array_temp = array();
 			$array_temp = array($valor["CODIGO"]
-								, $valor["PRODUCTO"]
-								, $valor["CANTIDAD"]
-								, $valor["CANTIDAD_NC"]
-								, $valor["CANTIDAD_FINAL"]);
+								, $valor["CLIENTE"]
+								, $valor["IMPORTETOTAL"]
+								, $valor["IMPORTETOTAL_NC"]
+								, $valor["IMPORTETOTAL_FINAL"]);
 			$array_exportacion[] = $array_temp;
 		}
 

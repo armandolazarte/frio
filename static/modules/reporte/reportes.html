@@ -230,6 +230,39 @@
                     </div>
                 </div>
             </div>
+            <div class="x_panel hidden-print">
+                <div class="x_title">
+                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; IVentas por Vendedor y Cliente</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class=" form">
+                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/desc_importe_venta_cliente_vendedor_fecha">
+                            <div class="form-group col-lg-12">
+                                <label>Vendedor</label>
+                                <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                                    {slt_vendedor}
+                                </select>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Desde</label>
+                                <input type="date" class="form-control" id="desde" name="desde" required>
+                            </div>
+                            <div class="form-group col-lg-6">
+                                <label>Hasta</label>
+                                <input type="date" class="form-control" id="hasta" name="hasta" required>
+                            </div>
+                            <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                                <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
             <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
                 <div class="x_title" style="padding-left: 2%;">
                     <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte clientes</h2>
@@ -254,32 +287,6 @@
                     </div>
                 </div>
             </div>
-            <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; display: {display_perfil};">
-                <div class="x_title" style="padding-left: 2%;">
-                    <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Stock Valorizado</h2>
-                    <ul class="nav navbar-right panel_toolbox">
-                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                        <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                    </ul>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                    <div class=" form">
-                        <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/descarga_stock_valorizado">
-                            <div class="form-group col-lg-12">
-                                <label>Proveedor</label>
-                                <select class="form-control m-bot15" name="proveedor" id="proveedor" required>
-                                    {slt_proveedor}
-                                </select>
-                            </div>
-                            <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                                <input type="hidden" name="tipo_busqueda" value="1">
-                                <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>            
         </div>
     </div>
 </div>
@@ -354,41 +361,6 @@
         </div>
     </div>
     <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Gastos por Categoría</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                </ul>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <div class=" form">
-                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
-                        <div class="form-group col-lg-6">
-                            <label>Desde</label>
-                            <input type="date" class="form-control" id="desde" name="desde" required>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <label>Hasta</label>
-                            <input type="date" class="form-control" id="hasta" name="hasta" required>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <label>Categoría de Gasto</label>
-                            <select class="form-control m-bot15" name="gastocategoria" id="gastocategoria" required>
-                                <option value="all" selected>TODOS</option>
-                                {slt_gastocategoria}
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
-                            <input type="hidden" name="tipo_busqueda" value="4">
-                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
         <div class="x_panel hidden-print">
             <div class="x_title">
                 <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Totales Vendedor-Marca</h2>
@@ -423,6 +395,67 @@
                         </div>
                         <div class="col-lg-12" style="margin-top: 2%;" align="right">
                             <input type="hidden" name="tipo_busqueda" value="6">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%; display: {display_perfil};">
+            <div class="x_title" style="padding-left: 2%;">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Stock Valorizado</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/descarga_stock_valorizado">
+                        <div class="form-group col-lg-12">
+                            <label>Proveedor</label>
+                            <select class="form-control m-bot15" name="proveedor" id="proveedor" required>
+                                {slt_proveedor}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <input type="hidden" name="tipo_busqueda" value="1">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Gastos por Categoría</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/post_descarga">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="hasta" name="hasta" required>
+                        </div>
+                        <div class="form-group col-lg-12">
+                            <label>Categoría de Gasto</label>
+                            <select class="form-control m-bot15" name="gastocategoria" id="gastocategoria" required>
+                                <option value="all" selected>TODOS</option>
+                                {slt_gastocategoria}
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
+                            <input type="hidden" name="tipo_busqueda" value="4">
                             <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
                         </div>
                     </form>
