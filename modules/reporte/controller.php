@@ -3105,7 +3105,7 @@ class ReporteController {
 		exit;
 	}
 
-	function desc_producto_importe($arg) {
+	function desc_producto_importe() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
 		$fecha_sys = strtotime(date('Y-m-d'));
@@ -3163,7 +3163,7 @@ class ReporteController {
 		exit;
 	}
 
-	function get_descarga($arg) {
+	function desc_producto_cantidad() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
 		$fecha_sys = strtotime(date('Y-m-d'));
@@ -3171,23 +3171,10 @@ class ReporteController {
     	$periodo_actual = date('Ym');
 
 		$tipo_descarga = $arg;
-		$select = "ed.codigo_producto AS COD, p.denominacion AS PRODUCTO, pm.denominacion MARCA, ROUND(SUM(ed.importe),2) AS IMPORTE,
-				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
-		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
-				 productomarca pm ON p.productomarca = pm.productomarca_id";
+		$select = "ed.codigo_producto AS COD, p.denominacion AS PRODUCTO, pm.denominacion MARCA, ROUND(SUM(ed.importe),2) AS IMPORTE, ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
+		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
-
-		switch ($tipo_descarga) {
-			case 1:
-				$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.importe),2) DESC";
-				$subtitulo = "+ VENDIDOS POR IMPORTE";
-				break;
-			case 2:
-				$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
-				$subtitulo = "+ VENDIDOS POR CANTIDAD";
-				break;
-		}
-
+		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
 		$datos_reporte = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
 
 		$select = "ROUND(SUM(ncd.importe),2) AS IMPORTE, ROUND(SUM(ncd.cantidad),2) AS CANTIDAD";
@@ -3209,15 +3196,8 @@ class ReporteController {
 			$datos_reporte[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
 		}
 
-		switch ($tipo_descarga) {
-			case 1:
-				$datos_reporte = $this->view->order_collection_array($datos_reporte, 'IMPORTE', SORT_DESC);
-				break;
-			case 2:
-				$datos_reporte = $this->view->order_collection_array($datos_reporte, 'CANTIDAD', SORT_DESC);
-				break;
-		}
-
+		$datos_reporte = $this->view->order_collection_array($datos_reporte, 'CANTIDAD', SORT_DESC);
+		$subtitulo = "+ VENDIDOS POR CANTIDAD";
 		$array_encabezados = array('CÓDIGO', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
@@ -3225,12 +3205,11 @@ class ReporteController {
 		foreach ($datos_reporte as $clave=>$valor) {
 			$sum_importe = $sum_importe + $valor["IMPORTE"];
 			$array_temp = array();
-			$array_temp = array(
-						  $valor["COD"]
-						, $valor["MARCA"]
-						, $valor["PRODUCTO"]
-						, $valor["CANTIDAD"]
-						, $valor["IMPORTE"]);
+			$array_temp = array($valor["COD"]
+								, $valor["MARCA"]
+								, $valor["PRODUCTO"]
+								, $valor["CANTIDAD"]
+								, $valor["IMPORTE"]);
 			$array_exportacion[] = $array_temp;
 		}
 
