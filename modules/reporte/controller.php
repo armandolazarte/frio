@@ -3103,7 +3103,7 @@ class ReporteController {
 	// REPORTES CLIENTES
 	function desc_importe_venta_cliente_vendedor_fecha() {
 		SessionHandler()->check_session();
-		require_once "tools/excelreport.php";
+		//require_once "tools/excelreport.php";
 
 		//$desde = filter_input(INPUT_POST, 'desde');
 		//$hasta = filter_input(INPUT_POST, 'hasta');
