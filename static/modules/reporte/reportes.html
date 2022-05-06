@@ -768,7 +768,7 @@
             arrayInput.push(dataInput.value);
         });
 
-        var path = "{url_app}/reporte/post_generar/" + desde + "@" + hasta + "@" + vendedor + "@" + tipo_grafico + "@" + arrayInput;
+        var path = "{url_app}/reporte/ajax_cobertura_marca/" + desde + "@" + hasta + "@" + vendedor + "@" + tipo_grafico + "@" + arrayInput;
         var vinculo = path;
         miPeticion.open("GET", vinculo, true);
         miPeticion.onreadystatechange = miPeticion.onreadystatechange = function() {
