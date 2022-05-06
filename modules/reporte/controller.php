@@ -3045,9 +3045,31 @@ class ReporteController {
 			$where = "ncd.egreso_id IN ($egreso_ids)";
 			$group_by = "ncd.producto_id";
 			$cantidad_nc_producto = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select, $group_by);
-			print_r($cantidad_nc_producto);exit;
+
+			foreach ($cantidad_venta_producto as $clave=>$valor) {
+				$venta_producto_id = $valor['PRODUCTO_ID'];
+				$venta_cantidad = $valor['CANTIDAD'];
+				$nc_cantidad_temp = 0;
+
+				foreach ($cantidad_nc_producto as $c=>$v) {
+					$nc_producto_id = $v['PRODUCTO_ID'];
+					$nc_cantidad = $v['CANTIDAD'];
+
+					if ($venta_producto_id == $nc_producto_id) {
+						$venta_cantidad = $venta_cantidad - $nc_cantidad;
+						$nc_cantidad_temp = $nc_cantidad;
+					}
+				}
+
+				$cantidad_venta_producto[$clave]['CANTIDAD_NC'] = $nc_cantidad_temp;
+				$cantidad_venta_producto[$clave]['CANTIDAD_FINAL'] = $venta_cantidad;
+			}
 			
+		} else {
+			$cantidad_venta_producto = array();
 		}
+		
+		print_r($cantidad_venta_producto);exit;
 	}
 }
 ?>
