@@ -3016,7 +3016,24 @@ class ReporteController {
 		$array_exportacion[] = array('', '', '', '');
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;
+	}
 
+	function prueba() {
+		SessionHandler()->check_session();
+		$select = "e.egreso_id AS EGRESO_ID";
+		$from = "egreso e";
+		$where = "e.fecha BETWEEN '2022-04-01' AND '2022-04-30' AND e.vendedor = 2";
+		$egreso_ids_array = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+		$egreso_ids_array = (is_array($egreso_ids_array) AND !empty($egreso_ids_array)) ? $egreso_ids_array : array();
+
+		$egreso_ids = array();
+		foreach ($egreso_ids_array as $clave=>$valor) {
+			$egreso_id = $valor['EGRESO_ID'];
+			if(!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
+		}
+
+		$egreso_ids = implode(',', $egreso_ids);
+		print_r($egreso_ids);exit;
 	}
 }
 ?>
