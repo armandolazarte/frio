@@ -1854,83 +1854,6 @@ class ReporteController {
 		return $calculo_cajadiaria;
 	}
 
-	function get_descarga($arg) {
-		SessionHandler()->check_session();
-		require_once "tools/excelreport.php";
-		$fecha_sys = strtotime(date('Y-m-d'));
-		$periodo_minimo = date("Ym", strtotime("-6 month", $fecha_sys));
-    	$periodo_actual = date('Ym');
-
-		$tipo_descarga = $arg;
-		$select = "ed.codigo_producto AS COD, p.denominacion AS PRODUCTO, pm.denominacion MARCA, ROUND(SUM(ed.importe),2) AS IMPORTE,
-				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
-		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
-				 productomarca pm ON p.productomarca = pm.productomarca_id";
-		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
-
-		switch ($tipo_descarga) {
-			case 1:
-				$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.importe),2) DESC";
-				$subtitulo = "+ VENDIDOS POR IMPORTE";
-				break;
-			case 2:
-				$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
-				$subtitulo = "+ VENDIDOS POR CANTIDAD";
-				break;
-		}
-
-		$datos_reporte = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
-
-		$select = "ROUND(SUM(ncd.importe),2) AS IMPORTE, ROUND(SUM(ncd.cantidad),2) AS CANTIDAD";
-		$from = "notacreditodetalle ncd INNER JOIN notacredito nc ON ncd.notacredito_id = nc.notacredito_id";
-		foreach ($datos_reporte as $clave=>$valor) {
-			$tmp_producto_id = $valor["PRID"];
-			$where = "ncd.producto_id = {$tmp_producto_id} AND date_format(nc.fecha, '%Y%m') = '{$periodo_actual}'";
-			$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
-
-			if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
-				$nuevo_valor_importe = $datos_reporte[$clave]['IMPORTE'] - $datos_notacredito[0]['IMPORTE'];
-				$nuevo_valor_cantidad = $datos_reporte[$clave]['CANTIDAD'] - $datos_notacredito[0]['CANTIDAD'];
-			} else {
-				$nuevo_valor_importe = 0;
-				$nuevo_valor_cantidad = 0;
-			}
-
-			$datos_reporte[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
-			$datos_reporte[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
-		}
-
-		switch ($tipo_descarga) {
-			case 1:
-				$datos_reporte = $this->view->order_collection_array($datos_reporte, 'IMPORTE', SORT_DESC);
-				break;
-			case 2:
-				$datos_reporte = $this->view->order_collection_array($datos_reporte, 'CANTIDAD', SORT_DESC);
-				break;
-		}
-
-		$array_encabezados = array('CÓDIGO', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
-		$array_exportacion = array();
-		$array_exportacion[] = $array_encabezados;
-		$sum_importe = 0;
-		foreach ($datos_reporte as $clave=>$valor) {
-			$sum_importe = $sum_importe + $valor["IMPORTE"];
-			$array_temp = array();
-			$array_temp = array(
-						  $valor["COD"]
-						, $valor["MARCA"]
-						, $valor["PRODUCTO"]
-						, $valor["CANTIDAD"]
-						, $valor["IMPORTE"]);
-			$array_exportacion[] = $array_temp;
-		}
-
-		$array_exportacion[] = array('', '', '', '', '');
-		$array_exportacion[] = array('', '', '', 'TOTAL', $sum_importe);
-		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
-		exit;
-	}
-
 	function post_descarga() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport_tipo2.php";
@@ -2339,66 +2262,7 @@ class ReporteController {
 
 				$array_exportacion[] = array('', '', '', '', '', '', '', '', '');
 				$array_exportacion[] = array('', '', '', '', '', '', '', 'TOTAL', $sum_importe);
-				break;
-			case 6:
-				$marca_id = filter_input(INPUT_POST, "marca_id");
-				$vendedor_id = filter_input(INPUT_POST, "vendedor_id");
-
-				$select = "ROUND(SUM(ed.cantidad),2) AS TOTCANT, ROUND(SUM(ed.importe),2) AS TOTIMPO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR,
-						   pm.denominacion AS MARCA, ed.producto_id AS PRID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, ed.descripcion_producto AS PRODUCTO";
-				$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN
-						 producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-				$where = "pm.productomarca_id = {$marca_id} AND e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
-				$group_by = "ed.producto_id ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
-				$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
-
-				$select = "ed.producto_id AS PRID, e.egreso_id AS EGRID";
-				$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN
-						 producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-				$where = "pm.productomarca_id = {$marca_id} AND e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
-				$datos_egresos = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
-
-				if (is_array($datos_reporte) AND !empty($datos_reporte)) {
-					foreach ($datos_egresos as $clave=>$valor) {
-						$tmp_egreso_id = $valor["EGRID"];
-						$tmp_producto_id = $valor["PRID"];
-						$select = "ncd.cantidad AS CANTIDAD, ncd.importe AS IMPORTE";
-						$from = "notacreditodetalle ncd";
-						$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id}";
-						$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
-
-						if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
-
-							foreach ($datos_reporte as $c=>$v) {
-								$producto_id = $v["PRID"];
-								if ($producto_id == $tmp_producto_id) {
-									$datos_reporte[$c]['TOTIMPO'] = $datos_reporte[$c]['TOTIMPO'] - $datos_notacredito[0]['IMPORTE'];
-									$datos_reporte[$c]['TOTCANT'] = $datos_reporte[$c]['TOTCANT'] - $datos_notacredito[0]['CANTIDAD'];
-
-								}
-							}
-
-						}
-					}
-				}
-
-				$subtitulo = "VENTAS POR VENDEDOR, RANGO DE FECHA, MARCA Y PRODUCTO";
-				$array_encabezados = array('VENDEDOR', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
-				$array_exportacion = array();
-				$array_exportacion[] = $array_encabezados;
-				$sum_importe = 0;
-				foreach ($datos_reporte as $clave=>$valor) {
-					$array_temp = array();
-					$array_temp = array(
-								  $valor["VENDEDOR"]
-								, $valor["MARCA"]
-								, $valor["PRODUCTO"]
-								, $valor["TOTCANT"]
-								, $valor["TOTIMPO"]);
-					$array_exportacion[] = $array_temp;
-				}
-
-				break;
+				break;			
 		}
 
 		ExcelReportTipo2()->extraer_informe($subtitulo, $array_exportacion);
@@ -3237,6 +3101,141 @@ class ReporteController {
 		$array_exportacion[] = $array_linea_blanco;
 		$array_exportacion[] = $array_valorizado_total;
 
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+		exit;
+	}
+
+	function desc_producto_importe($arg) {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+		$fecha_sys = strtotime(date('Y-m-d'));
+		$periodo_minimo = date("Ym", strtotime("-6 month", $fecha_sys));
+    	$periodo_actual = date('Ym');
+
+		$tipo_descarga = $arg;
+		$select = "ed.codigo_producto AS COD, p.denominacion AS PRODUCTO, pm.denominacion MARCA, ROUND(SUM(ed.importe),2) AS IMPORTE,
+				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
+		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
+				 productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
+		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.importe),2) DESC";
+		$datos_reporte = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
+
+		$select = "ROUND(SUM(ncd.importe),2) AS IMPORTE, ROUND(SUM(ncd.cantidad),2) AS CANTIDAD";
+		$from = "notacreditodetalle ncd INNER JOIN notacredito nc ON ncd.notacredito_id = nc.notacredito_id";
+		foreach ($datos_reporte as $clave=>$valor) {
+			$tmp_producto_id = $valor["PRID"];
+			$where = "ncd.producto_id = {$tmp_producto_id} AND date_format(nc.fecha, '%Y%m') = '{$periodo_actual}'";
+			$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+			if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
+				$nuevo_valor_importe = $datos_reporte[$clave]['IMPORTE'] - $datos_notacredito[0]['IMPORTE'];
+				$nuevo_valor_cantidad = $datos_reporte[$clave]['CANTIDAD'] - $datos_notacredito[0]['CANTIDAD'];
+			} else {
+				$nuevo_valor_importe = 0;
+				$nuevo_valor_cantidad = 0;
+			}
+
+			$datos_reporte[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
+			$datos_reporte[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
+		}
+
+		$datos_reporte = $this->view->order_collection_array($datos_reporte, 'IMPORTE', SORT_DESC);
+		$subtitulo = "+ VENDIDOS POR IMPORTE";
+		$array_encabezados = array('CÓDIGO', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		$sum_importe = 0;
+		foreach ($datos_reporte as $clave=>$valor) {
+			$sum_importe = $sum_importe + $valor["IMPORTE"];
+			$array_temp = array();
+			$array_temp = array($valor["COD"]
+								, $valor["MARCA"]
+								, $valor["PRODUCTO"]
+								, $valor["CANTIDAD"]
+								, $valor["IMPORTE"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		$array_exportacion[] = array('', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'TOTAL', $sum_importe);
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+		exit;
+	}
+
+	function get_descarga($arg) {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+		$fecha_sys = strtotime(date('Y-m-d'));
+		$periodo_minimo = date("Ym", strtotime("-6 month", $fecha_sys));
+    	$periodo_actual = date('Ym');
+
+		$tipo_descarga = $arg;
+		$select = "ed.codigo_producto AS COD, p.denominacion AS PRODUCTO, pm.denominacion MARCA, ROUND(SUM(ed.importe),2) AS IMPORTE,
+				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
+		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
+				 productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
+
+		switch ($tipo_descarga) {
+			case 1:
+				$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.importe),2) DESC";
+				$subtitulo = "+ VENDIDOS POR IMPORTE";
+				break;
+			case 2:
+				$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
+				$subtitulo = "+ VENDIDOS POR CANTIDAD";
+				break;
+		}
+
+		$datos_reporte = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
+
+		$select = "ROUND(SUM(ncd.importe),2) AS IMPORTE, ROUND(SUM(ncd.cantidad),2) AS CANTIDAD";
+		$from = "notacreditodetalle ncd INNER JOIN notacredito nc ON ncd.notacredito_id = nc.notacredito_id";
+		foreach ($datos_reporte as $clave=>$valor) {
+			$tmp_producto_id = $valor["PRID"];
+			$where = "ncd.producto_id = {$tmp_producto_id} AND date_format(nc.fecha, '%Y%m') = '{$periodo_actual}'";
+			$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+			if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
+				$nuevo_valor_importe = $datos_reporte[$clave]['IMPORTE'] - $datos_notacredito[0]['IMPORTE'];
+				$nuevo_valor_cantidad = $datos_reporte[$clave]['CANTIDAD'] - $datos_notacredito[0]['CANTIDAD'];
+			} else {
+				$nuevo_valor_importe = 0;
+				$nuevo_valor_cantidad = 0;
+			}
+
+			$datos_reporte[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
+			$datos_reporte[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
+		}
+
+		switch ($tipo_descarga) {
+			case 1:
+				$datos_reporte = $this->view->order_collection_array($datos_reporte, 'IMPORTE', SORT_DESC);
+				break;
+			case 2:
+				$datos_reporte = $this->view->order_collection_array($datos_reporte, 'CANTIDAD', SORT_DESC);
+				break;
+		}
+
+		$array_encabezados = array('CÓDIGO', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		$sum_importe = 0;
+		foreach ($datos_reporte as $clave=>$valor) {
+			$sum_importe = $sum_importe + $valor["IMPORTE"];
+			$array_temp = array();
+			$array_temp = array(
+						  $valor["COD"]
+						, $valor["MARCA"]
+						, $valor["PRODUCTO"]
+						, $valor["CANTIDAD"]
+						, $valor["IMPORTE"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		$array_exportacion[] = array('', '', '', '', '');
+		$array_exportacion[] = array('', '', '', 'TOTAL', $sum_importe);
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;
 	}
