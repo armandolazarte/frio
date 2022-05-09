@@ -1152,7 +1152,7 @@ class PedidoVendedorController {
 		SessionHandler()->check_session();
 		$vendedor_id = $arg;
 
-		$select = "pv.pedidovendedor_id AS PEDVENID, CONCAT(date_format(pv.fecha, '%d/%m/%Y'), ' ', LEFT(pv.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, pv.subtotal AS SUBTOTAL, pv.importe_total AS IMPORTETOTAL, CASE pv.estadopedido WHEN 1 THEN 'inline-block' WHEN 2 THEN 'none' WHEN 3 THEN 'none' WHEN 4 THEN 'inline-block' WHEN 5 THEN 'none' END AS BTNAPROC, ep.denominacion AS LBLEST, CASE pv.estadopedido WHEN 1 THEN 'primary' WHEN 4 THEN 'warning' WHEN 5 THEN 'success' END AS CLAEST, LPAD(pv.pedidovendedor_id, 8, 0) AS NUMPED, cl.cliente_id AS CLIID";
+		$select = "pv.pedidovendedor_id AS PEDVENID, CONCAT(date_format(pv.fecha, '%d/%m/%Y'), ' ', LEFT(pv.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, pv.subtotal AS SUBTOTAL, pv.importe_total AS IMPORTETOTAL, CASE pv.estadopedido WHEN 1 THEN 'inline-block' WHEN 2 THEN 'none' WHEN 3 THEN 'none' WHEN 4 THEN 'inline-block' WHEN 5 THEN 'none' END AS BTNAPROC, ep.denominacion AS LBLEST, CASE pv.estadopedido WHEN 1 THEN 'primary' WHEN 4 THEN 'warning' WHEN 5 THEN 'success' END AS CLAEST, LPAD(pv.pedidovendedor_id, 8, 0) AS NUMPED, cl.cliente_id AS CLIID, CASE WHEN pv.estadopedido = 5 THEN 'inline-block' ELSE 'none' END AS BTNAIMPR";
 		$from = "pedidovendedor pv INNER JOIN cliente cl ON pv.cliente_id = cl.cliente_id INNER JOIN vendedor ve ON pv.vendedor_id = ve.vendedor_id INNER JOIN estadopedido ep ON pv.estadopedido = ep.estadopedido_id";
 		$where = "pv.vendedor_id = {$vendedor_id} AND pv.estadopedido IN (1,4,5) ORDER BY cl.razon_social ASC";
 		$pedidovendedor_collection = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select);
