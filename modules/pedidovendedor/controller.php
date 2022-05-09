@@ -1147,6 +1147,7 @@ class PedidoVendedorController {
 		header("Location: " . URL_APP . "/egreso/consultar/{$egreso_id}");
 	}
 
+	//PROCESO POR LOTE
 	function prepara_lote_vendedor($arg) {
 		SessionHandler()->check_session();
 		$vendedor_id = $arg;
@@ -1161,40 +1162,6 @@ class PedidoVendedorController {
 		$vm->get();
 
 		$this->view->prepara_lote_vendedor($pedidovendedor_collection, $vm);
-	}
-
-	function traer_pedidovendedor_procesolote_ajax($arg) {
-		SessionHandler()->check_session();
-		$pedidovendedor_id = $arg;
-		$this->model->pedidovendedor_id = $pedidovendedor_id;
-		$this->model->get();
-		$cliente_id = $this->model->cliente_id;
-
-		$cm = new Cliente();
-		$cm->cliente_id = $cliente_id;
-		$cm->get();
-		$this->model->tipofactura = $cm->tipofactura;
-		$this->model->condicioniva = $cm->condicioniva;
-
-		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
-		$groupby = "p.producto_id";
-		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
-
-		$select = "pvd.codigo_producto AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, p.costo AS COSTO, pvd.importe AS IMPORTE, pvd.pedidovendedordetalle_id AS PEDVENID, pvd.producto_id AS PRODUCTO, pvd.valor_descuento AS VD, p.iva AS IVA, p.porcentaje_ganancia AS VALGAN, p.flete AS FLETE";
-		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-		$where = "pvd.pedidovendedor_id = {$arg}";
-		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
-
-		$condicionpago_collection = Collector()->get('CondicionPago');
-		$condicioniva_collection = Collector()->get('CondicionIVA');
-		$tipofactura_collection = Collector()->get('TipoFactura');
-
-		foreach ($tipofactura_collection as $clave=>$valor) {
-			if ($valor->tipofactura_id > 3) unset($tipofactura_collection[$clave]);
-		}
-
-		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $this->model, $cm);
 	}
 
 	function guardar_linea_lote() {
@@ -1235,6 +1202,42 @@ class PedidoVendedorController {
 
 		header("Location: " . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}");
 	}
+
+	function traer_pedidovendedor_procesolote_ajax($arg) {
+		SessionHandler()->check_session();
+		$pedidovendedor_id = $arg;
+		$this->model->pedidovendedor_id = $pedidovendedor_id;
+		$this->model->get();
+		$cliente_id = $this->model->cliente_id;
+
+		$cm = new Cliente();
+		$cm->cliente_id = $cliente_id;
+		$cm->get();
+		$this->model->tipofactura = $cm->tipofactura;
+		$this->model->condicioniva = $cm->condicioniva;
+
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
+		$groupby = "p.producto_id";
+		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
+
+		$select = "pvd.codigo_producto AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, p.costo AS COSTO, pvd.importe AS IMPORTE, pvd.pedidovendedordetalle_id AS PEDVENID, pvd.producto_id AS PRODUCTO, pvd.valor_descuento AS VD, p.iva AS IVA, p.porcentaje_ganancia AS VALGAN, p.flete AS FLETE";
+		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "pvd.pedidovendedor_id = {$arg}";
+		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
+
+		$condicionpago_collection = Collector()->get('CondicionPago');
+		$condicioniva_collection = Collector()->get('CondicionIVA');
+		$tipofactura_collection = Collector()->get('TipoFactura');
+
+		foreach ($tipofactura_collection as $clave=>$valor) {
+			if ($valor->tipofactura_id > 3) unset($tipofactura_collection[$clave]);
+		}
+
+		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $this->model, $cm);
+	}
+
+	
 
 	function traer_cantidad_actual_ajax($arg) {
 		SessionHandler()->check_session();

@@ -225,6 +225,7 @@ class PedidoVendedorView extends View {
 		print $template;
 	}
 
+	//PROCESO POR LOTE
 	function prepara_lote_vendedor($pedidovendedor_collection, $obj_vendedor) {
 		$gui = file_get_contents("static/modules/pedidovendedor/prepara_lote_vendedor.html");
 		$tbl_pedidovendedor = file_get_contents("static/modules/pedidovendedor/tbl_prepara_lote_pedidovendedor_array.html");
