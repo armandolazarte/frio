@@ -1234,7 +1234,7 @@ class PedidoVendedorController {
 			if ($valor->tipofactura_id > 3) unset($tipofactura_collection[$clave]);
 		}
 
-		$select = "c.cliente_id AS CLIENTE_ID, CONCAT(c.codigo, ' - ', c.razon_social) AS RAZON_SOCIAL";
+		$select = "c.cliente_id AS CLIID, CONCAT(c.codigo, ' - ', c.razon_social) AS RAZON_SOCIAL";
 		$from = "cliente c";
 		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
