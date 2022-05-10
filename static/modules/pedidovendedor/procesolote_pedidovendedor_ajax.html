@@ -17,14 +17,18 @@
                     <center>Condición Pago</center>
                     <select class="form-control" id="condicionpago" name="condicionpago">
                         <option value="{condicionpago-condicionpago_id}">{condicionpago-denominacion}</option>
-                        {slt_condicionpago}
+                        <option value="1">CUENTA CORRIENTE</option>
+                        <option value="2">CONTADO</option>
                     </select>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="background: #337ab7; color: #fff; font-size: 14px; margin-bottom: 5px;  padding-bottom: 5px;">
                     <center>Tipo Factura</center>
                     <select class="form-control" id="tipofactura" name="tipofactura">
                         <option value="{tipofactura-tipofactura_id}">{tipofactura-nomenclatura} - {tipofactura-denominacion}</option>
-                        {slt_tipofactura}
+                        <option value="1">A - COMP. A</option>
+                        <option value="3">B - COMP. B</option>
+                        <option value="2">R - COMP. R</option>
+                        
                     </select>
                 </div>
                 <div class="col-lg-offset-8 col-lg-4 col-md-offset-9 col-md-4 col-sm-12 col-xs-12" style="background: #d9534f; color: #fff; font-size: 14px; margin-bottom: 5px; ">
