@@ -83,13 +83,12 @@
         var bodyTblProducto = document.getElementById('bodyTblProducto');
         var trTblProducto = document.getElementById("idTrTbl_" + pedidovendedordetalle_id);
         var tdTblTotal = document.getElementById("importe_" + pedidovendedordetalle_id);
-
-        /*
+        
         var totalProducto = tdTblTotal.value;
         var total_quitar = totalProducto;
-        var resultado_quitar = total_quitar;        
+        var resultado_quitar = total_quitar;
         
-
+        /*
         var div_array_egresos = document.getElementById('div_array_egresos');
         var input_producto_id = document.getElementById('producto_id_' + producto_id);
         var input_codigo = document.getElementById('codigo_' + producto_id);
@@ -101,15 +100,12 @@
         var input_descuento = document.getElementById('descuento_' + producto_id);
         var input_importe_descuento = document.getElementById('importe_descuento_' + producto_id);
         var input_costo_total = document.getElementById('costo_total_' + producto_id);
-        
+        */
         costo_base = parseFloat(costo_base) - parseFloat(total_quitar);
         subtotal = parseFloat(costo_base);
         
-        document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
-        document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
-        document.getElementById('input_subtotal').value = subtotal.toFixed(2);
-        document.getElementById('input_importe_total').value = subtotal.toFixed(2);
-        */
+        document.getElementById('lbl_ImporteTotal').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
+        document.getElementById('importe_total').value = subtotal.toFixed(2);
 
         bodyTblProducto.removeChild(trTblProducto);   
         /*
