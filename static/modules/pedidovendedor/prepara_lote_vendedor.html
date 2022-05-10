@@ -58,7 +58,14 @@
         var traerPedido = $.ajax({
             url: '{url_app}/pedidovendedor/traer_pedidovendedor_procesolote_ajax/' + pedidovendedor_id,
                 dataType: 'text',
-                async: false
+                async: false,
+                success: function(data) {
+                    jQuery(document).ready(function($){
+                        $(document).ready(function() {
+                            $('.cliente').select2();
+                        });
+                    });
+                }
         }).responseText;
 
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
