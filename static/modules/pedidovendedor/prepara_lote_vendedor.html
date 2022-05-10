@@ -59,12 +59,10 @@
             url: '{url_app}/pedidovendedor/traer_pedidovendedor_procesolote_ajax/' + pedidovendedor_id,
                 dataType: 'text',
                 async: false,
-                success: function(respuesta) {
-                    
-                        $(document).ready(function() {
-                            $('.slt_cliente').select2();
-                        });
-                    
+                success: function(data) {
+                    $(document).ajaxComplete(function() {
+                        $(document).find('slt_cliente').select2();
+                    });
                 }
         }).responseText;
 
