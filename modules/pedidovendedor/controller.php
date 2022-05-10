@@ -1234,7 +1234,12 @@ class PedidoVendedorController {
 			if ($valor->tipofactura_id > 3) unset($tipofactura_collection[$clave]);
 		}
 
-		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $this->model, $cm);
+		$select = "c.cliente_id AS CLIENTE_ID, LPAD(c.cliente_id, 5, 0) AS CODCLI, c.razon_social AS RAZON_SOCIAL, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO";
+		$from = "cliente c INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id";
+		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
+		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+
+		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $this->model, $cm);
 	}
 
 	
