@@ -133,7 +133,7 @@ class CierreHojaRutaController {
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 		$sum_importe = 0;
-		foreach ($datos_reporte as $clave=>$valor) {
+		foreach ($detallecierrehojaruta_collection as $clave=>$valor) {
 			$sum_importe = $sum_importe + $valor["IMPORTE"];
 			$array_temp = array();
 			$array_temp = array($valor["FACTURA"]
