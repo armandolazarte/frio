@@ -120,10 +120,12 @@ class CierreHojaRutaController {
             $where = "nc.egreso_id = {$egreso_id}";
             $importe_notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
             $importe_notacredito = (is_array($importe_notacredito) AND !empty($importe_notacredito)) ? $importe_notacredito[0]['IMPORTE'] : 0;
-            if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
-            if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ANULADO";
-            if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) $detallecierrehojaruta_collection[$clave]["TIPOENTREGA"] = "ANULADO";
-
+            if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) {
+            	$detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
+            	$detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ANULADO";
+            	$detallecierrehojaruta_collection[$clave]["TIPOENTREGA"] = "ANULADO";
+            }
+            
             if ($importe == 0 AND $estadoentrega == 'ENTREGADO') {
                 $detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "FIRMA";
             }
