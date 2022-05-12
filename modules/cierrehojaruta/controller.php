@@ -102,6 +102,7 @@ class CierreHojaRutaController {
 		$this->model->cierrehojaruta_id = $cierrehojaruta_id;
 		$this->model->get();
 		$hojaruta_id = $this->model->hojaruta_id;
+		$rendicion = $this->model->rendicion;
 
 		$select = "dchr.detallecierrehojaruta_id AS DCHRID, itp.denominacion AS TIPOPAGO, ee.denominacion AS ESTADOENTREGA, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, FORMAT(dchr.importe, 2,'de_DE') AS IMPORTE, e.egreso_id AS EGRID, e.importe_total AS EGRIMPTOT, dchr.tipoentrega AS TIPOENTREGA, c.razon_social AS CLIENTE";
     	$from = "detallecierrehojaruta dchr LEFT JOIN ingresotipopago itp ON dchr.ingresotipopago = itp.ingresotipopago_id LEFT JOIN estadoentrega ee ON dchr.estadoentrega = ee.estadoentrega_id LEFT JOIN egreso e ON dchr.egreso_id = e.egreso_id LEFT JOIN cliente c ON e.cliente = c.cliente_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
@@ -146,11 +147,9 @@ class CierreHojaRutaController {
 		}
 
 		$array_exportacion[] = array('', '', '', '', '', '');
-		$array_exportacion[] = array('', '', '', '', 'TOTAL', $sum_importe);
+		$array_exportacion[] = array('', '', '', '', 'TOTAL', '$' . $rendicion);
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
-		exit;
-
-    	
+		exit;    	
 	}
 }
 ?>
