@@ -245,8 +245,13 @@ class FacturaPDF extends View {
             $valor_descuento = $valor['DESCUENTO'] * $pvp / 100;
             //PVP MENOS DESCUENTO
             $pvp_descuento = round(($pvp - $valor_descuento), 2);
-
+            //UNITARIO CON DESCUENTO
             $egresodetalle_collection[$clave]['UNICONDES'] = round($pvp_descuento, 2);
+
+
+            //ACORTANDO DENOMINACION
+            $egresodetalle_collection[$clave]['DESCRIPCION'] = substr($egresodetalle_collection[$clave]['DESCRIPCION'], 0, 45);
+
         }
 
         $descuento_por_factura = $obj_egreso->descuento * $importe_total / 100;
