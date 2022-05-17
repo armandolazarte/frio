@@ -692,6 +692,7 @@ class HojaRutaController {
 
 			if ($egreso_id == 1082) {
 				print_r($dchrm);
+				exit;
 			}
 
 			$rendicion = $rendicion + $detallecierrehojaruta['IMPORTE'];
