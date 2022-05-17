@@ -538,6 +538,7 @@ class HojaRutaController {
 		foreach ($egreso_estadoentrega_array as $clave=>$valor) {
 			$detallecierrehojaruta = array();
 			$egreso_id = $clave;
+			print_r($egreso_id);exit;
 			$estadoentrega_id = $valor;
 			$array_egreso_ids[] = "{$egreso_id}@{$estadoentrega_id}";
 			$detallecierrehojaruta['EGRESO_ID'] = $egreso_id;
