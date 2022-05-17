@@ -552,10 +552,6 @@ class HojaRutaController {
 			//$importe_total = $em->importe_total;
 			$temp_cliente_id = $em->cliente->cliente_id;
 			$temp_importe_total = $em->importe_total;
-if ($egreso_id == 1082) {
-				print_r($em);
-				exit;
-			}
 			$select = "nc.importe_total AS IMPORTE";
             $from = "notacredito nc";
             $where = "nc.egreso_id = {$egreso_id}";
@@ -564,6 +560,10 @@ if ($egreso_id == 1082) {
             	$importe_notacredito = $importe_notacredito[0]['IMPORTE'];
 				$temp_importe_total = $temp_importe_total - $importe_notacredito;
             }
+			if ($egreso_id == 1082) {
+				print_r($em);
+				exit;
+			}
 
 			$select = "CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 			$from = "egreso e LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
