@@ -530,7 +530,7 @@ class HojaRutaController {
 		$chrm->rendicion = 0;
 		$chrm->hojaruta_id = $hojaruta_id;
 		$chrm->cobrador = $cobrador_id;
-		$chrm->save();
+		//$chrm->save();
 		$cierrehojaruta_id = $chrm->cierrehojaruta_id;
 		
 		$array_egreso_ids = array();
@@ -571,7 +571,7 @@ class HojaRutaController {
 			$eem->egresoentrega_id = $egresoentrega_id;
 			$eem->get();
 			$eem->estadoentrega = $estadoentrega_id;
-			$eem->save();
+			//$eem->save();
 
 			$estado_abonado = $egreso_abonado_array[$egreso_id];
 			if ($estado_abonado == 1) {
@@ -585,7 +585,7 @@ class HojaRutaController {
 						$em->egreso_id = $egreso_id;
 						$em->get();
 						$em->condicionpago = 1;
-						$em->save();
+						//$em->save();
 
 						$cccm = new CuentaCorrienteCliente();
 						$cccm->fecha = date('Y-m-d');
@@ -597,7 +597,7 @@ class HojaRutaController {
 						$cccm->tipomovimientocuenta = 1;
 						$cccm->estadomovimientocuenta = 1;
 						$cccm->cobrador = $cobrador_id;
-						$cccm->save();
+						//$cccm->save();
 
 						$cccma = new CuentaCorrienteCliente();
 						$cccma->fecha = date('Y-m-d');
@@ -610,7 +610,7 @@ class HojaRutaController {
 						$cccma->tipomovimientocuenta = 2;
 						$cccma->estadomovimientocuenta = 3;
 						$cccma->cobrador = $cobrador_id;
-						$cccma->save();
+						//$cccma->save();
 						$detallecierrehojaruta['IMPORTE'] = $egreso_monto_parcial_array[$egreso_id];
 					} else {
 						$tipoentrega = 'TOTAL';
@@ -640,7 +640,7 @@ class HojaRutaController {
 							$cccma->cuentacorrientecliente_id = $v['CCCID'];
 							$cccma->get();
 							$cccma->estadomovimientocuenta = 4;
-							$cccma->save();
+							//$cccma->save();
 						}
 
 						$cccma = new CuentaCorrienteCliente();
@@ -655,7 +655,7 @@ class HojaRutaController {
 						$cccma->tipomovimientocuenta = 2;
 						$cccma->estadomovimientocuenta = 4;
 						$cccma->cobrador = $cobrador_id;
-						$cccma->save();
+						//$cccma->save();
 						$detallecierrehojaruta['IMPORTE'] = $cccm->importe;
 					} else {
 						$tipoentrega = 'PARCIAL';
@@ -671,7 +671,7 @@ class HojaRutaController {
 						$cccma->tipomovimientocuenta = 2;
 						$cccma->estadomovimientocuenta = 3;
 						$cccma->cobrador = $cobrador_id;
-						$cccma->save();
+						//$cccma->save();
 						$detallecierrehojaruta['IMPORTE'] = $egreso_monto_parcial_array[$egreso_id];
 					}
 				}				
@@ -688,7 +688,9 @@ class HojaRutaController {
 			$dchrm->cierrehojaruta_id = $cierrehojaruta_id;
 			$dchrm->ingresotipopago = $detallecierrehojaruta['INGRESOTIPOPAGO_ID'];
 			$dchrm->estadoentrega = $detallecierrehojaruta['ESTADOENTREGA_ID'];
-			$dchrm->save();
+			//$dchrm->save();
+
+			if ($egreso_id == 1082) print_r($dchrm);
 
 			$rendicion = $rendicion + $detallecierrehojaruta['IMPORTE'];
 		}
@@ -698,13 +700,13 @@ class HojaRutaController {
 		$this->model->get();
 		$this->model->egreso_ids = $egreso_ids;
 		$this->model->estadoentrega = 7;
-		$this->model->save();
+		//$this->model->save();
 
 		$chrm = new CierreHojaRuta();
 		$chrm->cierrehojaruta_id = $cierrehojaruta_id;
 		$chrm->get();
 		$chrm->rendicion = round($rendicion, 2);
-		$chrm->save();
+		//$chrm->save();
 
 		header("Location: " . URL_APP . "/hojaruta/panel");
 	}
