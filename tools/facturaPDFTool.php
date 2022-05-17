@@ -250,7 +250,7 @@ class FacturaPDF extends View {
 
 
             //ACORTANDO DENOMINACION
-            $egresodetalle_collection[$clave]['DESCRIPCION'] = substr($egresodetalle_collection[$clave]['DESCRIPCION'], 0, 45);
+            $egresodetalle_collection[$clave]['DESCRIPCION'] = substr($egresodetalle_collection[$clave]['DESCRIPCION'], 0, 40);
 
         }
 
