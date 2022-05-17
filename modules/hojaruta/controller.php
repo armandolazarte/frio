@@ -561,7 +561,8 @@ class HojaRutaController {
 				$temp_importe_total = $temp_importe_total - $importe_notacredito;
             }
 			if ($egreso_id == 1082) {
-				print_r($em);
+				print_r($temp_importe_total);
+
 				exit;
 			}
 
