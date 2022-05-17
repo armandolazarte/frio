@@ -538,7 +538,7 @@ class HojaRutaController {
 		foreach ($egreso_estadoentrega_array as $clave=>$valor) {
 			$detallecierrehojaruta = array();
 			$egreso_id = $clave;
-			print_r($egreso_id);exit;
+			print_r($egreso_id);
 			$estadoentrega_id = $valor;
 			$array_egreso_ids[] = "{$egreso_id}@{$estadoentrega_id}";
 			$detallecierrehojaruta['EGRESO_ID'] = $egreso_id;
@@ -552,7 +552,10 @@ class HojaRutaController {
 			//$importe_total = $em->importe_total;
 			$temp_cliente_id = $em->cliente->cliente_id;
 			$temp_importe_total = $em->importe_total;
-
+if ($egreso_id == 1082) {
+				print_r($em);
+				exit;
+			}
 			$select = "nc.importe_total AS IMPORTE";
             $from = "notacredito nc";
             $where = "nc.egreso_id = {$egreso_id}";
@@ -691,7 +694,9 @@ class HojaRutaController {
 			$dchrm->estadoentrega = $detallecierrehojaruta['ESTADOENTREGA_ID'];
 			//$dchrm->save();
 
-			if ($egreso_id == 1082) print_r($dchrm);
+			if ($egreso_id == 1082) {
+				print_r($dchrm);
+			}
 
 			$rendicion = $rendicion + $detallecierrehojaruta['IMPORTE'];
 		}
