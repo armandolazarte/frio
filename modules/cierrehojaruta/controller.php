@@ -109,17 +109,24 @@ class CierreHojaRutaController {
     	$where = "dchr.cierrehojaruta_id = {$cierrehojaruta_id}";
     	$detallecierrehojaruta_collection = CollectorCondition()->get('DetalleCierreHojaRuta', $where, 4, $from, $select);
 
-        foreach ($detallecierrehojaruta_collection as $clave=>$valor) {
+    	$notacredito_array = array();
+		foreach ($detallecierrehojaruta_collection as $clave=>$valor) {
             $egreso_id = $valor['EGRID'];
             $importe_egreso = $valor['EGRIMPTOT'];
             $importe = $valor['IMPORTE'];
             $estadoentrega = $valor['ESTADOENTREGA'];
 
+            $select = "nc.fecha AS FECHA, CONCAT(tifa.nomenclatura, ' ', LPAD(nc.punto_venta, 4, 0), '-', LPAD(nc.numero_factura, 8, 0)) AS NOTCRE, CASE WHEN nc.emitido_afip = 0 THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS REFERENCIA, cl.razon_social AS CLIENTE, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, nc.importe_total AS IMPORTE, nc.notacredito_id AS NOTACREDITO_ID";
+			$from = "notacredito nc INNER JOIN egreso e ON nc.egreso_id = e.egreso_id INNER JOIN tipofactura tifa ON nc.tipofactura = tifa.tipofactura_id INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+			$where = "nc.egreso_id = {$egreso_id}";
+
+			/*
             $select = "nc.importe_total AS IMPORTE";
             $from = "notacredito nc";
-            $where = "nc.egreso_id = {$egreso_id}";
+            */
             $importe_notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
             $importe_notacredito = (is_array($importe_notacredito) AND !empty($importe_notacredito)) ? $importe_notacredito[0]['IMPORTE'] : 0;
+            if (is_array($importe_notacredito) AND !empty($importe_notacredito)) $notacredito_array[] = $importe_notacredito[0];
             if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) {
             	$detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
             	$detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ANULADO";
@@ -150,6 +157,20 @@ class CierreHojaRutaController {
 
 		$array_exportacion[] = array('', '', '', '', '', '');
 		$array_exportacion[] = array('', '', '', '', 'TOTAL', '$' . $rendicion);
+		$array_exportacion[] = array('', '', '', '', '', '');
+		$array_exportacion[] = array('NOTAS DE CRÉDITO', '', '', '', '', '');
+		$array_encabezados = array('COMPROBANTE', 'COMP REFERENCIA', 'CLIENTE', 'IMPORTE', '', '');
+		foreach ($notacredito_array as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["NOTCRE"]
+								, $valor["REFERENCIA"]
+								, $valor["CLIENTE"]
+								, '$' . $valor["IMPORTE"]
+								, ''
+								, '');
+			$array_exportacion[] = $array_temp;
+		}
+
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;    	
 	}
