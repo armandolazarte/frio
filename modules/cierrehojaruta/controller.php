@@ -124,9 +124,11 @@ class CierreHojaRutaController {
             $select = "nc.importe_total AS IMPORTE";
             $from = "notacredito nc";
             */
-            $importe_notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
-            $importe_notacredito = (is_array($importe_notacredito) AND !empty($importe_notacredito)) ? $importe_notacredito[0]['IMPORTE'] : 0;
-            if (is_array($importe_notacredito) AND !empty($importe_notacredito)) $notacredito_array[] = $importe_notacredito[0];
+            $rst_notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+
+            $importe_notacredito = (is_array($rst_notacredito) AND !empty($rst_notacredito)) ? $rst_notacredito[0]['IMPORTE'] : 0;
+            if (is_array($rst_notacredito) AND !empty($rst_notacredito)) $notacredito_array[] = $rst_notacredito[0];
+            
             if ($importe_notacredito > 0 AND $importe_notacredito >= $importe_egreso ) {
             	$detallecierrehojaruta_collection[$clave]["ESTADOENTREGA"] = "ANULADO";
             	$detallecierrehojaruta_collection[$clave]["TIPOPAGO"] = "ANULADO";
