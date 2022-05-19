@@ -216,7 +216,7 @@ class EgresoController {
 
 		$this->model->cliente->cliente_frecuencia = $this->model->cliente->frecuenciaventa->denominacion." (".$this->model->cliente->frecuenciaventa->dia_1."-".$this->model->cliente->frecuenciaventa->dia_2.")";
 
-		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, ed.neto_producto AS NETPRO, ed.valor_ganancia AS GANANCIA";
+		$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS BKDESCRIP, p.denominacion AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, ed.neto_producto AS NETPRO, ed.valor_ganancia AS GANANCIA";
 		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN
 				 productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "ed.egreso_id = {$egreso_id}";
