@@ -161,7 +161,7 @@ class CierreHojaRutaController {
 		$array_exportacion[] = array('', '', '', '', 'TOTAL', '$' . $rendicion);
 		$array_exportacion[] = array('', '', '', '', '', '');
 		$array_exportacion[] = array('NOTAS DE CRÉDITO', '', '', '', '', '');
-		$array_encabezados = array('COMPROBANTE', 'COMP REFERENCIA', 'CLIENTE', 'IMPORTE', '', '');
+		$array_exportacion[] = array('COMPROBANTE', 'COMP REFERENCIA', 'CLIENTE', 'IMPORTE', '', '');
 		foreach ($notacredito_array as $clave=>$valor) {
 			$array_temp = array();
 			$array_temp = array($valor["NOTCRE"]
