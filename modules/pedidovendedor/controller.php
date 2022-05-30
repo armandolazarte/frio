@@ -541,7 +541,7 @@ class PedidoVendedorController {
 			$importe_final = $total_pvp - $valor_descuento_recalculado;
 			$importe_final = round($importe_final, 2);
 
-			$pedidovendedordetalle_collection[$clave]['COSTO'] = round($pvp_factura, 4);
+			$pedidovendedordetalle_collection[$clave]['COSTO'] = round($pvp_factura, 2);
         	$pedidovendedordetalle_collection[$clave]['IMPORTE'] = $importe_final;
         	$pedidovendedordetalle_collection[$clave]['VD'] = $valor_descuento_recalculado;
 
