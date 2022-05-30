@@ -799,12 +799,13 @@ class EgresoController {
 			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
 			//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN CON LISTA DE PRECIO
 			$valor_por_listaprecio = $porcentaje_listaprecio * $costo_producto / 100;
+			/*
 			if ($condicion_listaprecio == '+') {
 				$pvp_factura = $pvp + $valor_por_listaprecio;						
 			} elseif ($condicion_listaprecio == '-') {
 				$pvp_factura = $pvp - $valor_por_listaprecio;
 			}
-			
+			*/
 			//IMPORTE NETO
 			$total_neto = $valor_neto * $cantidad;
 			//IMPORTE VENTA
