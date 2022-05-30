@@ -527,7 +527,7 @@ class PedidoVendedorController {
 			//IMPORTE NETO
 			$total_neto = $valor_neto * $cantidad;
 			//IMPORTE VENTA
-			$total_pvp = $pvp * $cantidad;
+			$total_pvp = $pvp_factura * $cantidad;
 
 			//DESCUENTO
 			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
