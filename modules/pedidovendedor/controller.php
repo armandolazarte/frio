@@ -1196,11 +1196,16 @@ class PedidoVendedorController {
 		$where = "pv.vendedor_id = {$vendedor_id} AND pv.estadopedido IN (1,4,5) ORDER BY cl.razon_social ASC";
 		$pedidovendedor_collection = CollectorCondition()->get('PedidoVendedor', $where, 4, $from, $select);
 		
+		$select = "p.producto_id AS PRODUCTO_ID, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, pc.denominacion AS CATEGORIA, p.codigo AS CODIGO, p.stock_minimo AS STMINIMO, p.stock_ideal AS STIDEAL, p.costo as COSTO, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, (((p.costo * p.porcentaje_ganancia)/100)+p.costo) AS VENTA";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productodetalle pd ON p.producto_id = pd.producto_id LEFT JOIN proveedor prv ON pd.proveedor_id = prv.proveedor_id";
+		$groupby = "p.producto_id";
+		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
+
 		$vm = new Vendedor();
 		$vm->vendedor_id = $vendedor_id;
 		$vm->get();
 
-		$this->view->prepara_lote_vendedor($pedidovendedor_collection, $vm);
+		$this->view->prepara_lote_vendedor($pedidovendedor_collection, $producto_collection, $vm);
 	}
 
 	function guardar_linea_lote() {

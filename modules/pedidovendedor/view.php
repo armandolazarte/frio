@@ -226,14 +226,19 @@ class PedidoVendedorView extends View {
 	}
 
 	//PROCESO POR LOTE
-	function prepara_lote_vendedor($pedidovendedor_collection, $obj_vendedor) {
+	function prepara_lote_vendedor($pedidovendedor_collection, $producto_collection, $obj_vendedor) {
 		$gui = file_get_contents("static/modules/pedidovendedor/prepara_lote_vendedor.html");
 		$tbl_pedidovendedor = file_get_contents("static/modules/pedidovendedor/tbl_prepara_lote_pedidovendedor_array.html");
 		$tbl_pedidovendedor = $this->render_regex_dict('TBL_PEDIDOVENDEDOR', $tbl_pedidovendedor, $pedidovendedor_collection);
+		$tbl_producto_array = file_get_contents("static/modules/pedidovendedor/tbl_producto_array.html");
+		$tbl_producto_array = $this->render_regex_dict('TBL_PRODUCTO', $tbl_producto_array, $producto_collection);
+		$tbl_producto_array = str_replace('<!--TBL_PRODUCTO-->', '', $tbl_producto_array);
+
 
 		unset($obj_vendedor->infocontacto_collection);
 		$obj_vendedor = $this->set_dict($obj_vendedor);
 		$render = str_replace('{tbl_pedidovendedor}', $tbl_pedidovendedor, $gui);
+		$render = str_replace('{tbl_producto}', $tbl_producto_array, $render);
 		$render = $this->render($obj_vendedor, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
