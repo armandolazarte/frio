@@ -65,6 +65,7 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_form_producto" style="display: none;"></div>
                 </div>
             </div>
         </div>
@@ -121,6 +122,57 @@
         document.getElementById('importe_' + pedidovendedordetalle_id).value = importe_total.toFixed(2);
         document.getElementById('importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Monto Total: $' + nuevo_pedidovenededor_importetotal.toFixed(2);
+    }
+
+    function seleccionarProducto(producto_id) {
+        ini_producto_id = producto_id;
+        document.getElementById('producto').value = producto_id;
+        var form_producto = $.ajax({
+            url: '{url_app}/pedidovendedor/traer_formulario_producto_ajax/' + producto_id + "@" + {pedidovendedor-pedidovendedor_id},
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById('div_form_producto').style.display = "block";
+        document.getElementById('div_form_producto').innerHTML = form_producto;
+        document.getElementById('div_lst_producto').style.display = "none";
+        document.getElementById('cantidad').focus();
+        actualizarCostoTotal();
+    }
+
+    function actualizarCostoTotal() {
+        if(ini_producto_id == 0) {
+            return false;
+        } else { 
+            var cantidad = document.getElementById('cantidad').value;
+            costo_producto = document.getElementById('costo').value;
+            if(cantidad == null || cantidad == undefined || cantidad == "") {
+                return false;
+            } else {
+                if (costo_producto == 0) {
+                    return false;
+                } else {
+                    var costo_total = parseFloat(cantidad) * parseFloat(costo_producto);
+                    var descuento = document.getElementById('descuento_producto').value;
+                    
+                    if (descuento != null && descuento.length != 0 && descuento != "" && descuento > 0) {
+                        var valor_descuento = parseFloat(descuento) * parseFloat(costo_total) / 100;
+                        costo_total = parseFloat(costo_total) - parseFloat(valor_descuento);
+                    }
+
+                    var iva_producto = document.getElementById('iva');
+                    var iva_producto_seleccionado = iva_producto.options[iva_producto.selectedIndex].value;
+                    if (iva_producto_seleccionado == 0) {
+                        var iva_original = document.getElementById('iva_original').value;
+                        iva_original = 1 + iva_original / 100; 
+                        costo_total = costo_total / iva_original;
+                    }
+
+                    costo_total = costo_total.toFixed(2);
+                    document.getElementById('costo_total').value = costo_total;
+                }
+            } 
+        } 
     }
 
     function quitarProducto(pedidovendedordetalle_id) {
