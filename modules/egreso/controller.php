@@ -1698,10 +1698,18 @@ class EgresoController {
 
 	function traer_formulario_producto_ajax($arg) {
 		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
-		$producto_id = $arg;
+		$ids = explode("@", $arg);
+		$producto_id = $ids[0];
+		$cliente_id = $ids[1];
 		$pm = new Producto();
 		$pm->producto_id = $producto_id;
 		$pm->get();
+
+		$cm = new Cliente();
+		$cm->cliente_id = $cliente_id;
+		$cm->get();
+		$condicion_listaprecio = $cm->listaprecio->condicion;
+		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
 
 		$iva = $pm->iva;
 		$neto = $pm->costo;
@@ -1711,7 +1719,16 @@ class EgresoController {
 		$valor_neto = $neto + ($flete * $neto / 100);
 		$valor_con_iva = $valor_neto + ($iva * $valor_neto / 100);
 		$pvp = $valor_con_iva + ($porcentaje_ganancia * $valor_con_iva / 100);
-		$pm->precio_venta = round($pvp, 2);
+		
+		//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN
+		$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
+		if ($condicion_listaprecio == '+') {
+			$pvp_factura = $pvp + $valor_por_listaprecio;						
+		} elseif ($condicion_listaprecio == '-') {
+			$pvp_factura = $pvp - $valor_por_listaprecio;
+		}
+
+		$pm->precio_venta = round($pvp_factura, 2);
 
 		$select = "MAX(s.stock_id) AS MAXID";
 		$from = "stock s";

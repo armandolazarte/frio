@@ -296,10 +296,11 @@
     }
 
     function seleccionarProducto(producto_id) {
+        cliente_id = document.getElementById('cliente').value;
         ini_producto_id = producto_id;
         document.getElementById('producto').value = producto_id;
         var form_producto = $.ajax({
-            url: '{url_app}/egreso/traer_formulario_producto_ajax/' + producto_id,
+            url: '{url_app}/egreso/traer_formulario_producto_ajax/' + producto_id + "@" + cliente_id,
                 dataType: 'text',
                 async: false
         }).responseText;
@@ -351,6 +352,13 @@
                 async: false
         }).responseText;
 
+        var condicionpago = $.ajax({
+            url: '{url_app}/egreso/traer_cliente_condicionpago_ajax/' + cliente_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById('div_condicion_pago').innerHTML = condicionpago;
         var elementos_cliente_listaprecio = cliente_listaprecio.split('@');
         var elementos_cliente = cliente.split('@');
         var elementos_vendedor = vendedor.split('@');
@@ -412,7 +420,7 @@
                 /*SE APLICA PORCENTAJE DE LISTA DE PRECIO*/
                 costo_listaprecio = document.getElementById('cliente_listaprecio').value;
                 cliente_condicion_listaprecio = document.getElementById('cliente_condicion_listaprecio').value;
-
+                /*
                 if (costo_listaprecio == 0) {
                     var valor_listaprecio = 0;
                 } else {
@@ -424,6 +432,7 @@
                 } else {
                     costo_total = parseFloat(txtCostoTotalOculto) - parseFloat(valor_listaprecio);
                 }
+                */
                 
                 costo_total = costo_total.toFixed(2);
 
@@ -625,6 +634,7 @@
                     document.getElementById('costo_total_oculto').value = costo_total;
 
                     /*SE APLICA PORCENTAJE DE LISTA DE PRECIO*/
+                    /*
                     if (costo_listaprecio == 0) {
                         var valor_listaprecio = 0;
                     } else {
@@ -636,6 +646,7 @@
                     }else {
                       costo_total = parseFloat(costo_total) - parseFloat(valor_listaprecio);
                     }
+                    */
 
                     costo_total = costo_total.toFixed(2);
                     document.getElementById('costo_total').value = costo_total;
