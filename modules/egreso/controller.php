@@ -667,8 +667,8 @@ class EgresoController {
 
 	function guardar() {
 		SessionHandler()->check_session();
-		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
 		
 		$com = new Configuracion();
 		$com->configuracion_id = 1;
@@ -794,7 +794,7 @@ class EgresoController {
 			
 			//PRECIO NETO
 			$valor_neto = $neto + ($iva * $neto / 100);
-			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
 			//PRECIO VENTA
 			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
 			//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN CON LISTA DE PRECIO
@@ -966,7 +966,7 @@ class EgresoController {
 					}
 				}	
 			}
-
+			
 			header("Location: " . URL_APP . "/egreso/consultar/{$egreso_id}");
 		} else {
 			header("Location: " . URL_APP . "/egreso/listar/{$flag_error}");
