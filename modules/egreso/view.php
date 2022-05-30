@@ -431,6 +431,22 @@ class EgresoView extends View {
 		print $gui_tbl_producto;
 	}
 
+	function traer_cliente_condicionpago_ajax($condicionpago_collection, $habilita_cuenta_corriente) {
+		switch ($habilita_cuenta_corriente) {
+			case 0:
+				$gui = file_get_contents("static/modules/egreso/slt_condicionpago_contado_ajax.html");
+				break;
+			case 1:
+				$gui = file_get_contents("static/modules/egreso/slt_condicionpago_ajax.html");
+				$gui_slt_condicionpago = file_get_contents("static/common/slt_condicionpago.html");
+				$gui_slt_condicionpago = $this->render_regex('SLT_CONDICIONPAGO', $gui_slt_condicionpago, $condicionpago_collection);
+				$gui = str_replace('slt_condicionpago', $gui_slt_condicionpago, $gui);
+				break;
+		}
+		
+		print $gui;
+	}
+
 	function traer_formulario_entrega_ajax($flete_collection, $obj_egreso) {
 		$gui = file_get_contents("static/modules/egreso/formulario_programar_entrega_ajax.html");
 		$gui_slt_flete = file_get_contents("static/common/slt_flete.html");
