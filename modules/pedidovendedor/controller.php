@@ -155,6 +155,7 @@ class PedidoVendedorController {
 		$this->model->pedidovendedor_id = $pedidovendedor_id;
 		$this->model->get();
 		$vendedor_id = $this->model->vendedor_id;
+		$cliente_id = $this->model->cliente_id;
 
 		$select = "uv.usuario_id AS ID";
 		$from = "usuariovendedor uv";
@@ -162,9 +163,34 @@ class PedidoVendedorController {
 		$usuario_id = CollectorCondition()->get('UsuarioVendedor', $where, 4, $from, $select);
 		$usuario_id = (is_array($usuario_id) AND !empty($usuario_id)) ? $usuario_id[0]['ID'] : 0;
 
+		$cm = new Cliente();
+		$cm->cliente_id = $cliente_id;
+		$cm->get();
+		$condicion_listaprecio = $cm->listaprecio->condicion;
+		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
+
 		$pm = new Producto();
 		$pm->producto_id = $producto_id;
 		$pm->get();
+
+		$iva = $pm->iva;
+		$neto = $pm->costo;
+		$flete = $pm->flete;
+		$porcentaje_ganancia = $pm->porcentaje_ganancia;
+		
+		$valor_neto = $neto + ($flete * $neto / 100);
+		$valor_con_iva = $valor_neto + ($iva * $valor_neto / 100);
+		$pvp = $valor_con_iva + ($porcentaje_ganancia * $valor_con_iva / 100);
+
+		//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN
+		$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
+		if ($condicion_listaprecio == '+') {
+			$pvp_factura = $pvp + $valor_por_listaprecio;						
+		} elseif ($condicion_listaprecio == '-') {
+			$pvp_factura = $pvp - $valor_por_listaprecio;
+		}
+
+		$pm->precio_venta = round($pvp_factura, 2);
 
 		if ($usuario_id == 0) {
 			$select = "MAX(s.stock_id) AS MAXID";
