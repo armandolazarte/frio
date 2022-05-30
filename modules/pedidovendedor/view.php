@@ -181,7 +181,7 @@ class PedidoVendedorView extends View {
 				$costo_iva = (($costo_flete * $valor['IVA']) / 100) + $costo_flete;
 				$valor_ganancia = $costo_iva * $valor['VALGAN'] / 100;
 				$valor_venta = $costo_iva + $valor_ganancia;
-				//$pedidovendedordetalle_collection[$clave]['COSTO'] = round($valor_venta, 2);
+				$pedidovendedordetalle_collection[$clave]['COSTO'] = round($valor_venta, 2);
 				$array_producto_ids[] = '"' . $valor['PRODUCTO'] . '"';
 			}
 			
