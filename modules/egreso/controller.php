@@ -1719,8 +1719,7 @@ class EgresoController {
 		$cm->get();
 		$condicion_listaprecio = $cm->listaprecio->condicion;
 		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
-		print_r($porcentaje_listaprecio);exit;
-
+		
 		$iva = $pm->iva;
 		$neto = $pm->costo;
 		$flete = $pm->flete;
