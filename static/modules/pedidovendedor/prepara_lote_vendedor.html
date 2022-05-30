@@ -49,7 +49,7 @@
             </div>
             <div class="x_content">
                 <div class=" form">
-                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_lst_producto">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_lst_producto" style="display: none;">
                         <label>Producto</label>
                         <table id="tbl_producto" class="table table-striped table-bordered">
                             <thead>
@@ -95,6 +95,8 @@
         } );
     });
 
+    var temp_pedidovendedor_id = 0;
+
     function traerPedido(pedidovendedor_id) {
         var traerPedido = $.ajax({
             url: '{url_app}/pedidovendedor/traer_pedidovendedor_procesolote_ajax/' + pedidovendedor_id,
@@ -102,7 +104,11 @@
                 async: false
         }).responseText;
 
+        $temp_pedidovendedor_id = pedidovendedor_id;
+
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
+        document.getElementById('div_lst_producto').style.display = 'block';
+        document.getElementById('div_form_producto').style.display = 'none';
     }
 
     function calculaMontoTotal(pedidovendedordetalle_id) {
@@ -128,7 +134,7 @@
         ini_producto_id = producto_id;
         document.getElementById('producto').value = producto_id;
         var form_producto = $.ajax({
-            url: '{url_app}/pedidovendedor/traer_formulario_producto_ajax/' + producto_id + "@" + {pedidovendedor-pedidovendedor_id},
+            url: '{url_app}/pedidovendedor/traer_formulario_producto_ajax/' + producto_id + "@" + temp_pedidovendedor_id,
                 dataType: 'text',
                 async: false
         }).responseText;
