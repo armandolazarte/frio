@@ -1695,6 +1695,15 @@ class EgresoController {
 		$flete_collection = Collector()->get('Flete');
 		$this->view->traer_formulario_entrega_ajax($flete_collection, $this->model);
 	}
+	
+	function traer_cliente_condicionpago_ajax($arg) {
+		$cm = new Cliente();
+		$cm->cliente_id = $arg;
+		$cm->get();
+		$habilita_cuenta_corriente = $cm->habilita_cuenta_corriente;
+		$condicionpago_collection = Collector()->get('CondicionPago');
+		$this->view->traer_cliente_condicionpago_ajax($condicionpago_collection, $habilita_cuenta_corriente);
+	}
 
 	function traer_formulario_producto_ajax($arg) {
 		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
