@@ -876,6 +876,8 @@ class PedidoVendedorController {
 		$cm = new Cliente();
 		$cm->cliente_id = $cliente_id;
 		$cm->get();
+		$condicion_listaprecio = $cm->listaprecio->condicion;
+		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
 		$flete_id = $cm->flete->flete_id;
 
 		$fecha_entrega = strtotime('+1 day', strtotime($fecha));
@@ -960,7 +962,7 @@ class PedidoVendedorController {
 			//IMPORTE NETO
 			$total_neto = $valor_neto * $cantidad;
 			//IMPORTE VENTA
-			$total_pvp = $pvp * $cantidad;
+			$total_pvp = $costo_producto * $cantidad;
 
 			//DESCUENTO
 			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
@@ -981,7 +983,7 @@ class PedidoVendedorController {
 			$edm->valor_descuento = round($valor_descuento_recalculado, 2);
 			$edm->descuento = $descuento;
 			$edm->neto_producto = $neto;
-			$edm->costo_producto = round($pvp, 2);
+			$edm->costo_producto = round($costo_producto, 2);
 			$edm->iva = $iva;
 			$edm->importe = $importe_final;
 			$edm->valor_ganancia = $ganancia_final;
