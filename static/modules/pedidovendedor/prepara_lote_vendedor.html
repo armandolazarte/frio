@@ -70,8 +70,6 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_visor_form_producto">
-    </div>
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="div_visor_pedidovendedor"></div>    
 </div>
 
@@ -139,13 +137,13 @@
                 async: false
         }).responseText;
 
-        document.getElementById('div_form_producto').style.display = "block";
         document.getElementById('div_form_producto').innerHTML = form_producto;
+        document.getElementById('div_form_producto').style.display = "block";
         document.getElementById('div_lst_producto').style.display = "none";
         document.getElementById('cantidad').focus();
         actualizarCostoTotal();
     }
-    /*
+    
     function actualizarCostoTotal() {
         if(ini_producto_id == 0) {
             return false;
@@ -180,7 +178,7 @@
             } 
         } 
     }
-    */
+    
     function quitarProducto(pedidovendedordetalle_id) {
         var viejo_importe_total = document.getElementById('importe_total').value;
         var bodyTblProducto = document.getElementById('bodyTblProducto');
