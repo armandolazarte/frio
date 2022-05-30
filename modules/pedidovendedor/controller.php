@@ -155,6 +155,7 @@ class PedidoVendedorController {
 		$this->model->pedidovendedor_id = $pedidovendedor_id;
 		$this->model->get();
 		$vendedor_id = $this->model->vendedor_id;
+		$cliente_id = $this->model->cliente_id;
 
 		$select = "uv.usuario_id AS ID";
 		$from = "usuariovendedor uv";
