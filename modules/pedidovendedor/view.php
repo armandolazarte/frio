@@ -248,6 +248,7 @@ class PedidoVendedorView extends View {
 	function traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $obj_pedidovendedor, $obj_cliente) {
 		$gui = file_get_contents("static/modules/pedidovendedor/procesolote_pedidovendedor_ajax.html");
 		$tbl_pedidovendedordetalle = file_get_contents("static/modules/pedidovendedor/tbl_procesolote_pedidovendedordetalle.html");
+		$hidden_editar_pedidovendedordetalle_array = file_get_contents("static/modules/pedidovendedor/hidden_editar_pedidovendedordetalle_array.html");
 		$slt_cliente = file_get_contents("static/common/slt_cliente_pedidovendedor.html");
 		$slt_cliente = $this->render_regex_dict('SLT_CLIENTE', $slt_cliente, $cliente_collection);
 		$slt_cliente = str_replace('<!--SLT_CLIENTE-->', '', $slt_cliente);
@@ -259,16 +260,18 @@ class PedidoVendedorView extends View {
 				$costo_iva = (($costo_flete * $valor['IVA']) / 100) + $costo_flete;
 				$valor_ganancia = $costo_iva * $valor['VALGAN'] / 100;
 				$valor_venta = $costo_iva + $valor_ganancia;
-				$pedidovendedordetalle_collection[$clave]['COSTO'] = round($valor_venta, 2);
+				//$pedidovendedordetalle_collection[$clave]['COSTO'] = round($valor_venta, 2);
 				$array_producto_ids[] = '"' . $valor['PRODUCTO'] . '"';
 			}
 			
 			$array_producto_ids = implode(',', $array_producto_ids);
 			$obj_pedidovendedor->array_producto_ids = $array_producto_ids;
 
-			$tbl_pedidovendedordetalle = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_pedidovendedordetalle, $pedidovendedordetalle_collection);
-			$tbl_pedidovendedordetalle = str_replace('<!--TBL_PEDIDOVENDEDORDETALLE-->', '', $tbl_pedidovendedordetalle);
+			$tbl_editar_pedidovendedordetalle_array = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_editar_pedidovendedordetalle_array, $pedidovendedordetalle_collection);
+			$tbl_editar_pedidovendedordetalle_array = str_replace('<!--TBL_PEDIDOVENDEDORDETALLE-->', '', $tbl_editar_pedidovendedordetalle_array);
 			
+			$hidden_editar_pedidovendedordetalle_array = $this->render_regex_dict('HDN_PEDIDOVENDEDORDETALLE', $hidden_editar_pedidovendedordetalle_array, $pedidovendedordetalle_collection);
+			$hidden_editar_pedidovendedordetalle_array = str_replace('<!--HDN_PEDIDOVENDEDORDETALLE-->', '', $hidden_editar_pedidovendedordetalle_array);
 			$costo_base = 0;
 			foreach ($pedidovendedordetalle_collection as $clave=>$valor) $costo_base = $costo_base + $valor['IMPORTE'];
 			$obj_pedidovendedor->costo_base = $costo_base;
@@ -288,6 +291,7 @@ class PedidoVendedorView extends View {
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($obj_pedidovendedor, $render);
 		$render = str_replace('{slt_cliente}', $slt_cliente, $render);
+		$render = str_replace('{hidden_editar_pedidovendedordetalle_array}', $hidden_editar_pedidovendedordetalle_array, $render);
 		$render = str_replace('{url_app}', URL_APP, $render);
 		print $render;
 	}

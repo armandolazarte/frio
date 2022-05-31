@@ -1270,6 +1270,88 @@ class PedidoVendedorController {
 		$where = "pvd.pedidovendedor_id = {$arg}";
 		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
 
+		$importe_total_control = 0;
+		$flag_error = 0;
+		foreach ($pedidovendedordetalle_collection as $clave=>$valor) {
+			$producto_id = $valor['PRODUCTO'];
+			$costo = $valor['COSTO'];
+			$flete = $valor['FLETE'];
+			$ganancia = $valor['VALGAN'];
+			$cantidad = $valor['CANTIDAD'];
+			$descuento = $valor['DESCUENTO'];
+			$iva = $valor['IVA'];
+
+			$pm = new Producto();
+			$pm->producto_id = $producto_id;
+			$pm->get();
+
+			$iva = $pm->iva;
+			$neto = $pm->costo;
+			$flete = $pm->flete;
+			$porcentaje_ganancia = $pm->porcentaje_ganancia;
+			
+			//PRECIO NETO
+			$valor_neto = $neto + ($iva * $neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+			//PRECIO VENTA
+			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+
+			//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN
+			$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
+			if ($condicion_listaprecio == '+') {
+				$pvp_factura = $pvp + $valor_por_listaprecio;						
+			} elseif ($condicion_listaprecio == '-') {
+				$pvp_factura = $pvp - $valor_por_listaprecio;
+			}
+			
+			//IMPORTE NETO
+			$total_neto = $valor_neto * $cantidad;
+			//IMPORTE VENTA
+			$total_pvp = $pvp_factura * $cantidad;
+
+			//DESCUENTO
+			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
+
+			//GANANCIA FINAL
+			$ganancia = round(($total_pvp - $total_neto),2);
+			$ganancia_final = $ganancia - $valor_descuento_recalculado;
+			$ganancia_final = round($ganancia_final, 2);
+
+			//IMPORTE FINAL
+			$importe_final = $total_pvp - $valor_descuento_recalculado;
+			$importe_final = round($importe_final, 2);
+
+			$pedidovendedordetalle_collection[$clave]['COSTO'] = round($pvp_factura, 2);
+        	$pedidovendedordetalle_collection[$clave]['IMPORTE'] = $importe_final;
+        	$pedidovendedordetalle_collection[$clave]['VD'] = $valor_descuento_recalculado;
+
+        	$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
+			$groupby = "s.producto_id";
+			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
+
+			$sm = new Stock();
+			$sm->stock_id = $stockid_collection[0]['STOCK_ID'];
+			$sm->get();
+			
+			$cantidad_actual = $sm->cantidad_actual;
+
+			if ($cantidad > $cantidad_actual) {
+				$pedidovendedordetalle_collection[$clave]["CLASS_ROW"] = 'danger';
+				$flag_error = 1;
+			} else {
+				$pedidovendedordetalle_collection[$clave]["CLASS_ROW"] = '';
+			}
+
+			$importe_total_control = $importe_total_control + $importe_final;
+		}
+
+		if ($importe_total != $importe_total_control) {
+			$this->model->importe_total = $importe_total_control;
+			$this->model->subtotal = $importe_total_control;
+		}
+
 		$condicionpago_collection = Collector()->get('CondicionPago');
 		$condicioniva_collection = Collector()->get('CondicionIVA');
 		$tipofactura_collection = Collector()->get('TipoFactura');
