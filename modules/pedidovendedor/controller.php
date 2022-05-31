@@ -2119,9 +2119,19 @@ class PedidoVendedorController {
 
 	function descargar_factura_lote($arg) {
 		require_once 'core/helpers/filehandler.php';
-		$archivo = "facturas/egresos/Factura-{$arg}";
-		//print_r($archivo);exit;
+		$ids = explode('@', $arg);
+		$pedidovendedor_id = $ids[0];
+		$egreso_id = $ids[1];
+
+		$this->model->pedidovendedor_id = $pedidovendedor_id;
+		$this->model->get();
+		$vendedor_id = $this->model->vendedor_id;
+		$this->model->estadopedido = 2;
+		$this->model->save();
+
+		$archivo = "facturas/egresos/Factura-{$egreso_id}";
 		FileHandler::get_file($archivo);
+		header("Location: " . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}");
 	}
 
 	function ejecuta_proceso_lote() {
