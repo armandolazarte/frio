@@ -2117,7 +2117,7 @@ class PedidoVendedorController {
 		}
 	}
 
-	function descargar_factura_lote() {
+	function descargar_factura_lote($arg) {
 		require_once 'core/helpers/file.php';
 
 	}
