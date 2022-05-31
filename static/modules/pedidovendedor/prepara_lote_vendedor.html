@@ -117,7 +117,7 @@
 
         temp_pedidovendedor_id = pedidovendedor_id;
         console.log(traerArrayProductos);
-        array_ids = traerArrayProductos;
+        array_ids = traerArrayProductos.split(',');
 
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
         document.getElementById('div_lst_producto').style.display = 'block';
