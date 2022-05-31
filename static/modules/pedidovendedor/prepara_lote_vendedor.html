@@ -469,17 +469,13 @@
         
     }
     
-    function quitarProducto(pedidovendedordetalle_id) {
-        var viejo_importe_total = document.getElementById('importe_total').value;
+    function quitarProducto(producto_id) {
+        var viejo_importe_total = document.getElementById('input_importe_total').value;
         var bodyTblProducto = document.getElementById('bodyTblProducto');
-        var trTblProducto = document.getElementById("idTrTbl_" + pedidovendedordetalle_id);
-        var tdTblTotal = document.getElementById("importe_" + pedidovendedordetalle_id);
+        var trTblProducto = document.getElementById("idTrTbl_" + producto_id);
+        var tdTblTotal = document.getElementById("tdImporte_" + producto_id);
+        var resultado_quitar = tdTblTotal.value;
         
-        var totalProducto = tdTblTotal.value;
-        var total_quitar = totalProducto;
-        var resultado_quitar = total_quitar;
-        
-        /*
         var div_array_egresos = document.getElementById('div_array_egresos');
         var input_producto_id = document.getElementById('producto_id_' + producto_id);
         var input_codigo = document.getElementById('codigo_' + producto_id);
@@ -491,13 +487,13 @@
         var input_descuento = document.getElementById('descuento_' + producto_id);
         var input_importe_descuento = document.getElementById('importe_descuento_' + producto_id);
         var input_costo_total = document.getElementById('costo_total_' + producto_id);
-        */
+        
         var nuevo_importe_total = parseFloat(viejo_importe_total) - parseFloat(total_quitar);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Importe Total: $' + nuevo_importe_total.toFixed(2);
-        document.getElementById('importe_total').value = nuevo_importe_total.toFixed(2);
+        document.getElementById('input_importe_total').value = nuevo_importe_total.toFixed(2);
+        document.getElementById('input_subtotal').value = nuevo_importe_total.toFixed(2);
 
         bodyTblProducto.removeChild(trTblProducto);   
-        /*
         div_array_egresos.removeChild(input_producto_id);
         div_array_egresos.removeChild(input_codigo);
         div_array_egresos.removeChild(input_descripcion);
@@ -513,10 +509,10 @@
         var control_importe_total = 0;
         var flag = 0;
         for (i=0; fila = tab.getElementsByTagName('tr')[i]; i++) {
-            var cant_temporal = fila.getElementsByTagName('td')[1].innerHTML;
             var producto_id_temporal_array = tab.rows[i].getAttribute('id');
             producto_id_temporal_array = producto_id_temporal_array.split('_');
             var producto_id_temporal = producto_id_temporal_array[1];
+            var cant_temporal = document.getElementById('tdCantidad_' + producto_id_temporal).value;
 
             var cantidad_actual = $.ajax({
                 url: '{url_app}/pedidovendedor/traer_cantidad_actual_ajax/' + producto_id_temporal,
@@ -532,22 +528,21 @@
             }
 
             //PARA CONTROL DE VALORES
-            var subtotal_tabla = fila.getElementsByTagName('td')[4].innerHTML;
-            subtotal_tabla = subtotal_tabla.replace(quitar, '');
+            var subtotal_tabla = document.getElementById('tdImporte_' + producto_id_temporal).value;
             control_importe_total = control_importe_total + parseFloat(subtotal_tabla);
-
-            var subtotal_input = document.getElementById('costo_total_' + producto_id_temporal).value;
+            var subtotal_input = document.getElementById('costo_total_' + producto_id_temporal).value;            
+            /*
             if (parseFloat(subtotal_tabla) != parseFloat(subtotal_input)) {
                 document.getElementById('costo_total_' + producto_id_temporal).value = subtotal_tabla.toFixed(2);
             }
+            */            
         }
 
         if (parseFloat(control_importe_total.toFixed(2)) != parseFloat(subtotal.toFixed(2))) {
-            document.getElementById('subtotal').innerHTML = 'Subtotal: $' + control_importe_total.toFixed(2);
-            document.getElementById('importe_total').innerHTML = 'Importe Total: $' + control_importe_total.toFixed(2);
+            costo_base = control_importe_total;
+            document.getElementById('lbl_ImporteTotal').innerHTML = 'Importe Total: $' + control_importe_total.toFixed(2);
             document.getElementById('input_subtotal').value = control_importe_total.toFixed(2);
             document.getElementById('input_importe_total').value = control_importe_total.toFixed(2);
         }
-        */
     }
 </script>
