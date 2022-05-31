@@ -276,11 +276,6 @@
 
                 var txtDescripcion = document.createTextNode(descripcion); 
                 tdTblDescripcion.appendChild(txtDescripcion);
-                //var txtCantidad = document.createTextNode(cantidad); 
-                //var txtCosto = document.createTextNode(" $" + costo); 
-                //var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
-                //var txtCostoTotal = document.createTextNode(" $" + costo_total); 
-                
                 tdTblCantidad.appendChild(tdTblInputCantidad);
                 tdTblCosto.appendChild(tdTblInputCosto);
                 tdTblDescuento.appendChild(tdTblInputDescuento);
@@ -386,13 +381,13 @@
                 tdInputTotal.value = costo_total;
 
                 //SUSTITUYE VALORES EN INPUTS HIDDEN
-                /*
                 document.getElementById("cantidad_" + producto_id).value = cantidad;
                 document.getElementById("descuento_" + producto_id).value = descuento;
                 document.getElementById("importe_descuento_" + producto_id).value = importe_descuento;
                 document.getElementById("costo_" + producto_id).value = costo;
                 document.getElementById("costo_total_" + producto_id).value = costo_total;
                 
+                /*
                 costo_final = 0;
                 costo_base = parseFloat(costo_base) - parseFloat(old_total);
                 costo_base = parseFloat(costo_base) + parseFloat(costo_total);
