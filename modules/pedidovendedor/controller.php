@@ -1440,7 +1440,7 @@ class PedidoVendedorController {
 		$verificar_remito = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
 
 		if (is_array($verificar_remito)) $num_factura = $this->siguiente_remito();
-		$fecha = filter_input(INPUT_POST, 'fecha');
+		$fecha = date('Y-m-d');
 		$hora = date('H:i:s');
 		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
 		$comprobante .= str_pad($num_factura, 8, '0', STR_PAD_LEFT);
