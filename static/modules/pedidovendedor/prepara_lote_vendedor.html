@@ -234,7 +234,7 @@
                 tdTblInputCosto.setAttribute("class", "form-control");
                 tdTblInputCosto.setAttribute("readonly", "readonly");
 
-                var tdTblImporteDescuento = document.createElement("td");
+                var tdTblDescuento = document.createElement("td");
                 var tdTblInputDescuento = document.createElement("input");
                 tdTblInputDescuento.setAttribute("id", "descuento_" + producto_id);
                 tdTblInputDescuento.setAttribute("type", "number");
@@ -242,10 +242,14 @@
                 tdTblInputDescuento.setAttribute("value", descuento);
                 tdTblInputDescuento.setAttribute("class", "form-control");
 
-                tdTblImporteDescuento.setAttribute("id", "idTdImporteDescuento_" + producto_id);
                 var tdTblTotal = document.createElement("td");
-                tdTblTotal.setAttribute("id", "idTdTotal_" + producto_id);
-
+                var tdTblInputTotal = document.createElement("input");
+                tdTblInputTotal.setAttribute("id", "importe_" + producto_id);
+                tdTblInputTotal.setAttribute("type", "number");
+                tdTblInputTotal.setAttribute("step", "0.01");
+                tdTblInputTotal.setAttribute("value", costo_total);
+                tdTblInputTotal.setAttribute("class", "form-control");
+                
                 var btnQuitar = document.createElement("a");
                 btnQuitar.setAttribute("href", "#");
                 btnQuitar.setAttribute("id", "btnQuitar_" + producto_id);
@@ -256,23 +260,23 @@
                 btnQuitar.appendChild(iconQuitar);
 
                 var txtDescripcion = document.createTextNode(descripcion); 
+                tdTblDescripcion.appendChild(txtDescripcion);
                 //var txtCantidad = document.createTextNode(cantidad); 
                 //var txtCosto = document.createTextNode(" $" + costo); 
-                var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
-                var txtCostoTotal = document.createTextNode(" $" + costo_total); 
+                //var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
+                //var txtCostoTotal = document.createTextNode(" $" + costo_total); 
                 
-                tdTblDescripcion.appendChild(txtDescripcion);
                 
                 tdTblCantidad.appendChild(tdTblInputCantidad);
                 tdTblCosto.appendChild(tdTblInputCosto);
-                tdTblImporteDescuento.appendChild(txtImporteDescuento);
-                tdTblTotal.appendChild(txtCostoTotal);
+                tdTblDescuento.appendChild(tdTblImporteDescuento);
+                tdTblTotal.appendChild(tdTblInputTotal);
                 tdTblBtnQuitar.appendChild(btnQuitar);
 
                 trTblProducto.appendChild(tdTblDescripcion);
                 trTblProducto.appendChild(tdTblCantidad);
                 trTblProducto.appendChild(tdTblCosto);
-                trTblProducto.appendChild(tdTblImporteDescuento);
+                trTblProducto.appendChild(tdTblDescuento);
                 trTblProducto.appendChild(tdTblTotal);
                 trTblProducto.appendChild(tdTblBtnQuitar);
 
