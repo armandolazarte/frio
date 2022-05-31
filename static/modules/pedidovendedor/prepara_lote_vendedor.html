@@ -115,12 +115,12 @@
         document.getElementById('div_form_producto').style.display = 'none';
     }
 
-    function calculaMontoTotal(pedidovendedordetalle_id) {
+    function calculaMontoTotal(producto_id) {
         var pedidovendedor_importe_total = document.getElementById('importe_total').value;
-        var cantidad = document.getElementById('cantidad_' + pedidovendedordetalle_id).value;
-        var costo = document.getElementById('costo_' + pedidovendedordetalle_id).value;
-        var descuento = document.getElementById('descuento_' + pedidovendedordetalle_id).value;
-        var importe = document.getElementById('importe_' + pedidovendedordetalle_id).value;
+        var cantidad = document.getElementById('cantidad_' + producto_id).value;
+        var costo = document.getElementById('costo_' + producto_id).value;
+        var descuento = document.getElementById('descuento_' + producto_id).value;
+        var importe = document.getElementById('importe_' + producto_id).value;
 
         var subtotal = parseFloat(cantidad) * parseFloat(costo);
         var valor_descuento = (parseFloat(descuento) * parseFloat(subtotal)) / 100;
@@ -129,7 +129,7 @@
         var nuevo_pedidovenededor_importetotal = parseFloat(pedidovendedor_importe_total) - parseFloat(importe);
         nuevo_pedidovenededor_importetotal = parseFloat(nuevo_pedidovenededor_importetotal) + parseFloat(importe_total);
 
-        document.getElementById('importe_' + pedidovendedordetalle_id).value = importe_total.toFixed(2);
+        document.getElementById('importe_' + producto_id).value = importe_total.toFixed(2);
         document.getElementById('importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Monto Total: $' + nuevo_pedidovenededor_importetotal.toFixed(2);
     }
@@ -265,7 +265,6 @@
                 //var txtCosto = document.createTextNode(" $" + costo); 
                 //var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
                 //var txtCostoTotal = document.createTextNode(" $" + costo_total); 
-                
                 
                 tdTblCantidad.appendChild(tdTblInputCantidad);
                 tdTblCosto.appendChild(tdTblInputCosto);
