@@ -127,10 +127,10 @@
 
     function calculaMontoTotal(producto_id) {
         var pedidovendedor_importe_total = document.getElementById('importe_total').value;
-        var cantidad = document.getElementById('cantidad_' + producto_id).value;
-        var costo = document.getElementById('costo_' + producto_id).value;
-        var descuento = document.getElementById('descuento_' + producto_id).value;
-        var importe = document.getElementById('importe_' + producto_id).value;
+        var cantidad = document.getElementById('tdCantidad_' + producto_id).value;
+        var costo = document.getElementById('tdCosto_' + producto_id).value;
+        var descuento = document.getElementById('tdDescuento_' + producto_id).value;
+        var importe = document.getElementById('tdImporte_' + producto_id).value;
 
         var subtotal = parseFloat(cantidad) * parseFloat(costo);
         var valor_descuento = (parseFloat(descuento) * parseFloat(subtotal)) / 100;
@@ -229,7 +229,7 @@
                 var tdTblCantidad = document.createElement("td");
                 tdTblCantidad.setAttribute("id", "idTdCantidad_" + producto_id);
                 var tdTblInputCantidad = document.createElement("input");
-                tdTblInputCantidad.setAttribute("id", "cantidad_" + producto_id);
+                tdTblInputCantidad.setAttribute("id", "tdCantidad_" + producto_id);
                 tdTblInputCantidad.setAttribute("type", "number");
                 tdTblInputCantidad.setAttribute("step", "0.01");
                 tdTblInputCantidad.setAttribute("value", cantidad);
@@ -238,7 +238,7 @@
                 
                 var tdTblCosto = document.createElement("td");
                 var tdTblInputCosto = document.createElement("input");
-                tdTblInputCosto.setAttribute("id", "costo_" + producto_id);
+                tdTblInputCosto.setAttribute("id", "tdCosto_" + producto_id);
                 tdTblInputCosto.setAttribute("type", "number");
                 tdTblInputCosto.setAttribute("step", "0.01");
                 tdTblInputCosto.setAttribute("value", costo);
@@ -248,7 +248,7 @@
 
                 var tdTblDescuento = document.createElement("td");
                 var tdTblInputDescuento = document.createElement("input");
-                tdTblInputDescuento.setAttribute("id", "descuento_" + producto_id);
+                tdTblInputDescuento.setAttribute("id", "tdDescuento_" + producto_id);
                 tdTblInputDescuento.setAttribute("type", "number");
                 tdTblInputDescuento.setAttribute("step", "0.01");
                 tdTblInputDescuento.setAttribute("value", descuento);
@@ -257,7 +257,7 @@
 
                 var tdTblTotal = document.createElement("td");
                 var tdTblInputTotal = document.createElement("input");
-                tdTblInputTotal.setAttribute("id", "importe_" + producto_id);
+                tdTblInputTotal.setAttribute("id", "tdImporte_" + producto_id);
                 tdTblInputTotal.setAttribute("type", "number");
                 tdTblInputTotal.setAttribute("step", "0.01");
                 tdTblInputTotal.setAttribute("value", costo_total);
@@ -368,11 +368,11 @@
                 buscarProducto();
             
             } else {
-                var tdInputCantidad = document.getElementById('cantidad_' + producto_id);
+                var tdInputCantidad = document.getElementById('tdCantidad_' + producto_id);
                 var old_cantidad = tdInputCantidad.value;
-                var tdInputDescuento = document.getElementById('descuento_' + producto_id);
+                var tdInputDescuento = document.getElementById('tdDescuento_' + producto_id);
                 var old_descuento = tdInputDescuento.value;
-                var tdInputTotal = document.getElementById('importe_' + producto_id);
+                var tdInputTotal = document.getElementById('tdImporte_' + producto_id);
                 var old_total = tdInputTotal.value;
                 
                 //SUSTITUYE EN TABLA POR NUEVOS VALORES
