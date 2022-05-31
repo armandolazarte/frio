@@ -2132,7 +2132,7 @@ class PedidoVendedorController {
 		$archivo = "facturas/egresos/Factura-{$egreso_id}";
 		FileHandler::get_file($archivo);
 
-		echo "<script>window.location.href ='" . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}';</script>";
+		print "<script>window.location.href ='" . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}';</script>";
 	}
 
 	function ejecuta_proceso_lote() {
