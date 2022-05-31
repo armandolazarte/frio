@@ -224,6 +224,7 @@
                 tdTblInputCantidad.setAttribute("step", "0.01");
                 tdTblInputCantidad.setAttribute("value", cantidad);
                 tdTblInputCantidad.setAttribute("class", "form-control");
+                tdTblInputCantidad.setAttribute("onchange", "calculaMontoTotal(" + producto_id + ");");
                 
                 var tdTblCosto = document.createElement("td");
                 var tdTblInputCosto = document.createElement("input");
@@ -233,6 +234,7 @@
                 tdTblInputCosto.setAttribute("value", costo);
                 tdTblInputCosto.setAttribute("class", "form-control");
                 tdTblInputCosto.setAttribute("readonly", "readonly");
+                tdTblInputCosto.setAttribute("onchange", "calculaMontoTotal(" + producto_id + ");");
 
                 var tdTblDescuento = document.createElement("td");
                 var tdTblInputDescuento = document.createElement("input");
@@ -241,6 +243,7 @@
                 tdTblInputDescuento.setAttribute("step", "0.01");
                 tdTblInputDescuento.setAttribute("value", descuento);
                 tdTblInputDescuento.setAttribute("class", "form-control");
+                tdTblInputDescuento.setAttribute("onchange", "calculaMontoTotal(" + producto_id + ");");
 
                 var tdTblTotal = document.createElement("td");
                 var tdTblInputTotal = document.createElement("input");
@@ -249,6 +252,7 @@
                 tdTblInputTotal.setAttribute("step", "0.01");
                 tdTblInputTotal.setAttribute("value", costo_total);
                 tdTblInputTotal.setAttribute("class", "form-control");
+                tdTblInputTotal.setAttribute("onchange", "calculaMontoTotal(" + producto_id + ");");
                 
                 var btnQuitar = document.createElement("a");
                 btnQuitar.setAttribute("href", "#");
