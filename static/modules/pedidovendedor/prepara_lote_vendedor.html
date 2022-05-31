@@ -94,6 +94,13 @@
     });
 
     var temp_pedidovendedor_id = 0;
+    var costo_base = 0;
+    
+    function buscarProducto() {
+        document.getElementById('div_form_producto').style.display = "none";
+        document.getElementById('div_lst_producto').style.display = "block";
+    }
+
     function traerPedido(pedidovendedor_id) {
         var traerPedido = $.ajax({
             url: '{url_app}/pedidovendedor/traer_pedidovendedor_procesolote_ajax/' + pedidovendedor_id,
