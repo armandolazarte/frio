@@ -1257,6 +1257,8 @@ class PedidoVendedorController {
 		$cm = new Cliente();
 		$cm->cliente_id = $cliente_id;
 		$cm->get();
+		$condicion_listaprecio = $cm->listaprecio->condicion;
+		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
 		$this->model->tipofactura = $cm->tipofactura;
 		$this->model->condicioniva = $cm->condicioniva;
 
