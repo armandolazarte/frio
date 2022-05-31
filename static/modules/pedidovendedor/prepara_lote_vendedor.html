@@ -447,7 +447,7 @@
 
             //PARA CONTROL DE VALORES
             //var subtotal_tabla = fila.getElementsByTagName('td')[4].innerHTML;
-            var subtotal_tabla = getElementsById('tdImporte_' + producto_id_temporal).value;
+            var subtotal_tabla = document.getElementsById('tdImporte_' + producto_id_temporal).value;
             //subtotal_tabla = subtotal_tabla.replace(quitar, '');
             control_importe_total = control_importe_total + parseFloat(subtotal_tabla);
 
