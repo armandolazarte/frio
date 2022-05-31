@@ -1389,6 +1389,16 @@ class PedidoVendedorController {
 		print $array_productos;
 	}
 
+	function traer_pedidovendedor_costobase_procesolote_ajax($arg) {
+		SessionHandler()->check_session();
+		$pedidovendedor_id = $arg;
+		
+		$this->model->pedidovendedor_id = $pedidovendedor_id;
+		$this->model->get();
+		$costo_base = $this->model->importe_total;
+		print $costo_base;
+	}
+
 	function traer_cantidad_actual_ajax($arg) {
 		SessionHandler()->check_session();
 		$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];

@@ -115,10 +115,16 @@
                 async: false
         }).responseText;
 
+        var traerCostoBase = $.ajax({
+            url: '{url_app}/pedidovendedor/traer_pedidovendedor_costobase_procesolote_ajax/' + pedidovendedor_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
         temp_pedidovendedor_id = pedidovendedor_id;
         nuevo_array = traerArrayProductos.split(',');
         array_ids = nuevo_array;
-        console.log(array_ids);
+        costo_base = traerCostoBase;
 
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
         document.getElementById('div_lst_producto').style.display = 'block';
@@ -359,11 +365,12 @@
                 div_array_egresos.appendChild(inputEgresoImporteDescuento);
                 div_array_egresos.appendChild(inputEgresoCostoTotal);
                 bodyTblProducto.appendChild(trTblProducto);
-                /*
+                
                 costo_final = 0;
                 costo_base = parseFloat(costo_base) + parseFloat(costo_total);
                 subtotal = parseFloat(costo_base);
                 
+                /*
                 document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
                 document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
                 document.getElementById('input_subtotal').value = subtotal.toFixed(2);
