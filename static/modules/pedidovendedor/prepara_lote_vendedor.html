@@ -401,17 +401,17 @@
                 document.getElementById("importe_descuento_" + producto_id).value = importe_descuento;
                 document.getElementById("costo_" + producto_id).value = costo;
                 document.getElementById("costo_total_" + producto_id).value = costo_total;
-                /*
                 
                 costo_final = 0;
                 costo_base = parseFloat(costo_base) - parseFloat(old_total);
                 costo_base = parseFloat(costo_base) + parseFloat(costo_total);
                 subtotal = parseFloat(costo_base);
-                
-                document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
                 document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
                 document.getElementById('input_subtotal').value = subtotal.toFixed(2);
                 document.getElementById('input_importe_total').value = subtotal.toFixed(2);
+                /*
+                document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
+                
                 */
                 buscarProducto();
             }

@@ -1,4 +1,5 @@
-<form class="form" method="post" action="{url_app}/pedidovendedor/guardar_linea_lote">
+<!--<form class="form" method="post" action="{url_app}/pedidovendedor/guardar_linea_lote">-->
+<form class="form" method="post" action="{url_app}/pedidovendedor/guardar_procesar_lote">
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Pedido: {pedidovendedor-numero_pedido}</h2>
@@ -53,7 +54,6 @@
             <div class="form-group col-lg-12" align="right" id="div_array_egresos">
                 <input type='hidden' id="pedidovendedor_id" name="pedidovendedor_id" value="{pedidovendedor-pedidovendedor_id}">
                 <input type="hidden" name="vendedor" id="vendedor" value="{pedidovendedor-vendedor_id}">
-                <input type="hidden" name="cliente" id="cliente" value="{pedidovendedor-cliente_id}">
                 <input type="hidden" name="descuento" id="descuento" value="0">
                 <input type="hidden" name="producto" id="producto">
                 <input type="hidden" name="subtotal" id="input_subtotal" value="{pedidovendedor-subtotal}">

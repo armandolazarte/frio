@@ -1417,6 +1417,329 @@ class PedidoVendedorController {
 		print $cantidad_actual;			
 	}
 
+	function guardar_procesar_lote() {
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		
+		$com = new Configuracion();
+		$com->configuracion_id = 1;
+		$com->get();
+		$punto_venta = $com->punto_venta;
+
+		$ccm = new ConfiguracionComprobante();
+		$ccm->configuracioncomprobante_id = 1;
+		$ccm->get();
+		$dias_alerta_comision = $ccm->dias_alerta_comision;
+		$dias_vencimiento = $ccm->dias_vencimiento;
+
+		$num_factura = $this->siguiente_remito();
+		$select = "e.numero_factura AS NUMERO_FACTURA";
+		$from = "egreso e";
+		$where = "e.numero_factura = {$num_factura}";
+		$groupby = "e.tipofactura";
+		$verificar_remito = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
+
+		if (is_array($verificar_remito)) $num_factura = $this->siguiente_remito();
+		$fecha = filter_input(INPUT_POST, 'fecha');
+		$hora = date('H:i:s');
+		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+		$comprobante .= str_pad($num_factura, 8, '0', STR_PAD_LEFT);
+		$vendedor_id = filter_input(INPUT_POST, 'vendedor');
+		$vm = new Vendedor();
+		$vm->vendedor_id = $vendedor_id;
+		$vm->get();
+		$comision = $vm->comision;
+
+		$select = "uv.usuario_id AS USUID";
+		$from = "usuariovendedor uv";
+		$where = "uv.vendedor_id = {$vendedor_id}";
+		$temp_usuario_id = CollectorCondition()->get('UsuarioVendedor', $where, 4, $from, $select); 
+		if (is_array($temp_usuario_id) AND !empty($temp_usuario_id)) {
+			$temp_usuario_id = $temp_usuario_id[0]['USUID'];
+			$um = new Usuario();
+			$um->usuario_id = $temp_usuario_id;
+			$um->get();
+			$almacen_id = $um->almacen->almacen_id;
+		} else {
+			$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+		}
+
+		$ecm = new EgresoComision();
+		$ecm->fecha = $fecha;
+		$ecm->valor_comision = round($comision, 2);
+		$ecm->valor_abonado = 0;
+		$ecm->estadocomision = 1;
+		$ecm->save();
+		$egresocomision_id = $ecm->egresocomision_id;
+
+		$cliente_id = filter_input(INPUT_POST, 'cliente');
+		$cm = new Cliente();
+		$cm->cliente_id = $cliente_id;
+		$cm->get();
+		$condicion_listaprecio = $cm->listaprecio->condicion;
+		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
+		$flete_id = $cm->flete->flete_id;
+		$condicioniva_id = $cm->condicioniva->condicioniva_id;
+
+		$fecha_entrega = strtotime('+1 day', strtotime($fecha));
+		$fecha_entrega = date('Y-m-d', $fecha_entrega);
+
+		$eem = new EgresoEntrega();
+		$eem->fecha = $fecha_entrega;
+		$eem->flete = $flete_id;
+		$eem->estadoentrega = 2;
+		$eem->save();
+		$egresoentrega_id = $eem->egresoentrega_id;
+
+		$condicionpago = filter_input(INPUT_POST, 'condicionpago');
+		$importe_total = filter_input(INPUT_POST, 'importe_total');
+		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
+		$descuento = filter_input(INPUT_POST, 'descuento');
+		$mem = new Egreso();
+		$mem->punto_venta = $punto_venta;
+		$mem->numero_factura = intval($num_factura);
+		$mem->fecha = $fecha;
+		$mem->hora = $hora;
+		$mem->descuento = $descuento;
+		$mem->subtotal = filter_input(INPUT_POST, 'subtotal');
+		$mem->importe_total = $importe_total;
+		$mem->emitido = 0;
+		$mem->dias_alerta_comision = $dias_alerta_comision;
+		$mem->dias_vencimiento = $dias_vencimiento;
+		$mem->usuario_id = $usuario_id;
+		$mem->cliente = $cliente_id;
+		$mem->vendedor = $vendedor_id;
+		$mem->tipofactura = $tipofactura;
+		$mem->condicioniva = $condicioniva_id;
+		$mem->condicionpago = $condicionpago;
+		$mem->egresocomision = $egresocomision_id;
+		$mem->egresoentrega = $egresoentrega_id;		
+		$mem->save();
+		$egreso_id = $mem->egreso_id;
+		
+		$mem->egreso_id = $egreso_id;
+		$mem->get();
+		
+		if ($condicionpago == 1) {
+			$cccm = new CuentaCorrienteCliente();
+			$cccm->fecha = date('Y-m-d');
+			$cccm->hora = date('H:i:s');
+			$cccm->referencia = "Comprobante venta {$comprobante}";
+			$cccm->importe = $importe_total;
+			$cccm->cliente_id = $cliente_id;
+			$cccm->egreso_id = $egreso_id;
+			$cccm->tipomovimientocuenta = 1;
+			$cccm->estadomovimientocuenta = 1;
+			$cccm->save();
+			$cuentacorrientecliente_id = $cccm->cuentacorrientecliente_id;
+		}
+
+		/* */
+		$egresos_array = $_POST['egreso'];
+		$egresodetalle_ids = array();
+		$importe_control = 0;
+		foreach ($egresos_array as $egreso) {
+			$producto_id = $egreso['producto_id'];
+			$cantidad = $egreso['cantidad'];
+			$costo_producto = $egreso['costo'];
+			$valor_descuento = $egreso['importe_descuento'];
+			$importe = $egreso['costo_total'];
+			$descuento = $egreso['descuento'];
+
+			$pm = new Producto();
+			$pm->producto_id = $producto_id;
+			$pm->get();
+
+			$iva = $pm->iva;
+			$neto = $pm->costo;
+			$flete = $pm->flete;
+			$porcentaje_ganancia = $pm->porcentaje_ganancia;
+			
+			//PRECIO NETO
+			$valor_neto = $neto + ($iva * $neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+			//PRECIO VENTA
+			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+			//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN CON LISTA DE PRECIO
+			$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
+			if ($condicion_listaprecio == '+') {
+				$pvp_factura = $pvp + $valor_por_listaprecio;						
+			} elseif ($condicion_listaprecio == '-') {
+				$pvp_factura = $pvp - $valor_por_listaprecio;
+			}
+			
+			//IMPORTE NETO
+			$total_neto = $valor_neto * $cantidad;
+			//IMPORTE VENTA
+			$total_pvp = $pvp_factura * $cantidad;
+
+			//DESCUENTO
+			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
+
+			//GANANCIA FINAL
+			$ganancia = round(($total_pvp - $total_neto),2);
+			$ganancia_final = $ganancia - $valor_descuento_recalculado;
+			$ganancia_final = round($ganancia_final, 2);
+
+			//IMPORTE FINAL
+			$importe_final = $total_pvp - $valor_descuento_recalculado;
+			$importe_final = round($importe_final, 2);
+
+			$edm = new EgresoDetalle();
+			$edm->codigo_producto = $egreso['codigo'];
+			$edm->descripcion_producto = $egreso['descripcion'];
+			$edm->cantidad = $cantidad;
+			$edm->valor_descuento = round($valor_descuento_recalculado, 2);
+			$edm->descuento = $descuento;
+			$edm->neto_producto = $neto;
+			$edm->costo_producto = round($pvp_factura, 2);
+			$edm->iva = $iva;
+			$edm->importe = $importe_final;
+			$edm->valor_ganancia = $ganancia_final;
+			$edm->producto_id = $producto_id;
+			$edm->egreso_id = $egreso_id;
+			$edm->egresodetalleestado = 1;
+			$edm->flete_producto = $flete;
+			$edm->save();
+			$egresodetalle_ids[] = $edm->egresodetalle_id;
+
+			$importe_control = $importe_control + $importe_final;
+		}
+
+		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id";
+		$where = "ed.egreso_id = {$egreso_id}";
+		$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+		$flag_error = 0;
+		if ($tipofactura == 1 OR $tipofactura == 3) {
+			try {
+			    $this->facturar_afip_argumento($egreso_id);
+			} catch (Exception $e) {
+				$ecm = new EgresoComision();
+				$ecm->egresocomision_id = $egresocomision_id;
+				$ecm->delete();
+
+				$eem = new EgresoEntrega();
+				$eem->egresoentrega_id = $egresoentrega_id;
+				$eem->delete();
+
+				$mem =  new Egreso();
+				$mem->egreso_id = $egreso_id;
+				$mem->delete();
+
+				if ($condicionpago == 1) {
+					$cccm = new CuentaCorrienteCliente();
+					$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+					$cccm->delete();
+				}
+
+				foreach ($egresodetalle_ids as $egresodetalle_id) {
+					$edm = new EgresoDetalle();
+					$edm->egresodetalle_id = $egresodetalle_id;
+					$edm->delete();
+				}
+
+				$sm = new Stock();
+				$sm->stock_id = $stock_id;
+				$sm->delete();
+				print_r($e->getMessage());exit;
+				switch ($e->getCode()) {
+					case 4:
+						$flag_error = 3;
+						break;
+					case 10015:
+						$flag_error = 4;
+						break;
+				}
+			}
+		}
+
+		if ($flag_error == 0) {
+			foreach ($egresodetalle_collection as $egreso) {
+				$temp_producto_id = $egreso['PRODUCTO_ID'];
+				$select = "MAX(s.stock_id) AS STOCK_ID";
+				$from = "stock s";
+				$where = "s.producto_id = {$temp_producto_id} AND s.almacen_id = {$almacen_id}";
+				$rst_stock = CollectorCondition()->get('Stock', $where, 4, $from, $select);
+
+				if ($rst_stock == 0 || empty($rst_stock) || !is_array($rst_stock)) {
+					$sm = new Stock();
+					$sm->fecha = $fecha;
+					$sm->hora = $hora;
+					$sm->concepto = "Venta. Comprobante: {$comprobante}";
+					$sm->codigo = $egreso['CODIGO'];
+					$sm->cantidad_actual = $egreso['CANTIDAD'];
+					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
+					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = $almacen_id;
+					$sm->save();
+				} else {
+					$stock_id = $rst_stock[0]['STOCK_ID'];
+					$sm = new Stock();
+					$sm->stock_id = $stock_id;
+					$sm->get();
+					$ultima_cantidad = $sm->cantidad_actual;
+					$nueva_cantidad = $ultima_cantidad - $egreso['CANTIDAD'];
+
+					$sm = new Stock();
+					$sm->fecha = $fecha;
+					$sm->hora = $hora;
+					$sm->concepto = "Venta. Comprobante: {$comprobante}";
+					$sm->codigo = $egreso['CODIGO'];
+					$sm->cantidad_actual = $nueva_cantidad;
+					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
+					$sm->producto_id = $temp_producto_id;
+					$sm->almacen_id = $almacen_id;
+					$sm->save();
+				}
+			}
+
+			$importe_control = round($importe_control, 2);
+			if ($importe_total == 0) {
+				$tem = new Egreso();
+				$tem->egreso_id = $egreso_id;
+				$tem->get();
+				$tem->importe_total = $importe_control;
+				$tem->save();
+
+				if ($condicionpago == 1) {
+					$cccm = new CuentaCorrienteCliente();
+					$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+					$cccm->get();
+					$cccm->importe = $importe_control;
+					$cccm->save();
+				}
+			} else {
+				if ($importe_control != $importe_total) {
+					$tem = new Egreso();
+					$tem->egreso_id = $egreso_id;
+					$tem->get();
+					$tem->importe_total = $importe_control;
+					$tem->save();
+
+					if ($condicionpago == 1) {
+						$cccm = new CuentaCorrienteCliente();
+						$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+						$cccm->get();
+						$cccm->importe = $importe_control;
+						$cccm->save();
+					}
+				}	
+			}
+
+
+			$this->model->pedidovendedor_id = filter_input(INPUT_POST, 'pedidovendedor_id');
+			$this->model->get();
+			$this->model->estadopedido = 2;
+			$this->model->egreso_id = $egreso_id;
+			$this->model->save();
+
+			header("Location: " . URL_APP . "/egreso/consultar/{$egreso_id}");
+		} else {
+			header("Location: " . URL_APP . "/egreso/listar/{$flag_error}");
+		}
+	}
+
 	function proceso_lote($arg) {
 		$pedidovendedor_id = $arg;
 		
