@@ -430,7 +430,7 @@
             producto_id_temporal_array = producto_id_temporal_array.split('_');
             var producto_id_temporal = producto_id_temporal_array[1];
             //var cant_temporal = fila.getElementsByTagName('td')[1].innerHTML;
-            var cant_temporal = getElementById('tdCantidad_' + producto_id_temporal).value;
+            var cant_temporal = document.getElementById('tdCantidad_' + producto_id_temporal).value;
 
             var cantidad_actual = $.ajax({
                 url: '{url_app}/pedidovendedor/traer_cantidad_actual_ajax/' + producto_id_temporal,
