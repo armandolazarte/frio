@@ -139,7 +139,7 @@
         var nuevo_pedidovenededor_importetotal = parseFloat(pedidovendedor_importe_total) - parseFloat(importe);
         nuevo_pedidovenededor_importetotal = parseFloat(nuevo_pedidovenededor_importetotal) + parseFloat(importe_total);
 
-        document.getElementById('importe_' + producto_id).value = importe_total.toFixed(2);
+        document.getElementById('tdImporte_' + producto_id).value = importe_total.toFixed(2);
         document.getElementById('importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Monto Total: $' + nuevo_pedidovenededor_importetotal.toFixed(2);
     }
