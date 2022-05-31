@@ -1759,7 +1759,7 @@ class PedidoVendedorController {
 					break;
 			}
 
-			header("Location: " . URL_APP . "/egreso/prepara_lote_vendedor/{$vendedor_id}");
+			header("Location: " . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}");
 		} else {
 			header("Location: " . URL_APP . "/egreso/listar/{$flag_error}");
 		}
