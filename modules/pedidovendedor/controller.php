@@ -1730,11 +1730,36 @@ class PedidoVendedorController {
 
 			$this->model->pedidovendedor_id = filter_input(INPUT_POST, 'pedidovendedor_id');
 			$this->model->get();
-			$this->model->estadopedido = 2;
+			$this->model->estadopedido = 5;
 			$this->model->egreso_id = $egreso_id;
 			$this->model->save();
 
-			header("Location: " . URL_APP . "/egreso/consultar/{$egreso_id}");
+			require_once 'tools/facturaPDFTool.php';
+			$tem = new Egreso();
+			$tem->egreso_id = $egreso_id;
+			$tem->get();
+
+			$vendedor = new Vendedor();
+			$vendedor->vendedor_id = $vendedor_id;
+			$vendedor->get();
+
+			$flete = new Flete();
+			$flete->flete_id = $flete_id;
+			$flete->get();
+
+			switch ($tipofactura_id) {
+				case 1:
+					$facturaPDFHelper->facturaA($egresodetalle_collection, $com, $tem, $vendedor, $flete);
+					break;
+				case 2:
+					$facturaPDFHelper->remitoR($egresodetalle_collection, $com, $tem, $vendedor, $flete);
+					break;
+				case 3:
+					$facturaPDFHelper->facturaB($egresodetalle_collection, $com, $tem, $vendedor, $flete);
+					break;
+			}
+
+			header("Location: " . URL_APP . "/egreso/prepara_lote_vendedor/{$vendedor_id}");
 		} else {
 			header("Location: " . URL_APP . "/egreso/listar/{$flag_error}");
 		}
