@@ -1286,7 +1286,24 @@ class PedidoVendedorController {
 		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $this->model, $cm);
 	}
 
-	
+	function traer_pedidovendedor_arrayproductos_procesolote_ajax($arg) {
+		SessionHandler()->check_session();
+		$pedidovendedor_id = $arg;
+		
+		$select = "pvd.producto_id AS PRODUCTO";
+		$from = "pedidovendedordetalle pvd ";
+		$where = "pvd.pedidovendedor_id = {$arg}";
+		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
+		$pedidovendedordetalle_collection = (is_array($pedidovendedordetalle_collection) AND !empty($pedidovendedordetalle_collection)) ? $pedidovendedordetalle_collection : array();
+		$array_productos = array();
+		foreach ($pedidovendedordetalle_collection as $clave=>$valor) {
+			$producto_id = $valor["PRODUCTO"];
+			if (!in_array($producto_id, $array_productos)) $array_productos[] = $producto_id;
+		}
+
+		$array_productos = implode(',', $array_productos);
+		print $array_productos;
+	}
 
 	function traer_cantidad_actual_ajax($arg) {
 		SessionHandler()->check_session();

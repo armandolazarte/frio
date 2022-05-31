@@ -95,6 +95,7 @@
 
     var temp_pedidovendedor_id = 0;
     var costo_base = 0;
+    var array_ids = [];
     
     function buscarProducto() {
         document.getElementById('div_form_producto').style.display = "none";
@@ -108,7 +109,14 @@
                 async: false
         }).responseText;
 
+        var traerArrayProductos = $.ajax({
+            url: '{url_app}/pedidovendedor/traer_pedidovendedor_arrayproductos_procesolote_ajax/' + pedidovendedor_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
         temp_pedidovendedor_id = pedidovendedor_id;
+        array_ids = traerArrayProductos;
 
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
         document.getElementById('div_lst_producto').style.display = 'block';
@@ -252,6 +260,7 @@
                 tdTblInputTotal.setAttribute("step", "0.01");
                 tdTblInputTotal.setAttribute("value", costo_total);
                 tdTblInputTotal.setAttribute("class", "form-control");
+                tdTblInputTotal.setAttribute("readonly", "readonly");
                 tdTblInputTotal.setAttribute("onchange", "calculaMontoTotal(" + producto_id + ");");
                 
                 var btnQuitar = document.createElement("a");
