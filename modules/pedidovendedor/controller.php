@@ -2120,7 +2120,7 @@ class PedidoVendedorController {
 	function descargar_factura_lote($arg) {
 		require_once 'core/helpers/filehandler.php';
 		$archivo = "facturas/egresos/Factura-{$arg}";
-		print_r($archivo);exit;
+		//print_r($archivo);exit;
 		FileHandler::get_file($archivo);
 	}
 
