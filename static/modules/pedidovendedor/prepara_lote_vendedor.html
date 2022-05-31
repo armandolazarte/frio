@@ -199,7 +199,7 @@
 
         //document.getElementById('alerta_stock').style.display = 'none';
         var producto_id = document.getElementById('producto_id').value;
-        //var flag = array_ids.indexOf(producto_id);
+        var flag = array_ids.indexOf(producto_id);
         
         var cantidad = document.getElementById('cantidad').value;
         var cantidad_disponible = document.getElementById('cantidad_disponible').value;
@@ -216,7 +216,7 @@
 
         //if(parseFloat(cantidad) <= parseFloat(cantidad_disponible)) {
 
-            //if(parseInt(flag) === -1){   
+            if(parseInt(flag) === -1){   
                 var bodyTblProducto = document.getElementById('bodyTblProducto');
                
                 /* FILA */
@@ -358,7 +358,7 @@
                 div_array_egresos.appendChild(inputEgresoImporteDescuento);
                 div_array_egresos.appendChild(inputEgresoCostoTotal);
                 bodyTblProducto.appendChild(trTblProducto);
-                
+                /*
                 costo_final = 0;
                 costo_base = parseFloat(costo_base) + parseFloat(costo_total);
                 subtotal = parseFloat(costo_base);
@@ -369,24 +369,24 @@
                 document.getElementById('input_importe_total').value = subtotal.toFixed(2);
                 array_ids.push(producto_id);
                 i = i + 1;
+                */
                 buscarProducto();
-            /*
+            
             } else {
-                var td_cantidad = document.getElementById('idTdCantidad_' + producto_id);
-                var old_cantidad = td_cantidad.innerHTML;
-                var td_importedescuento = document.getElementById('idTdImporteDescuento_' + producto_id);
-                var old_importedescuento = td_importedescuento.innerHTML;
-                var td_total = document.getElementById('idTdTotal_' + producto_id);
-                var old_total = td_total.innerHTML;
-                old_total = old_total.replace(quitar, '');
-
+                var tdInputCantidad = document.getElementById('cantidad_' + producto_id);
+                var old_cantidad = tdInputCantidad.value;
+                var tdInputDescuento = document.getElementById('descuento_' + producto_id);
+                var old_descuento = tdInputDescuento.value;
+                var tdInputTotal = document.getElementById('importe_' + producto_id);
+                var old_total = tdInputTotal.value;
                 
                 //SUSTITUYE EN TABLA POR NUEVOS VALORES
-                td_cantidad.innerHTML = cantidad;
-                td_importedescuento.innerHTML = '$' + importe_descuento;
-                td_total.innerHTML = '$' + costo_total;
+                tdInputCantidad.value = cantidad;
+                tdInputDescuento.value = descuento;
+                tdInputTotal.value = costo_total;
 
                 //SUSTITUYE VALORES EN INPUTS HIDDEN
+                /*
                 document.getElementById("cantidad_" + producto_id).value = cantidad;
                 document.getElementById("descuento_" + producto_id).value = descuento;
                 document.getElementById("importe_descuento_" + producto_id).value = importe_descuento;
@@ -402,7 +402,7 @@
                 document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
                 document.getElementById('input_subtotal').value = subtotal.toFixed(2);
                 document.getElementById('input_importe_total').value = subtotal.toFixed(2);
-
+                */
                 buscarProducto();
             }
         } else {
