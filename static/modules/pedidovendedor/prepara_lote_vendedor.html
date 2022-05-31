@@ -223,9 +223,25 @@
                 tdTblInputCantidad.setAttribute("type", "number");
                 tdTblInputCantidad.setAttribute("step", "0.01");
                 tdTblInputCantidad.setAttribute("value", cantidad);
+                tdTblInputCantidad.setAttribute("class", "form-control");
                 
                 var tdTblCosto = document.createElement("td");
+                var tdTblInputCosto = document.createElement("input");
+                tdTblInputCosto.setAttribute("id", "costo_" + producto_id);
+                tdTblInputCosto.setAttribute("type", "number");
+                tdTblInputCosto.setAttribute("step", "0.01");
+                tdTblInputCosto.setAttribute("value", costo);
+                tdTblInputCosto.setAttribute("class", "form-control");
+                tdTblInputCosto.setAttribute("readonly", "readonly");
+
                 var tdTblImporteDescuento = document.createElement("td");
+                var tdTblInputDescuento = document.createElement("input");
+                tdTblInputDescuento.setAttribute("id", "descuento_" + producto_id);
+                tdTblInputDescuento.setAttribute("type", "number");
+                tdTblInputDescuento.setAttribute("step", "0.01");
+                tdTblInputDescuento.setAttribute("value", descuento);
+                tdTblInputDescuento.setAttribute("class", "form-control");
+
                 tdTblImporteDescuento.setAttribute("id", "idTdImporteDescuento_" + producto_id);
                 var tdTblTotal = document.createElement("td");
                 tdTblTotal.setAttribute("id", "idTdTotal_" + producto_id);
@@ -241,14 +257,14 @@
 
                 var txtDescripcion = document.createTextNode(descripcion); 
                 //var txtCantidad = document.createTextNode(cantidad); 
-                var txtCosto = document.createTextNode(" $" + costo); 
+                //var txtCosto = document.createTextNode(" $" + costo); 
                 var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
                 var txtCostoTotal = document.createTextNode(" $" + costo_total); 
                 
                 tdTblDescripcion.appendChild(txtDescripcion);
                 
                 tdTblCantidad.appendChild(tdTblInputCantidad);
-                tdTblCosto.appendChild(txtCosto);
+                tdTblCosto.appendChild(tdTblInputCosto);
                 tdTblImporteDescuento.appendChild(txtImporteDescuento);
                 tdTblTotal.appendChild(txtCostoTotal);
                 tdTblBtnQuitar.appendChild(btnQuitar);
