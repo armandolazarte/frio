@@ -267,8 +267,8 @@ class PedidoVendedorView extends View {
 			$array_producto_ids = implode(',', $array_producto_ids);
 			$obj_pedidovendedor->array_producto_ids = $array_producto_ids;
 
-			$tbl_editar_pedidovendedordetalle_array = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_editar_pedidovendedordetalle_array, $pedidovendedordetalle_collection);
-			$tbl_editar_pedidovendedordetalle_array = str_replace('<!--TBL_PEDIDOVENDEDORDETALLE-->', '', $tbl_editar_pedidovendedordetalle_array);
+			$tbl_pedidovendedordetalle = $this->render_regex_dict('TBL_PEDIDOVENDEDORDETALLE', $tbl_pedidovendedordetalle, $pedidovendedordetalle_collection);
+			$tbl_pedidovendedordetalle = str_replace('<!--TBL_PEDIDOVENDEDORDETALLE-->', '', $tbl_pedidovendedordetalle);
 			
 			$hidden_editar_pedidovendedordetalle_array = $this->render_regex_dict('HDN_PEDIDOVENDEDORDETALLE', $hidden_editar_pedidovendedordetalle_array, $pedidovendedordetalle_collection);
 			$hidden_editar_pedidovendedordetalle_array = str_replace('<!--HDN_PEDIDOVENDEDORDETALLE-->', '', $hidden_editar_pedidovendedordetalle_array);
