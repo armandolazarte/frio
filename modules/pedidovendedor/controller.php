@@ -1513,7 +1513,8 @@ class PedidoVendedorController {
 		$mem->condicioniva = $condicioniva_id;
 		$mem->condicionpago = $condicionpago;
 		$mem->egresocomision = $egresocomision_id;
-		$mem->egresoentrega = $egresoentrega_id;		
+		$mem->egresoentrega = $egresoentrega_id;
+		print_r($mem);exit;
 		$mem->save();
 		$egreso_id = $mem->egreso_id;
 		
