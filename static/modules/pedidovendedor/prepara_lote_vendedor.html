@@ -371,13 +371,13 @@
                 costo_base = parseFloat(costo_base) + parseFloat(costo_total);
                 subtotal = parseFloat(costo_base);
                 
-                /*
-                document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
-                document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
+                document.getElementById('lbl_ImporteTotal').innerHTML = 'Monto Total: $' + subtotal.toFixed(2);
                 document.getElementById('input_subtotal').value = subtotal.toFixed(2);
                 document.getElementById('input_importe_total').value = subtotal.toFixed(2);
                 array_ids.push(producto_id);
                 i = i + 1;
+                /*
+                document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
                 */
                 buscarProducto();
             
