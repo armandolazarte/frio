@@ -133,7 +133,7 @@
     }
 
     function calculaMontoTotal(producto_id) {
-        var pedidovendedor_importe_total = document.getElementById('importe_total').value;
+        var pedidovendedor_importe_total = document.getElementById('input_importe_total').value;
         var cantidad = document.getElementById('tdCantidad_' + producto_id).value;
         var costo = document.getElementById('tdCosto_' + producto_id).value;
         var descuento = document.getElementById('tdDescuento_' + producto_id).value;
@@ -153,7 +153,7 @@
         document.getElementById("costo_total_" + producto_id).value = importe_total;
 
         document.getElementById('tdImporte_' + producto_id).value = importe_total.toFixed(2);
-        document.getElementById('importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
+        document.getElementById('input_importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Monto Total: $' + nuevo_pedidovenededor_importetotal.toFixed(2);
     }
 
@@ -375,12 +375,11 @@
                 document.getElementById('input_subtotal').value = subtotal.toFixed(2);
                 document.getElementById('input_importe_total').value = subtotal.toFixed(2);
                 array_ids.push(producto_id);
-                i = i + 1;
                 /*
                 document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
+                i = i + 1;
                 */
-                buscarProducto();
-            
+                buscarProducto();            
             } else {
                 var tdInputCantidad = document.getElementById('tdCantidad_' + producto_id);
                 var old_cantidad = tdInputCantidad.value;
