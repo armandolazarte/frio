@@ -152,6 +152,7 @@
         document.getElementById("costo_" + producto_id).value = costo;
         document.getElementById("costo_total_" + producto_id).value = importe_total;
 
+        costo_base = nuevo_pedidovenededor_importetotal;
         document.getElementById('tdImporte_' + producto_id).value = importe_total.toFixed(2);
         document.getElementById('input_subtotal').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('input_importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
@@ -456,14 +457,12 @@
             */
         }
 
-        /*
         if (parseFloat(control_importe_total.toFixed(2)) != parseFloat(subtotal.toFixed(2))) {
-            costo_base = parseFloat(costo_base) + parseFloat(costo_total);
+            //costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             document.getElementById('lbl_ImporteTotal').innerHTML = 'Importe Total: $' + control_importe_total.toFixed(2);
             document.getElementById('input_subtotal').value = control_importe_total.toFixed(2);
             document.getElementById('input_importe_total').value = control_importe_total.toFixed(2);
         }
-        */
     }
     
     function quitarProducto(pedidovendedordetalle_id) {
