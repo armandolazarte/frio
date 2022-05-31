@@ -1189,6 +1189,7 @@ class PedidoVendedorController {
 	//PROCESO POR LOTE
 	function prepara_lote_vendedor($arg) {
 		SessionHandler()->check_session();
+		require_once 'core/helpers/file.php';
 		$vendedor_id = $arg;
 
 		$select = "pv.pedidovendedor_id AS PEDVENID, CONCAT(date_format(pv.fecha, '%d/%m/%Y'), ' ', LEFT(pv.hora,5)) AS FECHA, UPPER(cl.razon_social) AS CLIENTE, pv.subtotal AS SUBTOTAL, pv.importe_total AS IMPORTETOTAL, CASE pv.estadopedido WHEN 1 THEN 'inline-block' WHEN 2 THEN 'none' WHEN 3 THEN 'none' WHEN 4 THEN 'inline-block' WHEN 5 THEN 'none' END AS BTNAPROC, ep.denominacion AS LBLEST, CASE pv.estadopedido WHEN 1 THEN 'primary' WHEN 4 THEN 'warning' WHEN 5 THEN 'success' END AS CLAEST, LPAD(pv.pedidovendedor_id, 8, 0) AS NUMPED, cl.cliente_id AS CLIID, CASE WHEN pv.estadopedido = 5 THEN 'inline-block' ELSE 'none' END AS BTNAIMPR, pv.egreso_id AS EGRID";
