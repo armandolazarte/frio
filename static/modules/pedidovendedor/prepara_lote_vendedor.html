@@ -474,7 +474,6 @@
         var bodyTblProducto = document.getElementById('bodyTblProducto');
         var trTblProducto = document.getElementById("idTrTbl_" + producto_id);
         var tdTblTotal = document.getElementById("tdImporte_" + producto_id);
-        var resultado_quitar = tdTblTotal.value;
         
         var div_array_egresos = document.getElementById('div_array_egresos');
         var input_producto_id = document.getElementById('producto_id_' + producto_id);
@@ -488,7 +487,8 @@
         var input_importe_descuento = document.getElementById('importe_descuento_' + producto_id);
         var input_costo_total = document.getElementById('costo_total_' + producto_id);
         
-        var nuevo_importe_total = parseFloat(viejo_importe_total) - parseFloat(total_quitar);
+        var nuevo_importe_total = parseFloat(viejo_importe_total) - parseFloat(tdTblTotal);
+        costo_base = nuevo_importe_total;
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Importe Total: $' + nuevo_importe_total.toFixed(2);
         document.getElementById('input_importe_total').value = nuevo_importe_total.toFixed(2);
         document.getElementById('input_subtotal').value = nuevo_importe_total.toFixed(2);
