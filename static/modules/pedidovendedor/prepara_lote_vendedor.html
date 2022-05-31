@@ -218,6 +218,12 @@
                 var tdTblDescripcion = document.createElement("td");
                 var tdTblCantidad = document.createElement("td");
                 tdTblCantidad.setAttribute("id", "idTdCantidad_" + producto_id);
+                var tdTblInputCantidad = document.createElement("input");
+                tdTblInputCantidad.setAttribute("id", "cantidad_" + producto_id);
+                tdTblInputCantidad.setAttribute("type", "number");
+                tdTblInputCantidad.setAttribute("step", "0.01");
+                tdTblInputCantidad.setAttribute("value", cantidad);
+                
                 var tdTblCosto = document.createElement("td");
                 var tdTblImporteDescuento = document.createElement("td");
                 tdTblImporteDescuento.setAttribute("id", "idTdImporteDescuento_" + producto_id);
@@ -234,13 +240,14 @@
                 btnQuitar.appendChild(iconQuitar);
 
                 var txtDescripcion = document.createTextNode(descripcion); 
-                var txtCantidad = document.createTextNode(cantidad); 
+                //var txtCantidad = document.createTextNode(cantidad); 
                 var txtCosto = document.createTextNode(" $" + costo); 
                 var txtImporteDescuento = document.createTextNode('$' + importe_descuento); 
                 var txtCostoTotal = document.createTextNode(" $" + costo_total); 
                 
                 tdTblDescripcion.appendChild(txtDescripcion);
-                tdTblCantidad.appendChild(txtCantidad);
+                
+                tdTblCantidad.appendChild(tdTblInputCantidad);
                 tdTblCosto.appendChild(txtCosto);
                 tdTblImporteDescuento.appendChild(txtImporteDescuento);
                 tdTblTotal.appendChild(txtCostoTotal);
