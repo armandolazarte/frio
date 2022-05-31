@@ -153,6 +153,7 @@
         document.getElementById("costo_total_" + producto_id).value = importe_total;
 
         document.getElementById('tdImporte_' + producto_id).value = importe_total.toFixed(2);
+        document.getElementById('input_subtotal').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('input_importe_total').value = nuevo_pedidovenededor_importetotal.toFixed(2);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Monto Total: $' + nuevo_pedidovenededor_importetotal.toFixed(2);
     }
