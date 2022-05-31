@@ -116,8 +116,8 @@
         }).responseText;
 
         temp_pedidovendedor_id = pedidovendedor_id;
-        console.log(traerArrayProductos);
         nuevo_array = traerArrayProductos.split(',');
+        console.log(nuevo_array);
         array_ids = nuevo_array;
 
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
