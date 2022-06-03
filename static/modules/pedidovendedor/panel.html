@@ -44,6 +44,31 @@
     -->
     <div class="x_panel">
         <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Procesar por vendedor</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/pedidovendedor/prepara_lote_vendedor">
+                    <div class="form-group col-lg-6">
+                        <label>Vendedor</label>
+                        <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                            {slt_vendedor}
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-top: 2%;" align="right">
+                        <button class="btn btn-xs btn-primary" style="width: 100%;" type="submit"> <i class="fa fa-user"></i> Ir </button>
+                    </div>
+                </form>
+            </div>    
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Buscar pedidos</h2>
             <ul class="nav navbar-right panel_toolbox">
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
