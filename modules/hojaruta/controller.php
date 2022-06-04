@@ -669,9 +669,24 @@ class HojaRutaController {
 					}
 				}				
 			} else {
+				if ($condicionpago_id == 2 AND $estadoentrega_id == 4) {
+					$cccm = new CuentaCorrienteCliente();
+					$cccm->fecha = date('Y-m-d');
+					$cccm->hora = date('H:i:s');
+					$cccm->referencia = "Pasa de contado a Cta. Cte. - Comprobante venta {$temp_referencia}";
+					$cccm->importe = $temp_importe_total;
+					$cccm->ingreso = 0;
+					$cccm->cliente_id = $temp_cliente_id;
+					$cccm->egreso_id = $egreso_id;
+					$cccm->tipomovimientocuenta = 1;
+					$cccm->estadomovimientocuenta = 1;
+					$cccm->cobrador = $cobrador_id;
+					$cccm->save();
+				} 
+				
 				$tipoentrega = 'FIRMA';
 				$detallecierrehojaruta['INGRESOTIPOPAGO_ID'] = null;
-				$detallecierrehojaruta['IMPORTE'] = 0;
+				$detallecierrehojaruta['IMPORTE'] = 0;					
 			}
 
 			$dchrm = new DetalleCierreHojaRuta();
