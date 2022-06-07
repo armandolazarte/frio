@@ -1766,11 +1766,13 @@ class PedidoVendedorController {
 			$vendedor = new Vendedor();
 			$vendedor->vendedor_id = $vendedor_id;
 			$vendedor->get();
+			$vendedor = $this->model->vendedor->apellido . ' ' . $this->model->vendedor->nombre;
 
 			$flete = new Flete();
 			$flete->flete_id = $flete_id;
 			$flete->get();
-
+			$flete = $this->model->cliente->flete->denominacion;
+			
 			require_once 'tools/facturaPDFTool.php';
 			$facturaPDFHelper = new FacturaPDF();
 			switch ($tipofactura) {
