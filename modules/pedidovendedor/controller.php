@@ -2111,17 +2111,17 @@ class PedidoVendedorController {
 			$em->get();
 			$tipofactura_id = $em->tipofactura->tipofactura_id;
 
-			require_once 'tools/facturaPDFPorcesoLoteTool.php';
-			$facturaPDFHelper = new FacturaPDFProcesoLote();			
+			require_once 'tools/facturaPDFTool.php';
+			$facturaPDFHelper = new FacturaPDF();			
 			switch ($tipofactura_id) {
 				case 1:
-					$facturaPDFHelper->facturaAPL($egresodetalle_collection, $com, $em);
+					$facturaPDFHelper->facturaA($egresodetalle_collection, $com, $em);
 					break;
 				case 2:
-					$facturaPDFHelper->remitoRPL($egresodetalle_collection, $com, $em);
+					$facturaPDFHelper->remitoR($egresodetalle_collection, $com, $em);
 					break;
 				case 3:
-					$facturaPDFHelper->facturaBPL($egresodetalle_collection, $com, $em);
+					$facturaPDFHelper->facturaB($egresodetalle_collection, $com, $em);
 					break;
 			}
 
@@ -2151,12 +2151,10 @@ class PedidoVendedorController {
 		$this->model->get();
 		$vendedor_id = $this->model->vendedor_id;
 		$this->model->estadopedido = 2;
-		//$this->model->save();
+		$this->model->save();
 		$archivo = "facturas/egresos/Factura-{$egreso_id}";
 		FileHandler::get_file($archivo);
 		exit;
-
-		//print "<script>window.location.href ='" . URL_APP . "/pedidovendedor/prepara_lote_vendedor/{$vendedor_id}';</script>";
 	}
 
 	function ejecuta_proceso_lote() {
