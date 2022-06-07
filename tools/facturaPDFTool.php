@@ -74,7 +74,16 @@ class FacturaPDF extends View {
         $cantidad_hojas = count($new_array);
         $i = 1;
         foreach ($new_array as $egresodetalle_array) {
-            $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA.html");
+            if ($cantidad_hojas > 1) {
+                if ($i == $cantidad_hojas) {
+                    $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA.html");
+                } else { 
+                    $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA_sinTotal.html");
+                }
+            } else {
+                $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA.html");
+            }
+
             $gui_tbl_facturaA = file_get_contents("static/common/plantillas_facturas/tbl_facturaA.html");
             $gui_tbl_facturaA = $this->render_regex_dict('TBL_EGRESODETALLE', $gui_tbl_facturaA, $egresodetalle_array);
 
@@ -275,7 +284,16 @@ class FacturaPDF extends View {
         $cantidad_hojas = count($new_array);
         $i = 1;
         foreach ($new_array as $egresodetalle_array) {
-            $gui_remitoR = file_get_contents("static/common/plantillas_facturas/remitoR.html");
+            if ($cantidad_hojas > 1) {
+                if ($i == $cantidad_hojas) {
+                    $gui_remitoR = file_get_contents("static/common/plantillas_facturas/remitoR.html");
+                } else { 
+                    $gui_remitoR = file_get_contents("static/common/plantillas_facturas/remitoR_sinTotal.html");
+                }
+            } else {
+                $gui_remitoR = file_get_contents("static/common/plantillas_facturas/remitoR.html");
+            }
+
             $gui_tbl_remitoR = file_get_contents("static/common/plantillas_facturas/tbl_remitoR.html");
             $gui_tbl_remitoR = $this->render_regex_dict('TBL_EGRESODETALLE', $gui_tbl_remitoR, $egresodetalle_array);
 
