@@ -1,0 +1,286 @@
+<table style=" width: 100% !important;" cellspacing="0">
+    <tr>
+        <td style=" width: 49% !important; padding-right: 1%;">
+            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 48% !important; text-align: center; font-size: 13px;">
+                        <img width="100" height="50" src='static/template/images/logoFrio.jpg' class="text-align-center"/><br>
+                        <strong>{configuracion-razon_social} S.R.L.</strong>
+                    </td>
+                    <td style="width: 4% !important; border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; text-align: center; font-size: 15px;">
+                        <strong>A</strong><br>
+                        <font style="font-size: 10px;">Código N° 01</font>
+                    </td>
+                    <td style="width: 48% !important; text-align: right; font-size: 18px; padding-left: 15px;">
+                        <strong>FACTURA</strong><br>
+                        <strong>N°: {egreso-punto_venta}-{egreso-numero_factura} A</strong><br>
+                        <font style="font-size: 15px;">Fecha: {egreso-fecha}</font>
+                    </td>
+                </tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 45% !important;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr>                                
+                                <td style="width: 50% !important; font-size: 15px;">
+                                    {configuracion-domicilio_comercial}<br>
+                                    La Rioja<br>
+                                    Tel: 0380-4420964
+                                </td>
+                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; padding-left: 15px; font-size: 15px;">
+                                    <strong>CUIT: {configuracion-cuit}</strong><br>
+                                    <strong>IIBB: </strong>{configuracion-ingresos_brutos}<br>
+                                    <strong>Inicio Actividades: </strong>{configuracion-fecha_inicio_actividad}<br>
+                                    <strong>Resp. Inscripto</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 1px; border-top: 1px #000 solid;"><td colspan="3"></td></tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left; font-size: 18px;">
+                                    Sres: <b>{cliente-razon_social}</b> - [{cliente-codigo}]
+                                </td>
+                                <td style="width: 35% !important; text-align: left; font-size: 15px;">
+                                    {egreso-cliente_documentotipo}: {cliente-documento}
+                                </td>
+                            </tr>
+                            <tr style=" text-align: center; font-size: 15px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Dom.: {cliente-domicilio} - {cliente-barrio} - Loc.: {cliente-localidad}
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    I.V.A.: {cliente-condicioniva}
+                                </td>
+                            </tr>
+                            <tr style=" text-align: center; font-size: 15px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Prov.: {provincia-denominacion} - Teléfonos: {cliente-telefono}
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    IIBB:
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 1px; border-top: 1px #000 solid;"><td colspan="3"></td></tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; font-size: 15px; width: 100% !important;">
+                                <td style="width: 33% !important; text-align: left;">
+                                    C. Venta: <b>{condicionpago-denominacion}
+                                </td>
+                                <td style="width: 33% !important; text-align: center;">
+                                    Vendedor: {vendedor}
+                                </td>
+                                <td style="width: 33% !important; text-align: right;">
+                                    Flete: {flete}
+                                </td>
+                            </tr>                            
+                        </table>
+                    </td>
+                </tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; text-align: center; height: 345px !important; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; font-size: 13px; background-color: #ccc; font-weight: bold;">
+                                <td style="text-align: center; width: 5% !important; padding: 2px 4px 1px 4px;">CANT</td>
+                                <td style="text-align: left; width: 50% !important; padding: 2px 4px 1px 4px;">DESCRIPCIÓN</td>
+                                <td style="text-align: center; padding: 2px 4px 1px 4px;">UNITARIO</td>
+                                <td style="text-align: center; width: 15% !important; padding: 2px 4px 1px 4px;">UNI. C/DTO</td>
+                                <td style="text-align: center; padding: 2px 4px 1px 4px;">TOTAL</td>
+                            </tr>
+                            {tbl_egresodetalle}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
+                <tr style="padding:5px 0 8px 0; background-color: #ccc; font-weight: bold;">
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      Subtotal
+                    </td>
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      IVA Insc.
+                    </td>
+                    <td style="width: 33% !important; text-align: center; font-size: 18px;" colspan="2">
+                      Total
+                    </td>
+                </tr>
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      {egreso-subtotal}
+                    </td>
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      {egreso-importe_iva}
+                    </td>
+                    <td style="width: 33% !important; text-align: center; font-size: 18px;" colspan="2">
+                      {egreso-importe_total}
+                    </td>
+                </tr>                
+            </table>
+            <table style="border: none; width: 100% !important;" cellspacing="1">
+                <tr>
+                    <td style="text-align: left; width: 20% !important;">
+                        <img src="data:image/gif;base64,{egreso-cod_qr}" width="75" height="75">
+                    </td>
+                    <td style="text-align: left; width: 40% !important; font-size: 8px;">
+                        <img width="" height="" src='static/template/images/AfipComprobanteAutorizado.jpg' class="text-align-center"/><br>
+                        Esta Administración Federal no se responsabiliza por los datos ingresados en el detalle de la operación.
+                    </td>
+                    <td style="text-align: right; width: 40% !important; font-size: 13px;">
+                        Hojas: {numero_hoja}/{cantidad_hojas}<br>
+                        CAE: {egreso-cae}<br>
+                        Vto. CAE: {egreso-fecha_vencimiento}
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td style=" width: 49% !important; padding-right: 1%;">
+            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 48% !important; text-align: center; font-size: 13px;">
+                        <img width="100" height="50" src='static/template/images/logoFrio.jpg' class="text-align-center"/><br>
+                        <strong>{configuracion-razon_social} S.R.L.</strong>
+                    </td>
+                    <td style="width: 4% !important; border-left: 1px #000 solid; border-right: 1px #000 solid; border-bottom: 1px #000 solid; text-align: center; font-size: 15px;">
+                        <strong>A</strong><br>
+                        <font style="font-size: 10px;">Código N° 01</font>
+                    </td>
+                    <td style="width: 48% !important; text-align: right; font-size: 18px; padding-left: 15px;">
+                        <strong>FACTURA</strong><br>
+                        <strong>N°: {egreso-punto_venta}-{egreso-numero_factura} A</strong><br>
+                        <font style="font-size: 15px;">Fecha: {egreso-fecha}</font>
+                    </td>
+                </tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 45% !important;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr>                                
+                                <td style="width: 50% !important; font-size: 15px;">
+                                    {configuracion-domicilio_comercial}<br>
+                                    La Rioja<br>
+                                    Tel: 0380-4420964
+                                </td>
+                                <td style="border-left: 1px #000 solid;  width: 50% !important; text-align: left; padding-left: 15px; font-size: 15px;">
+                                    <strong>CUIT: {configuracion-cuit}</strong><br>
+                                    <strong>IIBB: </strong>{configuracion-ingresos_brutos}<br>
+                                    <strong>Inicio Actividades: </strong>{configuracion-fecha_inicio_actividad}<br>
+                                    <strong>Resp. Inscripto</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 1px; border-top: 1px #000 solid;"><td colspan="3"></td></tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left; font-size: 18px;">
+                                    Sres: <b>{cliente-razon_social}</b> - [{cliente-codigo}]
+                                </td>
+                                <td style="width: 35% !important; text-align: left; font-size: 15px;">
+                                    {egreso-cliente_documentotipo}: {cliente-documento}
+                                </td>
+                            </tr>
+                            <tr style=" text-align: center; font-size: 15px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Dom.: {cliente-domicilio} - {cliente-barrio} - Loc.: {cliente-localidad}
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    I.V.A.: {cliente-condicioniva}
+                                </td>
+                            </tr>
+                            <tr style=" text-align: center; font-size: 15px; width: 100% !important;">
+                                <td style="width: 65% !important; text-align: left;">
+                                    Prov.: {provincia-denominacion} - Teléfonos: {cliente-telefono}
+                                </td>
+                                <td style="width: 35% !important; text-align: left;">
+                                    IIBB:
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr style="height: 1px; border-top: 1px #000 solid;"><td colspan="3"></td></tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; border-top: 1px #000 solid; text-align: center;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; font-size: 15px; width: 100% !important;">
+                                <td style="width: 33% !important; text-align: left;">
+                                    C. Venta: <b>{condicionpago-denominacion}
+                                </td>
+                                <td style="width: 33% !important; text-align: center;">
+                                    Vendedor: {vendedor}
+                                </td>
+                                <td style="width: 33% !important; text-align: right;">
+                                    Flete: {flete}
+                                </td>
+                            </tr>                            
+                        </table>
+                    </td>
+                </tr>
+                <tr style="padding:5px 0 8px 0;">
+                    <td style="width: 100% !important; text-align: center; height: 345px !important; vertical-align: top;" colspan="3">
+                        <table cellspacing="0" style="width: 100% !important;">
+                            <tr style=" text-align: center; font-size: 13px; background-color: #ccc; font-weight: bold;">
+                                <td style="text-align: center; width: 5% !important; padding: 2px 4px 1px 4px;">CANT</td>
+                                <td style="text-align: left; width: 50% !important; padding: 2px 4px 1px 4px;">DESCRIPCIÓN</td>
+                                <td style="text-align: center; padding: 2px 4px 1px 4px;">UNITARIO</td>
+                                <td style="text-align: center; width: 15% !important; padding: 2px 4px 1px 4px;">UNI. C/DTO</td>
+                                <td style="text-align: center; padding: 2px 4px 1px 4px;">TOTAL</td>
+                            </tr>
+                            {tbl_egresodetalle}
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <table style="border: 1px #000 solid; width: 100% !important;" cellspacing="1">
+                <tr style="padding:5px 0 8px 0; background-color: #ccc; font-weight: bold;">
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      Subtotal
+                    </td>
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      IVA Insc.
+                    </td>
+                    <td style="width: 33% !important; text-align: center; font-size: 18px;" colspan="2">
+                      Total
+                    </td>
+                </tr>
+                <tr style="font-size: 11px; padding:5px 0 8px 0; width: 100% !important;">
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      {egreso-subtotal}
+                    </td>
+                    <td style="width: 33% !important; border-right: 1px solid; text-align: center; font-size: 18px;">
+                      {egreso-importe_iva}
+                    </td>
+                    <td style="width: 33% !important; text-align: center; font-size: 18px;" colspan="2">
+                      {egreso-importe_total}
+                    </td>
+                </tr>                
+            </table>
+            <table style="border: none; width: 100% !important;" cellspacing="1">
+                <tr>
+                    <td style="text-align: left; width: 20% !important;">
+                        <img src="data:image/gif;base64,{egreso-cod_qr}" width="75" height="75">
+                    </td>
+                    <td style="text-align: left; width: 40% !important; font-size: 8px;">
+                        <img width="" height="" src='static/template/images/AfipComprobanteAutorizado.jpg' class="text-align-center"/><br>
+                        Esta Administración Federal no se responsabiliza por los datos ingresados en el detalle de la operación.
+                    </td>
+                    <td style="text-align: right; width: 40% !important; font-size: 13px;">
+                        Hojas: {numero_hoja}/{cantidad_hojas}<br>
+                        CAE: {egreso-cae}<br>
+                        Vto. CAE: {egreso-fecha_vencimiento}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>

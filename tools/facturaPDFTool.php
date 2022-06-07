@@ -183,7 +183,16 @@ class FacturaPDF extends View {
         $cantidad_hojas = count($new_array);
         $i = 1;
         foreach ($new_array as $egresodetalle_array) {
-            $gui_facturaB = file_get_contents("static/common/plantillas_facturas/facturaB.html");
+            if ($cantidad_hojas > 1) {
+                if ($i == $cantidad_hojas) {
+                    $gui_facturaB = file_get_contents("static/common/plantillas_facturas/facturaB.html");
+                } else { 
+                    $gui_facturaB = file_get_contents("static/common/plantillas_facturas/facturaB_sinTotal.html");
+                }
+            } else {
+                $gui_facturaB = file_get_contents("static/common/plantillas_facturas/facturaB.html");
+            }
+
             $gui_tbl_facturaB = file_get_contents("static/common/plantillas_facturas/tbl_facturaB.html");
             $gui_tbl_facturaB = $this->render_regex_dict('TBL_EGRESODETALLE', $gui_tbl_facturaB, $egresodetalle_array);
 
