@@ -1453,6 +1453,12 @@ class EgresoController {
 			}
 		}
 
+		$array_temp = array();
+        foreach ($egreso_collection as $array) {
+            $array_temp[] = $array['FACTURA'];
+        }
+
+        array_multisort($array_temp, SORT_ASC, $egreso_collection);
 		$flete_collection = Collector()->get('Flete');
 
 		$this->view->entregas_pendientes($egreso_collection, $flete_collection, $arg);
