@@ -36,7 +36,8 @@ class ProductoController {
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 0 ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
-		$this->view->modificacion_precio_por_lote($producto_collection);
+		$productomarca_collection = Collector()->get('ProductoMarca');
+		$this->view->modificacion_precio_por_lote($producto_collection, $productomarca_collection);
 	}
 
 	function ocultos() {

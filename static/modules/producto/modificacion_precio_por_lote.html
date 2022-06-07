@@ -4,7 +4,18 @@
         <li><a href="{url_app}/{objeto}/listar">Listar Productos</a></li>
     </ul>
 </div>
-<div class="col-md-12 col-sm-12 col-xs-12" align="right">
+<div class="col-md-5 col-sm-12 col-xs-12" align="right">
+    <div class="input-group">
+        <label>Marca</label>
+        <select class="form-control m-bot15" name="productomarca" id="productomarca" required>
+            {slt_productomarca}
+        </select>
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-primary">Filtrar!</button>
+        </span>
+    </div>
+</div>
+<div class="col-md-5 col-sm-12 col-xs-12" align="right">
     <button type="button" class="btn btn-danger btn-xs" style="font-size: 14px;" onClick="location.href='{url_app}/productomarca/panel'">
         <i class="fa fa-table"></i> Marcas
     </button>
