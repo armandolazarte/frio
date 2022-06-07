@@ -2151,7 +2151,7 @@ class PedidoVendedorController {
 		$this->model->get();
 		$vendedor_id = $this->model->vendedor_id;
 		$this->model->estadopedido = 2;
-		$this->model->save();
+		//$this->model->save();
 
 		$archivo = "facturas/egresos/Factura-{$egreso_id}";
 		FileHandler::get_file($archivo);
