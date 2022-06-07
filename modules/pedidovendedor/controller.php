@@ -1759,7 +1759,6 @@ class PedidoVendedorController {
 			$this->model->egreso_id = $egreso_id;
 			$this->model->save();
 
-			require_once 'tools/facturaPDFTool.php';
 			$tem = new Egreso();
 			$tem->egreso_id = $egreso_id;
 			$tem->get();
@@ -1772,6 +1771,8 @@ class PedidoVendedorController {
 			$flete->flete_id = $flete_id;
 			$flete->get();
 
+			require_once 'tools/facturaPDFTool.php';
+			$facturaPDFHelper = new FacturaPDF();
 			switch ($tipofactura_id) {
 				case 1:
 					$facturaPDFHelper->facturaA($egresodetalle_collection, $com, $tem, $vendedor, $flete);
