@@ -40,6 +40,17 @@ class ProductoController {
 		$this->view->modificacion_precio_por_lote($producto_collection, $productomarca_collection);
 	}
 
+	function modificacion_precio_por_lote_marca() {
+		SessionHandler()->check_session();
+		$productomarca = filter_input(INPUT_POST, 'productomarca');
+		$select = "p.producto_id AS PROID, p.codigo AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.flete AS FLETE, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, p.precio_venta AS VENTA";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "p.oculto = 0 AND p.productomarca = {$productomarca} ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
+		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
+		$productomarca_collection = Collector()->get('ProductoMarca');
+		$this->view->modificacion_precio_por_lote($producto_collection, $productomarca_collection);
+	}
+
 	function ocultos() {
 		SessionHandler()->check_session();
 		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.iva AS IVA, p.precio_venta AS VENTA, p.ubicacion AS UBICACION";

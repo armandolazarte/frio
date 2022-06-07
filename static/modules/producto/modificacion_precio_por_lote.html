@@ -4,14 +4,16 @@
         <li><a href="{url_app}/{objeto}/listar">Listar Productos</a></li>
     </ul>
 <div class="col-md-7 col-sm-12 col-xs-12" align="right">
-    <div class="input-group">
-        <select class="form-control m-bot15" name="productomarca" id="productomarca" required>
-            {slt_productomarca}
-        </select>
-        <span class="input-group-btn">
-            <button type="button" class="btn btn-primary">Filtrar!</button>
-        </span>
-    </div>
+    <form class="form" id="" method="post" action="{url_app}/producto/modificacion_precio_por_lote_marca">
+        <div class="input-group">
+            <select class="form-control m-bot15" name="productomarca" id="productomarca" required>
+                {slt_productomarca}
+            </select>
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">Filtrar</button>
+            </span>
+        </div>
+    </form>
 </div>
 <div class="col-md-5 col-sm-12 col-xs-12" align="right">
     <button type="button" class="btn btn-danger btn-xs" style="font-size: 14px;" onClick="location.href='{url_app}/productomarca/panel'">
