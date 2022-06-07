@@ -1375,6 +1375,51 @@ class EgresoController {
 			$cccm->save();
 		}
 
+		//AFIP
+		$cm = new Configuracion();
+		$cm->configuracion_id = 1;
+		$cm->get();
+
+		$ncm = new NotaCredito();
+		$ncm->notacredito_id = $notacredito_id;
+		$ncm->get();
+		
+		$em = new Egreso();
+		$em->egreso_id = $egreso_id;
+		$em->get();
+		$tipofactura_id = $em->tipofactura->tipofactura_id;
+
+		switch ($tipofactura_id) {
+			case 1:
+				$tiponc_id = 4;
+				break;
+			case 3:
+				$tiponc_id = 5;
+				break;
+		}
+
+		$tfm = new TipoFactura();
+		$tfm->tipofactura_id = $tiponc_id;
+		$tfm->get();
+
+		$select = "ncd.codigo_producto AS CODIGO, ncd.descripcion_producto AS DESCRIPCION, ncd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ncd.descuento AS DESCUENTO, ncd.valor_descuento AS VD, p.no_gravado AS NOGRAVADO, ncd.costo_producto AS COSTO, ROUND(ncd.importe, 2) AS IMPORTE, ncd.iva AS IVA, p.exento AS EXENTO";
+		$from = "notacreditodetalle ncd INNER JOIN producto p ON ncd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "ncd.egreso_id = {$egreso_id}";
+		$notacreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+		$resultadoAFIP = FacturaAFIPTool()->notaCreditoAFIP($cm, $tfm, $ncm, $em, $notacreditodetalle_collection);
+		if (is_array($resultadoAFIP)) {
+			$this->model = new NotaCredito();
+			$this->model->notacredito_id = $notacredito_id;
+			$this->model->get();
+			$this->model->punto_venta = $cm->punto_venta;
+			$this->model->numero_factura = $resultadoAFIP['NUMFACTURA'];
+			$this->model->numero_cae = $resultadoAFIP['CAE'];
+			$this->model->vencimiento_cae = $resultadoAFIP['CAEFchVto'];
+			$this->model->emitido_afip = 1;
+			$this->model->save();
+		}
+
 		header("Location: " . URL_APP . "/notacredito/consultar/{$notacredito_id}");
 	}
 
