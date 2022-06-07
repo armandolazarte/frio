@@ -1407,17 +1407,20 @@ class EgresoController {
 		$where = "ncd.egreso_id = {$egreso_id}";
 		$notacreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
 
-		$resultadoAFIP = FacturaAFIPTool()->notaCreditoAFIP($cm, $tfm, $ncm, $em, $notacreditodetalle_collection);
-		if (is_array($resultadoAFIP)) {
-			$this->model = new NotaCredito();
-			$this->model->notacredito_id = $notacredito_id;
-			$this->model->get();
-			$this->model->punto_venta = $cm->punto_venta;
-			$this->model->numero_factura = $resultadoAFIP['NUMFACTURA'];
-			$this->model->numero_cae = $resultadoAFIP['CAE'];
-			$this->model->vencimiento_cae = $resultadoAFIP['CAEFchVto'];
-			$this->model->emitido_afip = 1;
-			$this->model->save();
+
+		if ($tipofactura_id == 1 OR $tipofactura_id == 3) {
+			$resultadoAFIP = FacturaAFIPTool()->notaCreditoAFIP($cm, $tfm, $ncm, $em, $notacreditodetalle_collection);
+			if (is_array($resultadoAFIP)) {
+				$this->model = new NotaCredito();
+				$this->model->notacredito_id = $notacredito_id;
+				$this->model->get();
+				$this->model->punto_venta = $cm->punto_venta;
+				$this->model->numero_factura = $resultadoAFIP['NUMFACTURA'];
+				$this->model->numero_cae = $resultadoAFIP['CAE'];
+				$this->model->vencimiento_cae = $resultadoAFIP['CAEFchVto'];
+				$this->model->emitido_afip = 1;
+				$this->model->save();
+			}
 		}
 
 		header("Location: " . URL_APP . "/notacredito/consultar/{$notacredito_id}");
