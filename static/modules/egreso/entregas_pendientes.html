@@ -73,7 +73,7 @@
                     </select>
                 </div>
                 <label><small>Recuerde seleccionar al menos un egreso de la lista de pendientes!</small></label>
-                <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="armarHojaRuta();">
+                <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" id="btn_armarHojaRuta" onClick="armarHojaRuta();">
                     <i class="fa fa-save"></i> CONFECCIONAR RUTA
                 </button>
             </div>
@@ -228,6 +228,8 @@
         }
 
         if (flag_array == 0) {
+            document.getElementById('btn_armarHojaRuta').style.display = "none";
+            document.getElementById('btn_armarHojaRuta').disabled = true;
             var form = document.getElementById('formulario_guardar');
             form.action = "{url_app}/egreso/descargar_hoja_ruta_flete";
             document.getElementById("formulario_guardar").submit();
