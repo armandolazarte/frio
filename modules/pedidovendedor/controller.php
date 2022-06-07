@@ -1773,7 +1773,7 @@ class PedidoVendedorController {
 
 			require_once 'tools/facturaPDFTool.php';
 			$facturaPDFHelper = new FacturaPDF();
-			switch ($tipofactura_id) {
+			switch ($tipofactura) {
 				case 1:
 					$facturaPDFHelper->facturaA($egresodetalle_collection, $com, $tem, $vendedor, $flete);
 					break;
