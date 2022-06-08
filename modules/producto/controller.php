@@ -37,6 +37,10 @@ class ProductoController {
 		$where = "p.oculto = 0 ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 		$productomarca_collection = Collector()->get('ProductoMarca');
+		foreach ($productomarca_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($productomarca_collection[$clave]);
+		}
+		
 		$this->view->modificacion_precio_por_lote($producto_collection, $productomarca_collection);
 	}
 
