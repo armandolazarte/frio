@@ -1764,6 +1764,36 @@ class PedidoVendedorController {
 			$tem->get();
 			$infocontacto_collection = $tem->cliente->infocontacto_collection;
 
+			$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+			$where = "eafip.egreso_id = {$egreso_id}";
+			$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+
+			$vendedor = $tem->vendedor->apellido . ' ' . $tem->vendedor->nombre;
+			$flete = $tem->cliente->flete->denominacion;
+			if (!is_array($egresoafip)) {
+				$egresoafip = array();
+				$tem->cae = 0;
+				$tem->fecha_vencimiento = 0;
+				$tipofactura_id = $tem->tipofactura->tipofactura_id;
+				$plantilla_tipofactura = $tem->tipofactura->plantilla_impresion;
+			} else {
+				$egresoafip = $egresoafip[0];
+				$tipofactura_id = $egresoafip['TF_ID'];
+				$tfm = new TipoFactura();
+				$tfm->tipofactura_id = $tipofactura_id;
+				$tfm->get();
+
+				$tem->punto_venta = $egresoafip['PUNTO_VENTA'];
+				$tem->numero_factura = $egresoafip['NUMERO_FACTURA'];
+				$tem->fecha = $egresoafip['FECHA'];
+				$tem->cae = $egresoafip['CAE'];
+				$tem->fecha_vencimiento = $egresoafip['FVENCIMIENTO'];
+				unset($tem->tipofactura);
+				$tem->tipofactura = $tfm;
+				$tipofactura_id = $tem->tipofactura->tipofactura_id;
+			}
+
 			if (is_array($infocontacto_collection) AND !empty($infocontacto_collection)) {
 				foreach ($infocontacto_collection as $infocontacto) if ($infocontacto->denominacion == 'Teléfono') $telefono = $infocontacto->valor;
 
@@ -1776,6 +1806,7 @@ class PedidoVendedorController {
 				$tem->cliente->telefono = '';
 			}
 
+			/*
 			$vendedor = new Vendedor();
 			$vendedor->vendedor_id = $vendedor_id;
 			$vendedor->get();
@@ -1785,6 +1816,7 @@ class PedidoVendedorController {
 			$flete->flete_id = $flete_id;
 			$flete->get();
 			$flete = $tem->cliente->flete->denominacion;
+			*/
 
 			$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS BKDESCRIP, p.denominacion AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, ed.neto_producto AS NETPRO, ed.valor_ganancia AS GANANCIA";
 			$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
