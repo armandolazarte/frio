@@ -1825,7 +1825,7 @@ class PedidoVendedorController {
 			
 			require_once 'tools/facturaPDFTool.php';
 			$facturaPDFHelper = new FacturaPDF();
-			switch ($tipofactura) {
+			switch ($tipofactura_id) {
 				case 1:
 					$facturaPDFHelper->facturaA($egresodetalle_collection, $com, $tem, $vendedor, $flete);
 					break;
