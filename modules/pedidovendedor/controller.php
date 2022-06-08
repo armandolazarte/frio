@@ -1779,12 +1779,12 @@ class PedidoVendedorController {
 			$vendedor = new Vendedor();
 			$vendedor->vendedor_id = $vendedor_id;
 			$vendedor->get();
-			$vendedor = $this->model->vendedor->apellido . ' ' . $this->model->vendedor->nombre;
+			$vendedor = $tem->vendedor->apellido . ' ' . $tem->vendedor->nombre;
 
 			$flete = new Flete();
 			$flete->flete_id = $flete_id;
 			$flete->get();
-			$flete = $this->model->cliente->flete->denominacion;
+			$flete = $tem->cliente->flete->denominacion;
 
 			$select = "ed.codigo_producto AS CODIGO, ed.descripcion_producto AS BKDESCRIP, p.denominacion AS DESCRIPCION, ed.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, ed.descuento AS DESCUENTO, ed.valor_descuento AS VD, ed.costo_producto AS COSTO, ROUND(ed.importe, 2) AS IMPORTE, ed.iva AS IVA, ed.neto_producto AS NETPRO, ed.valor_ganancia AS GANANCIA";
 			$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
