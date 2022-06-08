@@ -1712,8 +1712,12 @@ class ReporteController {
 		$where = "p.oculto = 0";
 		$groupby = "p.producto_id ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
-		$productomarca_collection = Collector()->get('ProductoMarca');
 		$gastocategoria_collection = Collector()->get('GastoCategoria');
+		$productomarca_collection = Collector()->get('ProductoMarca');
+		foreach ($productomarca_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($productomarca_collection[$clave]);
+		}
+		
 
 		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION";
 		$from = "proveedor p";
