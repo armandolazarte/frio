@@ -461,12 +461,39 @@ class ReporteController {
 		$cajadiaria = (is_array($cajadiaria) AND !empty($cajadiaria)) ? $cajadiaria[0]['CAJA'] : 0;
 		$cajadiaria = (is_null($cajadiaria)) ? 0 : $cajadiaria;
 
+		$select = "e.egreso_id AS EGRID, ROUND(e.importe_total, 2) AS IMPTOT";
+		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id";
+		$where = "e.condicionpago = 2 AND ee.fecha = '{$fecha_sys}' AND ee.estadoentrega = 4";
+		$cobranzacontado_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+
+		$sum_contado = 0;
+		foreach ($cobranzacontado_collection as $clave=>$valor) {
+			$egreso_id = $valor['EGRID'];
+			$egreso_importe_total = $valor['IMPTOT'];
+
+			$select = "nc.importe_total AS IMPTOT";
+			$from = "notacredito nc";
+			$where = "nc.egreso_id = {$egreso_id}";
+			$notacredito_contado = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+
+			if (is_array($notacredito_contado) AND !empty($notacredito_contado)) {
+				$notacredito_importe_total = $notacredito_contado[0]['IMPTOT'];
+				$nuevo_valor_importe = round(($egreso_importe_total - $notacredito_importe_total), 2);
+				$cobranzacontado_collection[$clave]['IMPTOT'] = $nuevo_valor_importe;
+				if ($nuevo_valor_importe == 0) unset($cobranzacontado_collection[$clave]);
+			}
+			
+			$sum_contado = $sum_contado + $cobranzacontado_collection[$clave]['IMPTOT'];
+		}
+
+		/*
     	$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
 		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega esen ON ee.estadoentrega = esen.estadoentrega_id";
 		$where = "e.condicionpago = 2 AND ee.fecha = CURDATE() AND esen.estadoentrega_id = 4";
 		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
+		*/
 		
 		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
