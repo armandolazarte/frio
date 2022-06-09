@@ -1762,6 +1762,7 @@ class PedidoVendedorController {
 			$tem = new Egreso();
 			$tem->egreso_id = $egreso_id;
 			$tem->get();
+			$tem->cliente_documentotipo = $tem->cliente->documentotipo->denominacion;
 			$infocontacto_collection = $tem->cliente->infocontacto_collection;
 
 			$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
