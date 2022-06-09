@@ -1610,7 +1610,7 @@ class EgresoController {
 			$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 			foreach ($egresodetalle_collection as $clave => $producto) {
-				$key = array_search($producto['PROID'], array_column($array_productos, 'PROID'));
+				$key = array_search($producto['COD'], array_column($array_productos, 'COD'));
 				if (false !== $key OR !empty($key)) {
 					$array_productos[$key]['CANTIDAD'] = $array_productos[$key]['CANTIDAD']+$producto['CANTIDAD'];
  				} else {
