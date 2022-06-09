@@ -1604,13 +1604,13 @@ class EgresoController {
 		$cant_contado = 0;
 		$array_productos = array();
 		foreach ($egreso_ids as $egreso_id) {
-			$select = 'ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pr.unidad_bulto AS UNPOBU';
+			$select = 'ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pr.unidad_bulto AS UNPOBU, p.producto_id AS PROID';
 			$from = 'egresodetalle ed INNER JOIN producto pr ON pr.producto_id = ed.producto_id INNER JOIN productounidad pu ON pu.productounidad_id = pr.productounidad';
 			$where = "ed.egreso_id = {$egreso_id}";
 			$egresodetalle_collection = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
 
 			foreach ($egresodetalle_collection as $clave => $producto) {
-				$key = array_search($producto['COD'], array_column($array_productos, 'COD'));
+				$key = array_search($producto['PROID'], array_column($array_productos, 'PROID'));
 				if (false !== $key OR !empty($key)) {
 					$array_productos[$key]['CANTIDAD'] = $array_productos[$key]['CANTIDAD']+$producto['CANTIDAD'];
  				} else {
