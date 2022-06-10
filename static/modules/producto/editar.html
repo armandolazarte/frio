@@ -338,22 +338,19 @@
         }
 
         if (flag_array == 0) {
-            /*
+            var codigo = document.getElementById("codigo").value;
             var flag = $.ajax({
                 url: '{url_app}/producto/verifica_existencia_codigo/' + codigo,
                     dataType: 'text',
                     async: false
             }).responseText;
-            console.log(flag);
+            
             if (flag > 0) {
                 $('#sistema_alertas').modal('show');
                 document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> El CÓDIGO del producto ya se encuentra cargado en el sistema.";
             } else {
                 document.getElementById("formulario_guardar").submit();
             }
-            */
-            
-            document.getElementById("formulario_guardar").submit();
         } else {
             var mensaje = array.join("<br><br>");
             $('#sistema_alertas').modal('show');
