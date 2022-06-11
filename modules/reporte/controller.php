@@ -3318,31 +3318,45 @@ class ReporteController {
 		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}' AND e.cliente = {$cliente}";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
-
-
-
-
-
-
-
-
-
-
-		
-
-		
-			
 		$subtitulo = "Ventas Cliente: {$denominacion_cliente} - ({$desde} - {$hasta})";
-		$array_encabezados = array('COMPROBANTE', 'FECHA', 'VENDEDOR', 'COND. PAGO', 'IMPORTE');
+		$array_encabezados = array('FECHA', 'COMPROBANTE', 'COND. PAGO', 'VENDEDOR', 'IMPORTE');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
-
+		$total_ventas = 0;
+		$cantidad_ventas = count($egreso_collection);
+		$egreso_ids = array();
 		foreach ($egreso_collection as $clave=>$valor) {
+			$egreso_ids[] = $valor["EGRESO_ID"];
+			$total_ventas = $total_ventas + $valor["IMPORTETOTAL"];
 			$array_temp = array();
-			$array_temp = array($valor["FACTURA"]
-								, $valor["FECHA"]
-								, $valor["VENDEDOR"]
+			$array_temp = array($valor["FECHA"]
+								, $valor["FACTURA"]
 								, $valor["CP"]
+								, $valor["VENDEDOR"]
+								, $valor["IMPORTETOTAL"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		$array_exportacion[] = array('','','','','');
+		$array_exportacion[] = array('','','',"Cant: {$cantidad_ventas}","Total: {$total_ventas}");
+		$array_exportacion[] = array('','','','','');
+
+		$egreso_ids = implode(',', $egreso_ids);
+		$select = "nc.fecha AS FECHA, CONCAT(tifa.nomenclatura, ' ', LPAD(nc.punto_venta, 4, 0), '-', LPAD(nc.numero_factura, 8, 0)) AS NOTCRE, CASE WHEN nc.emitido_afip = 0 THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS REFERENCIA, cl.razon_social AS CLIENTE, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, nc.importe_total AS IMPORTETOTAL, nc.notacredito_id AS NOTACREDITO_ID";
+		$from = "notacredito nc INNER JOIN egreso e ON nc.egreso_id = e.egreso_id INNER JOIN tipofactura tifa ON nc.tipofactura = tifa.tipofactura_id INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+		$where = "nc.egreso_id IN ({$egreso_ids}) ORDER BY e.fecha DESC";
+		$notacredito_collection = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+
+		$array_encabezados = array('FECHA', 'NOTA CREDITO', 'FACTURA', 'VENDEDOR', 'IMPORTE');
+		$array_exportacion[] = $array_encabezados;
+		$total_nc = 0;
+		foreach ($notacredito_collection as $clave=>$valor) {
+			$total_nc = $total_nc + $valor["IMPORTETOTAL"];
+			$array_temp = array();
+			$array_temp = array($valor["FECHA"]
+								, $valor["NOTCRE"]
+								, $valor["REFERENCIA"]
+								, $valor["VENDEDOR"]
 								, $valor["IMPORTETOTAL"]);
 			$array_exportacion[] = $array_temp;
 		}
