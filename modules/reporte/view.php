@@ -401,8 +401,8 @@ class ReporteView extends View {
 		$render = str_replace('{fecha_sys}', date('d/m/Y'), $gui);
 		$render = str_replace('{periodo_actual}', date('Ym'), $render);
 		$render = str_replace('{tbl_cliente}', $tbl_cliente, $render);
-		print_r($render);exit;
 		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		print_r($render);exit;
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
