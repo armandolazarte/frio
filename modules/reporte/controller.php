@@ -3340,6 +3340,9 @@ class ReporteController {
 		$array_exportacion[] = array('','','','','');
 		$array_exportacion[] = array('','','',"Cant: {$cantidad_ventas}","Total: {$total_ventas}");
 		$array_exportacion[] = array('','','','','');
+		$array_exportacion[] = array('','','','','');
+		$array_exportacion[] = array('NOTAS DE CRÉDITO','','','','');
+		$array_exportacion[] = array('','','','','');
 
 		$egreso_ids = implode(',', $egreso_ids);
 		$select = "nc.fecha AS FECHA, CONCAT(tifa.nomenclatura, ' ', LPAD(nc.punto_venta, 4, 0), '-', LPAD(nc.numero_factura, 8, 0)) AS NOTCRE, CASE WHEN nc.emitido_afip = 0 THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS REFERENCIA, cl.razon_social AS CLIENTE, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, nc.importe_total AS IMPORTETOTAL, nc.notacredito_id AS NOTACREDITO_ID";
@@ -3350,6 +3353,7 @@ class ReporteController {
 		$array_encabezados = array('FECHA', 'NOTA CREDITO', 'FACTURA', 'VENDEDOR', 'IMPORTE');
 		$array_exportacion[] = $array_encabezados;
 		$total_nc = 0;
+		$cantidad_nc = count($notacredito_collection);
 		foreach ($notacredito_collection as $clave=>$valor) {
 			$total_nc = $total_nc + $valor["IMPORTETOTAL"];
 			$array_temp = array();
@@ -3361,6 +3365,8 @@ class ReporteController {
 			$array_exportacion[] = $array_temp;
 		}
 
+		$array_exportacion[] = array('','','','','');
+		$array_exportacion[] = array('','','',"Cant: {$cantidad_nc}","Total: {$total_nc}");
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 
