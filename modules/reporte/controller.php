@@ -3337,7 +3337,7 @@ class ReporteController {
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
-		foreach ($importe_venta_cliente as $clave=>$valor) {
+		foreach ($egreso_collection as $clave=>$valor) {
 			$array_temp = array();
 			$array_temp = array($valor["FACTURA"]
 								, $valor["FECHA"]
