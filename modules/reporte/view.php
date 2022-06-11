@@ -396,7 +396,7 @@ class ReporteView extends View {
 
 	function reportes_clientes($cliente_collection, $user_level) {
 		$gui = file_get_contents("static/modules/reporte/reportes_clientes.html");
-		$tbl_cliente = file_get_contents("static/modules/reporte/tbl_cliente.html");
+		$tbl_cliente = file_get_contents("static/modules/reporte/tbl_slt_cliente.html");
 		$tbl_cliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente, $cliente_collection);
 
 		$render = str_replace('{fecha_sys}', date('d/m/Y'), $gui);
