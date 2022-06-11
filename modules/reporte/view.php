@@ -313,9 +313,7 @@ class ReporteView extends View {
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
-	}
-
-	
+	}	
 
 	//PANELES REPORTES
 	function reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $productomarca_collection, $proveedor_collection, $user_level) {
@@ -394,14 +392,17 @@ class ReporteView extends View {
 		print $template;
 	}
 
-	function reportes_clientes($cliente_collection, $user_level) {
+	function reportes_clientes($cliente_collection, $vendedor_collection, $user_level) {
 		$gui = file_get_contents("static/modules/reporte/reportes_clientes.html");
 		$tbl_cliente = file_get_contents("static/modules/reporte/tbl_slt_cliente.html");
 		$tbl_cliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente, $cliente_collection);
+		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor_array.html");
+		$gui_slt_vendedor = $this->render_regex_dict('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
 
 		$render = str_replace('{fecha_sys}', date('d/m/Y'), $gui);
 		$render = str_replace('{periodo_actual}', date('Ym'), $render);
 		$render = str_replace('{tbl_cliente}', $tbl_cliente, $render);
+		$render = str_replace('{gui_slt_vendedor}', $gui_slt_vendedor, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;

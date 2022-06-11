@@ -2648,7 +2648,12 @@ class ReporteController {
 		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
 
-		$this->view->reportes_clientes($cliente_collection, $user_level);
+		$select = "v.vendedor_id AS ID, CONCAT(v.apellido, ' ', v.nombre) AS DENOMINACION";
+		$from = "vendedor v";
+		$where = "v.oculto = 0 ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC";
+		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
+
+		$this->view->reportes_clientes($cliente_collection, $vendedor_collection, $user_level);
 	}
 
 	// REPORTES PRODUCTOS
