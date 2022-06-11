@@ -292,12 +292,13 @@
 <script src="{url_static}vendors/morris.js/morris.min.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        $('#tbl_producto').dataTable( {
+        $('#tbl_cliente').dataTable( {
             "aaSorting": [[ 0, "asc" ]]
           , "iDisplayLength":3
         } );
     } );
 
+    /*
     $(document).ready(function() {
         $('#tbl_marca').dataTable( {
             "aaSorting": [[ 0, "asc" ]]
@@ -323,7 +324,7 @@
     function getXMLHTTPRequest() {
       var req = false;
       try {
-        req = new XMLHttpRequest(); /* p.e. Firefox */
+        req = new XMLHttpRequest(); 
       } catch(err1) {
         try {
           req = new ActiveXObject("Msxml2.XMLHTTP");
@@ -381,7 +382,7 @@
         if(parseInt(flag) === -1){
             var bodyTblProducto = document.getElementById('bodyTblProducto');
 
-            /* FILA */
+            // FILA 
             var trTblProducto = document.createElement("tr");
             trTblProducto.setAttribute("id", "idTrTbl_" + producto_id);
 
@@ -410,7 +411,7 @@
 
             bodyTblProducto.appendChild(trTblProducto);
 
-            /* ARRAY */
+            // ARRAY
             var div_array_reporte_producto_vendedor_fecha = document.getElementById('div_array_reporte_producto_vendedor_fecha');
             var inputProductoId = document.createElement("input");
             inputProductoId.setAttribute("type", "hidden");
@@ -444,7 +445,7 @@
         if(parseInt(flag) === -1){
             var bodyTblMarca = document.getElementById('bodyTblMarca');
 
-            /* FILA */
+            // FILA
             var trTblMarca = document.createElement("tr");
             trTblMarca.setAttribute("id", "idTrTblMarca_" + marca_id);
 
@@ -469,7 +470,7 @@
 
             bodyTblMarca.appendChild(trTblMarca);
 
-            /* ARRAY */
+            // ARRAY
             var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_marca_vendedor_fecha');
             var inputMarcaId = document.createElement("input");
             inputMarcaId.setAttribute("type", "hidden");
@@ -503,7 +504,7 @@
         if(parseInt(flag) === -1){
             var bodyTblMarca = document.getElementById('bodyTblMarcaGrafico');
 
-            /* FILA */
+            // FILA
             var trTblMarca = document.createElement("tr");
             trTblMarca.setAttribute("id", "idTrTblMarcaGrafico_" + marca_id);
 
@@ -528,7 +529,7 @@
 
             bodyTblMarca.appendChild(trTblMarca);
 
-            /* ARRAY */
+            // ARRAY 
             var div_array_reporte_marca_vendedor_fecha = document.getElementById('div_array_reporte_marca_vendedor_fecha_grafico');
             var inputMarcaId = document.createElement("input");
             inputMarcaId.setAttribute("type", "hidden");
@@ -555,4 +556,5 @@
         var index = array_marca_grafico_ids.indexOf(marca_id);
         array_marca_grafico_ids.splice(index, 1);
     }    
+    */
 </script>
