@@ -2647,7 +2647,7 @@ class ReporteController {
 		$from = "cliente c";
 		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
-
+		print_r($cliente_collection);exit;
 		
 		$this->view->reportes_clientes($cliente_collection, $user_level);
 	}
