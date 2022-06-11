@@ -398,7 +398,7 @@ class ReporteView extends View {
 		$tbl_cliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente, $cliente_collection);
 		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor_array.html");
 		$gui_slt_vendedor = $this->render_regex_dict('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
-		
+		print_r($gui_slt_vendedor);exit;
 		$render = str_replace('{fecha_sys}', date('d/m/Y'), $gui);
 		$render = str_replace('{periodo_actual}', date('Ym'), $render);
 		$render = str_replace('{tbl_cliente}', $tbl_cliente, $render);
