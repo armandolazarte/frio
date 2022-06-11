@@ -394,6 +394,19 @@ class ReporteView extends View {
 		print $template;
 	}
 
+	function reportes_clientes($cliente_collection, $user_level) {
+		$gui = file_get_contents("static/modules/reporte/reportes_clientes.html");
+		$tbl_cliente = file_get_contents("static/modules/reporte/tbl_cliente.html");
+		$tbl_cliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente, $cliente_collection);
+
+		$render = str_replace('{fecha_sys}', date('d/m/Y'), $gui);
+		$render = str_replace('{periodo_actual}', date('Ym'), $render);
+		$render = str_replace('{tbl_cliente}', $tbl_cliente, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
+
 	// REPORTES PRODUCTOS
 	function ajax_cobertura_marca($obj_resultado, $array_titulo, $tipo_grafico, $vendedor) {
 		if ($tipo_grafico == 1) {

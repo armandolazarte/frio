@@ -2624,6 +2624,9 @@ class ReporteController {
 		$groupby = "p.producto_id ORDER BY CONCAT(pm.denominacion, ' ', p.denominacion) ASC";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
 		$productomarca_collection = Collector()->get('ProductoMarca');
+		foreach ($productomarca_collection as $clave=>$valor) {
+			if($valor->oculto == 0) unset($productomarca_collection[$clave]);
+		}
 		
 		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION";
 		$from = "proveedor p";
@@ -2631,6 +2634,22 @@ class ReporteController {
 		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
 
 		$this->view->reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $productomarca_collection, $proveedor_collection, $user_level);
+	}
+
+	function reportes_clientes() {
+		SessionHandler()->check_session();
+		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
+    	$fecha_sys = strtotime(date('Y-m-d'));
+		$periodo_minimo = date("Ym", strtotime("-6 month", $fecha_sys));
+    	$periodo_actual = date('Ym');
+
+    	$select = "c.cliente_id AS CLIID, c.razon_social AS DENOMINACION, c.barrio AS BARRIO, c.domicilio AS DOMICILIO";
+		$from = "cliente c";
+		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
+		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+
+		
+		$this->view->reportes_clientes($cliente_collection, $user_level);
 	}
 
 	// REPORTES PRODUCTOS
