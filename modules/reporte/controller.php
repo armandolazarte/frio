@@ -3306,8 +3306,8 @@ class ReporteController {
 
 		$desde = filter_input(INPUT_POST, 'desde');
 		$hasta = filter_input(INPUT_POST, 'hasta');
-		$cliente = filter_input(INPUT_POST, 'cliente');
-		print_r($_POST);exit;
+		$cliente = filter_input(INPUT_POST, 'cliente_id');
+		
 		$cm = new Cliente();
 		$cm->cliente_id = $cliente;
 		$cm->get();
