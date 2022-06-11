@@ -2647,7 +2647,7 @@ class ReporteController {
 		$from = "cliente c";
 		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
-		
+
 		$this->view->reportes_clientes($cliente_collection, $user_level);
 	}
 
@@ -3299,6 +3299,57 @@ class ReporteController {
 
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
+
+	function desc_cantidad_ventas_cliente_fecha() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+		$cliente = filter_input(INPUT_POST, 'cliente');
+		
+		$cm = new Cliente();
+		$cm->cliente_id = $cliente;
+		$cm->get();
+		$denominacion_cliente = $cm->razon_social;
+
+		$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECHA, e.subtotal AS SUBTOTAL, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}' AND e.cliente = {$cliente}";
+		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+
+
+
+
+
+
+
+
+
+
+
+		
+
+		
+			
+		$subtitulo = "Ventas Cliente: {$denominacion_cliente} - ({$desde} - {$hasta})";
+		$array_encabezados = array('COMPROBANTE', 'FECHA', 'VENDEDOR', 'COND. PAGO', 'IMPORTE');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+
+		foreach ($importe_venta_cliente as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["FACTURA"]
+								, $valor["FECHA"]
+								, $valor["VENDEDOR"]
+								, $valor["CP"]
+								, $valor["IMPORTETOTAL"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
+
 
 	// REPORTES GASTOS
 	function desc_gastos_categoria_fecha() {
