@@ -2624,12 +2624,12 @@ class ReporteController {
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select, $groupby);
 		$productomarca_collection = Collector()->get('ProductoMarca');
 		foreach ($productomarca_collection as $clave=>$valor) {
-			if($valor->oculto == 0) unset($productomarca_collection[$clave]);
+			if($valor->oculto == 1) unset($productomarca_collection[$clave]);
 		}
 		
 		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION";
 		$from = "proveedor p";
-		$where = "p.oculto = 1 ORDER BY p.razon_social ASC";
+		$where = "p.oculto = 0 ORDER BY p.razon_social ASC";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
 
 		$this->view->reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $productomarca_collection, $proveedor_collection, $user_level);
