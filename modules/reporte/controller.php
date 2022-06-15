@@ -2566,8 +2566,7 @@ class ReporteController {
 		$periodo_minimo = date("Ym", strtotime("-6 month", $fecha_sys));
     	$periodo_actual = date('Ym');
 
-    	$select = "ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, ROUND(SUM(ed.importe),2) AS IMPORTE,
-				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
+    	$select = "ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, ROUND(SUM(ed.importe),2) AS IMPORTE, ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ed.producto_id AS PRID";
 		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id";
 		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
 		
@@ -2630,7 +2629,7 @@ class ReporteController {
 		
 		$select = "p.proveedor_id AS ID, p.razon_social AS DENOMINACION";
 		$from = "proveedor p";
-		$where = "p.oculto = 0 ORDER BY p.razon_social ASC";
+		$where = "p.oculto = 1 ORDER BY p.razon_social ASC";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', $where, 4, $from, $select);
 
 		$this->view->reportes_productos($sum_importe_producto, $sum_cantidad_producto, $vendedor_collection, $producto_collection, $productomarca_collection, $proveedor_collection, $user_level);
