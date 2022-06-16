@@ -47,6 +47,9 @@ const DEFAULT_ACTION = "panel";
 
 define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 ini_set('include_path', DOCUMENT_ROOT);
+ini_set("session.cookie_lifetime",28800);
+ini_set("session.gc_maxlifetime",28800);
+ini_set('session.cache_expire', 28000);
 
 session_start();
 $session_vars = array('login'=>false);
