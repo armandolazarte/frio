@@ -1292,7 +1292,7 @@ class PedidoVendedorController {
 		$groupby = "p.producto_id";
 		$producto_collection = CollectorCondition()->get('Producto', NULL, 4, $from, $select, $groupby);
 
-		$select = "pvd.codigo_producto AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, p.costo AS COSTO, pvd.importe AS IMPORTE, pvd.pedidovendedordetalle_id AS PEDVENID, pvd.producto_id AS PRODUCTO, pvd.valor_descuento AS VD, p.iva AS IVA, p.porcentaje_ganancia AS VALGAN, p.flete AS FLETE";
+		$select = "pvd.codigo_producto AS CODIGO, CONCAT(pm.denominacion, ' ', p.denominacion) AS DESCRIPCION, pvd.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, pvd.descuento AS DESCUENTO, p.costo AS COSTO, pvd.importe AS IMPORTE, pvd.pedidovendedordetalle_id AS PEDVENID, pvd.producto_id AS PRODUCTO, pvd.valor_descuento AS VD, p.iva AS IVA, p.porcentaje_ganancia AS VALGAN, p.flete AS FLETE, pvd.pedidovendedor_id CONID";
 		$from = "pedidovendedordetalle pvd INNER JOIN producto p ON pvd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "pvd.pedidovendedor_id = {$arg}";
 		$pedidovendedordetalle_collection = CollectorCondition()->get('PedidoVendedorDetalle', $where, 4, $from, $select);
@@ -1445,6 +1445,7 @@ class PedidoVendedorController {
 	function guardar_procesar_lote() {
 		SessionHandler()->check_session();
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$pedidovendedor_id = filter_input(INPUT_POST, 'pedidovendedor_id');
 		
 		$com = new Configuracion();
 		$com->configuracion_id = 1;
@@ -1564,6 +1565,7 @@ class PedidoVendedorController {
 		$egresodetalle_ids = array();
 		$importe_control = 0;
 		foreach ($egresos_array as $egreso) {
+			$linea_pedidovendedor_id = $egreso['pedidovendedor_id'];
 			$producto_id = $egreso['producto_id'];
 			$cantidad = $egreso['cantidad'];
 			$costo_producto = $egreso['costo'];
@@ -1571,64 +1573,67 @@ class PedidoVendedorController {
 			$importe = $egreso['costo_total'];
 			$descuento = $egreso['descuento'];
 
-			$pm = new Producto();
-			$pm->producto_id = $producto_id;
-			$pm->get();
+			if($linea_pedidovendedor_id == $pedidovendedor_id) {
+				$pm = new Producto();
+				$pm->producto_id = $producto_id;
+				$pm->get();
 
-			$iva = $pm->iva;
-			$neto = $pm->costo;
-			$flete = $pm->flete;
-			$porcentaje_ganancia = $pm->porcentaje_ganancia;
-			
-			//PRECIO NETO
-			$valor_neto = $neto + ($iva * $neto / 100);
-			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
-			//PRECIO VENTA
-			$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
-			//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN CON LISTA DE PRECIO
-			$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
-			if ($condicion_listaprecio == '+') {
-				$pvp_factura = $pvp + $valor_por_listaprecio;						
-			} elseif ($condicion_listaprecio == '-') {
-				$pvp_factura = $pvp - $valor_por_listaprecio;
+				$iva = $pm->iva;
+				$neto = $pm->costo;
+				$flete = $pm->flete;
+				$porcentaje_ganancia = $pm->porcentaje_ganancia;
+				
+				//PRECIO NETO
+				$valor_neto = $neto + ($iva * $neto / 100);
+				$valor_neto = $valor_neto + ($flete * $valor_neto / 100);						
+				//PRECIO VENTA
+				$pvp = $valor_neto + ($porcentaje_ganancia * $valor_neto / 100);
+				//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN CON LISTA DE PRECIO
+				$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
+				if ($condicion_listaprecio == '+') {
+					$pvp_factura = $pvp + $valor_por_listaprecio;						
+				} elseif ($condicion_listaprecio == '-') {
+					$pvp_factura = $pvp - $valor_por_listaprecio;
+				}
+				
+				//IMPORTE NETO
+				$total_neto = $valor_neto * $cantidad;
+				//IMPORTE VENTA
+				$total_pvp = $pvp_factura * $cantidad;
+
+				//DESCUENTO
+				$valor_descuento_recalculado = $descuento * $total_pvp / 100;
+
+				//GANANCIA FINAL
+				$ganancia = round(($total_pvp - $total_neto),2);
+				$ganancia_final = $ganancia - $valor_descuento_recalculado;
+				$ganancia_final = round($ganancia_final, 2);
+
+				//IMPORTE FINAL
+				$importe_final = $total_pvp - $valor_descuento_recalculado;
+				$importe_final = round($importe_final, 2);
+
+				$edm = new EgresoDetalle();
+				$edm->codigo_producto = $egreso['codigo'];
+				$edm->descripcion_producto = $egreso['descripcion'];
+				$edm->cantidad = $cantidad;
+				$edm->valor_descuento = round($valor_descuento_recalculado, 2);
+				$edm->descuento = $descuento;
+				$edm->neto_producto = $neto;
+				$edm->costo_producto = round($pvp_factura, 2);
+				$edm->iva = $iva;
+				$edm->importe = $importe_final;
+				$edm->valor_ganancia = $ganancia_final;
+				$edm->producto_id = $producto_id;
+				$edm->egreso_id = $egreso_id;
+				$edm->egresodetalleestado = 1;
+				$edm->flete_producto = $flete;
+				$edm->save();
+				$egresodetalle_ids[] = $edm->egresodetalle_id;
+
+				$importe_control = $importe_control + $importe_final;
+				
 			}
-			
-			//IMPORTE NETO
-			$total_neto = $valor_neto * $cantidad;
-			//IMPORTE VENTA
-			$total_pvp = $pvp_factura * $cantidad;
-
-			//DESCUENTO
-			$valor_descuento_recalculado = $descuento * $total_pvp / 100;
-
-			//GANANCIA FINAL
-			$ganancia = round(($total_pvp - $total_neto),2);
-			$ganancia_final = $ganancia - $valor_descuento_recalculado;
-			$ganancia_final = round($ganancia_final, 2);
-
-			//IMPORTE FINAL
-			$importe_final = $total_pvp - $valor_descuento_recalculado;
-			$importe_final = round($importe_final, 2);
-
-			$edm = new EgresoDetalle();
-			$edm->codigo_producto = $egreso['codigo'];
-			$edm->descripcion_producto = $egreso['descripcion'];
-			$edm->cantidad = $cantidad;
-			$edm->valor_descuento = round($valor_descuento_recalculado, 2);
-			$edm->descuento = $descuento;
-			$edm->neto_producto = $neto;
-			$edm->costo_producto = round($pvp_factura, 2);
-			$edm->iva = $iva;
-			$edm->importe = $importe_final;
-			$edm->valor_ganancia = $ganancia_final;
-			$edm->producto_id = $producto_id;
-			$edm->egreso_id = $egreso_id;
-			$edm->egresodetalleestado = 1;
-			$edm->flete_producto = $flete;
-			$edm->save();
-			$egresodetalle_ids[] = $edm->egresodetalle_id;
-
-			$importe_control = $importe_control + $importe_final;
 		}
 
 		$select = "ed.producto_id AS PRODUCTO_ID, ed.codigo_producto AS CODIGO, ed.cantidad AS CANTIDAD";

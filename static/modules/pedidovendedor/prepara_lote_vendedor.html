@@ -309,6 +309,11 @@
 
                 /* ARRAY */
                 var div_array_egresos = document.getElementById('div_array_egresos');
+                var inputPedidoVendedorId = document.createElement("input");
+                inputPedidoVendedorId.setAttribute("type", "hidden");
+                inputPedidoVendedorId.setAttribute("name", "egreso[" + producto_id + "][pedidovendedor_id]");
+                inputPedidoVendedorId.setAttribute("id", "pedidovendedor_id_" + producto_id);
+                inputPedidoVendedorId.setAttribute("value", temp_pedidovendedor_id);
                 var inputEgresoProductoId = document.createElement("input");
                 inputEgresoProductoId.setAttribute("type", "hidden");
                 inputEgresoProductoId.setAttribute("name", "egreso[" + producto_id + "][producto_id]");
@@ -360,6 +365,7 @@
                 inputEgresoCostoTotal.setAttribute("id", "costo_total_" + producto_id);
                 inputEgresoCostoTotal.setAttribute("value", costo_total);
 
+                div_array_egresos.appendChild(inputPedidoVendedorId);
                 div_array_egresos.appendChild(inputEgresoProductoId);
                 div_array_egresos.appendChild(inputEgresoCodigo);
                 div_array_egresos.appendChild(inputEgresoDescripcion);
@@ -479,6 +485,7 @@
         var tdTblTotal = document.getElementById("tdImporte_" + producto_id);
         
         var div_array_egresos = document.getElementById('div_array_egresos');
+        var input_pedidovendedor_id = document.getElementById('pedidovendedor_id_' + producto_id);
         var input_producto_id = document.getElementById('producto_id_' + producto_id);
         var input_codigo = document.getElementById('codigo_' + producto_id);
         var input_descripcion = document.getElementById('descripcion_' + producto_id);
@@ -497,6 +504,7 @@
         document.getElementById('input_subtotal').value = nuevo_importe_total.toFixed(2);
 
         bodyTblProducto.removeChild(trTblProducto);   
+        div_array_egresos.removeChild(input_pedidovendedor_id);
         div_array_egresos.removeChild(input_producto_id);
         div_array_egresos.removeChild(input_codigo);
         div_array_egresos.removeChild(input_descripcion);

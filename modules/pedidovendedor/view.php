@@ -251,7 +251,7 @@ class PedidoVendedorView extends View {
 	function traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $obj_pedidovendedor, $obj_cliente) {
 		$gui = file_get_contents("static/modules/pedidovendedor/procesolote_pedidovendedor_ajax.html");
 		$tbl_pedidovendedordetalle = file_get_contents("static/modules/pedidovendedor/tbl_procesolote_pedidovendedordetalle.html");
-		$hidden_editar_pedidovendedordetalle_array = file_get_contents("static/modules/pedidovendedor/hidden_editar_pedidovendedordetalle_array.html");
+		$hidden_editar_pedidovendedordetalle_array = file_get_contents("static/modules/pedidovendedor/hidden_editar_pedidovendedordetalle_array_lote.html");
 		$slt_cliente = file_get_contents("static/common/slt_cliente_pedidovendedor.html");
 		$slt_cliente = $this->render_regex_dict('SLT_CLIENTE', $slt_cliente, $cliente_collection);
 		$slt_cliente = str_replace('<!--SLT_CLIENTE-->', '', $slt_cliente);
