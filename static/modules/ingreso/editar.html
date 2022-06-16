@@ -73,14 +73,18 @@
                             <label>IVA</label>
                             <input type="number" class="form-control" id="iva" name="iva" onchange="actualizarCostoFinal();" value="{ingreso-iva}" required>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
+                            <label>Flete</label>
+                            <input type="number" class="form-control" id="costo_distribucion" name="costo_distribucion" onchange="actualizarCostoFinal();" value="{ingreso-costo_distribucion}" required>
+                        </div>
+                        <div class="form-group col-lg-4">
                             <label>Condición IVA</label>
                             <select class="form-control m-bot15" name="condicioniva" id="condicioniva" required>
                                 <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
                                 {slt_condicioniva}
                             </select>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-4">
                             <label>Condición Pago</label>
                             <select class="form-control m-bot15" name="condicionpago" id="condicionpago" required>
                                 <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
@@ -379,11 +383,12 @@
         var percepcion_iva = document.getElementById('percepcion_iva').value;
         var ingresos_brutos = document.getElementById('ingresos_brutos').value;
         var impuesto_interno = document.getElementById('impuesto_interno').value;
+        var costo_distribucion = document.getElementById('costo_distribucion').value;
         
         if (costo_base == 0) {
             return false;
         } else {
-            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
 
             document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
@@ -529,12 +534,13 @@
             var percepcion_iva = document.getElementById('percepcion_iva').value;
             var ingresos_brutos = document.getElementById('ingresos_brutos').value;
             var impuesto_interno = document.getElementById('impuesto_interno').value;
+            var costo_distribucion = document.getElementById('costo_distribucion').value;
            
             //SUMO NUEVO IMPORTE A COSTO BASE
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             
             //VALOR FINAL
-            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
             
             document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
@@ -586,6 +592,7 @@
             var percepcion_iva = document.getElementById('percepcion_iva').value;
             var ingresos_brutos = document.getElementById('ingresos_brutos').value;
             var impuesto_interno = document.getElementById('impuesto_interno').value;
+            var costo_distribucion = document.getElementById('costo_distribucion').value;
            
             //RESTO VIEJO IMPORTE DE COSTO BASE
             costo_base = parseFloat(costo_base) - parseFloat(old_total);
@@ -593,7 +600,7 @@
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
             
             //VALOR FINAL
-            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
+            var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
             
             document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
             document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
@@ -626,12 +633,13 @@
         var percepcion_iva = document.getElementById('percepcion_iva').value;
         var ingresos_brutos = document.getElementById('ingresos_brutos').value;
         var impuesto_interno = document.getElementById('impuesto_interno').value;
+        var costo_distribucion = document.getElementById('costo_distribucion').value;
            
         //RESTO VIEJO IMPORTE DE COSTO BASE
         costo_base = parseFloat(costo_base) - parseFloat(total_quitar);
             
         //VALOR FINAL
-        var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno);
+        var valor_final = parseFloat(costo_base) + parseFloat(iva) + parseFloat(percepcion_iva) + parseFloat(ingresos_brutos) + parseFloat(impuesto_interno) + parseFloat(costo_distribucion);
 
         document.getElementById('suma_total').innerHTML = 'SUBTOTAL: $' + costo_base.toFixed(2);
         document.getElementById('suma_total_iva').innerHTML = 'TOTAL: $' + valor_final.toFixed(2);
