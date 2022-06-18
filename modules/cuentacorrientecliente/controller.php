@@ -701,7 +701,7 @@ class CuentaCorrienteClienteController {
 		$this->model->get();
 		$cliente_id = $this->model->cliente_id;
 		$egreso_id = $this->model->egreso_id;
-		$ingresotipopago_id = $this->model->ingresotipopago;
+		$ingresotipopago_id = $this->model->ingresotipopago->ingresotipopago_id;
 		$this->model->delete();
 
 		$select = "ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, ccc.cuentacorrientecliente_id  AS ID";
