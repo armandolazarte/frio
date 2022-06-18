@@ -8,6 +8,7 @@ require_once "modules/tipomovimientocuenta/model.php";
 require_once "modules/ingresotipopago/model.php";
 require_once "modules/chequeclientedetalle/model.php";
 require_once "modules/transferenciaclientedetalle/model.php";
+require_once "modules/retencionclientedetalle/model.php";
 require_once "tools/cuentaCorrienteClientePDFTool.php";
 
 

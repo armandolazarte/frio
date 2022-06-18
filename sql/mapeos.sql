@@ -815,7 +815,7 @@ CREATE TABLE IF NOT EXISTS almacen (
 CREATE TABLE IF NOT EXISTS retencionclientedetalle (
     retencionclientedetalle_id INT(11) NOT NULL 
         AUTO_INCREMENT PRIMARY KEY
-    , numero BIGINT()
+    , numero BIGINT(20)
     , cuentacorrientecliente_id INT(11)
     , INDEX (cuentacorrientecliente_id)
     , egreso_id INT(11)
