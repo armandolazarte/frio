@@ -811,3 +811,13 @@ CREATE TABLE IF NOT EXISTS almacen (
     , localidad VARCHAR(250)
     , oculto INT(1)
 ) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS retencionclientedetalle (
+    retencionclientedetalle_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , numero BIGINT()
+    , cuentacorrientecliente_id INT(11)
+    , INDEX (cuentacorrientecliente_id)
+    , egreso_id INT(11)
+    , INDEX (egreso_id)
+) ENGINE=InnoDb;
