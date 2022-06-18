@@ -701,6 +701,7 @@ class CuentaCorrienteClienteController {
 		$this->model->get();
 		$cliente_id = $this->model->cliente_id;
 		$egreso_id = $this->model->egreso_id;
+		$ingresotipopago_id = $this->model->ingresotipopago;
 		$this->model->delete();
 
 		$select = "ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, ccc.cuentacorrientecliente_id  AS ID";
@@ -748,6 +749,51 @@ class CuentaCorrienteClienteController {
 					$cccm->estadomovimientocuenta = 4;
 					$cccm->save();
 				}
+			}
+
+			switch ($ingresotipopago_id) {
+				case 1:
+					#CHEQUE
+					$select = "ccd.chequeclientedetalle_id AS ID";
+					$from = "chequeclientedetalle ccd";
+					$where = "ccd.egreso_id = {$egreso_id} AND ccd.cuentacorrientecliente_id = {$cuentacorrientecliente_id}";
+					$chequeclientedetalle_id = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select);
+					$chequeclientedetalle_id = (is_array($chequeclientedetalle_id) AND !empty($chequeclientedetalle_id)) ? $chequeclientedetalle_id[0]['ID'] : 0;
+					
+					if ($chequeclientedetalle_id != 0) {
+						$ccdm = new ChequeClienteDetalle();
+						$ccdm->chequeclientedetalle_id = $chequeclientedetalle_id;
+						$ccdm->delete();
+					}
+					break;
+				case 2:
+					#TRANSFERENCIA
+					$select = "tcd.transferenciaclientedetalle_id AS ID";
+					$from = "transferenciaclientedetalle tcd";
+					$where = "tcd.egreso_id = {$egreso_id} AND tcd.cuentacorrientecliente_id = {$cuentacorrientecliente_id}";
+					$transferenciaclientedetalle_id = CollectorCondition()->get('TransferenciaClienteDetalle', $where, 4, $from, $select);
+					$transferenciaclientedetalle_id = (is_array($transferenciaclientedetalle_id) AND !empty($transferenciaclientedetalle_id)) ? $transferenciaclientedetalle_id[0]['ID'] : 0;
+					
+					if ($transferenciaclientedetalle_id != 0) {
+						$ccdm = new TransferenciaClienteDetalle();
+						$ccdm->transferenciaclientedetalle_id = $transferenciaclientedetalle_id;
+						$ccdm->delete();
+					}
+					break;
+				case 5:
+					#RETENCIÓN
+					$select = "rcd.retencionclientedetalle_id AS ID";
+					$from = "retencionclientedetalle rcd";
+					$where = "rcd.egreso_id = {$egreso_id} AND rcd.cuentacorrientecliente_id = {$cuentacorrientecliente_id}";
+					$retencionclientedetalle_id = CollectorCondition()->get('RetencionClienteDetalle', $where, 4, $from, $select);
+					$retencionclientedetalle_id = (is_array($retencionclientedetalle_id) AND !empty($retencionclientedetalle_id)) ? $retencionclientedetalle_id[0]['ID'] : 0;
+					
+					if ($retencionclientedetalle_id != 0) {
+						$ccdm = new RetencionClienteDetalle();
+						$ccdm->retencionclientedetalle_id = $retencionclientedetalle_id;
+						$ccdm->delete();
+					}
+					break;
 			}
 		}
 		
