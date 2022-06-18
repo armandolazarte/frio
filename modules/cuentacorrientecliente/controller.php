@@ -588,6 +588,13 @@ class CuentaCorrienteClienteController {
 				$tpdm->egreso_id = $egreso_id;
 				$tpdm->save();
 				break;
+			case 5:
+				$tpdm = new RetencionClienteDetalle();
+				$tpdm->numero = filter_input(INPUT_POST, 'numero_retencion');
+				$tpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+				$tpdm->egreso_id = $egreso_id;
+				$tpdm->save();
+				break;
 		}
 
 		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
