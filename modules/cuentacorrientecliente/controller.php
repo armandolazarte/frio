@@ -775,9 +775,9 @@ class CuentaCorrienteClienteController {
 					$transferenciaclientedetalle_id = (is_array($transferenciaclientedetalle_id) AND !empty($transferenciaclientedetalle_id)) ? $transferenciaclientedetalle_id[0]['ID'] : 0;
 					
 					if ($transferenciaclientedetalle_id != 0) {
-						$ccdm = new TransferenciaClienteDetalle();
-						$ccdm->transferenciaclientedetalle_id = $transferenciaclientedetalle_id;
-						$ccdm->delete();
+						$tcdm = new TransferenciaClienteDetalle();
+						$tcdm->transferenciaclientedetalle_id = $transferenciaclientedetalle_id;
+						$tcdm->delete();
 					}
 					break;
 				case 5:
@@ -789,9 +789,9 @@ class CuentaCorrienteClienteController {
 					$retencionclientedetalle_id = (is_array($retencionclientedetalle_id) AND !empty($retencionclientedetalle_id)) ? $retencionclientedetalle_id[0]['ID'] : 0;
 					
 					if ($retencionclientedetalle_id != 0) {
-						$ccdm = new RetencionClienteDetalle();
-						$ccdm->retencionclientedetalle_id = $retencionclientedetalle_id;
-						$ccdm->delete();
+						$rcdm = new RetencionClienteDetalle();
+						$rcdm->retencionclientedetalle_id = $retencionclientedetalle_id;
+						$rcdm->delete();
 					}
 					break;
 			}
