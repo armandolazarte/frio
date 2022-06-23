@@ -498,6 +498,7 @@
         
         var nuevo_importe_total = parseFloat(viejo_importe_total) - parseFloat(tdTblTotal);
         costo_base = nuevo_importe_total;
+        subtotal = parseFloat(costo_base);
         document.getElementById('lbl_ImporteTotal').innerHTML = 'Importe Total: $' + nuevo_importe_total.toFixed(2);
         document.getElementById('input_importe_total').value = nuevo_importe_total.toFixed(2);
         document.getElementById('input_subtotal').value = nuevo_importe_total.toFixed(2);
@@ -564,6 +565,5 @@
                 array_ids.splice(index, 1);
             }
         });
-        console.log(array_ids);
     }
 </script>
