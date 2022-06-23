@@ -642,6 +642,15 @@
         div_array_ingresos.removeChild(input_descuento3);
         div_array_ingresos.removeChild(input_costo);
         div_array_ingresos.removeChild(input_costo_total);
+        quitarProductoArray(producto_id);
+    }
+
+    function quitarProductoArray(producto_id) {    
+        array_ids.forEach(function(temp_producto_id, index) {
+            if (producto_id == temp_producto_id) {
+                array_ids.splice(index, 1);
+            }
+        });
     }
 
     function verificarIngreso() {
