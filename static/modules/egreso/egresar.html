@@ -832,16 +832,22 @@
 
                 buscarProducto();
             } else {
+                var quitar = /\$/g;
+
                 var td_cantidad = document.getElementById('idTdCantidad_' + producto_id);
                 var old_cantidad = td_cantidad.innerHTML;
+                var td_descuento = document.getElementById('idTdDescuento_' + producto_id);
+                var old_descuento = td_descuento.innerHTML;
                 var td_importedescuento = document.getElementById('idTdImporteDescuento_' + producto_id);
                 var old_importedescuento = td_importedescuento.innerHTML;
                 var td_total = document.getElementById('idTdTotal_' + producto_id);
                 var old_total = td_total.innerHTML;
                 old_total = old_total.replace(quitar, '');
-                
+
+
                 //SUSTITUYE EN TABLA POR NUEVOS VALORES
                 td_cantidad.innerHTML = cantidad;
+                td_descuento.innerHTML = descuento + '%';
                 td_importedescuento.innerHTML = '$' + importe_descuento;
                 td_total.innerHTML = '$' + costo_total;
 
@@ -849,14 +855,21 @@
                 document.getElementById("cantidad_" + producto_id).value = cantidad;
                 document.getElementById("descuento_" + producto_id).value = descuento;
                 document.getElementById("importe_descuento_" + producto_id).value = importe_descuento;
-                document.getElementById("costo_" + producto_id).value = costo;
                 document.getElementById("costo_total_" + producto_id).value = costo_total;
-                
+
                 costo_final = 0;
                 costo_base = parseFloat(costo_base) - parseFloat(old_total);
                 costo_base = parseFloat(costo_base) + parseFloat(costo_total);
-                subtotal = parseFloat(costo_base);
-                
+
+                var descuento_factura = document.getElementById('descuento').value;
+
+                if (descuento_factura != null && descuento_factura.length != 0 && descuento_factura != "" && descuento_factura > 0) {
+                    var valor_descuento = parseFloat(descuento_factura) * parseFloat(costo_base) / 100;
+                    subtotal = parseFloat(costo_base) - parseFloat(valor_descuento);
+                } else {
+                    subtotal = parseFloat(costo_base);
+                }
+
                 document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
                 document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
                 document.getElementById('input_subtotal').value = subtotal.toFixed(2);
