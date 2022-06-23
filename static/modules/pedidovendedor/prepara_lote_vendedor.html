@@ -128,7 +128,6 @@
         nuevo_array = traerArrayProductos.split(',');
         array_ids = nuevo_array;
         costo_base = traerCostoBase;
-        console.log(costo_base);
 
         document.getElementById('div_visor_pedidovendedor').innerHTML = traerPedido;
         document.getElementById('div_lst_producto').style.display = 'block';
@@ -555,5 +554,16 @@
             document.getElementById('input_subtotal').value = control_importe_total.toFixed(2);
             document.getElementById('input_importe_total').value = control_importe_total.toFixed(2);
         }
+
+        quitarProductoArray(producto_id);
+    }
+
+    function quitarProductoArray(producto_id) {    
+        array_ids.forEach(function(temp_producto_id, index) {
+            if (producto_id == temp_producto_id) {
+                array_ids.splice(index, 1);
+            }
+        });
+        console.log(array_ids);
     }
 </script>
