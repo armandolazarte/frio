@@ -884,11 +884,15 @@
     }
 
     function quitarProducto(indice) {
+        var quitar = /\$/g;
         var bodyTblProducto = document.getElementById('bodyTblProducto');
         var trTblProducto = document.getElementById("idTrTbl_" + indice);
         var tdTblTotal = document.getElementById("idTdTotal_" + indice);
-        var totalProducto = tdTblTotal.textContent;
-        var total_quitar = totalProducto.substring(1);
+
+        //var totalProducto = tdTblTotal.textContent;
+        //var total_quitar = totalProducto.substring(1);
+        var totalProducto = tdTblTotal.innerHTML;
+        var total_quitar = totalProducto.replace(quitar, '');
         console.log(total_quitar);
         var div_array_egresos = document.getElementById('div_array_egresos');
         var input_producto_id = document.getElementById('producto_id_' + indice);
