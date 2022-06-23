@@ -200,7 +200,8 @@ class PedidoVendedorController {
 			$um = new Usuario();
 			$um->usuario_id = $usuario_id;
 			$um->get();
-			$almacen_id = $um->almacen->almacen_id;
+			//$almacen_id = $um->almacen->almacen_id;
+			$almacen_id = 1;
 
 			$select = "MAX(s.stock_id) AS MAXID";
 			$from = "stock s";
@@ -859,9 +860,11 @@ class PedidoVendedorController {
 			$um = new Usuario();
 			$um->usuario_id = $temp_usuario_id;
 			$um->get();
-			$almacen_id = $um->almacen->almacen_id;
+			//$almacen_id = $um->almacen->almacen_id;
+			$almacen_id = 1;
 		} else {
-			$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+			//$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+			$almacen_id = 1;
 		}
 
 		$ecm = new EgresoComision();
@@ -1062,7 +1065,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
-					$sm->almacen_id = $almacen_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				} else {
 					$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -1080,7 +1083,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
-					$sm->almacen_id = $almacen_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				}
 			}
@@ -1485,9 +1488,11 @@ class PedidoVendedorController {
 			$um = new Usuario();
 			$um->usuario_id = $temp_usuario_id;
 			$um->get();
-			$almacen_id = $um->almacen->almacen_id;
+			//$almacen_id = $um->almacen->almacen_id;
+			$almacen_id = 1;
 		} else {
-			$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+			//$almacen_id = $_SESSION["data-login-" . APP_ABREV]["almacen-almacen_id"];
+			$almacen_id = 1;
 		}
 
 		$ecm = new EgresoComision();
@@ -1701,7 +1706,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
-					$sm->almacen_id = $almacen_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				} else {
 					$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -1719,7 +1724,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
-					$sm->almacen_id = $almacen_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				}
 			}
@@ -1922,7 +1927,8 @@ class PedidoVendedorController {
 			$um = new Usuario();
 			$um->usuario_id = $temp_usuario_id;
 			$um->get();
-			$almacen_id = $um->almacen->almacen_id;
+			//$almacen_id = $um->almacen->almacen_id;
+			$almacen_id = 1;
 		} else {
 			$almacen_id = 1;
 		}
@@ -2142,7 +2148,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
-					$sm->almacen_id = $almacen_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				} else {
 					$stock_id = $rst_stock[0]['STOCK_ID'];
@@ -2160,7 +2166,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
-					$sm->almacen_id = $almacen_id;
+					$sm->almacen_id = 1;
 					$sm->save();
 				}
 			}
