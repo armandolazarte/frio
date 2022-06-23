@@ -796,7 +796,9 @@ class PedidoVendedorController {
 
 	function eliminar($arg) {
     	SessionHandler()->check_session();
-    	$pedidovendedor_id = $arg;
+    	$ids = explode('@', $arg);
+    	$pedidovendedor_id = $ids[0];
+    	$vendedor_id = $ids[1];
     	$select = "pvd.pedidovendedordetalle_id AS ID";
 		$from = "pedidovendedordetalle pvd";
 		$where = "pvd.pedidovendedor_id = {$pedidovendedor_id}";
@@ -814,7 +816,7 @@ class PedidoVendedorController {
 		$this->model->pedidovendedor_id = $pedidovendedor_id;
 		$this->model->delete();
 
-		header("Location: " . URL_APP . "/pedidovendedor/panel");
+		header("Location: " . URL_APP . "/pedidovendedor/get_prepara_lote_vendedor/{$vendedor_id}");
 	}
 
 	function guardar_procesar() {
