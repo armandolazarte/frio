@@ -675,161 +675,195 @@
         var costo_total_oculto = document.getElementById('costo_total_oculto').value;
 
         if(parseFloat(cantidad) <= parseFloat(cantidad_disponible)) {
-            var bodyTblProducto = document.getElementById('bodyTblProducto');
+            if(parseInt(flag) === -1){
+                var bodyTblProducto = document.getElementById('bodyTblProducto');
 
-            /* FILA */
-            var trTblProducto = document.createElement("tr");
-            trTblProducto.setAttribute("id", "idTrTbl_" + j);
+                /* FILA */
+                var trTblProducto = document.createElement("tr");
+                trTblProducto.setAttribute("id", "idTrTbl_" + producto_id);
 
-            var tdTblBtnQuitar = document.createElement("td");
-            var tdTblCodigo = document.createElement("td");
-            var tdTblDescripcion = document.createElement("td");
-            var tdTblCantidad = document.createElement("td");
-            tdTblCantidad.setAttribute("id", "idTdCantidad_" + j);
-            var tdTblUnidad = document.createElement("td");
-            var tdTblCosto = document.createElement("td");
-            var tdTblDescuento = document.createElement("td");
-            tdTblDescuento.setAttribute("id", "idTdDescuento_" + j);
-            var tdTblImporteDescuento = document.createElement("td");
-            tdTblImporteDescuento.setAttribute("id", "idTdImporteDescuento_" + j);
-            var tdTblTotal = document.createElement("td");
-            tdTblTotal.setAttribute("id", "idTdTotal_" + j);
-            var tdTblTotalOculto = document.createElement("td");
-            tdTblTotalOculto.setAttribute("class", "idTdTotal");
-            tdTblTotalOculto.setAttribute("style", "display:none;");
-            var tdTblIdOculto = document.createElement("td");
-            tdTblIdOculto.setAttribute("id", "producto_" + j);
-            tdTblIdOculto.setAttribute("style", "display:none;");
+                var tdTblBtnQuitar = document.createElement("td");
+                var tdTblCodigo = document.createElement("td");
+                var tdTblDescripcion = document.createElement("td");
+                var tdTblCantidad = document.createElement("td");
+                tdTblCantidad.setAttribute("id", "idTdCantidad_" + producto_id);
+                var tdTblUnidad = document.createElement("td");
+                var tdTblCosto = document.createElement("td");
+                var tdTblDescuento = document.createElement("td");
+                tdTblDescuento.setAttribute("id", "idTdDescuento_" + producto_id);
+                var tdTblImporteDescuento = document.createElement("td");
+                tdTblImporteDescuento.setAttribute("id", "idTdImporteDescuento_" + producto_id);
+                var tdTblTotal = document.createElement("td");
+                tdTblTotal.setAttribute("id", "idTdTotal_" + producto_id);
+                var tdTblTotalOculto = document.createElement("td");
+                tdTblTotalOculto.setAttribute("class", "idTdTotal");
+                tdTblTotalOculto.setAttribute("style", "display:none;");
+                var tdTblIdOculto = document.createElement("td");
+                tdTblIdOculto.setAttribute("id", "producto_" + producto_id);
+                tdTblIdOculto.setAttribute("style", "display:none;");
 
-            var btnQuitar = document.createElement("a");
-            btnQuitar.setAttribute("href", "#");
-            btnQuitar.setAttribute("id", "btnQuitar_" + j);
-            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
-            btnQuitar.setAttribute("onClick", "quitarProducto(" + j + ");");
-            var iconQuitar = document.createElement("i");
-            iconQuitar.setAttribute("class", "fa fa-trash-o");
-            btnQuitar.appendChild(iconQuitar);
+                var btnQuitar = document.createElement("a");
+                btnQuitar.setAttribute("href", "#");
+                btnQuitar.setAttribute("id", "btnQuitar_" + producto_id);
+                btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+                btnQuitar.setAttribute("onClick", "quitarProducto(" + producto_id + ");");
+                var iconQuitar = document.createElement("i");
+                iconQuitar.setAttribute("class", "fa fa-trash-o");
+                btnQuitar.appendChild(iconQuitar);
 
-            var txtCodigo = document.createTextNode(codigo);
-            var txtDescripcion = document.createTextNode(descripcion);
-            var txtCantidad = document.createTextNode(cantidad);
-            var txtUnidad = document.createTextNode(unidad);
-            var txtCosto = document.createTextNode(" $" + costo);
-            var txtDescuento = document.createTextNode(descuento + '%');
-            var txtImporteDescuento = document.createTextNode('$' + importe_descuento);
-            var txtCostoTotal = document.createTextNode(" $" + costo_total);
-            var txtCostoTotalOculto = document.createTextNode(costo_total_oculto);
-            var txtIdOculto = document.createTextNode(producto_id);
+                var txtCodigo = document.createTextNode(codigo);
+                var txtDescripcion = document.createTextNode(descripcion);
+                var txtCantidad = document.createTextNode(cantidad);
+                var txtUnidad = document.createTextNode(unidad);
+                var txtCosto = document.createTextNode(" $" + costo);
+                var txtDescuento = document.createTextNode(descuento + '%');
+                var txtImporteDescuento = document.createTextNode('$' + importe_descuento);
+                var txtCostoTotal = document.createTextNode(" $" + costo_total);
+                var txtCostoTotalOculto = document.createTextNode(costo_total_oculto);
+                var txtIdOculto = document.createTextNode(producto_id);
 
-            tdTblCodigo.appendChild(txtCodigo);
-            tdTblDescripcion.appendChild(txtDescripcion);
-            tdTblCantidad.appendChild(txtCantidad);
-            tdTblUnidad.appendChild(txtUnidad);
-            tdTblCosto.appendChild(txtCosto);
-            tdTblDescuento.appendChild(txtDescuento);
-            tdTblImporteDescuento.appendChild(txtImporteDescuento);
-            tdTblTotal.appendChild(txtCostoTotal);
-            tdTblTotalOculto.appendChild(txtCostoTotalOculto);
-            tdTblIdOculto.appendChild(txtIdOculto);
-            tdTblBtnQuitar.appendChild(btnQuitar);
+                tdTblCodigo.appendChild(txtCodigo);
+                tdTblDescripcion.appendChild(txtDescripcion);
+                tdTblCantidad.appendChild(txtCantidad);
+                tdTblUnidad.appendChild(txtUnidad);
+                tdTblCosto.appendChild(txtCosto);
+                tdTblDescuento.appendChild(txtDescuento);
+                tdTblImporteDescuento.appendChild(txtImporteDescuento);
+                tdTblTotal.appendChild(txtCostoTotal);
+                tdTblTotalOculto.appendChild(txtCostoTotalOculto);
+                tdTblIdOculto.appendChild(txtIdOculto);
+                tdTblBtnQuitar.appendChild(btnQuitar);
 
-            trTblProducto.appendChild(tdTblCodigo);
-            trTblProducto.appendChild(tdTblDescripcion);
-            trTblProducto.appendChild(tdTblCantidad);
-            trTblProducto.appendChild(tdTblUnidad);
-            trTblProducto.appendChild(tdTblCosto);
-            trTblProducto.appendChild(tdTblDescuento);
-            trTblProducto.appendChild(tdTblImporteDescuento);
-            trTblProducto.appendChild(tdTblTotal);
-            trTblProducto.appendChild(tdTblTotalOculto);
-            trTblProducto.appendChild(tdTblIdOculto);
-            trTblProducto.appendChild(tdTblBtnQuitar);
+                trTblProducto.appendChild(tdTblCodigo);
+                trTblProducto.appendChild(tdTblDescripcion);
+                trTblProducto.appendChild(tdTblCantidad);
+                trTblProducto.appendChild(tdTblUnidad);
+                trTblProducto.appendChild(tdTblCosto);
+                trTblProducto.appendChild(tdTblDescuento);
+                trTblProducto.appendChild(tdTblImporteDescuento);
+                trTblProducto.appendChild(tdTblTotal);
+                trTblProducto.appendChild(tdTblTotalOculto);
+                trTblProducto.appendChild(tdTblIdOculto);
+                trTblProducto.appendChild(tdTblBtnQuitar);
 
-            /* ARRAY */
-            var div_array_egresos = document.getElementById('div_array_egresos');
-            var inputEgresoProductoId = document.createElement("input");
-            inputEgresoProductoId.setAttribute("type", "hidden");
-            inputEgresoProductoId.setAttribute("name", "egreso[" + j + "][producto_id]");
-            inputEgresoProductoId.setAttribute("id", "producto_id_" + j);
-            inputEgresoProductoId.setAttribute("value", producto_id);
-            var inputEgresoCodigo = document.createElement("input");
-            inputEgresoCodigo.setAttribute("type", "hidden");
-            inputEgresoCodigo.setAttribute("name", "egreso[" + j + "][codigo]");
-            inputEgresoCodigo.setAttribute("id", "codigo_" + j);
-            inputEgresoCodigo.setAttribute("value", codigo);
-            var inputEgresoDescripcion = document.createElement("input");
-            inputEgresoDescripcion.setAttribute("type", "hidden");
-            inputEgresoDescripcion.setAttribute("name", "egreso[" + j + "][descripcion]");
-            inputEgresoDescripcion.setAttribute("id", "descripcion_" + j);
-            inputEgresoDescripcion.setAttribute("value", descripcion);
-            var inputEgresoIva = document.createElement("input");
-            inputEgresoIva.setAttribute("type", "hidden");
-            inputEgresoIva.setAttribute("name", "egreso[" + j + "][iva]");
-            inputEgresoIva.setAttribute("id", "iva_" + j);
-            inputEgresoIva.setAttribute("value", iva);
-            var inputEgresoCantidad = document.createElement("input");
-            inputEgresoCantidad.setAttribute("type", "hidden");
-            inputEgresoCantidad.setAttribute("name", "egreso[" + j + "][cantidad]");
-            inputEgresoCantidad.setAttribute("id", "cantidad_" + j);
-            inputEgresoCantidad.setAttribute("value", cantidad);
-            var inputEgresoUnidad = document.createElement("input");
-            inputEgresoUnidad.setAttribute("type", "hidden");
-            inputEgresoUnidad.setAttribute("name", "egreso[" + j + "][unidad]");
-            inputEgresoUnidad.setAttribute("id", "unidad_" + j);
-            inputEgresoUnidad.setAttribute("value", unidad);
-            var inputEgresoCosto = document.createElement("input");
-            inputEgresoCosto.setAttribute("type", "hidden");
-            inputEgresoCosto.setAttribute("name", "egreso[" + j + "][costo]");
-            inputEgresoCosto.setAttribute("id", "costo_" + j);
-            inputEgresoCosto.setAttribute("value", costo);
-            var inputEgresoDescuento = document.createElement("input");
-            inputEgresoDescuento.setAttribute("type", "hidden");
-            inputEgresoDescuento.setAttribute("name", "egreso[" + j + "][descuento]");
-            inputEgresoDescuento.setAttribute("id", "descuento_" + j);
-            inputEgresoDescuento.setAttribute("value", descuento);
-            var inputEgresoImporteDescuento = document.createElement("input");
-            inputEgresoImporteDescuento.setAttribute("type", "hidden");
-            inputEgresoImporteDescuento.setAttribute("name", "egreso[" + j + "][importe_descuento]");
-            inputEgresoImporteDescuento.setAttribute("id", "importe_descuento_" + j);
-            inputEgresoImporteDescuento.setAttribute("value", importe_descuento);
-            var inputEgresoCostoTotal = document.createElement("input");
-            inputEgresoCostoTotal.setAttribute("type", "hidden");
-            inputEgresoCostoTotal.setAttribute("name", "egreso[" + j + "][costo_total]");
-            inputEgresoCostoTotal.setAttribute("id", "costo_total_" + j);
-            inputEgresoCostoTotal.setAttribute("value", costo_total);
+                /* ARRAY */
+                var div_array_egresos = document.getElementById('div_array_egresos');
+                var inputEgresoProductoId = document.createElement("input");
+                inputEgresoProductoId.setAttribute("type", "hidden");
+                inputEgresoProductoId.setAttribute("name", "egreso[" + producto_id + "][producto_id]");
+                inputEgresoProductoId.setAttribute("id", "producto_id_" + producto_id);
+                inputEgresoProductoId.setAttribute("value", producto_id);
+                var inputEgresoCodigo = document.createElement("input");
+                inputEgresoCodigo.setAttribute("type", "hidden");
+                inputEgresoCodigo.setAttribute("name", "egreso[" + producto_id + "][codigo]");
+                inputEgresoCodigo.setAttribute("id", "codigo_" + producto_id);
+                inputEgresoCodigo.setAttribute("value", codigo);
+                var inputEgresoDescripcion = document.createElement("input");
+                inputEgresoDescripcion.setAttribute("type", "hidden");
+                inputEgresoDescripcion.setAttribute("name", "egreso[" + producto_id + "][descripcion]");
+                inputEgresoDescripcion.setAttribute("id", "descripcion_" + producto_id);
+                inputEgresoDescripcion.setAttribute("value", descripcion);
+                var inputEgresoIva = document.createElement("input");
+                inputEgresoIva.setAttribute("type", "hidden");
+                inputEgresoIva.setAttribute("name", "egreso[" + producto_id + "][iva]");
+                inputEgresoIva.setAttribute("id", "iva_" + producto_id);
+                inputEgresoIva.setAttribute("value", iva);
+                var inputEgresoCantidad = document.createElement("input");
+                inputEgresoCantidad.setAttribute("type", "hidden");
+                inputEgresoCantidad.setAttribute("name", "egreso[" + producto_id + "][cantidad]");
+                inputEgresoCantidad.setAttribute("id", "cantidad_" + producto_id);
+                inputEgresoCantidad.setAttribute("value", cantidad);
+                var inputEgresoUnidad = document.createElement("input");
+                inputEgresoUnidad.setAttribute("type", "hidden");
+                inputEgresoUnidad.setAttribute("name", "egreso[" + producto_id + "][unidad]");
+                inputEgresoUnidad.setAttribute("id", "unidad_" + producto_id);
+                inputEgresoUnidad.setAttribute("value", unidad);
+                var inputEgresoCosto = document.createElement("input");
+                inputEgresoCosto.setAttribute("type", "hidden");
+                inputEgresoCosto.setAttribute("name", "egreso[" + producto_id + "][costo]");
+                inputEgresoCosto.setAttribute("id", "costo_" + producto_id);
+                inputEgresoCosto.setAttribute("value", costo);
+                var inputEgresoDescuento = document.createElement("input");
+                inputEgresoDescuento.setAttribute("type", "hidden");
+                inputEgresoDescuento.setAttribute("name", "egreso[" + producto_id + "][descuento]");
+                inputEgresoDescuento.setAttribute("id", "descuento_" + producto_id);
+                inputEgresoDescuento.setAttribute("value", descuento);
+                var inputEgresoImporteDescuento = document.createElement("input");
+                inputEgresoImporteDescuento.setAttribute("type", "hidden");
+                inputEgresoImporteDescuento.setAttribute("name", "egreso[" + producto_id + "][importe_descuento]");
+                inputEgresoImporteDescuento.setAttribute("id", "importe_descuento_" + producto_id);
+                inputEgresoImporteDescuento.setAttribute("value", importe_descuento);
+                var inputEgresoCostoTotal = document.createElement("input");
+                inputEgresoCostoTotal.setAttribute("type", "hidden");
+                inputEgresoCostoTotal.setAttribute("name", "egreso[" + producto_id + "][costo_total]");
+                inputEgresoCostoTotal.setAttribute("id", "costo_total_" + producto_id);
+                inputEgresoCostoTotal.setAttribute("value", costo_total);
 
-            div_array_egresos.appendChild(inputEgresoProductoId);
-            div_array_egresos.appendChild(inputEgresoCodigo);
-            div_array_egresos.appendChild(inputEgresoDescripcion);
-            div_array_egresos.appendChild(inputEgresoIva);
-            div_array_egresos.appendChild(inputEgresoCantidad);
-            div_array_egresos.appendChild(inputEgresoUnidad);
-            div_array_egresos.appendChild(inputEgresoCosto);
-            div_array_egresos.appendChild(inputEgresoDescuento);
-            div_array_egresos.appendChild(inputEgresoImporteDescuento);
-            div_array_egresos.appendChild(inputEgresoCostoTotal);
-            bodyTblProducto.appendChild(trTblProducto);
+                div_array_egresos.appendChild(inputEgresoProductoId);
+                div_array_egresos.appendChild(inputEgresoCodigo);
+                div_array_egresos.appendChild(inputEgresoDescripcion);
+                div_array_egresos.appendChild(inputEgresoIva);
+                div_array_egresos.appendChild(inputEgresoCantidad);
+                div_array_egresos.appendChild(inputEgresoUnidad);
+                div_array_egresos.appendChild(inputEgresoCosto);
+                div_array_egresos.appendChild(inputEgresoDescuento);
+                div_array_egresos.appendChild(inputEgresoImporteDescuento);
+                div_array_egresos.appendChild(inputEgresoCostoTotal);
+                bodyTblProducto.appendChild(trTblProducto);
 
-            costo_final = 0;
-            costo_base = parseFloat(costo_base) + parseFloat(costo_total);
-            var descuento = document.getElementById('descuento').value;
+                costo_final = 0;
+                costo_base = parseFloat(costo_base) + parseFloat(costo_total);
+                var descuento = document.getElementById('descuento').value;
 
-            if (descuento != null && descuento.length != 0 && descuento != "" && descuento > 0) {
-                var valor_descuento = parseFloat(descuento) * parseFloat(costo_base) / 100;
-                subtotal = parseFloat(costo_base) - parseFloat(valor_descuento);
+                if (descuento != null && descuento.length != 0 && descuento != "" && descuento > 0) {
+                    var valor_descuento = parseFloat(descuento) * parseFloat(costo_base) / 100;
+                    subtotal = parseFloat(costo_base) - parseFloat(valor_descuento);
+                } else {
+                    subtotal = parseFloat(costo_base);
+                }
+
+                document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
+                document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
+                document.getElementById('input_subtotal').value = subtotal.toFixed(2);
+                document.getElementById('input_importe_total').value = subtotal.toFixed(2);
+                array_ids.push(producto_id);
+                i = i + 1;
+                j = j + 1;
+
+                buscarProducto();
             } else {
+                var td_cantidad = document.getElementById('idTdCantidad_' + producto_id);
+                var old_cantidad = td_cantidad.innerHTML;
+                var td_importedescuento = document.getElementById('idTdImporteDescuento_' + producto_id);
+                var old_importedescuento = td_importedescuento.innerHTML;
+                var td_total = document.getElementById('idTdTotal_' + producto_id);
+                var old_total = td_total.innerHTML;
+                old_total = old_total.replace(quitar, '');
+                
+                //SUSTITUYE EN TABLA POR NUEVOS VALORES
+                td_cantidad.innerHTML = cantidad;
+                td_importedescuento.innerHTML = '$' + importe_descuento;
+                td_total.innerHTML = '$' + costo_total;
+
+                //SUSTITUYE VALORES EN INPUTS HIDDEN
+                document.getElementById("cantidad_" + producto_id).value = cantidad;
+                document.getElementById("descuento_" + producto_id).value = descuento;
+                document.getElementById("importe_descuento_" + producto_id).value = importe_descuento;
+                document.getElementById("costo_" + producto_id).value = costo;
+                document.getElementById("costo_total_" + producto_id).value = costo_total;
+                
+                costo_final = 0;
+                costo_base = parseFloat(costo_base) - parseFloat(old_total);
+                costo_base = parseFloat(costo_base) + parseFloat(costo_total);
                 subtotal = parseFloat(costo_base);
+                
+                document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
+                document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
+                document.getElementById('input_subtotal').value = subtotal.toFixed(2);
+                document.getElementById('input_importe_total').value = subtotal.toFixed(2);
+
+                buscarProducto();
             }
-
-            document.getElementById('subtotal').innerHTML = 'Subtotal: $' + subtotal.toFixed(2);
-            document.getElementById('importe_total').innerHTML = 'Importe Total: $' + subtotal.toFixed(2);
-            document.getElementById('input_subtotal').value = subtotal.toFixed(2);
-            document.getElementById('input_importe_total').value = subtotal.toFixed(2);
-            array_ids.push(producto_id);
-            i = i + 1;
-            j = j + 1;
-
-            buscarProducto();
         } else {
             document.getElementById('alerta_stock').style.display = 'block';
             return false;
@@ -881,6 +915,17 @@
         div_array_egresos.removeChild(input_importe_descuento);
         div_array_egresos.removeChild(input_costo);
         div_array_egresos.removeChild(input_costo_total);
+
+        quitarProductoArray(indice);
+    }
+
+    function quitarProductoArray(producto_id) {    
+        array_ids.forEach(function(temp_producto_id, index) {
+            if (producto_id == temp_producto_id) {
+                array_ids.splice(index, 1);
+            }
+        });
+        console.log(array_ids);
     }
 
     function verificarEgreso() {
