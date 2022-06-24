@@ -161,9 +161,9 @@
         */
 
         $('#tbl_egreso').dataTable( {
-            columnDefs: [ {
-                targets: 1,
-                render: $.fn.dataTable.render.moment( 'DD/MM/YYYY', 'DD/MM/YYYY' )
+            "columnDefs": [ {
+                "targets": 1,
+                "render": $.fn.dataTable.render.moment( 'DD/MM/YYYY', 'DD/MM/YYYY' )
             } ]
         } );
     });
