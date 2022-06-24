@@ -86,6 +86,8 @@
         */
 
         $('#tbl_stock').dataTable( {
+            "aaSorting": [[ 0, "desc" ]],
+            "iDisplayLength":10,
             columnDefs: [ {
                 targets: 0,
                 render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
