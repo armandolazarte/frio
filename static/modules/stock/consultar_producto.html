@@ -73,8 +73,6 @@
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-
-<!--<script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.13/dataRender/datetime.js"></script>
 
@@ -90,7 +88,7 @@
         $('#tbl_stock').dataTable( {
             columnDefs: [ {
                 targets: 0,
-                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD-MM-YYYY' )
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
             } ]
         } );
     } );
