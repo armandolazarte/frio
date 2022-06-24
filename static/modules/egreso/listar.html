@@ -153,9 +153,20 @@
     }); 
 
     $(document).ready(function() {
+        /*
         $('#tbl_egreso').dataTable( {
             "aaSorting": [[ 0, "desc" ]]
           , "iDisplayLength":20
+        } );
+        */
+
+        $('#tbl_egreso').dataTable( {
+            "aaSorting": [[ 1, "desc" ]],
+            "iDisplayLength":10,
+            columnDefs: [ {
+                targets: 1,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
+            } ]
         } );
     });
 
