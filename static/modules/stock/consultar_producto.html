@@ -52,7 +52,7 @@
             <table id="tbl_stock" class="table table-striped table-bordered">
                 <thead>
                     <tr style="font-size: 12px;">
-                        <th style="display: none;"></th>
+                        <!--<th style="display: none;"></th>-->
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Concepto</th>
@@ -68,15 +68,30 @@
     </div>
 </div>
 <!-- Datatables -->
+<script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>    
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.13/dataRender/datetime.js"></script>
+
 <script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
+        /*
         $('#tbl_stock').dataTable( {
             "aaSorting": [[ 0, "desc" ]]
           , "iDisplayLength":10
         } );
+        */
+
+        $('#tbl_stock').DataTable( {
+            columnDefs: [ {
+                targets: 0,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD-MM-YYYY' )
+            } ]
+        } );
     } );
+
+
 </script>
