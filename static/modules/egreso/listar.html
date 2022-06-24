@@ -137,8 +137,8 @@
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/plug-ins/1.10.13/dataRender/datetime.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/moment.min.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/datetime.js"></script>
 <script type="text/javascript" charset="utf-8">
     var user_level = {display-user_level};
     $( window ).on( "load", function() {
@@ -153,13 +153,6 @@
     }); 
 
     $(document).ready(function() {
-        /*
-        $('#tbl_egreso').dataTable( {
-            "aaSorting": [[ 0, "desc" ]]
-          , "iDisplayLength":20
-        } );
-        */
-
         $('#tbl_egreso').dataTable( {
             "aaSorting": [[ 1, "desc" ]],
             "iDisplayLength":10,

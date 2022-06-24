@@ -112,6 +112,8 @@
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/moment.min.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/datetime.js"></script>
 <script type="text/javascript" charset="utf-8">
     var user_level = {display-user_level};
     $( window ).on( "load", function() {
@@ -124,8 +126,12 @@
 
     $(document).ready(function() {
         $('#tbl_notacredito').dataTable( {
-            "aaSorting": [[ 0, "desc" ]]
-          , "iDisplayLength":20
+            "aaSorting": [[ 1, "desc" ]],
+            "iDisplayLength":10,
+            columnDefs: [ {
+                targets: 1,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
+            } ]
         } );
-    } );
+    });
 </script>

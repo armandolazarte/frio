@@ -43,6 +43,47 @@ class PedidoVendedorView extends View {
 		print $template;
 	}
 
+	function buscar($pedidovendedor_collection, $vendedor_collection) {
+		$gui = file_get_contents("static/modules/pedidovendedor/buscar.html");
+		$gui_tbl_vendedor = file_get_contents("static/modules/pedidovendedor/tbl_vendedor_array.html");
+		$gui_tbl_vendedor = $this->render_regex_dict('TBL_VENDEDOR', $gui_tbl_vendedor, $vendedor_collection);
+		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor_array.html");
+		$gui_slt_vendedor = $this->render_regex_dict('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
+
+		$user_rol = $_SESSION["data-login-" . APP_ABREV]["usuario-configuracionmenu"];
+		switch ($user_rol) {
+			// FACTURADOR
+			case 3:
+				//$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array_facturador.html");
+				$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array.html");
+				$display_descargar = 'inline-block';
+				break;
+			// SUPERVISOR
+			case 4:
+				$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array_supervisor.html");
+				$display_descargar = 'inline-block';
+				break;
+			// VENDEDOR
+			case 5:
+				$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array_vendedor.html");
+				$display_descargar = 'none';
+				break;
+			default:
+				$tbl_pedidovendedor_array = file_get_contents("static/modules/pedidovendedor/tbl_pedidovendedor_array.html");
+				$display_descargar = 'inline-block';
+				break;
+		}
+
+		$tbl_pedidovendedor_array = $this->render_regex_dict('TBL_PEDIDOVENDEDOR', $tbl_pedidovendedor_array, $pedidovendedor_collection);	
+		$render = str_replace('{tbl_pedidovendedor}', $tbl_pedidovendedor_array, $gui);
+		$render = str_replace('{tbl_vendedor}', $gui_tbl_vendedor, $render);
+		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		$render = str_replace('{usuario-display_descargar_pedidos}', $display_descargar, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
+
 	function agregar($producto_collection, $cliente_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection) {
 		$gui = file_get_contents("static/modules/pedidovendedor/agregar.html");
 		$tbl_producto_array = file_get_contents("static/modules/pedidovendedor/tbl_producto_array.html");
