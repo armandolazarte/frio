@@ -758,6 +758,34 @@ class HojaRutaController {
 		$this->model->egreso_ids = $tuplas;
 		$this->model->save();
 
+		$select = "hr.hojaruta_id AS ID";
+		$from = "hojaruta hr";
+		$where = "hr.egreso_ids LIKE '%{$egreso_id}%' AND hr.estadoentrega = 3";
+		$hojaruta_collection = CollectorCondition()->get('HojaRuta', $where, 4, $from, $select);
+		if (is_array($hojaruta_collection) AND !empty($hojaruta_collection)) {
+			foreach ($hojaruta_collection as $clave=>$valor) {				
+				$temp_hojaruta_id = $valor['ID'];
+				$thjm = new HojaRuta();
+				$thjm->hojaruta_id = $temp_hojaruta_id;
+				$thjm->get();
+				$temp_array_tuplas = $thjm->egreso_ids;
+				$temp1_array_tuplas = explode(',', $egreso_ids);
+				
+				foreach ($temp1_array_tuplas as $c1=>$v1) {
+					$tmp1_ids = explode('@', $v1);
+					$tmp1_egreso_id = $tmp1_ids[0];
+					if ($egreso_id == $tmp1_egreso_id) unset($temp1_array_tuplas[$c1]);
+				}
+
+				$new_tuplas = implode(',', $temp1_array_tuplas);
+				$thjm1 = new HojaRuta();
+				$thjm1->hojaruta_id = $temp_hojaruta_id;
+				$thjm1->get();
+				$thjm1->egreso_ids = $new_tuplas;
+				$thjm1->save();
+			}
+		}
+
 		header("Location: " . URL_APP . "/hojaruta/panel");
 	}
 }
