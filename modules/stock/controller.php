@@ -411,11 +411,14 @@ class StockController {
 				$pm = new Producto();
 				$pm->producto_id = $this->model->producto_id;
 				$pm->get();
-				$this->model->producto = $pm;
-				unset($this->model->producto_id);
-				$stock_collection[] = $this->model;
-			}
+				$oculto = $pm->oculto;
 
+				if ($oculto == 0) {
+					$this->model->producto = $pm;
+					unset($this->model->producto_id);
+					$stock_collection[] = $this->model;
+				}
+			}
 		}
 
 		$this->view->ajustar_stock($stock_collection, $almacen_collection, $am, $arg);
@@ -457,11 +460,14 @@ class StockController {
 				$pm = new Producto();
 				$pm->producto_id = $this->model->producto_id;
 				$pm->get();
-				$this->model->producto = $pm;
-				unset($this->model->producto_id);
-				$stock_collection[] = $this->model;
-			}
+				$oculto = $pm->oculto;
 
+				if ($oculto == 0) {
+					$this->model->producto = $pm;
+					unset($this->model->producto_id);
+					$stock_collection[] = $this->model;
+				}
+			}
 		}
 
 		$this->view->ajustar_stock($stock_collection, $almacen_collection, $am, $arg);
