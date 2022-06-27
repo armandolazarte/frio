@@ -72,6 +72,7 @@ class FacturaPDF extends View {
         $new_array = array_chunk($egresodetalle_collection, 12);
         $contenido = '';
         $cantidad_hojas = count($new_array);
+        print_r($cantidad_hojas);exit;
         $i = 1;
         foreach ($new_array as $egresodetalle_array) {
             if ($cantidad_hojas > 1) {
