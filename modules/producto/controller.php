@@ -172,6 +172,66 @@ class ProductoController {
 		exit;
 	}
 
+	function descargar_lista_precio_tipo() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$listaprecio_id = filter_input(INPUT_POST, 'listaprecio');
+		$lpm = new ListaPrecio();
+		$lpm->listaprecio_id = $listaprecio_id;
+		$lpm->get();
+		$obj_denominacion = $lpm->denominacion;
+		$condicion_listaprecio = $lpm->condicion;
+		$porcentaje_listaprecio = $lpm->porcentaje;
+
+		$select = "p.producto_id AS PRODUCTO_ID";
+		$from = "producto p";
+		$where = "p.oculto = 0 ORDER BY pm.codigo";
+		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
+
+		$subtitulo = "LISTA DE PRECIO: {$obj_denominacion}";
+		$array_encabezados = array('COD', 'RUBRO', 'MARCA', 'PRODUCTO', 'PRECIO UNITARIO');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		foreach ($producto_collection as $clave=>$valor) {
+			$producto_id = $valor['PRODUCTO_ID'];
+			$pm = new Producto();
+			$pm->producto_id = $producto_id;
+			$pm->get();
+		
+			$iva = $pm->iva;
+			$neto = $pm->costo;
+			$flete = $pm->flete;
+			$porcentaje_ganancia = $pm->porcentaje_ganancia;
+		
+			$valor_neto = $neto + ($flete * $neto / 100);
+			$valor_con_iva = $valor_neto + ($iva * $valor_neto / 100);
+			$pvp = $valor_con_iva + ($porcentaje_ganancia * $valor_con_iva / 100);
+		
+			//PRECIO VENTA AL MOMENTO DE LA FACTURACIÓN
+			$valor_por_listaprecio = $porcentaje_listaprecio * $pvp / 100;
+			if ($condicion_listaprecio == '+') {
+				$pvp_factura = $pvp + $valor_por_listaprecio;						
+			} elseif ($condicion_listaprecio == '-') {
+				$pvp_factura = $pvp - $valor_por_listaprecio;
+			}
+
+			$precio_venta = round($pvp_factura, 2);
+			
+			$array_temp = array();
+			$array_temp = array(
+						  $pm->codigo
+						, $pm->productocategoria->denominacion
+						, $pm->productomarca->denominacion
+						, $pm->denominacion
+						, $precio_venta);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+		exit;
+	}
+
 	function agregar() {
     	SessionHandler()->check_session();
 		$productomarca_collection = Collector()->get('ProductoMarca');
