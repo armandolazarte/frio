@@ -75,14 +75,16 @@ class FacturaPDF extends View {
         $i = 1;
         foreach ($new_array as $egresodetalle_array) {
             if ($cantidad_hojas > 1) {
-            print_r('Hola');exit;
                 if ($i == $cantidad_hojas) {
+                    print_r('Hola Total');exit;
                     $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA.html");
                 } else { 
                     $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA_sinTotal.html");
+                    print_r('Hola Sin Total');exit;
                 }
             } else {
                 $gui_facturaA = file_get_contents("static/common/plantillas_facturas/facturaA.html");
+                    print_r('Hola 1 hoja');exit;
             }
 
             $gui_tbl_facturaA = file_get_contents("static/common/plantillas_facturas/tbl_facturaA.html");
