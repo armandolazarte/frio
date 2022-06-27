@@ -186,7 +186,7 @@ class ProductoController {
 
 		$select = "p.producto_id AS PRODUCTO_ID";
 		$from = "producto p";
-		$where = "p.oculto = 0 ORDER BY pm.codigo";
+		$where = "p.oculto = 0 ORDER BY p.codigo";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 print_r($producto_collection);exit;
 		$subtitulo = "LISTA DE PRECIO: {$obj_denominacion}";
