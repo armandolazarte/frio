@@ -188,7 +188,7 @@ class ProductoController {
 		$from = "producto p";
 		$where = "p.oculto = 0 ORDER BY p.codigo";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
-print_r($producto_collection);exit;
+
 		$subtitulo = "LISTA DE PRECIO: {$obj_denominacion}";
 		$array_encabezados = array('COD', 'RUBRO', 'MARCA', 'PRODUCTO', 'PRECIO UNITARIO');
 		$array_exportacion = array();
