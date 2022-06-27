@@ -7,6 +7,7 @@ require_once "modules/productounidad/model.php";
 require_once "modules/productodetalle/model.php";
 require_once "modules/proveedor/model.php";
 require_once "modules/stock/model.php";
+require_once "modules/listaprecio/model.php";
 
 
 class ProductoController {
@@ -81,7 +82,12 @@ class ProductoController {
 			if($valor->oculto == 1) unset($proveedor_collection[$clave]);
 		}
 
-		$this->view->lista_precio($producto_collection, $productomarca_collection, $proveedor_collection);
+		$listaprecio_collection = Collector()->get('ListaPrecio');
+		foreach ($listaprecio_collection as $clave=>$valor) {
+			if($valor->oculto == 1) unset($listaprecio_collection[$clave]);
+		}
+
+		$this->view->lista_precio($producto_collection, $productomarca_collection, $proveedor_collection, $listaprecio_collection);
 	}
 
 	function vdr_lista_precio() {

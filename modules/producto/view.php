@@ -69,7 +69,7 @@ class ProductoView extends View {
 		print $template;
 	}
 
-	function lista_precio($producto_collection, $productomarca_collection, $proveedor_collection) {
+	function lista_precio($producto_collection, $productomarca_collection, $proveedor_collection, $listaprecio_collection) {
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		if ($user_level < 3) {
 			$gui = file_get_contents("static/modules/producto/op_lista_precio.html");
@@ -79,6 +79,7 @@ class ProductoView extends View {
 			$tbl_listaprecio_array = file_get_contents("static/modules/producto/tbl_listaprecio_array.html");
 		}
 
+		$gui_slt_listaprecio = file_get_contents("static/common/slt_listaprecio.html");
 		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
 		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor.html");
 		foreach ($proveedor_collection as $clave=>$valor) unset($proveedor_collection[$clave]->infocontacto_collection);
@@ -87,11 +88,13 @@ class ProductoView extends View {
 		$proveedor_collection = $this->order_collection_objects($proveedor_collection, 'razon_social', SORT_ASC);
 
 		$tbl_listaprecio_array = $this->render_regex_dict('TBL_LISTAPRECIO', $tbl_listaprecio_array, $producto_collection);
+		$gui_slt_listaprecio = $this->render_regex('SLT_LISTAPRECIO', $gui_slt_listaprecio, $listaprecio_collection);
 		$gui_slt_productomarca = $this->render_regex('SLT_PRODUCTOMARCA', $gui_slt_productomarca, $productomarca_collection);
 		$gui_slt_proveedor = $this->render_regex('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
 		$render = str_replace('{tbl_listaprecio}', $tbl_listaprecio_array, $gui);
 		$render = str_replace('{slt_proveedor}', $gui_slt_proveedor, $render);
 		$render = str_replace('{slt_productomarca}', $gui_slt_productomarca, $render);
+		$render = str_replace('{slt_listaprecio}', $gui_slt_listaprecio, $render);
 		$render = str_replace('{display-user_level}', $user_level, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
