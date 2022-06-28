@@ -3308,8 +3308,11 @@ class ReporteController {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
 
-		$desde = filter_input(INPUT_POST, 'desde');
-		$hasta = filter_input(INPUT_POST, 'hasta');
+		//$desde = filter_input(INPUT_POST, 'desde');
+		//$hasta = filter_input(INPUT_POST, 'hasta');
+		
+		$desde = '2022-06-20';
+		$hasta = '2022-06-26';
 		
 		$select = "e.egreso_id AS EGRESO_ID";
 		$from = "egreso e";
@@ -3373,7 +3376,7 @@ class ReporteController {
 								, $valor["IMPORTETOTAL_FINAL"]);
 			$array_exportacion[] = $array_temp;
 		}
-
+		
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 
