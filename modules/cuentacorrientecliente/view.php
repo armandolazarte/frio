@@ -158,6 +158,7 @@ class CuentaCorrienteClienteView extends View {
 		$render = str_replace('{lst_infocontacto}', $gui_lst_infocontacto, $gui);
 		$render = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $render);
 		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes_array, $render);
+		$render = str_replace('{anio_actual}', date('Y'), $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($array_cuentacorriente, $render);
 		$render = $this->render_breadcrumb($render);
