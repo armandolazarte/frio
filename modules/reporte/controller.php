@@ -3376,7 +3376,7 @@ class ReporteController {
 								, $valor["IMPORTETOTAL_FINAL"]);
 			$array_exportacion[] = $array_temp;
 		}
-
+		print_r($array_exportacion);exit;
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 
