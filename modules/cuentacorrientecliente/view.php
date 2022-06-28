@@ -275,6 +275,7 @@ class CuentaCorrienteClienteView extends View {
 		$obj_cliente = $this->set_dict($obj_cliente);
 		$render = str_replace('{fecha_sys}', $fecha_sys, $gui);
 		$render = str_replace('{balance}', $balance, $render);
+		$render = str_replace('{anio_actual}', date('Y'), $render);
 		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
 		$render = str_replace('{slt_ingresotipopago}', $gui_slt_ingresotipopago, $render);
 		$render = $this->render($obj_cliente, $render);
