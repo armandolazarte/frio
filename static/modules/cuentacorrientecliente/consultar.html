@@ -305,7 +305,7 @@
     function controlaAnio() {
         var anio_actual = {anio_actual};
         anio_form = document.getElementById('anio_retencion').value;
-        if (anio_actual > anio_retencion) {
+        if (parseInt(anio_actual) > parseInt(anio_retencion)) {
             document.getElementById('anio_retencion').value = anio_retencion;
         }
     }
