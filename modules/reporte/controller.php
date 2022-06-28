@@ -3304,6 +3304,82 @@ class ReporteController {
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 
+	function desc_importe_total_venta_vendedores_fecha() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		//$desde = filter_input(INPUT_POST, 'desde');
+		//$hasta = filter_input(INPUT_POST, 'hasta');
+		
+		$desde = '2022-06-20';
+		$hasta = '2022-06-26';
+		
+		$select = "e.egreso_id AS EGRESO_ID";
+		$from = "egreso e";
+		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$egreso_ids_array = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+		$egreso_ids_array = (is_array($egreso_ids_array) AND !empty($egreso_ids_array)) ? $egreso_ids_array : array();
+
+		$egreso_ids = array();
+		foreach ($egreso_ids_array as $clave=>$valor) {
+			$egreso_id = $valor['EGRESO_ID'];
+			if(!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
+		}
+
+		if (!empty($egreso_ids)) {
+			$egreso_ids = implode(',', $egreso_ids);
+			$select = "v.vendedor_id AS VENDEDOR_ID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, ROUND(SUM(e.importe_total), 2) AS IMPORTETOTAL";
+			$from = "egreso e INNER JOIN vendedor v ON e.vendedor = v.vendedor_id";
+			$where = "e.egreso_id IN ($egreso_ids)";
+			$group_by = "e.vendedor";
+			$importe_venta_vendedor = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $group_by);
+			
+			$select = "v.vendedor_id AS VENDEDOR_ID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, ROUND(SUM(nc.importe_total), 2) AS IMPORTETOTAL";
+			$from = "notacredito nc INNER JOIN egreso e ON nc.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id";
+			$where = "nc.egreso_id IN ($egreso_ids)";
+			$group_by = "e.vendedor";
+			$importe_nc_vendedor = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select, $group_by);
+
+			foreach ($importe_venta_vendedor as $clave=>$valor) {
+				$venta_vendedor_id = $valor['VENDEDOR_ID'];
+				$venta_importetotal = $valor['IMPORTETOTAL'];
+				$nc_importetotal_temp = 0;
+
+				foreach ($importe_nc_vendedor as $c=>$v) {
+					$nc_vendedor_id = $v['VENDEDOR_ID'];
+					$nc_importotal = $v['IMPORTETOTAL'];
+
+					if ($venta_vendedor_id == $nc_vendedor_id) {
+						$venta_importetotal = $venta_importetotal - $nc_importotal;
+						$nc_importetotal_temp = $nc_importotal;
+					}
+				}
+
+				$importe_venta_vendedor[$clave]['IMPORTETOTAL_NC'] = $nc_importetotal_temp;
+				$importe_venta_vendedor[$clave]['IMPORTETOTAL_FINAL'] = $venta_importetotal;
+			}
+			
+		} else {
+			$importe_venta_vendedor = array();
+		}
+			
+		$subtitulo = "Importes Totales de Venta Vendedor - ({$desde} - {$hasta})";
+		$array_encabezados = array('VENDEDOR', 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+
+		foreach ($importe_venta_vendedor as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["VENDEDOR"]
+								, $valor["IMPORTETOTAL"]
+								, $valor["IMPORTETOTAL_NC"]
+								, $valor["IMPORTETOTAL_FINAL"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
+
 	function desc_cantidad_ventas_cliente_fecha() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
