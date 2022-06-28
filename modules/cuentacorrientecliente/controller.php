@@ -592,8 +592,12 @@ class CuentaCorrienteClienteController {
 			case 5:
 				$tpdm = new RetencionClienteDetalle();
 				$tpdm->numero = filter_input(INPUT_POST, 'numero_retencion');
+				$tpdm->mes = filter_input(INPUT_POST, 'mes_retencion');
+				$tpdm->anio = filter_input(INPUT_POST, 'anio_retencion');
+				$tpdm->importe = $importe;
 				$tpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
 				$tpdm->egreso_id = $egreso_id;
+				$tpdm->caja = 1;
 				$tpdm->save();
 				break;
 		}
