@@ -356,7 +356,7 @@ class ExcelReport extends View {
         $this->estilo_subtitulo = array(
                                         'font'=>array(
                                             'name'=>'Bookman Old Style',
-                                            'size'=>13,
+                                            'size'=>10,
                                             'color'=>array('rgb' => '000000')),
                                         'fill'=>array(
                                             'type'=>PHPExcel_Style_Fill::FILL_SOLID,
