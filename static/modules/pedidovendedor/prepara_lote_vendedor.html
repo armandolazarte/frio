@@ -214,7 +214,7 @@
 
     function egresarProducto() {
 
-        //document.getElementById('alerta_stock').style.display = 'none';
+        document.getElementById('alerta_stock').style.display = 'none';
         var producto_id = document.getElementById('producto_id').value;
         var flag = array_ids.indexOf(producto_id);
         
@@ -231,7 +231,7 @@
         importe_descuento = importe_descuento.toFixed(2);
         var costo_total = document.getElementById('costo_total').value;
 
-        //if(parseFloat(cantidad) <= parseFloat(cantidad_disponible)) {
+        if(parseFloat(cantidad) <= parseFloat(cantidad_disponible)) {
 
             if(parseInt(flag) === -1){   
                 var bodyTblProducto = document.getElementById('bodyTblProducto');
@@ -423,12 +423,10 @@
                 */
                 buscarProducto();
             }
-            /*
         } else {
             document.getElementById('alerta_stock').style.display = 'block';
             return false;
         }
-        */
 
         var tab = document.getElementById('bodyTblProducto');
         var control_importe_total = 0;
