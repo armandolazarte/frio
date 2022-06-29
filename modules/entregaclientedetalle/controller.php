@@ -69,7 +69,7 @@ class EntregaClienteDetalleController {
 	    SessionHandler()->check_session();
 	    $select = "CONCAT('$ ',ROUND(SUM(ec.monto), 2)) AS TOTAL";
 	    $from = "entregaclientedetalle ecd INNER JOIN entregacliente ec ON ec.entregacliente_id = ecd.entregacliente_id";
-	    $where = "ec.vendedor_id  = {$arg} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now() ORDER BY ecd.egreso_id ASC";
+	    $where = "ec.vendedor_id  = {$arg} AND ec.anulada = 0 and ec.estado = 1 ORDER BY ecd.egreso_id ASC";
 	    $cobranza = CollectorCondition()->get('EntregaClienteDetalle', $where, 4, $from, $select);
 	    $total = (is_array($cobranza)) ? $cobranza[0]["TOTAL"] : 0 ;
 	    print_r($total);
