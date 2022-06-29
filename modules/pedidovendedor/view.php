@@ -289,7 +289,7 @@ class PedidoVendedorView extends View {
 		print $template;
 	}
 
-	function traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $obj_pedidovendedor, $obj_cliente) {
+	function traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $obj_pedidovendedor, $obj_cliente, $flag_error) {
 		$gui = file_get_contents("static/modules/pedidovendedor/procesolote_pedidovendedor_ajax.html");
 		$tbl_pedidovendedordetalle = file_get_contents("static/modules/pedidovendedor/tbl_procesolote_pedidovendedordetalle.html");
 		$hidden_editar_pedidovendedordetalle_array = file_get_contents("static/modules/pedidovendedor/hidden_editar_pedidovendedordetalle_array_lote.html");
@@ -322,10 +322,12 @@ class PedidoVendedorView extends View {
 
 		$obj_pedidovendedor->numero_pedido = str_pad($obj_pedidovendedor->pedidovendedor_id, 8, '0', STR_PAD_LEFT);
 		$obj_pedidovendedor = $this->set_dict($obj_pedidovendedor);
+		$btn_disabled = ($flag_error == 1) ? 'disabled' : '';
 
 		$render = str_replace('{tbl_pedidovendedordetalle}', $tbl_pedidovendedordetalle, $gui);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($obj_pedidovendedor, $render);
+		$render = str_replace('{btn_disabled}', $btn_disabled, $render);
 		$render = str_replace('{slt_cliente}', $slt_cliente, $render);
 		$render = str_replace('{hidden_editar_pedidovendedordetalle_array}', $hidden_editar_pedidovendedordetalle_array, $render);
 		$render = str_replace('{url_app}', URL_APP, $render);

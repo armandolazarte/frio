@@ -1397,7 +1397,7 @@ class PedidoVendedorController {
 		$where = "c.oculto = 0 ORDER BY c.razon_social ASC";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
 
-		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $this->model, $cm);
+		$this->view->traer_pedidovendedor_procesolote_ajax($producto_collection, $pedidovendedordetalle_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection, $cliente_collection, $this->model, $cm, $flag_error);
 	}
 
 	function traer_pedidovendedor_arrayproductos_procesolote_ajax($arg) {
