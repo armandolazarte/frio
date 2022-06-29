@@ -1359,7 +1359,7 @@ class PedidoVendedorController {
 
         	$select = "MAX(s.stock_id) AS STOCK_ID";
 			$from = "stock s";
-			$where = "s.producto_id = {$producto_id} AND s.almacen_id = {$almacen_id}";
+			$where = "s.producto_id = {$producto_id} AND s.almacen_id = 1";
 			$groupby = "s.producto_id";
 			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 
