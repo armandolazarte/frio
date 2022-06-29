@@ -42,7 +42,7 @@ class EntregaClienteDetalleController {
 	    		   ec.cliente_id AS CLINT, 
 	    		   ec.estado AS ESTADO, 
 	    		   ec.fecha AS FECHA, 
-	    		   CONCAT('$',ecd.monto) AS MONTO, 
+	    		   CONCAT('$',ROUND(ecd.monto,2)) AS MONTO, 
 	    		   e.punto_venta AS PUNTO_VENTA, 
 	    		   ecd.parcial AS VAL_PARCIAL, 
 	    		   (CASE WHEN ecd.parcial = 1 THEN 'PARCIAL' ELSE 'TOTAL' END) AS PARCIAL, 
