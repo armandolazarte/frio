@@ -78,15 +78,17 @@ class EntregaClienteDetalleController {
 	function guardar() {
     	SessionHandler()->check_session();
 		$fecha = date('Y-m-d');
+		
 		$total = filter_input(INPUT_POST, 'total');
 		$total = explode("$", $total);
 		$total = $total[1];
+		
 		$cobrador = filter_input(INPUT_POST, 'cobrador');
 		$var = explode("@", $cobrador);
 		$cobrador_id = $var[0];
 		$cobrador_denominacion = $var[1];
-		$cobros_array = $_POST['cobro'];
 
+		$cobros_array = $_POST['cobro'];
 		if (is_array($cobros_array)) {
 			$fecha_actual = date('Y-m-d');
 			$hora = date('H:i:s');
@@ -110,8 +112,7 @@ class EntregaClienteDetalleController {
 				$ecdm->save();
 
 				if ($cobro['val_parcial'] == 1) {
-					$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) -
-							  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
+					$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
 					$from = "cuentacorrientecliente ccc";
 					$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id}";
 					$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
