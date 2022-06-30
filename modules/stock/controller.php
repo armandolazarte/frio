@@ -772,6 +772,7 @@ class StockController {
         }
         
         array_multisort($array_temp, SORT_ASC, $array_exportacion);
+        array_unshift($array_exportacion, $array_encabezados);
 		print_r($array_exportacion);exit;
 
 
