@@ -71,7 +71,7 @@
                     </font>
                   </small>
                 </label>
-                <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="armarHojaRuta();">
+                <button type="button" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="armarHojaRuta();" id="btnEnviar">
                     <i class="fa fa-download"></i> AGREGAR A RUTA ENTREGA
                 </button>
             </div>
@@ -132,11 +132,15 @@
         if (flag_array == 0) {
             var form = document.getElementById('formulario_guardar');
             form.action = "{url_app}/hojaruta/actualizar_hoja_ruta_flete/{hojaruta-hojaruta_id}";
+            document.getElementById('btnEnviar').style.display = "none";
+            document.getElementById('btnEnviar').disabled = true;
             document.getElementById("formulario_guardar").submit();
         } else {
             var mensaje = array.join("<br><br>");
             $('#sistema_alertas').modal('show');
             document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+            document.getElementById('btnEnviar').style.display = "block";
+            document.getElementById('btnEnviar').disabled = false;
         }
     }
 
