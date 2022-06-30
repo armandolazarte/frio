@@ -2923,8 +2923,7 @@ class ReporteController {
 				 vendedor v ON e.vendedor = v.vendedor_id INNER JOIN 
 				 producto p ON ed.producto_id = p.producto_id INNER JOIN 
 				 productomarca pm ON p.productomarca = pm.productomarca_id";
-		$where = "pm.productomarca_id = {$marca_id} AND 
-				  e.vendedor = {$vendedor_id} AND 
+		$where = "pm.productomarca_id = {$marca_id} AND
 				  e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$group_by = "ed.producto_id ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
 		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
