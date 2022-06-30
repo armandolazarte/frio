@@ -756,7 +756,6 @@ class StockController {
 		$subtitulo = "Inventario al {$fecha_sys}";
 		$array_encabezados = array('COD', 'MARCA','PRODUCTO','CANTIDAD');
 		$array_exportacion = array();
-		$array_exportacion[] = $array_encabezados;
 
 		foreach ($stock_collection as $clave=>$valor) {
 			$array_temp = array();
@@ -767,8 +766,16 @@ class StockController {
 			$array_exportacion[] = $array_temp;
 		}
 
+		$array_temp = array();
+        foreach ($array_exportacion as $array) {
+            $array_temp[] = $array[0];
+        }
+        
+        array_multisort($array_temp, SORT_ASC, $array_exportacion);
 		print_r($array_exportacion);exit;
 
+
+		$array_exportacion[] = $array_encabezados;
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 }
