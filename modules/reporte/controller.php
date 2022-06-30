@@ -2929,7 +2929,6 @@ class ReporteController {
 		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "pm.productomarca_id = {$marca_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$datos_egresos = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
-		print_r($datos_reporte);exit;
 
 		if (is_array($datos_reporte) AND !empty($datos_reporte)) {
 			foreach ($datos_egresos as $clave=>$valor) {
