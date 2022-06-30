@@ -2905,23 +2905,14 @@ class ReporteController {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport_tipo2.php";
 
-		//$desde = filter_input(INPUT_POST, 'desde');
-		$desde = '2022-06-01';
-		//$hasta = filter_input(INPUT_POST, 'hasta');
-		$hasta = '2022-06-30';
-		$marca_id = 1;
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+		$marca_id = filter_input(INPUT_POST, 'marca_id');
 		
-		$select = "e.vendedor AS VENDEDOR_ID,
-				   ROUND(SUM(ed.importe),2) AS TOTIMPO, 
-				   CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, 
-				   pm.denominacion AS MARCA";
-		$from = "egresodetalle ed INNER JOIN 
-				 egreso e ON ed.egreso_id = e.egreso_id INNER JOIN 
-				 vendedor v ON e.vendedor = v.vendedor_id INNER JOIN 
-				 producto p ON ed.producto_id = p.producto_id INNER JOIN 
+		$select = "e.vendedor AS VENDEDOR_ID, ROUND(SUM(ed.importe),2) AS TOTIMPO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, pm.denominacion AS MARCA";
+		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN 
 				 productomarca pm ON p.productomarca = pm.productomarca_id";
-		$where = "pm.productomarca_id = {$marca_id} AND
-				  e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "pm.productomarca_id = {$marca_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$group_by = "p.productomarca, e.vendedor ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC, e.fecha DESC";
 		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
 
