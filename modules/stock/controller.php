@@ -768,7 +768,7 @@ class StockController {
 
 		$array_temp = array();
         foreach ($array_exportacion as $array) {
-            $array_temp[] = $array[0];
+            $array_temp[] = $array[1];
         }
         
         array_multisort($array_temp, SORT_ASC, $array_exportacion);
