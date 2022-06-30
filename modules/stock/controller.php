@@ -78,9 +78,11 @@ class StockController {
 		}
 
 		$deuda_cuentacorrienteproveedor = ($deuda_cuentacorrienteproveedor > 0.5) ? $deuda_cuentacorrienteproveedor : 0;
+		
 		$select = "s.producto_id AS PROD_ID";
 		$from = "stock s";
-		$where = "s.almacen_id = {$almacen_id}";
+		//$where = "s.almacen_id = {$almacen_id}";
+		$where = "s.almacen_id = 1";
 		$groupby = "s.producto_id";
 		$productoid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 		$stock_valorizado = 0;
@@ -705,6 +707,54 @@ class StockController {
 		$pm->get();
 
 		$this->view->consultar_producto($stock_collection, $pm);
+	}
+
+	function descargar_stock() {
+    	SessionHandler()->check_session();
+
+    	$select = "s.producto_id AS PROD_ID";
+		$from = "stock s";
+		//$where = "s.almacen_id = {$almacen_id}";
+		$where = "s.almacen_id = 1";
+		$groupby = "s.producto_id";
+		$productoid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
+		
+		if ($productoid_collection == 0 || empty($productoid_collection) || !is_array($productoid_collection)) {
+			$stock_collection = array();
+		} else {
+			$producto_ids = array();
+			foreach ($productoid_collection as $producto_id) $producto_ids[] = $producto_id['PROD_ID'];
+			$producto_ids = implode(',', $producto_ids);
+
+			$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			//$where = "s.producto_id IN ({$producto_ids}) AND s.almacen_id = {$almacen_id}";
+			$where = "s.producto_id IN ({$producto_ids}) AND s.almacen_id = 1";
+			$groupby = "s.producto_id";
+			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
+
+			$stock_collection = array();
+			foreach ($stockid_collection as $stock_id) {
+				$this->model = new Stock();
+				$this->model->stock_id = $stock_id['STOCK_ID'];
+				$this->model->get();
+
+				$pm = new Producto();
+				$pm->producto_id = $this->model->producto_id;
+				$pm->get();
+
+				if ($pm->oculto == 0) {
+					$this->model->producto = $pm;
+					$this->model->valor_stock = $valor_stock_producto;
+					$this->model->class_stm = $class_stm;
+					$this->model->mensaje_stm = $mensaje_stm;
+					unset($this->model->producto_id);
+					$stock_collection[] = $this->model;
+				}
+			}
+		}
+
+		print_r($stock_collection);exit;
 	}
 }
 ?>
