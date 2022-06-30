@@ -2911,7 +2911,8 @@ class ReporteController {
 		$hasta = '2022-06-30';
 		$marca_id = 1;
 		
-		$select = "ROUND(SUM(ed.importe),2) AS TOTIMPO, 
+		$select = "e.vendedor AS VENDEDOR_ID,
+				   ROUND(SUM(ed.importe),2) AS TOTIMPO, 
 				   CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, 
 				   pm.denominacion AS MARCA";
 		$from = "egresodetalle ed INNER JOIN 
