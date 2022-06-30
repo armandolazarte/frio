@@ -2924,29 +2924,31 @@ class ReporteController {
 				  e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$group_by = "p.productomarca, e.vendedor ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC, e.fecha DESC";
 		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
-		print_r($datos_reporte);exit;
-		$select = "ed.producto_id AS PRID, e.egreso_id AS EGRID";
+
+		$select = "ed.producto_id AS PRID, e.egreso_id AS EGRID, e.vendedor AS VENDEDOR_ID";
 		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "pm.productomarca_id = {$marca_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$datos_egresos = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+		print_r($datos_reporte);exit;
 
 		if (is_array($datos_reporte) AND !empty($datos_reporte)) {
 			foreach ($datos_egresos as $clave=>$valor) {
 				$tmp_egreso_id = $valor["EGRID"];
 				$tmp_producto_id = $valor["PRID"];
-				$select = "ncd.cantidad AS CANTIDAD, ncd.importe AS IMPORTE";
-				$from = "notacreditodetalle ncd";
-				$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id}";
+				$tmp_vendedor_id = $valor["VENDEDOR_ID"];
+
+				$select = "e.vendedor AS VENDEDOR_ID, ncd.importe AS IMPORTE";
+				$from = "notacreditodetalle ncd INNER JOIN egreso e ON ncd.egreso_id = e.egreso_id";
+				$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id} AND e.vendedor = {$tmp_vendedor_id}";
 				$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
 
 				if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
 
 					foreach ($datos_reporte as $c=>$v) {
 						$producto_id = $v["PRID"];
-						if ($producto_id == $tmp_producto_id) {
+						$vendedor_id = $v["VENDEDOR_ID"];
+						if ($vendedor_id == $tmp_vendedor_id) {
 							$datos_reporte[$c]['TOTIMPO'] = $datos_reporte[$c]['TOTIMPO'] - $datos_notacredito[0]['IMPORTE'];
-							$datos_reporte[$c]['TOTCANT'] = $datos_reporte[$c]['TOTCANT'] - $datos_notacredito[0]['CANTIDAD'];
-
 						}
 					}
 
