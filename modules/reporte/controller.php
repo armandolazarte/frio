@@ -2901,6 +2901,84 @@ class ReporteController {
 		exit;
 	}
 
+	function desc_total_vendedores_marca() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport_tipo2.php";
+
+		//$desde = filter_input(INPUT_POST, 'desde');
+		$desde = '2022-06-01';
+		//$hasta = filter_input(INPUT_POST, 'hasta');
+		$hasta = '2022-06-30';
+		$marca_id = 1;
+		
+		$select = "ROUND(SUM(ed.cantidad),2) AS TOTCANT, 
+				   ROUND(SUM(ed.importe),2) AS TOTIMPO, 
+				   CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, 
+				   pm.denominacion AS MARCA, 
+				   ed.producto_id AS PRID, 
+				   date_format(e.fecha, '%d/%m/%Y') AS FECHA, 
+				   ed.descripcion_producto AS PRODUCTO";
+		$from = "egresodetalle ed INNER JOIN 
+				 egreso e ON ed.egreso_id = e.egreso_id INNER JOIN 
+				 vendedor v ON e.vendedor = v.vendedor_id INNER JOIN 
+				 producto p ON ed.producto_id = p.producto_id INNER JOIN 
+				 productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "pm.productomarca_id = {$marca_id} AND 
+				  e.vendedor = {$vendedor_id} AND 
+				  e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$group_by = "ed.producto_id ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
+		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
+		print_r($datos_reporte);exit;
+		$select = "ed.producto_id AS PRID, e.egreso_id AS EGRID";
+		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "pm.productomarca_id = {$marca_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$datos_egresos = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select);
+
+		if (is_array($datos_reporte) AND !empty($datos_reporte)) {
+			foreach ($datos_egresos as $clave=>$valor) {
+				$tmp_egreso_id = $valor["EGRID"];
+				$tmp_producto_id = $valor["PRID"];
+				$select = "ncd.cantidad AS CANTIDAD, ncd.importe AS IMPORTE";
+				$from = "notacreditodetalle ncd";
+				$where = "ncd.producto_id = {$tmp_producto_id} AND ncd.egreso_id = {$tmp_egreso_id}";
+				$datos_notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
+
+				if (is_array($datos_notacredito) AND !empty($datos_notacredito)) {
+
+					foreach ($datos_reporte as $c=>$v) {
+						$producto_id = $v["PRID"];
+						if ($producto_id == $tmp_producto_id) {
+							$datos_reporte[$c]['TOTIMPO'] = $datos_reporte[$c]['TOTIMPO'] - $datos_notacredito[0]['IMPORTE'];
+							$datos_reporte[$c]['TOTCANT'] = $datos_reporte[$c]['TOTCANT'] - $datos_notacredito[0]['CANTIDAD'];
+
+						}
+					}
+
+				}
+			}
+		}
+
+		print_r($datos_reporte);exit;
+
+		$subtitulo = "VENTAS POR VENDEDOR, RANGO DE FECHA, MARCA Y PRODUCTO";
+		$array_encabezados = array('VENDEDOR', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		$sum_importe = 0;
+		foreach ($datos_reporte as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["VENDEDOR"]
+								, $valor["MARCA"]
+								, $valor["PRODUCTO"]
+								, $valor["TOTCANT"]
+								, $valor["TOTIMPO"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReportTipo2()->extraer_informe($subtitulo, $array_exportacion);
+		exit;
+	}
+
 	function desc_stock_valorizado() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
