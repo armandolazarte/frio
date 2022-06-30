@@ -2925,7 +2925,7 @@ class ReporteController {
 				 productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "pm.productomarca_id = {$marca_id} AND
 				  e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
-		$group_by = "ed.producto_id ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
+		$group_by = "e.productomarca, e.vendedor ORDER BY CONCAT(v.apellido, ' ', v.nombre) ASC, e.fecha DESC";
 		$datos_reporte = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
 		print_r($datos_reporte);exit;
 		$select = "ed.producto_id AS PRID, e.egreso_id AS EGRID";
