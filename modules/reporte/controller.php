@@ -2955,10 +2955,8 @@ class ReporteController {
 			}
 		}
 
-		print_r($datos_reporte);exit;
-
 		$subtitulo = "VENTAS POR VENDEDOR, RANGO DE FECHA, MARCA Y PRODUCTO";
-		$array_encabezados = array('VENDEDOR', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
+		$array_encabezados = array('VENDEDOR', 'MARCA', 'IMPORTE');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 		$sum_importe = 0;
@@ -2966,8 +2964,6 @@ class ReporteController {
 			$array_temp = array();
 			$array_temp = array($valor["VENDEDOR"]
 								, $valor["MARCA"]
-								, $valor["PRODUCTO"]
-								, $valor["TOTCANT"]
 								, $valor["TOTIMPO"]);
 			$array_exportacion[] = $array_temp;
 		}
