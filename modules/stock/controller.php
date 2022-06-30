@@ -711,7 +711,9 @@ class StockController {
 
 	function descargar_stock() {
     	SessionHandler()->check_session();
+    	require_once "tools/excelreport.php";
 
+    	$fecha_sys = date('d-m-Y');
     	$select = "s.producto_id AS PROD_ID";
 		$from = "stock s";
 		//$where = "s.almacen_id = {$almacen_id}";
@@ -751,7 +753,21 @@ class StockController {
 			}
 		}
 
-		print_r($stock_collection);exit;
+		$subtitulo = "Inventario al {$fecha_sys}";
+		$array_encabezados = array('COD', 'MARCA','PRODUCTO','CANTIDAD');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+
+		foreach ($stock_collection as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor->producto->codigo
+								, $valor->producto->productomarca->denominacion
+								, $valor->producto->denominacion
+								, $valor->cantidad_actual);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 }
 ?>
