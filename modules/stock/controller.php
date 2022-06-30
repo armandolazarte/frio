@@ -745,9 +745,6 @@ class StockController {
 
 				if ($pm->oculto == 0) {
 					$this->model->producto = $pm;
-					$this->model->valor_stock = $valor_stock_producto;
-					$this->model->class_stm = $class_stm;
-					$this->model->mensaje_stm = $mensaje_stm;
 					unset($this->model->producto_id);
 					$stock_collection[] = $this->model;
 				}
