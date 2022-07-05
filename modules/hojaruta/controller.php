@@ -564,6 +564,7 @@ class HojaRutaController {
 			$eem->egresoentrega_id = $egresoentrega_id;
 			$eem->get();
 			$eem->estadoentrega = $estadoentrega_id;
+			$eem->fecha = date('Y-m-d');
 			$eem->save();
 
 			$estado_abonado = $egreso_abonado_array[$egreso_id];
