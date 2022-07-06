@@ -403,6 +403,7 @@ class ReporteView extends View {
 		$render = str_replace('{periodo_actual}', date('Ym'), $render);
 		$render = str_replace('{tbl_cliente}', $tbl_cliente, $render);
 		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		$render = str_replace('{display-user_level}', $user_level, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;

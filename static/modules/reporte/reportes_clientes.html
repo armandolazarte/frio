@@ -55,7 +55,7 @@
     </div>
 </div>
 <div class="col-md-6 col-sm-12 col-xs-12">
-    <div class="x_panel hidden-print">
+    <div class="x_panel hidden-print remover-info">
         <div class="x_title">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Ventas por Vendedor y Cliente</h2>
             <ul class="nav navbar-right panel_toolbox">
@@ -88,7 +88,7 @@
             </div>
         </div>
     </div>
-    <div class="x_panel hidden-print">
+    <div class="x_panel hidden-print remover-info">
         <div class="x_title">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Total de Ventas por Vendedor</h2>
             <ul class="nav navbar-right panel_toolbox">
@@ -115,7 +115,7 @@
             </div>
         </div>
     </div>
-    <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
+    <div class="x_panel hidden-print remover-info" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
         <div class="x_title" style="padding-left: 2%;">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte clientes</h2>
             <ul class="nav navbar-right panel_toolbox">
@@ -149,6 +149,13 @@
 <script src="{url_static}vendors/raphael/raphael.min.js"></script>
 <script src="{url_static}vendors/morris.js/morris.min.js"></script>
 <script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    $( window ).on( "load", function() {
+        if (user_level < 3) {
+            $(".remover-info").css("display","none");    
+        }
+    });
+
     $(document).ready(function() {
         $('#tbl_cliente').dataTable( {
             "aaSorting": [[ 0, "asc" ]]
