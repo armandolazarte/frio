@@ -65,7 +65,7 @@ class EntregaClienteDetalleController {
 				$itpm->get();
 				$temp_tipo_pago = $itpm->denominacion;
 				$entregacliente_collection[$clave]['DENTIPPAG'] = $temp_tipo_pago;
-				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos;
+				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos - 1;
 	    	}
 	    }
 
