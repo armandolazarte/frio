@@ -745,10 +745,11 @@ class ApiController {
                     foreach ($json->detalles as $detalle) {
                         
                         $entregaclientedetalle = new EntregaClienteDetalle();
-                        $entregaclientedetalle->entregacliente_id = $entregaCliente->entregacliente_id;
                         $entregaclientedetalle->egreso_id = $detalle->egreso_id;
                         $entregaclientedetalle->monto = $detalle->monto;
+                        $entregaclientedetalle->entregacliente_id = $entregaCliente->entregacliente_id;
                         $entregaclientedetalle->parcial = $detalle->parcial;                        
+                        $entregaclientedetalle->ingresotipopago_id = 3;                        
                         $entregaclientedetalle->save();
                     }
                     $respuesta = $entregaCliente;

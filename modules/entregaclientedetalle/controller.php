@@ -233,7 +233,7 @@ class EntregaClienteDetalleController {
 		$this->model->entregaclientedetalle_id = $entregaclientedetalle_id;
 		$this->model->get();
 		$this->model->monto = $monto;
-		$this->model->parcial = $monto;
+		$this->model->parcial = $parcial;
 		$this->model->ingresotipopago_id = $ingresotipopago_id;
 		$this->model->save();
 
