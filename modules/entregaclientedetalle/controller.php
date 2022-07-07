@@ -329,6 +329,22 @@ class EntregaClienteDetalleController {
 	    $where = "ec.vendedor_id  = {$vendedor_id} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now() ORDER BY ecd.egreso_id ASC";
 	    $entregacliente_collection = CollectorCondition()->get('EntregaClienteDetalle', $where, 4, $from, $select);
 
+	    if (!empty($entregacliente_collection)) {
+	    	$count_pagos =  0;
+	    	$flag_egreso = 0;
+	    	foreach ($entregacliente_collection as $clave=>$valor) {
+	    		$egreso_id = $valor['EGRESO'];
+	    		$cliente_id = $valor['CLINT'];
+		    	
+				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
+				$from = "cuentacorrientecliente ccc";
+				$where = "ccc.egreso_id = $egreso_id AND ccc.cliente_id = {$cliente_id} GROUP BY ccc.egreso_id";
+				$count_pagos = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+	    		$count_pagos = (is_array($count_pagos) AND !empty($count_pagos)) ? $count_pagos[0]['CANTIDAD'] : 0;
+				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos;
+	    	}
+	    }
+
     	/*GENERACION DE PDF*/
 		$cuentaCorrienteProveedorPDFHelper = new cobrosPDF();
 		$cuentaCorrienteProveedorPDFHelper->descarga_cobros_vendedor($fecha, $total, $cobrador_id, $cobrador_denominacion, $entregacliente_collection);
