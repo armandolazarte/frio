@@ -56,7 +56,7 @@ class EntregaClienteDetalleController {
 
 				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
 				$from = "cuentacorrientecliente ccc";
-				$where = "ccc.egreso_id = $egreso_id GROUP BY ccc.egreso_id";
+				$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id} GROUP BY ccc.egreso_id";
 				$count_pagos = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 	    		$count_pagos = (is_array($count_pagos) AND !empty($count_pagos)) ? $count_pagos[0]['CANTIDAD'] : 0;
 
@@ -284,7 +284,7 @@ class EntregaClienteDetalleController {
 
 				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
 				$from = "cuentacorrientecliente ccc";
-				$where = "ccc.egreso_id = $egreso_id GROUP BY ccc.egreso_id";
+				$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id}  GROUP BY ccc.egreso_id";
 				$count_pagos = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 	    		$count_pagos = (is_array($count_pagos) AND !empty($count_pagos)) ? $count_pagos[0]['CANTIDAD'] : 0;
 
@@ -293,7 +293,7 @@ class EntregaClienteDetalleController {
 				$itpm->get();
 				$temp_tipo_pago = $itpm->denominacion;
 				$entregacliente_collection[$clave]['DENTIPPAG'] = $temp_tipo_pago;
-				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos;
+				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos - 1;
 	    	}
 	    }
 
@@ -338,10 +338,10 @@ class EntregaClienteDetalleController {
 		    	
 				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
 				$from = "cuentacorrientecliente ccc";
-				$where = "ccc.egreso_id = $egreso_id AND ccc.cliente_id = {$cliente_id} GROUP BY ccc.egreso_id";
+				$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id} GROUP BY ccc.egreso_id";
 				$count_pagos = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 	    		$count_pagos = (is_array($count_pagos) AND !empty($count_pagos)) ? $count_pagos[0]['CANTIDAD'] : 0;
-				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos;
+				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos - 1;
 	    	}
 	    }
 
