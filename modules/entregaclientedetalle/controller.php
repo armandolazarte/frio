@@ -54,11 +54,18 @@ class EntregaClienteDetalleController {
 	    		$balance = (is_array($balance) AND !empty($balance)) ? $balance[0]['BALANCE'] : 0;				
 				$entregacliente_collection[$clave]['BALANCE'] = $balance;
 
+				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
+				$from = "cuentacorrientecliente ccc";
+				$where = "ccc.egreso_id = $egreso_id GROUP BY ccc.egreso_id";
+				$count_pagos = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+	    		$count_pagos = (is_array($count_pagos) AND !empty($count_pagos)) ? $count_pagos[0]['CANTIDAD'] : 0;
+
 				$itpm = new IngresoTipoPago();
 				$itpm->ingresotipopago_id = $entregacliente_collection[$clave]['INGTIPPAG'];
 				$itpm->get();
 				$temp_tipo_pago = $itpm->denominacion;
 				$entregacliente_collection[$clave]['DENTIPPAG'] = $temp_tipo_pago;
+				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos;
 	    	}
 	    }
 
