@@ -315,7 +315,7 @@ class EntregaClienteDetalleController {
 
   		$select = "CONCAT('$',ROUND(SUM(ecd.monto), 2)) AS TOTAL";
 	    $from = "entregaclientedetalle ecd INNER JOIN entregacliente ec ON ec.entregacliente_id = ecd.entregacliente_id";
-	    $where = "ec.vendedor_id  = {$vendedor_id} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now() ORDER BY ecd.egreso_id ASC";
+	    $where = "ec.vendedor_id  = {$vendedor_id} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now() AND ecd.ingresotipopago_id = 3 ORDER BY ecd.egreso_id ASC";
 	    $cobranza = CollectorCondition()->get('EntregaClienteDetalle', $where, 4, $from, $select);
 	    $total = (is_array($cobranza)) ? $cobranza[0]["TOTAL"] : 0 ;
 
@@ -335,6 +335,11 @@ class EntregaClienteDetalleController {
 	    	foreach ($entregacliente_collection as $clave=>$valor) {
 	    		$egreso_id = $valor['EGRESO'];
 	    		$cliente_id = $valor['CLINT'];
+
+	    		$itpm = new IngresoTipoPago();
+				$itpm->ingresotipopago_id = $entregacliente_collection[$clave]['INGTIPPAG'];
+				$itpm->get();
+				$temp_tipo_pago = $itpm->denominacion;
 		    	
 				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
 				$from = "cuentacorrientecliente ccc";
@@ -342,6 +347,7 @@ class EntregaClienteDetalleController {
 				$count_pagos = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 	    		$count_pagos = (is_array($count_pagos) AND !empty($count_pagos)) ? $count_pagos[0]['CANTIDAD'] : 0;
 				$entregacliente_collection[$clave]['CANPAG'] = $count_pagos - 1;
+				$entregacliente_collection[$clave]['DENTIPPAG'] = $temp_tipo_pago;
 	    	}
 	    }
 
