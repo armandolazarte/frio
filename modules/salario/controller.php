@@ -115,6 +115,13 @@ class SalarioController {
 		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select);
 
 		$this->view->filtrar_salario($salario_collection);
+	}
+
+	function eliminar($arg) {
+		SessionHandler()->check_session();		
+    	$this->model->salario_id = $arg;
+		$this->model->delete();
+		header("Location: " . URL_APP . "/salario/panel");
 	}	
 }
 ?>
