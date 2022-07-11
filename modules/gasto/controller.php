@@ -19,7 +19,7 @@ class GastoController {
 		$where = "date_format(g.fecha, '%Y%m') = {$periodo_actual}";
 		$gasto_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
 
-		$select = "ROUND(SUM(g.importe),2) AS IMPORTE";
+		$select = "ROUND(SUM(g.total),2) AS IMPORTE";
 		$from = "gasto g";
 		$where = "date_format(g.fecha, '%Y%m') = {$periodo_actual}";
 		$sum_gasto = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
