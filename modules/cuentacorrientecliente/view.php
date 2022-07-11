@@ -294,7 +294,10 @@ class CuentaCorrienteClienteView extends View {
 		$balance_color = (!empty($cuentacorriente_collection)) ? $cuentacorriente_collection[0]['BCOLOR'] : ""; 
 		$balance = (!empty($cuentacorriente_collection)) ? $cuentacorriente_collection[0]['BALANCE'] : ""; 
 		if (!empty($cuentacorriente_collection)) $cuentacorriente_collection[0]['BTN_DISPLAY'] = "none"; 
+
+		$cuentacorriente_collection = $this->order_collection_array($cuentacorriente_collection, 'CCCID', SORT_DESC);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
+
 		$gui = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $gui);
 		$gui = str_replace('{egreso-referencia}', $referencia, $gui);
 		$gui = str_replace('{cuentacorriente-balance}', $balance, $gui);
