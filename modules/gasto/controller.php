@@ -60,6 +60,13 @@ class GastoController {
 		$this->view->editar($gasto_collection, $gastocategoria_collection, $this->model);
 	}
 
+	function eliminar($arg) {
+		SessionHandler()->check_session();		
+    	$this->model->gasto_id = $arg;
+		$this->model->delete();
+		header("Location: " . URL_APP . "/gasto/panel");
+	}
+
 	function buscar() {
     	SessionHandler()->check_session();
     	$desde = filter_input(INPUT_POST, 'desde');

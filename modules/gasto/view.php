@@ -4,12 +4,25 @@
 class GastoView extends View {
 	
 	function panel($gasto_collection, $gastocategoria_collection, $sum_gasto) {
+		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
+
 		$gui = file_get_contents("static/modules/gasto/panel.html");
-		$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_array.html");
 		$gui_slt_gastocategoria = file_get_contents("static/modules/gasto/slt_gastocategoria.html");
+		switch ($user_level) {
+			case 1:
+				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_supervisor_array.html");
+				break;
+			case 2:
+				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_supervisor_array.html");
+				break;
+			default:
+				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_array.html");
+				break;
+		}
+
 		$gui_tbl_gasto = $this->render_regex_dict('TBL_GASTO', $gui_tbl_gasto, $gasto_collection);
 		$gui_slt_gastocategoria = $this->render_regex('SLT_GASTOCATEGORIA', $gui_slt_gastocategoria, $gastocategoria_collection);
-		
+
 		$render = str_replace('{tbl_gasto}', $gui_tbl_gasto, $gui);
 		$render = str_replace('{slt_gastocategoria}', $gui_slt_gastocategoria, $render);
 		$render = str_replace('{gasto-mensual}', $sum_gasto, $render);
@@ -20,9 +33,22 @@ class GastoView extends View {
 	}
 
 	function editar($gasto_collection, $gastocategoria_collection, $obj_gasto) {
+		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
+		
 		$gui = file_get_contents("static/modules/gasto/editar.html");
-		$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_array.html");
 		$gui_slt_gastocategoria = file_get_contents("static/modules/gasto/slt_gastocategoria.html");
+		switch ($user_level) {
+			case 1:
+				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_supervisor_array.html");
+				break;
+			case 2:
+				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_supervisor_array.html");
+				break;
+			default:
+				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_array.html");
+				break;
+		}
+
 		$gui_tbl_gasto = $this->render_regex_dict('TBL_GASTO', $gui_tbl_gasto, $gasto_collection);
 		$gui_slt_gastocategoria = $this->render_regex('SLT_GASTOCATEGORIA', $gui_slt_gastocategoria, $gastocategoria_collection);
 		

@@ -21,16 +21,12 @@ class CuentaCorrienteClienteController {
 
 	function panel() {
     	SessionHandler()->check_session();
-    	$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM
-    			   cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA,
-				   (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND
-				   dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+    	$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$groupby = "ccc.cliente_id";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select, $groupby);
 
-		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA,
-				   ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
+		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
 		$totales_array = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
 
@@ -55,17 +51,13 @@ class CuentaCorrienteClienteController {
 			header("Location: " . URL_APP . "/reporte/vdr_panel");
 		}
 
-    	$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM
-    			   cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA,
-				   (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND
-				   dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+    	$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$where = "c.vendedor = {$vendedor_id} AND c.oculto = 0";
 		$groupby = "ccc.cliente_id";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
 
-		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA,
-				   ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
+		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$totales_array = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 
@@ -202,9 +194,7 @@ class CuentaCorrienteClienteController {
     	$cm->cliente_id = $arg;
     	$cm->get();
     	
-		$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID,
-				   ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS,
-				   ccc.cuentacorrientecliente_id CCCID";
+		$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ccc.cuentacorrientecliente_id CCCID";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
 		$where = "ccc.cliente_id = {$arg} AND ccc.estadomovimientocuenta != 4 AND ccc.importe != 0";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -213,10 +203,7 @@ class CuentaCorrienteClienteController {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$egreso_id = $valor['EID'];
 			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
-			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
-				  	  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE,
-					  IF (ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
-					  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2)))) >= 0, 'none', 'inline-block') AS BTN_DISPLAY";
+			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE, IF (ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2)))) >= 0, 'none', 'inline-block') AS BTN_DISPLAY";
 			$from = "cuentacorrientecliente ccc";
 			$where = "ccc.egreso_id = {$egreso_id}";
 			$array_temp = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -261,9 +248,7 @@ class CuentaCorrienteClienteController {
 			if (!in_array($valor['CCCID'], $max_cuentacorrientecliente_ids)) $cuentacorriente_collection[$clave]['BTN_DISPLAY'] = 'none';
 		}
 			
-		$select = "(SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND 
-					dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc 
-					WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+		$select = "(SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND  dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$where = "ccc.cliente_id = {$arg}";
 		$groupby = "ccc.cliente_id";
@@ -279,8 +264,7 @@ class CuentaCorrienteClienteController {
     	$cm->cliente_id = $arg;
     	$cm->get();
     	
-    	$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, ccc.egreso_id AS EID,
-				   ccc.referencia AS REFERENCIA, ccc.cuentacorrientecliente_id CCCID";
+    	$select = "date_format(ccc.fecha, '%d/%m/%Y') AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, ccc.cuentacorrientecliente_id CCCID";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
 		$where = "ccc.cliente_id = {$arg}";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -289,8 +273,7 @@ class CuentaCorrienteClienteController {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$egreso_id = $valor['EID'];
 			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
-			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
-				  	  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
+			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
 			$from = "cuentacorrientecliente ccc";
 			$where = "ccc.egreso_id = {$egreso_id}";
 			$array_temp = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -408,16 +391,15 @@ class CuentaCorrienteClienteController {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$sum_importe = $sum_importe + $valor["BALANCE"];
 			$array_temp = array();
-			$array_temp = array(
-						  $valor["VENDEDOR"]
-						, $valor["FECHA"]
-						, $valor["VENCIMIENTO"]
-						, $valor["ESTACOMP"]
-						, $valor["FACTURA"]
-						, $valor["CLIENTE"]
-						, $valor["BARRIO"]
-						, $valor["DOMICILIO"]
-						, $valor["BALANCE"]);
+			$array_temp = array($valor["VENDEDOR"]
+								, $valor["FECHA"]
+								, $valor["VENCIMIENTO"]
+								, $valor["ESTACOMP"]
+								, $valor["FACTURA"]
+								, $valor["CLIENTE"]
+								, $valor["BARRIO"]
+								, $valor["DOMICILIO"]
+								, $valor["BALANCE"]);
 			$array_exportacion[] = $array_temp;
 		}
 
@@ -459,16 +441,15 @@ class CuentaCorrienteClienteController {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$sum_importe = $sum_importe + $valor["BALANCE"];
 			$array_temp = array();
-			$array_temp = array(
-						  $valor["VENDEDOR"]
-						, $valor["FECHA"]
-						, $valor["VENCIMIENTO"]
-						, $valor["ESTACOMP"]
-						, $valor["FACTURA"]
-						, $valor["CLIENTE"]
-						, $valor["BARRIO"]
-						, $valor["DOMICILIO"]
-						, $valor["BALANCE"]);
+			$array_temp = array($valor["VENDEDOR"]
+								, $valor["FECHA"]
+								, $valor["VENCIMIENTO"]
+								, $valor["ESTACOMP"]
+								, $valor["FACTURA"]
+								, $valor["CLIENTE"]
+								, $valor["BARRIO"]
+								, $valor["DOMICILIO"]
+								, $valor["BALANCE"]);
 			$array_exportacion[] = $array_temp;
 		}
 
@@ -480,7 +461,6 @@ class CuentaCorrienteClienteController {
 
 	function guardar_ingreso() {
 		SessionHandler()->check_session();
-
 		$cliente_id = filter_input(INPUT_POST, 'cliente_id');
 		$ingreso_id = filter_input(INPUT_POST, 'ingreso_id');
 		$this->model->fecha = filter_input(INPUT_POST, 'fecha');
@@ -493,7 +473,6 @@ class CuentaCorrienteClienteController {
 		$this->model->tipomovimientocuenta = 2;
 		$this->model->estadomovimientocuenta = 2;
 		$this->model->save();
-
 		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
 	}
 
@@ -506,8 +485,7 @@ class CuentaCorrienteClienteController {
 		$cliente_id = filter_input(INPUT_POST, 'cliente_id');
 		$egreso_id = filter_input(INPUT_POST, 'egreso_id');
 
-		$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
-				  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
+		$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
 		$from = "cuentacorrientecliente ccc";
 		$where = "ccc.egreso_id = {$egreso_id}";
 		$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -607,8 +585,7 @@ class CuentaCorrienteClienteController {
 		$cm->cliente_id = $this->model->cliente_id;
 		$cm->get();
 
-		$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
-				  (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
+		$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
 		$from = "cuentacorrientecliente ccc";
 		$where = "ccc.egreso_id = {$egreso_id}";
 		$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -805,7 +782,6 @@ class CuentaCorrienteClienteController {
 		$cpdm->estado = 2;
 		$cpdm->fecha_pago = date('Y-m-d');
 		$cpdm->save();
-
 		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
 	}
 }
