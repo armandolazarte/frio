@@ -97,6 +97,8 @@ class EntregaClienteDetalleController {
 
 		$cobros_array = $_POST['cobro'];
 		$cobranza_ids = $_POST['cobranza_ids'];
+		print_r($cobranza_ids);
+		print("<hr />");
 		print_r($cobros_array);exit;
 		if (is_array($cobros_array)) {
 			$fecha_actual = date('Y-m-d');
@@ -104,6 +106,7 @@ class EntregaClienteDetalleController {
 
 			/*PROCESA COBRO*/
 			foreach ($cobros_array as $key => $cobro) {
+				$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
 				$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
 				$comprobante .= str_pad($cobro['factura'], 8, '0', STR_PAD_LEFT);
 
