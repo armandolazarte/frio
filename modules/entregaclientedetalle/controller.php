@@ -105,8 +105,6 @@ class EntregaClienteDetalleController {
 			foreach ($cobros_array as $key => $cobro) {
 				
 				if (in_array($key, $cobranza_ids)) {
-					print("Procesa {$key} <hr />");	
-					/*
 					$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
 					$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
 					$comprobante .= str_pad($cobro['factura'], 8, '0', STR_PAD_LEFT);
@@ -189,14 +187,9 @@ class EntregaClienteDetalleController {
 						$cccm->estadomovimientocuenta = 4;
 						$cccm->cobrador = $cobrador_id;
 						$cccm->save();
-					}
-					*/	
-				} else {
-					print("No Procesa {$key} <hr />");
-				}
-				
+					}	
+				} 
 			}
-			exit;
 		}
 
 		header("Location: " . URL_APP . "/entregaclientedetalle/panel");
