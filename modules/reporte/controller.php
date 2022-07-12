@@ -3177,7 +3177,7 @@ class ReporteController {
 
 	function desc_producto_marca_cantidad_fecha() {
 		SessionHandler()->check_session();
-		//require_once "tools/excelreport_tipo2.php";
+		require_once "tools/excelreport_tipo2.php";
 
 		//PARAMETROS
 		$desde = filter_input(INPUT_POST, 'desde');
