@@ -3198,17 +3198,17 @@ class ReporteController {
 		}
 
 		$egreso_ids = implode(',', $egreso_ids);
-		print_r($egreso_ids);exit;
 		
+		$select = "ed.producto_id AS PRID, pm.denominacion AS MARCA, p.denominacion AS PRODUCTO, ROUND(SUM(ed.cantidad),2) AS CANTIDAD, p.productounidad AS PROUNI";
+		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
+		$where = "ed.egreso_id IN ({$egreso_ids}) AND p.productomarca = {$productomarca}";
+		$group_by = "p.producto_id ORDER BY pm.denominacion ASC, p.denominacion ASC, SUM(ed.cantidad) DESC";
+		$datos_temp = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
+		print_r($datos_temp);exit;
 
 		
 		if ($tipo_filtro == 1) {
 			
-			$select = "v.vendedor_id AS VID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, ed.producto_id AS PRID, pm.denominacion AS MARCA, p.denominacion AS PRODUCTO, ROUND(SUM(ed.cantidad),2) AS CANTIDAD, ROUND(SUM(ed.descuento),2) AS DESCUENTO, ROUND(SUM(ed.importe),2) AS IMPORTE, p.productounidad AS PROUNI";
-			$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
-			$where = "e.egreso_id IN ({$egreso_ids}) AND ed.producto_id IN ({$producto_ids})";
-			$group_by = "v.vendedor_id, p.producto_id ORDER BY v.apellido ASC, v.nombre ASC, pm.denominacion ASC, p.denominacion ASC, SUM(ed.cantidad) DESC, SUM(ed.importe) DESC";
-			$datos_temp = CollectorCondition()->get('EgresoDetalle', $where, 4, $from, $select, $group_by);
 
 			foreach ($datos_temp as $clave=>$valor) {
 				$tmp_producto_id = $valor["PRID"];
