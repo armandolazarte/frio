@@ -3182,8 +3182,8 @@ class ReporteController {
 		//PARAMETROS
 		$desde = filter_input(INPUT_POST, 'desde');
 		$hasta = filter_input(INPUT_POST, 'hasta');
-		$productomarca = filter_input(INPUT_POST, 'productomarca');
-		
+		$productomarca = filter_input(INPUT_POST, 'marca_id');
+	
 		$select = "ed.egreso_id AS EGRID";
 		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id";
 		$where = "p.productomarca = {$productomarca} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
