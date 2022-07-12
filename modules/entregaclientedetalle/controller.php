@@ -97,99 +97,106 @@ class EntregaClienteDetalleController {
 
 		$cobros_array = $_POST['cobro'];
 		$cobranza_ids = $_POST['cobranza_ids'];
-		print_r($cobranza_ids);
-		print("<hr />");
-		print_r($cobros_array);exit;
 		if (is_array($cobros_array)) {
 			$fecha_actual = date('Y-m-d');
 			$hora = date('H:i:s');
 
 			/*PROCESA COBRO*/
 			foreach ($cobros_array as $key => $cobro) {
-				$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
-				$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
-				$comprobante .= str_pad($cobro['factura'], 8, '0', STR_PAD_LEFT);
+				
+				if (in_array($key, $cobranza_ids)) {
+					print("Procesa {$key} <hr />");	
+					/*
+					$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
+					$comprobante = str_pad($cobro['punto_venta'], 4, '0', STR_PAD_LEFT) . "-";
+					$comprobante .= str_pad($cobro['factura'], 8, '0', STR_PAD_LEFT);
 
-	 			$monto = explode("$", $cobro['monto']);
-				$egreso_id = $cobro['egreso_id'];
-				$importe = $monto[1];
-				$entregacliente_id = $cobro['entregacliente_id'];
+		 			$monto = explode("$", $cobro['monto']);
+					$egreso_id = $cobro['egreso_id'];
+					$importe = $monto[1];
+					$entregacliente_id = $cobro['entregacliente_id'];
 
-				$ecdm = new EntregaCliente();
-				$ecdm->entregacliente_id  = $entregacliente_id;
-				$ecdm->get();
-				$cliente_id = $ecdm->cliente_id;
+					$ecdm = new EntregaCliente();
+					$ecdm->entregacliente_id  = $entregacliente_id;
+					$ecdm->get();
+					$cliente_id = $ecdm->cliente_id;
 
-				$ecdm->estado = 2;
-				$ecdm->save();
+					$ecdm->estado = 2;
+					$ecdm->save();
 
-				if ($cobro['val_parcial'] == 1) {
-					$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
-					$from = "cuentacorrientecliente ccc";
-					$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id}";
-					$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
-					$deuda = abs($balance[0]['BALANCE']) - $importe;
-					if ($deuda > 0) {
-						$estadomovimientocuenta = 3;
-					} else {
-						$select = "ccc.cuentacorrientecliente_id AS ID";
+					if ($cobro['val_parcial'] == 1) {
+						$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
 						$from = "cuentacorrientecliente ccc";
-						$where = "ccc.egreso_id = {$egreso_id} AND ccc.estadomovimientocuenta IN (1,2,3) AND ccc.cliente_id = {$cliente_id}";
-						$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
-						$estadomovimientocuenta = 4;
+						$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id}";
+						$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+						$deuda = abs($balance[0]['BALANCE']) - $importe;
+						if ($deuda > 0) {
+							$estadomovimientocuenta = 3;
+						} else {
+							$select = "ccc.cuentacorrientecliente_id AS ID";
+							$from = "cuentacorrientecliente ccc";
+							$where = "ccc.egreso_id = {$egreso_id} AND ccc.estadomovimientocuenta IN (1,2,3) AND ccc.cliente_id = {$cliente_id}";
+							$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+							$estadomovimientocuenta = 4;
 
-						foreach ($cuentacorriente_collection as $cuentacorrientecliente) {
-							$cuentacorrientecliente_id = $cuentacorrientecliente['ID'];
-							$cccm_temp = new CuentaCorrienteCliente();
-							$cccm_temp->cuentacorrientecliente_id = $cuentacorrientecliente_id;
-							$cccm_temp->get();
-							$cccm_temp->estadomovimientocuenta = 4;
-							$cccm_temp->save();
+							foreach ($cuentacorriente_collection as $cuentacorrientecliente) {
+								$cuentacorrientecliente_id = $cuentacorrientecliente['ID'];
+								$cccm_temp = new CuentaCorrienteCliente();
+								$cccm_temp->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+								$cccm_temp->get();
+								$cccm_temp->estadomovimientocuenta = 4;
+								$cccm_temp->save();
+							}
 						}
-					}
 
-					$cccm = new CuentaCorrienteCliente();
-					$cccm->fecha = date('Y-m-d');
-					$cccm->hora = date('H:i:s');
-					$cccm->referencia = "Pago de comprobante {$comprobante}";
-					$cccm->importe = $monto[1];
-					$cccm->ingreso = $monto[1];
-					$cccm->cliente_id = $cobro['cliente_id'];
-					$cccm->egreso_id = $egreso_id;
-					$cccm->ingresotipopago = $cobro['ingresotipopago_id'];
-					$cccm->tipomovimientocuenta = 2;
-					$cccm->estadomovimientocuenta = $estadomovimientocuenta;
-					$cccm->cobrador = $cobrador_id;
-					$cccm->save();
-				} else {
-					$select = "ccc.cuentacorrientecliente_id AS ID ";
-					$from = "cuentacorrientecliente ccc";
-					$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id} ORDER BY ccc.cuentacorrientecliente_id ASC";
-					$cuentacorrientecliente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
-
-					foreach ($cuentacorrientecliente_collection as $key => $cuentacorrientecliente) {
 						$cccm = new CuentaCorrienteCliente();
-						$cccm->cuentacorrientecliente_id = $cuentacorrientecliente['ID'];
-						$cccm->get();
+						$cccm->fecha = date('Y-m-d');
+						$cccm->hora = date('H:i:s');
+						$cccm->referencia = "Pago de comprobante {$comprobante}";
+						$cccm->importe = $monto[1];
+						$cccm->ingreso = $monto[1];
+						$cccm->cliente_id = $cobro['cliente_id'];
+						$cccm->egreso_id = $egreso_id;
+						$cccm->ingresotipopago = $cobro['ingresotipopago_id'];
+						$cccm->tipomovimientocuenta = 2;
+						$cccm->estadomovimientocuenta = $estadomovimientocuenta;
+						$cccm->cobrador = $cobrador_id;
+						$cccm->save();
+					} else {
+						$select = "ccc.cuentacorrientecliente_id AS ID ";
+						$from = "cuentacorrientecliente ccc";
+						$where = "ccc.egreso_id = {$egreso_id} AND ccc.cliente_id = {$cliente_id} ORDER BY ccc.cuentacorrientecliente_id ASC";
+						$cuentacorrientecliente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+
+						foreach ($cuentacorrientecliente_collection as $key => $cuentacorrientecliente) {
+							$cccm = new CuentaCorrienteCliente();
+							$cccm->cuentacorrientecliente_id = $cuentacorrientecliente['ID'];
+							$cccm->get();
+							$cccm->estadomovimientocuenta = 4;
+							$cccm->save();
+						}
+
+						$cccm = new CuentaCorrienteCliente();
+						$cccm->fecha = date('Y-m-d');
+						$cccm->hora = date('H:i:s');
+						$cccm->referencia = "Pago de comprobante {$comprobante}";
+						$cccm->importe = $monto[1];
+						$cccm->ingreso = $monto[1];
+						$cccm->cliente_id = $cobro['cliente_id'];
+						$cccm->egreso_id = $egreso_id;
+						$cccm->ingresotipopago = $cobro['ingresotipopago_id'];
+						$cccm->tipomovimientocuenta = 2;
 						$cccm->estadomovimientocuenta = 4;
+						$cccm->cobrador = $cobrador_id;
 						$cccm->save();
 					}
-
-					$cccm = new CuentaCorrienteCliente();
-					$cccm->fecha = date('Y-m-d');
-					$cccm->hora = date('H:i:s');
-					$cccm->referencia = "Pago de comprobante {$comprobante}";
-					$cccm->importe = $monto[1];
-					$cccm->ingreso = $monto[1];
-					$cccm->cliente_id = $cobro['cliente_id'];
-					$cccm->egreso_id = $egreso_id;
-					$cccm->ingresotipopago = $cobro['ingresotipopago_id'];
-					$cccm->tipomovimientocuenta = 2;
-					$cccm->estadomovimientocuenta = 4;
-					$cccm->cobrador = $cobrador_id;
-					$cccm->save();
+					*/	
+				} else {
+					print("No Procesa {$key} <hr />");
 				}
+				
 			}
+			exit;
 		}
 
 		header("Location: " . URL_APP . "/entregaclientedetalle/panel");
