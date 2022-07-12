@@ -3183,6 +3183,9 @@ class ReporteController {
 		$desde = filter_input(INPUT_POST, 'desde');
 		$hasta = filter_input(INPUT_POST, 'hasta');
 		$productomarca = filter_input(INPUT_POST, 'productomarca');
+		$desde = '2022-07-01';
+		$hasta = '2022-07-12';
+		$productomarca = 1;
 
 		$select = "ed.egreso_id AS EGRID";
 		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id";
