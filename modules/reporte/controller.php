@@ -3177,7 +3177,7 @@ class ReporteController {
 
 	function desc_producto_marca_cantidad_fecha() {
 		SessionHandler()->check_session();
-		require_once "tools/excelreport_tipo2.php";
+		require_once "tools/excelreport.php";
 
 		//PARAMETROS
 		$desde = filter_input(INPUT_POST, 'desde');
@@ -3235,7 +3235,7 @@ class ReporteController {
 		$array_exportacion[] = array('', '', '', '', '', '');
 		$array_exportacion[] = array('', '', '', '', 'TOTAL', $sum_importe);
 			
-		ExcelReportTipo2()->extraer_informe($subtitulo, $array_exportacion);
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;
 	}
 
