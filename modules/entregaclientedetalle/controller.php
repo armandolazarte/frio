@@ -96,6 +96,8 @@ class EntregaClienteDetalleController {
 		$cobrador_denominacion = $var[1];
 
 		$cobros_array = $_POST['cobro'];
+		$cobranza_ids = $_POST['cobranza_ids'];
+		print_r($cobranza_ids);exit;
 		if (is_array($cobros_array)) {
 			$fecha_actual = date('Y-m-d');
 			$hora = date('H:i:s');
