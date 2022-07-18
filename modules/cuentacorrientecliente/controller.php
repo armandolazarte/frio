@@ -306,8 +306,7 @@ class CuentaCorrienteClienteController {
 		$where = "ccc.cliente_id = {$arg}";
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
-		print_r($montos_cuentacorriente);exit;
-
+		
 		$this->view->desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $cm);
 	}
 
