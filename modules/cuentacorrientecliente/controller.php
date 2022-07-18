@@ -705,12 +705,21 @@ class CuentaCorrienteClienteController {
 
 	function guardar_ingreso_cuentacorriente_conjunto() {
 		SessionHandler()->check_session();
-		print_r($_POST);exit;
-		$cuentacorrientecliente_id = filter_input(INPUT_POST, 'cuentacorrientecliente_id');
 		$importe = filter_input(INPUT_POST, 'importe');
 		$cobrador = filter_input(INPUT_POST, 'cobrador');
 		$cliente_id = filter_input(INPUT_POST, 'cliente_id');
-		$egreso_id = filter_input(INPUT_POST, 'egreso_id');
+		$cuentacorrientecliente_collection = $_POST["cuentacorrientecliente"];
+
+		foreach ($cuentacorrientecliente_collection as $clave=>$valor) {
+
+		print_r($valor);
+		}
+		exit;
+
+
+
+		//$cuentacorrientecliente_id = filter_input(INPUT_POST, 'cuentacorrientecliente_id');
+		//$egreso_id = filter_input(INPUT_POST, 'egreso_id');
 
 		$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
 		$from = "cuentacorrientecliente ccc";
