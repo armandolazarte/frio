@@ -150,6 +150,93 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="div_alert_pago_cheque">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <form class="form" id="formulario_guardar" method="post" onsubmit="return checkSubmit();" action="{url_app}/cuentacorrientecliente/guardar_ingreso_cuentacorriente_conjunto">
+                        <div class="form-group col-lg-12" style="padding-left: 0px;">
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Cliente</label>
+                                    <input type="text" class="form-control" value="{cliente-razon_social}" readonly>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" name="fecha" value="{fecha_sys}" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <input type="hidden" name="ingresotipopago" id="ingresotipopago" value="1">
+                                <div class="form-group col-lg-5" id="div_numero_cheque">
+                                    <label>N° Cheque</label>
+                                    <input type="text" class="form-control" name="numero_cheque" id="numero_cheque">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_fecha_vencimiento">
+                                    <label>Fecha Vencimiento</label>
+                                    <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+                                </div>
+                                <div class="form-group col-lg-6" id="div_titular">
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" name="titular" id="titular">
+                                </div>
+                                <div class="form-group col-lg-6" id="div_documento">
+                                    <label>Documento</label>
+                                    <input type="text" class="form-control" name="documento" id="documento">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_banco">
+                                    <label>Banco</label>
+                                    <input type="text" class="form-control" name="banco" id="banco">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_plaza">
+                                    <label>Plaza</label>
+                                    <input type="text" class="form-control" name="plaza" id="plaza">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_cuenta_corriente">
+                                    <label>Cuenta Corriente</label>
+                                    <input type="text" class="form-control" name="cuenta_corriente" id="cuenta_corriente">
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Entrega</label>
+                                    <select class="form-control" name="cobrador" id="cobrador">
+                                        <option value="0">SELECCIONAR</option>
+                                        {slt_cobrador}
+                                    </select>
+                                    <br>
+                                    <div class="alert alert-danger alert-dismissible " role="alert" id="div_alert_cobrador" style="display: none;">
+                                        <strong>Error!</strong> Por favor seleccione un cobrador.
+                                    </div>       
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Importe</label>
+                                    <input type="text" class="form-control" name="importe" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" align="right" id="div_array_cheque_cuentacorrientecliente_ids">
+                                <input type="hidden" name="cliente_id" id="cliente_id" value="{cliente-cliente_id}">
+                                <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Abonar cuenta </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Datatables -->
 <script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -344,9 +431,6 @@
         } else {
             document.getElementById('div_pago_conjunto').style.display = 'none';
         }
-
-        console.log(ini_balance);
-        console.log(array_ids);
     }
 
     function quitarPagoArray(cuentacorrientecliente_id) {    
@@ -355,6 +439,20 @@
                 array_ids.splice(index, 1);
             }
         });
+    }
+
+    function pagoConjuntoCheque() {
+        var div_array_cuentascorrientes = document.getElementById('div_array_cheque_cuentacorrientecliente_ids');
+        array_ids.forEach(function(temp_cuentacorrientecliente_id, index) {
+            var inputCuentaCorrienteClienteId = document.createElement("input");
+            inputCuentaCorrienteClienteId.setAttribute("type", "hidden");
+            inputCuentaCorrienteClienteId.setAttribute("name", "cuentacorrientecliente[" + temp_cuentacorrientecliente_id + "][cuentacorrientecliente_id]");
+            inputCuentaCorrienteClienteId.setAttribute("id", "cuentacorrientecliente_id_" + temp_cuentacorrientecliente_id);
+            inputCuentaCorrienteClienteId.setAttribute("value", temp_cuentacorrientecliente_id);
+            div_array_cuentascorrientes.appendChild(inputCuentaCorrienteClienteId);
+        });
+
+        $('#div_alert_pago_cheque').modal('show');
     }
 
     function checkSubmit() {
