@@ -149,6 +149,7 @@
     var user_level = {display-user_level};
     var enviando = false;
     var ini_balance = 0;
+    var quitar = /\$/g;
     array_ids = new Array();
 
     $( window ).on( "load", function() {
@@ -316,11 +317,12 @@
 
     function cargaFacturaPagoConjunto(cuentacorrientecliente_id, balance) {
         var flag = array_ids.indexOf(cuentacorrientecliente_id);
+        var balance_final = balance.replace(quitar, '');
         if(parseInt(flag) === -1) {
-            ini_balance = ini_balance + parseFloat(balance);
+            ini_balance = ini_balance + parseFloat(balance_final);
             array_ids.push(producto_id);
         } else {
-            ini_balance = ini_balance - parseFloat(balance);
+            ini_balance = ini_balance - parseFloat(balance_final);
             quitarPagoArray(cuentacorrientecliente_id);
         }
         
