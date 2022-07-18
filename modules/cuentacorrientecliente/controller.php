@@ -722,9 +722,12 @@ class CuentaCorrienteClienteController {
 		}
 		
 		asort($egreso_ids);
+		foreach ($egreso_ids as $egreso_id) {
+			print_r($egreso_id);
+			
+		}
 
 		print_r($_POST);
-		print_r($egreso_ids);
 		exit;
 
 
