@@ -755,8 +755,8 @@ class CuentaCorrienteClienteController {
 					$this->model->fecha = filter_input(INPUT_POST, 'fecha');
 					$this->model->hora = date('H:i:s');
 					$this->model->referencia = "Pago de comprobante {$comprobante}";
-					$this->model->importe = abs($balance[0]['BALANCE'];
-					$this->model->ingreso = abs($balance[0]['BALANCE'];
+					$this->model->importe = abs($balance[0]['BALANCE']);
+					$this->model->ingreso = abs($balance[0]['BALANCE']);
 					$this->model->cliente_id = $cliente_id;
 					$this->model->egreso_id = $egreso_id;
 					$this->model->ingresotipopago = 1;
