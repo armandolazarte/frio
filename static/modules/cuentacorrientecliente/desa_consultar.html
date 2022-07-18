@@ -61,7 +61,15 @@
 <div class="col-md-7 col-sm-7 col-xs-12">
     <div class="col-md-12" style="border: 1px #ccc solid; margin-bottom: 2px; display: none;" id="div_pago_conjunto">
         <div class="tile_count" style="margin-top: 5px !important;">
-            <div class="col-md-12 col-sm-4 tile_stats_count" style="margin-bottom: 0px; padding-bottom: 5px;">
+            <div class="col-md-6 col-sm-4 tile_stats_count" style="margin-bottom: 0px; padding-bottom: 5px;">
+                <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
+                    <i class="fa fa-eye"></i> Cheque
+                </button>
+                <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
+                    <i class="fa fa-usd"></i> Transferencia
+                </button>
+            </div>
+            <div class="col-md-6 col-sm-4 tile_stats_count" style="margin-bottom: 0px; padding-bottom: 5px;">
                 <span class="count_top"><i class="fa fa-usd green"></i> Total Pago Conjunto</span>
                 <div class="count green" id="div_total_pago_conjunto"></div>
             </div>
