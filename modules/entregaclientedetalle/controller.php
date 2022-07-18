@@ -238,6 +238,7 @@ class EntregaClienteDetalleController {
 		$entregacliente_id = filter_input(INPUT_POST, "entregacliente_id");
 		$entregaclientedetalle_id = filter_input(INPUT_POST, "entregaclientedetalle_id");
 		$monto = filter_input(INPUT_POST, "monto");
+		$fecha = filter_input(INPUT_POST, "fecha");
 		$parcial = filter_input(INPUT_POST, "parcial");
 		$vendedor_id = filter_input(INPUT_POST, "vendedor_id");
 		$ingresotipopago_id = filter_input(INPUT_POST, "ingresotipopago");
@@ -252,6 +253,7 @@ class EntregaClienteDetalleController {
 		$ecm = new EntregaCliente();
 		$ecm->entregacliente_id = $entregacliente_id;
 		$ecm->get();
+		$ecm->fecha = $fecha;
 		$ecm->monto = $monto;
 		$ecm->save();
 
