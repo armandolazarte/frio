@@ -288,7 +288,6 @@ class CuentaCorrienteClienteController {
 			$cuentacorriente_collection[$clave]['MOVID'] = $btn_movimiento_id;
 		}
 
-		print_r($cuentacorriente_collection);exit;
 		$max_cuentacorrientecliente_ids = array();
 		foreach ($egreso_ids as $egreso_id) {
 			$select = "ccc.cuentacorrientecliente_id AS ID";
@@ -307,6 +306,7 @@ class CuentaCorrienteClienteController {
 		$where = "ccc.cliente_id = {$arg}";
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
+		print_r($montos_cuentacorriente);exit;
 
 		$this->view->desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $cm);
 	}
