@@ -219,8 +219,9 @@ class CuentaCorrienteClienteController {
 			$balance = ($balance == '-0') ? abs($balance) : $balance;
 			$balance_class = ($balance >= 0) ? 'primary' : 'danger';
 			$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
-
+			
 			$cuentacorriente_collection[$clave]['BALANCE'] = $new_balance;
+			$cuentacorriente_collection[$clave]['BALCAL'] = $balance;
 			$cuentacorriente_collection[$clave]['BCOLOR'] = $balance_class;
 			$cuentacorriente_collection[$clave]['BTN_DISPLAY'] = $array_temp[0]['BTN_DISPLAY'];
 			
