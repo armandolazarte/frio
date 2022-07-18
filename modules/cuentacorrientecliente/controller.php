@@ -776,7 +776,7 @@ class CuentaCorrienteClienteController {
 					$cpdm->documento = filter_input(INPUT_POST, 'documento');
 					$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
 					$cpdm->estado = 1;
-					$cpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+					$cpdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
 					$cpdm->egreso_id = $egreso_id;
 					$cpdm->save();
 
@@ -814,7 +814,7 @@ class CuentaCorrienteClienteController {
 					$cpdm->documento = filter_input(INPUT_POST, 'documento');
 					$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
 					$cpdm->estado = 1;
-					$cpdm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+					$cpdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
 					$cpdm->egreso_id = $egreso_id;
 					$cpdm->save();
 					
