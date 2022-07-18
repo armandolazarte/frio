@@ -318,13 +318,14 @@
     function cargaFacturaPagoConjunto(cuentacorrientecliente_id, balance) {
         var flag = array_ids.indexOf(cuentacorrientecliente_id);
         if(parseInt(flag) === -1) {
-            ini_balance = ini_balance + parseFloat(balance);
+            calculo_balance = ini_balance + parseFloat(balance);
             array_ids.push(cuentacorrientecliente_id);
         } else {
-            ini_balance = ini_balance - parseFloat(balance);
+            calculo_balance = ini_balance - parseFloat(balance);
             quitarPagoArray(cuentacorrientecliente_id);
         }
         
+        ini_balance = calculo_balance.toFixed(2);
         console.log(ini_balance);
         console.log(array_ids);
     }
