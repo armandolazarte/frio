@@ -193,7 +193,7 @@ class CuentaCorrienteClienteView extends View {
 
 		$infocontacto_collection = $obj_cliente->infocontacto_collection;
 		unset($obj_cliente->infocontacto_collection, $obj_cliente->vendedor->infocontacto_collection, 
-			  $obj_cliente->vendedor->frecuenciaventa, $obj_cliente->flete->infocontacto_collection);	
+			  $obj_cliente->vendedor->frecuenciaventa, $obj_cliente->flete->infocontacto_collection, $infocontacto_collection[2]);	
 		$obj_cliente = $this->set_dict($obj_cliente);
 
 		$deuda = (is_null($montos_cuentacorriente[0]['DEUDA'])) ? 0 : $montos_cuentacorriente[0]['DEUDA'];
