@@ -166,11 +166,12 @@ class CuentaCorrienteClienteView extends View {
 		print $template;
 	}
 
-	function desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $obj_cliente) {
+	function desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $obj_cliente) {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/desa_consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
 		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/desa_tbl_cuentacorriente_expandido_array.html");
+		$gui_slt_cobrador = file_get_contents("static/modules/cuentacorrientecliente/slt_cobrador.html");
 
 		foreach ($cuentascorrientes_collection as $clave=>$valor) {
 			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
@@ -212,9 +213,11 @@ class CuentaCorrienteClienteView extends View {
 		$gui_lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $gui_lst_infocontacto, $infocontacto_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
 		$tbl_cuentascorrientes_array = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentascorrientes_array, $cuentascorrientes_collection);
+		$gui_slt_cobrador = $this->render_regex('SLT_COBRADOR', $gui_slt_cobrador, $cobrador_collection);
 		$render = str_replace('{lst_infocontacto}', $gui_lst_infocontacto, $gui);
 		$render = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $render);
 		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes_array, $render);
+		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
 		$render = str_replace('{anio_actual}', date('Y'), $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($array_cuentacorriente, $render);
