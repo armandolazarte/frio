@@ -324,8 +324,8 @@
             calculo_balance = ini_balance - parseFloat(balance);
             quitarPagoArray(cuentacorrientecliente_id);
         }
-        
-        ini_balance = calculo_balance.toFixed(2);
+        Number(calculo_balance.toFixed(2));
+        ini_balance = Number(calculo_balance.toFixed(2));
         console.log(ini_balance);
         console.log(array_ids);
     }
