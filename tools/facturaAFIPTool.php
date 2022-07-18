@@ -220,8 +220,8 @@ class FacturaAFIPTool {
             $importe_neto = $subtotal_neto - ($subtotal_neto * $descuento); /**/
             $importe_iva = $subtotal_iva - ($subtotal_iva * $descuento); /**/
 
-            $egresodetalle_collection[$clave]['IMPORTE_NETO'] = round($importe_neto,4, PHP_ROUND_HALF_EVEN);
-            $egresodetalle_collection[$clave]['IMPORTE_IVA'] = round($importe_iva,4, PHP_ROUND_HALF_EVEN);
+            $egresodetalle_collection[$clave]['IMPORTE_NETO'] = round($importe_neto,2, PHP_ROUND_HALF_EVEN);
+            $egresodetalle_collection[$clave]['IMPORTE_IVA'] = round($importe_iva,2, PHP_ROUND_HALF_EVEN);
         }
 
         //DISCRIMINO IVA POR PRODUCTO Y CALCULO DESCUENTO DE FACTURA
@@ -300,18 +300,18 @@ class FacturaAFIPTool {
         }
         */
 
-        $sum_27 = round(($sum_27 - ($valor_descuento_factura * $sum_27)),4, PHP_ROUND_HALF_EVEN);
-        $sum_21 = round(($sum_21 - ($valor_descuento_factura * $sum_21)),4, PHP_ROUND_HALF_EVEN);
-        $sum_10_5 = round(($sum_10_5 - ($valor_descuento_factura * $sum_10_5)),4, PHP_ROUND_HALF_EVEN);
-        $sum_5 = round(($sum_5 - ($valor_descuento_factura * $sum_5)),4, PHP_ROUND_HALF_EVEN);
-        $sum_2_5 = round(($sum_2_5 - ($valor_descuento_factura * $sum_2_5)),4, PHP_ROUND_HALF_EVEN);
-        $sum_0 = round(($sum_0 - ($valor_descuento_factura * $sum_0)),4, PHP_ROUND_HALF_EVEN);
-        $sum_baseimp_27 = round(($sum_baseimp_27 - ($valor_descuento_factura * $sum_baseimp_27)),4, PHP_ROUND_HALF_EVEN);
-        $sum_baseimp_21 = round(($sum_baseimp_21 - ($valor_descuento_factura * $sum_baseimp_21)),4, PHP_ROUND_HALF_EVEN);
-        $sum_baseimp_10_5 = round(($sum_baseimp_10_5 - ($valor_descuento_factura * $sum_baseimp_10_5)),4, PHP_ROUND_HALF_EVEN);
-        $sum_baseimp_5 = round(($sum_baseimp_5 - ($valor_descuento_factura * $sum_baseimp_5)),4, PHP_ROUND_HALF_EVEN);
-        $sum_baseimp_2_5 = round(($sum_baseimp_2_5 - ($valor_descuento_factura * $sum_baseimp_2_5)),4, PHP_ROUND_HALF_EVEN);
-        $sum_baseimp_0 = round(($sum_baseimp_0 - ($valor_descuento_factura * $sum_baseimp_0)),4, PHP_ROUND_HALF_EVEN);
+        $sum_27 = round(($sum_27 - ($valor_descuento_factura * $sum_27)),2, PHP_ROUND_HALF_EVEN);
+        $sum_21 = round(($sum_21 - ($valor_descuento_factura * $sum_21)),2, PHP_ROUND_HALF_EVEN);
+        $sum_10_5 = round(($sum_10_5 - ($valor_descuento_factura * $sum_10_5)),2, PHP_ROUND_HALF_EVEN);
+        $sum_5 = round(($sum_5 - ($valor_descuento_factura * $sum_5)),2, PHP_ROUND_HALF_EVEN);
+        $sum_2_5 = round(($sum_2_5 - ($valor_descuento_factura * $sum_2_5)),2, PHP_ROUND_HALF_EVEN);
+        $sum_0 = round(($sum_0 - ($valor_descuento_factura * $sum_0)),2, PHP_ROUND_HALF_EVEN);
+        $sum_baseimp_27 = round(($sum_baseimp_27 - ($valor_descuento_factura * $sum_baseimp_27)),2, PHP_ROUND_HALF_EVEN);
+        $sum_baseimp_21 = round(($sum_baseimp_21 - ($valor_descuento_factura * $sum_baseimp_21)),2, PHP_ROUND_HALF_EVEN);
+        $sum_baseimp_10_5 = round(($sum_baseimp_10_5 - ($valor_descuento_factura * $sum_baseimp_10_5)),2, PHP_ROUND_HALF_EVEN);
+        $sum_baseimp_5 = round(($sum_baseimp_5 - ($valor_descuento_factura * $sum_baseimp_5)),2, PHP_ROUND_HALF_EVEN);
+        $sum_baseimp_2_5 = round(($sum_baseimp_2_5 - ($valor_descuento_factura * $sum_baseimp_2_5)),2, PHP_ROUND_HALF_EVEN);
+        $sum_baseimp_0 = round(($sum_baseimp_0 - ($valor_descuento_factura * $sum_baseimp_0)),2, PHP_ROUND_HALF_EVEN);
 
         $importes_iva = array(array('{iva}'=>0,'{sum_iva}'=>$sum_0,'{sum_baseimp_iva}'=>$sum_baseimp_0),
                               array('{iva}'=>2.5,'{sum_iva}'=>$sum_2_5,'{sum_baseimp_iva}'=>$sum_baseimp_2_5), 
@@ -328,8 +328,8 @@ class FacturaAFIPTool {
                                   'importe_control'=>$importe_control);
 
         // REDONDEO IMPORTES A DOS DECIMALES
-        //foreach ($importes_iva as $clave=>$valor) $importes_iva["{$clave}"] = round($valor,4, PHP_ROUND_HALF_EVEN);
-        foreach ($importes_finales as $clave=>$valor) $importes_finales["{$clave}"] = round($valor,4, PHP_ROUND_HALF_EVEN);
+        //foreach ($importes_iva as $clave=>$valor) $importes_iva["{$clave}"] = round($valor,2, PHP_ROUND_HALF_EVEN);
+        foreach ($importes_finales as $clave=>$valor) $importes_finales["{$clave}"] = round($valor,2, PHP_ROUND_HALF_EVEN);
         $importes_finales['importe_control'] = $importes_finales['importe_neto'] + $importes_finales['importe_iva'] + $importes_finales['importe_exento'] + $importes_finales['importe_nogravado'];
 
 
