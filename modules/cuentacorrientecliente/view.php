@@ -170,7 +170,7 @@ class CuentaCorrienteClienteView extends View {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/desa_consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
-		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
+		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/desa_tbl_cuentacorriente_expandido_array.html");
 
 		foreach ($cuentascorrientes_collection as $clave=>$valor) {
 			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
