@@ -146,8 +146,11 @@
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script type="text/javascript" charset="utf-8">
-    var enviando = false;
     var user_level = {display-user_level};
+    var enviando = false;
+    var ini_balance = 0;
+    array_ids = new Array();
+
     $( window ).on( "load", function() {
         switch(user_level){
             case 2:
@@ -309,6 +312,28 @@
         if (parseInt(anio_actual) > parseInt(anio_retencion)) {
             document.getElementById('anio_retencion').value = anio_actual;
         }
+    }
+
+    function cargaFacturaPagoConjunto(cuentacorrientecliente_id, balance) {
+        var flag = array_ids.indexOf(cuentacorrientecliente_id);
+        if(parseInt(flag) === -1) {
+            ini_balance = ini_balance + parseFloat(balance);
+            array_ids.push(producto_id);
+        } else {
+            ini_balance = ini_balance - parseFloat(balance);
+            quitarPagoArray(cuentacorrientecliente_id);
+        }
+        
+        console.log(balance);
+        console.log(array_ids);
+    }
+
+    function quitarPagoArray(cuentacorrientecliente_id) {    
+        array_ids.forEach(function(temp_cuentacorrientecliente_id, index) {
+            if (cuentacorrientecliente_id == temp_cuentacorrientecliente_id) {
+                array_ids.splice(index, 1);
+            }
+        });
     }
 
     function checkSubmit() {
