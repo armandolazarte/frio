@@ -19,11 +19,17 @@
             </div>
         </div>
         <div class="col-md-4 col-sm-4 col-xs-4" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="verCuentasCorrientes();" id="btn_cuentascorrientes">
+                <i class="fa fa-eye"></i> Ver Cuentas Corrientes
+            </button>
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
+                <i class="fa fa-eye"></i> Ver movimientos
+            </button>
+            <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
+                <i class="fa fa-usd"></i> Registrar Venta
+            </button>
             <button type="button" class="btn btn-danger" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/listar_cuentas/{cliente-cliente_id}'">
                 <i class="fa fa-table"></i> Listar Cuentas
-            </button>
-            <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="pagoConjunto();">
-                <i class="fa fa-usd"></i> Registrar Pago Conjunto
             </button>
         </div>
     </div>

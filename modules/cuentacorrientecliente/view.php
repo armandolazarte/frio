@@ -169,8 +169,20 @@ class CuentaCorrienteClienteView extends View {
 	function desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $obj_cliente) {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/desa_consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
+		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
 		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
 
+		foreach ($cuentascorrientes_collection as $clave=>$valor) {
+			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
+			$ingreso = (is_null($valor['INGRESO'])) ? 0 : round($valor['INGRESO'],2);
+			$cuenta = round(($ingreso - $deuda),2);
+			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
+			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
+			$class = ($cuenta >= 0) ? 'info' : 'danger';
+			$cuentascorrientes_collection[$clave]['CUENTA'] = abs($cuenta);
+			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
+		}
+		
 		$obj_cliente->codigo = str_pad($obj_cliente->cliente_id, 5, '0', STR_PAD_LEFT);
 		if ($obj_cliente->documentotipo->denominacion == 'CUIL' OR $obj_cliente->documentotipo->denominacion == 'CUIT') {
 			$cuil1 = substr($obj_cliente->documento, 0, 2);
@@ -199,8 +211,10 @@ class CuentaCorrienteClienteView extends View {
 
 		$gui_lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $gui_lst_infocontacto, $infocontacto_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
+		$tbl_cuentascorrientes_array = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentascorrientes_array, $cuentascorrientes_collection);
 		$render = str_replace('{lst_infocontacto}', $gui_lst_infocontacto, $gui);
 		$render = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $render);
+		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes_array, $render);
 		$render = str_replace('{anio_actual}', date('Y'), $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($array_cuentacorriente, $render);

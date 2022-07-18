@@ -190,12 +190,11 @@ class CuentaCorrienteClienteController {
 	function desa_consultar($arg) {
     	SessionHandler()->check_session();
 		
-		/*
     	$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$groupby = "ccc.cliente_id";
 		$cuentascorrientes_collection = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select, $groupby);
-		*/
+
     	$cm = new Cliente();
     	$cm->cliente_id = $arg;
     	$cm->get();
@@ -306,7 +305,7 @@ class CuentaCorrienteClienteController {
 		$where = "ccc.cliente_id = {$arg}";
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
-		
+
 		$this->view->desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $cm);
 	}
 
