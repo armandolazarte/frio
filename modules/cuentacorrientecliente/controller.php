@@ -710,10 +710,21 @@ class CuentaCorrienteClienteController {
 		$cliente_id = filter_input(INPUT_POST, 'cliente_id');
 		$cuentacorrientecliente_collection = $_POST["cuentacorrientecliente"];
 
+		$egreso_ids = array();
 		foreach ($cuentacorrientecliente_collection as $clave=>$valor) {
+			$cuentacorrientecliente_id = $valor["cuentacorrientecliente_id"];
+			$cccm = new CuentaCorrienteCliente();
+			$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+			$cccm->get();
 
-		print_r($valor["cuentacorrientecliente_id"]);
+			$egreso_id = $cccm->egreso_id;
+			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
 		}
+		
+		asort($egreso_ids);
+
+		print_r($_POST);
+		print_r($egreso_ids);
 		exit;
 
 
