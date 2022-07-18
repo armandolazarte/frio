@@ -205,7 +205,7 @@ class CuentaCorrienteClienteController {
 		$where = "ccc.cliente_id = {$arg} AND ccc.estadomovimientocuenta != 4 AND ccc.importe != 0";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 
-		print_r($cuentascorriente_collection);exit;
+		print_r($cuentacorriente_collection);exit;
 		$egreso_ids = array();
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$temp_cuentacorrientecliente_id = $valor['CCCID'];
