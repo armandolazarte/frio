@@ -712,7 +712,7 @@ class CuentaCorrienteClienteController {
 
 		foreach ($cuentacorrientecliente_collection as $clave=>$valor) {
 
-		print_r($valor);
+		print_r($valor["cuentacorrientecliente_id"]);
 		}
 		exit;
 
