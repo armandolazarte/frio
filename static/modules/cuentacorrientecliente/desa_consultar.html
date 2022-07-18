@@ -59,11 +59,11 @@
     </div>
 </div>
 <div class="col-md-7 col-sm-7 col-xs-12">
-    <div class="col-md-6" style="display: inline-block;">
-        <div class="tile_count">
+    <div class="col-md-6" style="display: none;" div="div_pago_conjunto">
+        <div class="tile_count" style="margin-top: 5px !important;">
             <div class="col-md-12 col-sm-4 tile_stats_count" style="margin-bottom: 0px; padding-bottom: 5px;">
                 <span class="count_top"><i class="fa fa-user"></i> Total Pago Conjunto</span>
-                <div class="count">7,325</div>
+                <div class="count" id="div_total_pago_conjunto"></div>
             </div>
         </div>
     </div>
@@ -326,8 +326,17 @@
             calculo_balance = ini_balance - parseFloat(balance);
             quitarPagoArray(cuentacorrientecliente_id);
         }
+
         Number(calculo_balance.toFixed(2));
         ini_balance = Number(calculo_balance.toFixed(2));
+
+        document.getElementById('div_total_pago_conjunto').innerHTML = "$" + ini_balance; 
+        if (parseFloat(ini_balance) > 0) {
+            document.getElementById('div_pago_conjunto').style.display = 'inline-block';
+        } else {
+            document.getElementById('div_pago_conjunto').style.display = 'none';
+        }
+
         console.log(ini_balance);
         console.log(array_ids);
     }
