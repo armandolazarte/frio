@@ -92,7 +92,7 @@ class CuentaCorrienteClienteView extends View {
 		print $template;
 	}
 
-	function consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $obj_cliente) {
+	function bk_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $obj_cliente) {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
@@ -166,11 +166,11 @@ class CuentaCorrienteClienteView extends View {
 		print $template;
 	}
 
-	function desa_consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $obj_cliente) {
-		$gui = file_get_contents("static/modules/cuentacorrientecliente/desa_consultar.html");
+	function consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $obj_cliente) {
+		$gui = file_get_contents("static/modules/cuentacorrientecliente/consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
-		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/desa_tbl_cuentacorriente_expandido_array.html");
+		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
 		$gui_slt_cobrador = file_get_contents("static/modules/cuentacorrientecliente/slt_cobrador.html");
 
 		foreach ($cuentascorrientes_collection as $clave=>$valor) {
