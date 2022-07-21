@@ -189,7 +189,9 @@
     todos = new Array();
     for (var i = 0, total = entregaclientedetalle_id.length; i < total; i++)
       if (entregaclientedetalle_id[i].checked) todos[todos.length] = entregaclientedetalle_id[i].value;
-        console.log(todos.join("."));
+        var ids = todos.join(",");
+
+    console.log(ids);
     /*
     if (cobrador === null || cobrador === "" || cobrador.length == 0 || cobrador == 0) {
       document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> Por favor seleccione Cobrador.";
