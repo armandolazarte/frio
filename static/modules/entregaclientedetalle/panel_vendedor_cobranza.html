@@ -90,7 +90,13 @@
                 {procesar_cobranza}
             </div>
           </div>
-          <button onClick="imprimirDescargo();" id="btnDescargar" class="btn btn-xs btn-dark" style="width: 100%; font-size: 14px;" type="button"> <i class="fa fa-file-pdf-o"></i> Descargar Cobranza </button>
+          <div class="form-group col-lg-12">
+            <label>Fecha Cobranza</label>
+            <input class="form-control" type="date" name="fecha_cobranza" id="fecha_cobranza" value="{fecha_sys}">
+          </div>
+          <div class="form-group col-lg-12">
+            <button onClick="imprimirDescargo();" id="btnDescargar" class="btn btn-xs btn-dark" style="width: 100%; font-size: 14px;" type="button"> <i class="fa fa-file-pdf-o"></i> Descargar Cobranza </button>
+          </div>
         </div>
       </div>
     </div>
@@ -189,7 +195,14 @@
       document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> Por favor seleccione Cobrador.";
       $('#sistema_alertas_cobranza').modal('show');
     } else {
-      location.href = "{url_app}/entregaclientedetalle/imprimir_cobranza/" + vendedor_id + "@" + cobrador;
+      var fecha_cobranza = document.getElementById('fecha_cobranza').value;
+      var entregaclientedetalle_id = document.getElementsByName('cobranza_ids[]');
+      todos = new Array();
+      for (var i = 0, total = entregaclientedetalle_id.length; i < total; i++)
+        if (entregaclientedetalle_id[i].checked) todos[todos.length] = entregaclientedetalle_id[i].value;
+          var ids = todos.join(",");
+
+      location.href = "{url_app}/entregaclientedetalle/imprimir_cobranza/" + vendedor_id + "@" + cobrador + '@' + fecha_cobranza + '@' + ids;
     } 
   }
 </script>
