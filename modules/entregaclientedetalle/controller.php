@@ -321,6 +321,7 @@ class EntregaClienteDetalleController {
     	$cobrador_id = $ids[1];
     	$fecha_cobranza = $ids[2];
     	$entregaclientedetalle_ids = $ids[3];
+    	print_r($entregaclientedetalle_ids);exit;
 
   		$select = "CONCAT('$',ROUND(SUM(ecd.monto), 2)) AS TOTAL";
 	    $from = "entregaclientedetalle ecd INNER JOIN entregacliente ec ON ec.entregacliente_id = ecd.entregacliente_id";
