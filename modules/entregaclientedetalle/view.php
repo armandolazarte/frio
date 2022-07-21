@@ -35,6 +35,7 @@ class EntregaClienteDetalleView extends View {
 
         $render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $gui);
         $render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
+        $render = str_replace('{fecha_sys}', date('Y-m-d'), $render);
         $render = $this->render_breadcrumb($render);
         $template = $this->render_template($render);
         print $template;
@@ -58,8 +59,7 @@ class EntregaClienteDetalleView extends View {
     }
 
     $gui = $this->render_regex_dict('TBL_COBRANZA', $gui, $entregacliente_collection);
-    $render = str_replace('{fecha_sys}', date('Y-m-d'), $gui);
-    $render = str_replace('{url_app}', URL_APP, $render);
+    $render = str_replace('{url_app}', URL_APP, $gui);
     print $render;
   }
 
