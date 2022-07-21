@@ -196,7 +196,7 @@
         if (entregaclientedetalle_id[i].checked) todos[todos.length] = entregaclientedetalle_id[i].value;
           var ids = todos.join(",");
 
-      location.href = "{url_app}/entregaclientedetalle/imprimir_cobranza/" + vendedor_id + "@" + cobrador;
+      location.href = "{url_app}/entregaclientedetalle/imprimir_cobranza/" + vendedor_id + "@" + cobrador + '@' + fecha_cobranza + '@' + ids;
     }
   }
 </script>
