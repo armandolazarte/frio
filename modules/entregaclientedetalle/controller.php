@@ -362,7 +362,7 @@ class EntregaClienteDetalleController {
 
     	/*GENERACION DE PDF*/
 		$cuentaCorrienteProveedorPDFHelper = new cobrosPDF();
-		$cuentaCorrienteProveedorPDFHelper->descarga_cobros_vendedor($fecha, $total, $cobrador_id, $cobrador_denominacion, $entregacliente_collection);
+		$cuentaCorrienteProveedorPDFHelper->descarga_cobros_vendedor($fecha, $total, $cobrador_id, $cobrador_denominacion, $fecha_cobranza, $entregacliente_collection);
   		print_r($valores);exit;
   	}
 }
