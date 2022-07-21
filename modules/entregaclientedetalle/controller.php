@@ -316,9 +316,9 @@ class EntregaClienteDetalleController {
   	function imprimir_cobranza($arg) {
     	SessionHandler()->check_session();
     	$fecha = date('Y-m-d');
+    	print_r($arg);exit;
     	$ids = explode("@", $arg);
     	$vendedor_id = $ids[0];
-    	print_r($vendedor_id);exit;
     	$cobrador_id = $ids[1];
     	$fecha_cobranza = $ids[2];
     	$entregaclientedetalle_ids = $ids[3];
