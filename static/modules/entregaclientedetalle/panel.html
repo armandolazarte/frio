@@ -89,8 +89,13 @@
                 {procesar_cobranza}
             </div>
           </div>
-          <input class="form-control" type="date" name="fecha_cobranza" id="fecha_cobranza" value="{fecha_sys}">
-          <button onclick="imprimirDescargo();" id="btnDescargar" class="btn btn-xs btn-dark" style="width: 100%; font-size: 14px;" type="button"> <i class="fa fa-file-pdf-o"></i> Descargar Cobranza </button>
+          <div class="form-group col-lg-12">
+            <label>Fecha Cobranza</label>
+            <input class="form-control" type="date" name="fecha_cobranza" id="fecha_cobranza" value="{fecha_sys}">
+          </div>
+          <div class="form-group col-lg-12">
+            <button onclick="imprimirDescargo();" id="btnDescargar" class="btn btn-xs btn-dark" style="width: 100%; font-size: 14px;" type="button"> <i class="fa fa-file-pdf-o"></i> Descargar Cobranza </button>
+          </div>
         </div>
       </div>
     </div>
