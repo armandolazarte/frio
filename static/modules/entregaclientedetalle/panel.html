@@ -186,7 +186,10 @@
   function imprimirDescargo() {
     var cobrador = document.getElementById("cobrador").value;
     var entregaclientedetalle_id = document.getElementsByName('cobranza_ids[]');
-    console.log(entregaclientedetalle_id);
+    for (x=0;x<entregaclientedetalle_id.length;x++) {
+      entregaclientedetalle_id[x].checked=true; 
+    console.log(entregaclientedetalle_id[x].checked=true;);
+    }
     /*
     if (cobrador === null || cobrador === "" || cobrador.length == 0 || cobrador == 0) {
       document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> Por favor seleccione Cobrador.";
