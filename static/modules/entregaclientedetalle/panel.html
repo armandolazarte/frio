@@ -89,6 +89,7 @@
                 {procesar_cobranza}
             </div>
           </div>
+          <input type="date" name="fecha_cobranza" id="fecha_cobranza" value="{fecha_sys}">
           <button onclick="imprimirDescargo();" id="btnDescargar" class="btn btn-xs btn-dark" style="width: 100%; font-size: 14px;" type="button"> <i class="fa fa-file-pdf-o"></i> Descargar Cobranza </button>
         </div>
       </div>
@@ -188,7 +189,9 @@
       document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> Por favor seleccione Cobrador.";
       $('#sistema_alertas_cobranza').modal('show');
     } else {
-      location.href = "{url_app}/entregaclientedetalle/imprimir_cobranza/" + vendedor_id + "@" + cobrador;
+      var entregaclientedetalle_id = document.getElementsByName('cobranza_ids').value;
+      console.log(entregaclientedetalle_id);
+      //location.href = "{url_app}/entregaclientedetalle/imprimir_cobranza/" + vendedor_id + "@" + cobrador;
     } 
   }
 </script>

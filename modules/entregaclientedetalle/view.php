@@ -58,7 +58,8 @@ class EntregaClienteDetalleView extends View {
     }
 
     $gui = $this->render_regex_dict('TBL_COBRANZA', $gui, $entregacliente_collection);
-    $render = str_replace('{url_app}', URL_APP, $gui);
+    $render = str_replace('{fecha_sys}', date('Y-m-d'), $gui);
+    $render = str_replace('{url_app}', URL_APP, $render);
     print $render;
   }
 
