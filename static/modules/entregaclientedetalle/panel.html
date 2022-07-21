@@ -189,7 +189,7 @@
       document.getElementById("msj_alerta_modal").innerHTML = "<strong>[ERROR]</strong> Por favor seleccione Cobrador.";
       $('#sistema_alertas_cobranza').modal('show');
     } else {
-      var fecha_cobranza = document.getElementsByName('fecha_cobranza').value;
+      var fecha_cobranza = document.getElementById('fecha_cobranza').value;
       var entregaclientedetalle_id = document.getElementsByName('cobranza_ids[]');
       todos = new Array();
       for (var i = 0, total = entregaclientedetalle_id.length; i < total; i++)

@@ -319,8 +319,8 @@ class EntregaClienteDetalleController {
     	$ids = explode("@", $arg);
     	$vendedor_id = $ids[0];
     	$cobrador_id = $ids[1];
-    	$fecha_cobranza = $ids[4];
-    	$entregaclientedetalle_ids = $ids[5];
+    	$fecha_cobranza = $ids[3];
+    	$entregaclientedetalle_ids = $ids[4];
     	print_r($ids);exit;
 
   		$select = "CONCAT('$',ROUND(SUM(ecd.monto), 2)) AS TOTAL";
