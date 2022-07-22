@@ -874,8 +874,8 @@ class CuentaCorrienteClienteController {
 				$cccc->cuentacorrientecliente_id = 0;
 				$cccc->egreso_id = 0;
 				$cccc->cliente_id = $cliente_id;
-				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) $chequeclientedetalle_id : 0;
-				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) $transferenciaclientedetalle_id : 0;
+				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) ? $chequeclientedetalle_id : 0;
+				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) ? $transferenciaclientedetalle_id : 0;
 				$cccc->usuario_id = $usuario_id;
 				$cccc->save();
 			} else {
@@ -894,8 +894,8 @@ class CuentaCorrienteClienteController {
 				$cccc->cuentacorrientecliente_id = 0;
 				$cccc->egreso_id = 0;
 				$cccc->cliente_id = $cliente_id;
-				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) $chequeclientedetalle_id : 0;
-				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) $transferenciaclientedetalle_id : 0;
+				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) ? $chequeclientedetalle_id : 0;
+				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) ? $transferenciaclientedetalle_id : 0;
 				$cccc->usuario_id = $usuario_id;
 				$cccc->save();
 			}
