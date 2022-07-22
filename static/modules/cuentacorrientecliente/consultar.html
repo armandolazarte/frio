@@ -333,6 +333,7 @@
     var user_level = {display-user_level};
     var enviando = false;
     var ini_balance = 0;
+    var credito_cta_cte = {cuentacorrienteclientecredito-importe};
     var quitar = /\$/g;
     array_ids = new Array();
 
@@ -470,6 +471,13 @@
                 document.getElementById("div_anio_retencion").style.display = "inline-block";
                 break;
             case 6:
+                var importe_deuda = document.getElementById('importe_deuda').value;
+                if (parseFloat(credito_cta_cte >= importe_deuda)) {
+                    document.getElementById('importe_deuda').value = $importe_deuda;
+                } else {
+                    document.getElementById('importe_deuda').value = $credito_cta_cte;
+                }
+
                 document.getElementById("div_numero_cheque").style.display = "none";
                 document.getElementById("div_fecha_vencimiento").style.display = "none";
                 document.getElementById("div_banco").style.display = "none";
