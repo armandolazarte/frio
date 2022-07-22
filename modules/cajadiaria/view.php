@@ -2,5 +2,4 @@
 
 
 class CajaDiariaView extends View {}
-}
 ?>

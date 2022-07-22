@@ -9,6 +9,7 @@ require_once "modules/ingresotipopago/model.php";
 require_once "modules/chequeclientedetalle/model.php";
 require_once "modules/transferenciaclientedetalle/model.php";
 require_once "modules/retencionclientedetalle/model.php";
+require_once "modules/cuentacorrienteclientecredito/model.php";
 require_once "tools/cuentaCorrienteClientePDFTool.php";
 
 
@@ -705,6 +706,7 @@ class CuentaCorrienteClienteController {
 
 	function guardar_ingreso_cuentacorriente_conjunto() {
 		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
 		$importe = filter_input(INPUT_POST, 'importe');
 		$cobrador = filter_input(INPUT_POST, 'cobrador');
@@ -768,28 +770,34 @@ class CuentaCorrienteClienteController {
 					$final_cuentacorrientecliente_id = $this->model->cuentacorrientecliente_id;
 
 					if ($ingresotipopago_id == 1) {
-						$cpdm = new ChequeClienteDetalle();
-						$cpdm->numero = filter_input(INPUT_POST, 'numero_cheque');
-						$cpdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
-						$cpdm->fecha_pago = date('Y-m-d');
-						$cpdm->banco = filter_input(INPUT_POST, 'banco');
-						$cpdm->plaza = filter_input(INPUT_POST, 'plaza');
-						$cpdm->titular = filter_input(INPUT_POST, 'titular');
-						$cpdm->documento = filter_input(INPUT_POST, 'documento');
-						$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
-						$cpdm->estado = 2;
-						$cpdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
-						$cpdm->egreso_id = $egreso_id;
-						$cpdm->save();
+						$numero_cheque = filter_input(INPUT_POST, 'numero_cheque'); 
+						$ccdm = new ChequeClienteDetalle();
+						$ccdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+						$ccdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
+						$ccdm->fecha_pago = date('Y-m-d');
+						$ccdm->banco = filter_input(INPUT_POST, 'banco');
+						$ccdm->plaza = filter_input(INPUT_POST, 'plaza');
+						$ccdm->titular = filter_input(INPUT_POST, 'titular');
+						$ccdm->documento = filter_input(INPUT_POST, 'documento');
+						$ccdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
+						$ccdm->estado = 2;
+						$ccdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$ccdm->egreso_id = $egreso_id;
+						$ccdm->save();
+						$chequeclientedetalle_id = $ccdm->chequeclientedetalle_id;
+						$referencia = "Sobrante de pago con Cheque N° {$numero_cheque}";
 					} else {
-						$tpdm = new TransferenciaClienteDetalle();
-						$tpdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
-						$tpdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
-						$tpdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
-						$tpdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
-						$tpdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
-						$tpdm->egreso_id = $egreso_id;
-						$tpdm->save();	
+						$numero_transferencia = filter_input(INPUT_POST, 'numero_transferencia'); 
+						$tcdm = new TransferenciaClienteDetalle();
+						$tcdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+						$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+						$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+						$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+						$tcdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$tcdm->egreso_id = $egreso_id;
+						$tcdm->save();	
+						$transferenciaclientedetalle_id = $tcdm->transferenciaclientedetalle_id;
+						$referencia = "Sobrante de pago con Transferencia N° {$numero_transferencia}";
 					}
 
 					//RESTANTE IMPORTE CHEQUE
@@ -817,33 +825,79 @@ class CuentaCorrienteClienteController {
 					$final_cuentacorrientecliente_id = $this->model->cuentacorrientecliente_id;
 
 					if ($ingresotipopago_id == 1) {
-						$cpdm = new ChequeClienteDetalle();
-						$cpdm->numero = filter_input(INPUT_POST, 'numero_cheque');
-						$cpdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
-						$cpdm->fecha_pago = date('Y-m-d');
-						$cpdm->banco = filter_input(INPUT_POST, 'banco');
-						$cpdm->plaza = filter_input(INPUT_POST, 'plaza');
-						$cpdm->titular = filter_input(INPUT_POST, 'titular');
-						$cpdm->documento = filter_input(INPUT_POST, 'documento');
-						$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
-						$cpdm->estado = 2;
-						$cpdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
-						$cpdm->egreso_id = $egreso_id;
-						$cpdm->save();
+						$ccdm = new ChequeClienteDetalle();
+						$ccdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+						$ccdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
+						$ccdm->fecha_pago = date('Y-m-d');
+						$ccdm->banco = filter_input(INPUT_POST, 'banco');
+						$ccdm->plaza = filter_input(INPUT_POST, 'plaza');
+						$ccdm->titular = filter_input(INPUT_POST, 'titular');
+						$ccdm->documento = filter_input(INPUT_POST, 'documento');
+						$ccdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
+						$ccdm->estado = 2;
+						$ccdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$ccdm->egreso_id = $egreso_id;
+						$ccdm->save();
+						$chequeclientedetalle_id = $ccdm->chequeclientedetalle_id;
 					} else {
-						$tpdm = new TransferenciaClienteDetalle();
-						$tpdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
-						$tpdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
-						$tpdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
-						$tpdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
-						$tpdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
-						$tpdm->egreso_id = $egreso_id;
-						$tpdm->save();
+						$tcdm = new TransferenciaClienteDetalle();
+						$tcdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+						$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+						$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+						$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+						$tcdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$tcdm->egreso_id = $egreso_id;
+						$tcdm->save();
+						$transferenciaclientedetalle_id = $tcdm->transferenciaclientedetalle_id;
 					}
 					
 					//FINALIZA IMPORTE CHEQUE
 					$importe = 0;
 				}	
+			}
+		}
+
+		if ($importe > 0.5) {
+			$select = "cccc.cuentacorrientecliente_id AS ID";
+			$from = "cuentacorrientecliente cccc";
+			$where = "cccc.cliente_id = {$cliente_id}";
+			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+			$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+			if ($max_cuentacorrienteclientecredito_id == 0) {
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->fecha = date('Y-m-d');
+				$cccc->hora = date('H:i:s');
+				$cccc->referencia = $referencia;
+				$cccc->importe = $importe;
+				$cccc->movimiento = $importe;
+				$cccc->cuentacorrientecliente_id = 0;
+				$cccc->egreso_id = 0;
+				$cccc->cliente_id = $cliente_id;
+				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) $chequeclientedetalle_id : 0;
+				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) $transferenciaclientedetalle_id : 0;
+				$cccc->usuario_id = $usuario_id;
+				$cccc->save();
+			} else {
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+				$cccc->get();
+				$importe_actual = $cccc->importe;
+				$nuevo_importe = $importe_actual + $importe;
+
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->fecha = date('Y-m-d');
+				$cccc->hora = date('H:i:s');
+				$cccc->referencia = $referencia;
+				$cccc->importe = $nuevo_importe;
+				$cccc->movimiento = $importe;
+				$cccc->cuentacorrientecliente_id = 0;
+				$cccc->egreso_id = 0;
+				$cccc->cliente_id = $cliente_id;
+				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) $chequeclientedetalle_id : 0;
+				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) $transferenciaclientedetalle_id : 0;
+				$cccc->usuario_id = $usuario_id;
+				$cccc->save();
 			}
 		}
 
