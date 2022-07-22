@@ -190,8 +190,7 @@ class CuentaCorrienteClienteController {
 
 	function consultar($arg) {
     	SessionHandler()->check_session();
-		
-    	$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+		$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$groupby = "ccc.cliente_id";
 		$cuentascorrientes_collection = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select, $groupby);
@@ -313,7 +312,22 @@ class CuentaCorrienteClienteController {
 			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);
 		}
 
-		$this->view->consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $cm);
+		$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+		$from = "cuentacorrienteclientecredito cccc";
+		$where = "cccc.cliente_id = {$arg} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+		$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+		$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+		if ($max_cuentacorrienteclientecredito_id == 0) {
+			$importe_cuentacorrienteclientecredito = 0;
+		} else {
+			$cccc = new CuentaCorrienteClienteCredito();
+			$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+			$cccc->get();
+			$importe_cuentacorrienteclientecredito = $cccc->importe;
+		}
+
+		$this->view->consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $cm, $importe_cuentacorrienteclientecredito);
 	}
 
 	function vdr_consultar($arg) {
@@ -860,7 +874,7 @@ class CuentaCorrienteClienteController {
 		if ($importe > 0.5) {
 			$select = "cccc.cuentacorrientecliente_id AS ID";
 			$from = "cuentacorrientecliente cccc";
-			$where = "cccc.cliente_id = {$cliente_id}";
+			$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
 			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 			$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
 
