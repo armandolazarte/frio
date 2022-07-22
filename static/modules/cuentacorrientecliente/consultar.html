@@ -45,24 +45,26 @@
             </button>
         </div>
     </div>
-    <div class="x_panel">
-        <div class="x_content">
-            <div class="pricing">
-                <div class="title" style="height: 85px !important;">
-                    <h2>COD {cliente-codigo} - {documentotipo-denominacion} {cliente-documento}</h2>
-                    <h1>{cliente-razon_social}</h1>
-                </div>
-                <div class="x_content">
-                    <div class="">
-                        <div class="pricing_features">
-                            <ul class="list-unstyled text-left">
-                                <li><i class="fa fa-check text-success"></i> <strong> Condición Fiscal:</strong> {condicionfiscal-denominacion}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Zona:</strong> {frecuenciaventa-denominacion} ({frecuenciaventa-dia_1}-{frecuenciaventa-dia_2})</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Prov. (Loc.):</strong> {provincia-denominacion} ({cliente-codigopostal} - {cliente-localidad})</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Domicilio:</strong> {cliente-domicilio}</li>
-                                {lst_infocontacto}
-                            </ul>
+    <div class="col-md-12 col-sm-12 col-xs-12" style="padding-left: 0px;">
+        <div class="x_panel">
+            <div class="x_content">
+                <div class="pricing">
+                    <div class="title" style="height: 85px !important;">
+                        <h2>COD {cliente-codigo} - {documentotipo-denominacion} {cliente-documento}</h2>
+                        <h1>{cliente-razon_social}</h1>
+                    </div>
+                    <div class="x_content">
+                        <div class="">
+                            <div class="pricing_features">
+                                <ul class="list-unstyled text-left">
+                                    <li><i class="fa fa-check text-success"></i> <strong> Condición Fiscal:</strong> {condicionfiscal-denominacion}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Zona:</strong> {frecuenciaventa-denominacion} ({frecuenciaventa-dia_1}-{frecuenciaventa-dia_2})</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Prov. (Loc.):</strong> {provincia-denominacion} ({cliente-codigopostal} - {cliente-localidad})</li>
+                                    <li><i class="fa fa-check text-success"></i> <strong> Domicilio:</strong> {cliente-domicilio}</li>
+                                    {lst_infocontacto}
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
