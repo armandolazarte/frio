@@ -724,6 +724,7 @@ class CuentaCorrienteClienteController {
 				$tpdm->save();
 				break;
 			case 6:
+				print_r($cliente_id);exit;
 				$select = "cccc.cuentacorrientecliente_id AS ID";
 				$from = "cuentacorrientecliente cccc";
 				$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
@@ -733,7 +734,6 @@ class CuentaCorrienteClienteController {
 				$cccc = new CuentaCorrienteClienteCredito();
 				$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
 				$cccc->get();
-				print_r($cccc);exit;
 				$importe_actual = $cccc->importe;
 				$nuevo_importe = $importe_actual - $importe;
 
