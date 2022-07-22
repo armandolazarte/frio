@@ -739,7 +739,7 @@ class CuentaCorrienteClienteController {
 				$cccc = new CuentaCorrienteClienteCredito();
 				$cccc->fecha = date('Y-m-d');
 				$cccc->hora = date('H:i:s');
-				$cccc->referencia = 'Pago de comprobante {$comprobante}';
+				$cccc->referencia = "Pago de comprobante {$comprobante}";
 				$cccc->importe = $nuevo_importe;
 				$cccc->movimiento = round($importe, 2);
 				$cccc->cuentacorrientecliente_id = $cuentacorrientecliente_id;
