@@ -10,35 +10,39 @@
 </div>
 <div class="col-md-5 col-sm-5 col-xs-12">
     <div class="row top_tiles">
-        <div class="animated flipInY col-lg-7 col-md-7 col-sm-12 col-xs-12">
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
                 <div class="icon" style="margin-top: 10px;"><i class="fa fa-arrow-circle-o-{cuentacorriente-icon} {cuentacorriente-class}" style="font-size: 55px;"></i></div>
                 <div class="count {cuentacorriente-class}" style="font-size: 35px;">${cuentacorriente-valor}</div>
-                <h3 style="font-size: 18px;">Estado Cta Corriente</h3>
+                <h3 style="font-size: 18px;">Estado Cta Cte</h3>
                 <p class="{cuentacorriente-class}">Cliente {cuentacorriente-msj}</p>
             </div>
         </div>
-        <div class="col-md-5 col-sm-12 col-xs-12" style="padding-left: 0px; margin-top: 5px;">
-            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="verCuentasCorrientes();" id="btn_cuentascorrientes">
-                <i class="fa fa-eye"></i> Ver Cuentas Corrientes
-            </button>
-            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
-                <i class="fa fa-eye"></i> Ver movimientos
-            </button>
-            <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
-                <i class="fa fa-usd"></i> Registrar Venta
-            </button>
-            <button type="button" class="btn btn-danger" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/listar_cuentas/{cliente-cliente_id}'">
-                <i class="fa fa-table"></i> Listar Cuentas
-            </button>
-        </div>
-        <div class="animated flipInY col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
                 <div class="icon" style="margin-top: 10px;"><i class="fa fa-info-circle blue" style="font-size: 55px;"></i></div>
                 <div class="count blue" style="font-size: 35px;">${cuentacorrienteclientecredito-importe}</div>
                 <h3 style="font-size: 18px;">Estado de Crédito</h3>
                 <p class="blue">Crédito del Cliente</p>
             </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="verCuentasCorrientes();" id="btn_cuentascorrientes">
+                <i class="fa fa-eye"></i> Ver Cuentas Corrientes
+            </button>
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
+                <i class="fa fa-eye"></i> Ver movimientos
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
+                <i class="fa fa-usd"></i> Registrar Venta
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-danger" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/listar_cuentas/{cliente-cliente_id}'">
+                <i class="fa fa-table"></i> Listar Cuentas
+            </button>
         </div>
     </div>
     <div class="x_panel">
