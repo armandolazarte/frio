@@ -733,6 +733,7 @@ class CuentaCorrienteClienteController {
 				$cccc = new CuentaCorrienteClienteCredito();
 				$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
 				$cccc->get();
+				print_r($cccc);exit;
 				$importe_actual = $cccc->importe;
 				$nuevo_importe = $importe_actual - $importe;
 
