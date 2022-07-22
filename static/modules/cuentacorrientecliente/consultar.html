@@ -472,7 +472,7 @@
                 break;
             case 6:
                 var importe_deuda = document.getElementById('importe_deuda').value;
-                if (parseFloat(credito_cta_cte >= importe_deuda)) {
+                if (parseFloat(credito_cta_cte) >= parseFloat(importe_deuda)) {
                     document.getElementById('importe_deuda').value = importe_deuda;
                 } else {
                     document.getElementById('importe_deuda').value = credito_cta_cte;
