@@ -473,9 +473,9 @@
             case 6:
                 var importe_deuda = document.getElementById('importe_deuda').value;
                 if (parseFloat(credito_cta_cte >= importe_deuda)) {
-                    document.getElementById('importe_deuda').value = $importe_deuda;
+                    document.getElementById('importe_deuda').value = importe_deuda;
                 } else {
-                    document.getElementById('importe_deuda').value = $credito_cta_cte;
+                    document.getElementById('importe_deuda').value = credito_cta_cte;
                 }
 
                 document.getElementById("div_numero_cheque").style.display = "none";
