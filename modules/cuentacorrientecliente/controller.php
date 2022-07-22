@@ -724,11 +724,10 @@ class CuentaCorrienteClienteController {
 				$tpdm->save();
 				break;
 			case 6:
-				$select = "cccc.cuentacorrientecliente_id AS ID";
+				$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 				$from = "cuentacorrientecliente cccc";
 				$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
 				$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
-				print_r($max_cuentacorrienteclientecredito_id);exit;
 				$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
 
 				$cccc = new CuentaCorrienteClienteCredito();
@@ -910,7 +909,7 @@ class CuentaCorrienteClienteController {
 		}
 
 		if ($importe > 0.5) {
-			$select = "cccc.cuentacorrientecliente_id AS ID";
+			$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 			$from = "cuentacorrientecliente cccc";
 			$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
 			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
