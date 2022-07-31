@@ -156,13 +156,17 @@
     $(document).ready(function() {
         $('#tbl_cuentacorrienteclientecredito').dataTable( {
             "aaSorting": [[ 0, "desc" ]]
-          , "iDisplayLength":20
+            , "iDisplayLength":20
+            , columnDefs: [ {
+                targets: 1,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
+            } ]
         } );
     } );
     
     $(document).ready(function() {
         $('#tbl_cuentascorrientes').dataTable( {
-            "aaSorting": [[ 0, "desc" ]]
+            "aaSorting": [[ 0, "asc" ]]
           , "iDisplayLength":20
         } );
     } );
