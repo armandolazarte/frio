@@ -37,10 +37,15 @@ class ChequeClienteDetalleController {
 			$where = "ccd.numero = {$num_cheque}";
 			$sobrantecheque = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 
-			print_r($sobrantecheque);
+			if (is_array($sobrantecheque) AND !empty($sobrantecheque)) {
+				$detallecheque_collection[$clave]['CREDITO'] = $sobrantecheque[0]['SOBRANTE'];
+			} else {
+				$detallecheque_collection[$clave]['CREDITO'] = 0;
+			}
 
 		}
 
+		print_r($detallecheque_collection);
 		exit;
 
 
