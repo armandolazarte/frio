@@ -4,8 +4,10 @@
 class ChequeClienteDetalleView extends View {
 	function consultar_pagos_cliente($pagos_chequeclientedetalle_collection, $chequeclientedetalle_collection, $obj_cliente) {
 		$gui = file_get_contents("static/modules/chequeclientedetalle/consultar_pagos_cliente.html");
+		
 		$tbl_pagos_cheques_cliente = file_get_contents("static/modules/chequeclientedetalle/tbl_pagos_cheques_cliente.html");
-		$tbl_pagos_cheques_cliente = $this->render_regex_dict('TBL_CHEQUECLIENTEDETALLE', $tbl_pagos_cheques_cliente, $chequeclientedetalle_collection);		
+		$tbl_pagos_cheques_cliente = $this->render_regex_dict('TBL_CHEQUECLIENTEDETALLE', $tbl_pagos_cheques_cliente, $pagos_chequeclientedetalle_collection);
+
 		$tbl_chequeclientedetalle = file_get_contents("static/modules/chequeclientedetalle/tbl_chequeclientedetalle.html");
 		$tbl_chequeclientedetalle = $this->render_regex_dict('TBL_CHEQUECLIENTEDETALLE', $tbl_chequeclientedetalle, $chequeclientedetalle_collection);		
 
