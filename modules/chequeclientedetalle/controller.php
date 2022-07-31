@@ -28,7 +28,7 @@ class ChequeClienteDetalleController {
 		$from = "chequeclientedetalle ccd INNER JOIN cuentacorrientecliente ccc ON ccd.cuentacorrientecliente_id = ccc.cuentacorrientecliente_id";
 		$where = "ccc.cliente_id = {$cliente_id}";
 		$groupby = "ccd.numero";
-		$detallecheque_collection = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select, $groupby);
+		$chequeclientedetalle_collection = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select, $groupby);
 
 		foreach ($chequeclientedetalle_collection as $clave=>$valor) {
 			$num_cheque = $valor['CHEQUE'];
