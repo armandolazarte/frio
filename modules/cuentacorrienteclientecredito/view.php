@@ -2,7 +2,7 @@
 
 
 class CuentaCorrienteClienteCreditoView extends View {
-	function consultar($credito_collection, $obj_cliente) {
+	function consultar($credito_collection, $montos_cuentacorriente, $importe_cuentacorrienteclientecredito, $obj_cliente) {
 		$gui = file_get_contents("static/modules/cuentacorrienteclientecredito/consultar.html");
 		$lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_credito = file_get_contents("static/modules/cuentacorrienteclientecredito/tbl_credito.html");
