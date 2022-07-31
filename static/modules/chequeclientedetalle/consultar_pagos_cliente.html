@@ -126,15 +126,4 @@
             } ]
         } );
     });
-
-    function programarEntrega(egreso_id) {
-        var formProgramarEntrega = $.ajax({
-            url: '{url_app}/egreso/traer_formulario_entrega_ajax/' + egreso_id,
-                dataType: 'text',
-                async: false
-        }).responseText;
-
-0       document.getElementById("div_contenido").innerHTML = formProgramarEntrega;
-        $('#sistema_alertas').modal('show');
-    }
 </script>
