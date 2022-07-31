@@ -24,8 +24,6 @@ class CuentaCorrienteClienteCreditoController {
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
 
-		print_r($montos_cuentacorriente);exit;
-
 		$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 		$from = "cuentacorrienteclientecredito cccc";
 		$where = "cccc.cliente_id = {$arg} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
