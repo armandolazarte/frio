@@ -1,6 +1,7 @@
 <?php
 require_once "modules/cuentacorrienteclientecredito/model.php";
 require_once "modules/cuentacorrienteclientecredito/view.php";
+require_once "modules/cliente/model.php";
 
 
 class CuentaCorrienteClienteCreditoController {
