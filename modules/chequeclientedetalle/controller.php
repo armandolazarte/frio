@@ -39,10 +39,11 @@ class ChequeClienteDetalleController {
 
 			if (is_array($sobrantecheque) AND !empty($sobrantecheque)) {
 				$detallecheque_collection[$clave]['CREDITO'] = $sobrantecheque[0]['SOBRANTE'];
+				$detallecheque_collection[$clave]['TOTAL'] = round(($valor['PAGO'] + $sobrantecheque[0]['SOBRANTE']) , 2);
 			} else {
 				$detallecheque_collection[$clave]['CREDITO'] = 0;
+				$detallecheque_collection[$clave]['TOTAL'] = round($valor['PAGO'], 2);
 			}
-
 		}
 
 		print_r($detallecheque_collection);
