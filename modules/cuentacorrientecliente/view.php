@@ -220,6 +220,7 @@ class CuentaCorrienteClienteView extends View {
 		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes_array, $render);
 		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
 		$render = str_replace('{anio_actual}', date('Y'), $render);
+		$render = str_replace('{fecha_sys}', date('Y-m-d'), $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($array_cuentacorriente, $render);
 		$render = $this->render_breadcrumb($render);
