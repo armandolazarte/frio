@@ -2,8 +2,8 @@
 
 
 class CuentaCorrienteClienteCreditoView extends View {
-	function consultar_pagos_cliente($credito_collection, $obj_cliente) {
-		$gui = file_get_contents("static/modules/cuentacorrienteclientecredito/consultar_pagos_cliente.html");
+	function consultar($credito_collection, $obj_cliente) {
+		$gui = file_get_contents("static/modules/cuentacorrienteclientecredito/consultar.html");
 		$tbl_credito = file_get_contents("static/modules/cuentacorrienteclientecredito/tbl_credito.html");
 		$tbl_credito = $this->render_regex_dict('TBL_CUENTACORRIENTECLIENTECREDITO', $tbl_credito, $credito_collection);
 

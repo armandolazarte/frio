@@ -10,7 +10,7 @@ class CuentaCorrienteClienteCreditoController {
 		$this->view = new CuentaCorrienteClienteCreditoView();
 	}
 
-	function consultar_pagos_cliente($arg) {
+	function consultar($arg) {
 		SessionHandler()->check_session();
 		$cliente_id = $arg;
 
@@ -23,7 +23,7 @@ class CuentaCorrienteClienteCreditoController {
 		$where = "cccc.cliente_id = {$cliente_id}";
 		$credito_collection = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 
-		$this->view->consultar_pagos_cliente($credito_collection, $cm);
+		$this->view->consultar($credito_collection, $cm);
 	}
 }
 ?>
