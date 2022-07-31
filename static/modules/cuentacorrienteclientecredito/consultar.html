@@ -166,4 +166,18 @@
           , "iDisplayLength":20
         } );
     } );
+
+    function verCuentasCorrientes() {
+        document.getElementById("div_cuentascorrientes").style.display = "inline-block";
+        document.getElementById("div_movimientos").style.display = "none";
+        document.getElementById("btn_cuentascorrientes").style.display = "none";
+        document.getElementById("btn_movimientos").style.display = "inline-block";  
+    }
+
+    function verMovimientos() {
+        document.getElementById("div_cuentascorrientes").style.display = "none";
+        document.getElementById("div_movimientos").style.display = "inline-block";
+        document.getElementById("btn_cuentascorrientes").style.display = "inline-block";
+        document.getElementById("btn_movimientos").style.display = "none";  
+    }
 </script>
