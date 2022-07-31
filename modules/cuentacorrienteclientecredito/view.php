@@ -2,11 +2,23 @@
 
 
 class CuentaCorrienteClienteCreditoView extends View {
-	function consultar($credito_collection, $montos_cuentacorriente, $importe_cuentacorrienteclientecredito, $obj_cliente) {
+	function consultar($cuentascorrientes_collection, $credito_collection, $montos_cuentacorriente, $importe_cuentacorrienteclientecredito, $obj_cliente) {
 		$gui = file_get_contents("static/modules/cuentacorrienteclientecredito/consultar.html");
 		$lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
+		$tbl_cuentascorrientes = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
 		$tbl_credito = file_get_contents("static/modules/cuentacorrienteclientecredito/tbl_credito.html");
 		$tbl_credito = $this->render_regex_dict('TBL_CUENTACORRIENTECLIENTECREDITO', $tbl_credito, $credito_collection);
+
+		foreach ($cuentascorrientes_collection as $clave=>$valor) {
+			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
+			$ingreso = (is_null($valor['INGRESO'])) ? 0 : round($valor['INGRESO'],2);
+			$cuenta = round(($ingreso - $deuda),2);
+			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
+			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
+			$class = ($cuenta >= 0) ? 'info' : 'danger';
+			$cuentascorrientes_collection[$clave]['CUENTA'] = abs($cuenta);
+			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
+		}
 
 		$obj_cliente->codigo = str_pad($obj_cliente->cliente_id, 5, '0', STR_PAD_LEFT);
 		if ($obj_cliente->documentotipo->denominacion == 'CUIL' OR $obj_cliente->documentotipo->denominacion == 'CUIT') {
@@ -37,9 +49,11 @@ class CuentaCorrienteClienteCreditoView extends View {
 									   '{cuentacorriente-class}'=>$class,
 									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
 
+		$tbl_cuentascorrientes = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentascorrientes, $cuentascorrientes_collection);
 		$lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $lst_infocontacto, $infocontacto_collection);
 		$render = str_replace('{lst_infocontacto}', $lst_infocontacto, $gui);
 		$render = str_replace('{tbl_credito}', $tbl_credito, $render);
+		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes, $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($obj_vendedor, $render);
 		$render = $this->render($array_cuentacorriente, $render);
