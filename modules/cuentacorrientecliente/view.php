@@ -208,7 +208,8 @@ class CuentaCorrienteClienteView extends View {
 		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
-									   '{cuentacorriente-class}'=>$class);
+									   '{cuentacorriente-class}'=>$class,
+									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
 
 		$gui_lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $gui_lst_infocontacto, $infocontacto_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
@@ -219,7 +220,6 @@ class CuentaCorrienteClienteView extends View {
 		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes_array, $render);
 		$render = str_replace('{slt_cobrador}', $gui_slt_cobrador, $render);
 		$render = str_replace('{anio_actual}', date('Y'), $render);
-		$render = str_replace('{cuentacorrienteclientecredito-importe}', round($importe_cuentacorrienteclientecredito, 2), $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($array_cuentacorriente, $render);
 		$render = $this->render_breadcrumb($render);
