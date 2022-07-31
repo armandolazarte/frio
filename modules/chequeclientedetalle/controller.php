@@ -24,6 +24,26 @@ class ChequeClienteDetalleController {
 		$where = "ccc.cliente_id = {$cliente_id}";
 		$chequeclientedetalle_collection = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select);
 
+		$select = "ccd.numero AS CHEQUE, ROUND((SUM(ccc.ingreso)), 2) AS PAGO";
+		$from = "chequeclientedetalle ccd INNER JOIN cuentacorrientecliente ccc ON ccd.cuentacorrientecliente_id = ccc.cuentacorrientecliente_id";
+		$where = "ccc.cliente_id = {$cliente_id}";
+		$groupby = "ccd.numero";
+		$detallecheque_collection = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select, $groupby);
+
+		foreach ($detallecheque_collection as $clave=>$valor) {
+			$num_cheque = $valor['CHEQUE'];
+			$select = "cccc.chequeclientedetalle_id AS CHECLIDETID, ccd.numero AS CHEQUE, cccc.movimiento SOBRANTE";
+			$from = "cuentacorrienteclientecredito cccc INNER JOIN chequeclientedetalle ccd ON cccc.chequeclientedetalle_id = ccd.chequeclientedetalle_id";
+			$where = "ccd.numero = {$num_cheque}";
+			$sobrantecheque = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+
+			print_r($sobrantecheque);
+
+		}
+
+		exit;
+
+
 		$this->view->consultar_pagos_cliente($chequeclientedetalle_collection, $cm);
 	}
 }
