@@ -365,6 +365,10 @@
         $('#tbl_cuentacorriente').dataTable( {
             "aaSorting": [[ 0, "desc" ]]
             , "iDisplayLength":20
+            , columnDefs: [ {
+                targets: 2,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
+            } ]
         } );
     } );
 
