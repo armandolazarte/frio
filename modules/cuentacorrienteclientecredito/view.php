@@ -21,6 +21,7 @@ class CuentaCorrienteClienteCreditoView extends View {
 		$infocontacto_collection = $obj_cliente->infocontacto_collection;
 		unset($obj_cliente->vendedor, $obj_cliente->flete, $obj_cliente->infocontacto_collection, $obj_vendedor->infocontacto_collection, $infocontacto_collection[2]);
 		$obj_cliente = $this->set_dict($obj_cliente);
+		$obj_vendedor = $this->set_dict($obj_vendedor);
 
 		$deuda = (is_null($montos_cuentacorriente[0]['DEUDA'])) ? 0 : $montos_cuentacorriente[0]['DEUDA'];
 		$ingreso = (is_null($montos_cuentacorriente[0]['INGRESO'])) ? 0 : $montos_cuentacorriente[0]['INGRESO'];
@@ -33,12 +34,14 @@ class CuentaCorrienteClienteCreditoView extends View {
 		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
-									   '{cuentacorriente-class}'=>$class);
+									   '{cuentacorriente-class}'=>$class,
+									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
 
 		$lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $lst_infocontacto, $infocontacto_collection);
 		$render = str_replace('{lst_infocontacto}', $gui_lst_infocontacto, $gui);
 		$render = str_replace('{tbl_credito}', $tbl_credito, $render);
 		$render = $this->render($obj_cliente, $render);
+		$render = $this->render($obj_vendedor, $render);
 		$render = $this->render($array_cuentacorriente, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
