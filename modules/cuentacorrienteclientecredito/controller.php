@@ -44,7 +44,7 @@ class CuentaCorrienteClienteCreditoController {
 		$where = "cccc.cliente_id = {$cliente_id}";
 		$credito_collection = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 
-		$this->view->consultar($credito_collection, $montos_cuentacorriente, $importe_cuentacorrienteclientecredito $cm);
+		$this->view->consultar($credito_collection, $montos_cuentacorriente, $importe_cuentacorrienteclientecredito, $cm);
 	}
 }
 ?>
