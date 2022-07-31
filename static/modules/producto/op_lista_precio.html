@@ -90,6 +90,32 @@
             </form>
         </div>
     </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Por lista de Precio</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <form class="form" id="descargar_listaprecio_proveedor" method="post" action="{url_app}/producto/descargar_lista_precio_tipo">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label>Lista de Precio</label>
+                        <select class="form-control m-bot15" name="listaprecio" id="listaprecio" required>
+                            {slt_listaprecio}
+                        </select>
+                    </div>
+                    <input type="hidden" name="filtro" value="2">
+                    <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 14px;" onClick="marcaListaPrecio();">
+                        <i class="fa fa-download"></i> DESCARGAR LISTA
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <!-- Datatables -->
 <script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>

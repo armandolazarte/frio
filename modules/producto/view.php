@@ -72,7 +72,7 @@ class ProductoView extends View {
 	function lista_precio($producto_collection, $productomarca_collection, $proveedor_collection, $listaprecio_collection) {
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		if ($user_level < 3) {
-			$gui = file_get_contents("static/modules/producto/lista_precio.html");
+			$gui = file_get_contents("static/modules/producto/op_lista_precio.html");
 			$tbl_listaprecio_array = file_get_contents("static/modules/producto/op_tbl_listaprecio_array.html");			
 		} else {
 			$gui = file_get_contents("static/modules/producto/lista_precio.html");
