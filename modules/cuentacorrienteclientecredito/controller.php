@@ -20,9 +20,11 @@ class CuentaCorrienteClienteCreditoController {
 
 		$select = "(SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
-		$where = "ccc.cliente_id = {$arg}";
+		$where = "ccc.cliente_id = {$cliente_id}";
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
+
+		print_r($montos_cuentacorriente);exit;
 
 		$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 		$from = "cuentacorrienteclientecredito cccc";
