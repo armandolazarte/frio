@@ -57,13 +57,29 @@
             </button>
         </div>
         <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
-            <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
+            <button type="button" class="btn btn-dark remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
                 <i class="fa fa-usd"></i> Registrar Venta
             </button>
         </div>
         <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
-            <button type="button" class="btn btn-danger" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/listar_cuentas/{cliente-cliente_id}'">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/listar_cuentas/{cliente-cliente_id}'">
                 <i class="fa fa-table"></i> Listar Cuentas
+            </button>
+        </div>
+
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/consultar_credito/{cliente-cliente_id}'">
+                <i class="fa fa-table"></i> Movimientos Crédito
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/chequeclientedetalle/consultar_pagos_cliente/{cliente-cliente_id}'">
+                <i class="fa fa-table"></i> Ver Cheques
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/transferenciaclientedetalle/consultar_pagos_cliente/{cliente-cliente_id}'">
+                <i class="fa fa-table"></i> Ver Transferencias
             </button>
         </div>
     </div>
