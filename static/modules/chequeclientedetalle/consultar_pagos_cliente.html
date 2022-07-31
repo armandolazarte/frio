@@ -121,7 +121,7 @@
             "aaSorting": [[ 0, "desc" ]],
             "iDisplayLength":10,
             columnDefs: [ {
-                targets: 1,
+                targets: 0,
                 render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
             } ]
         } );
@@ -134,7 +134,7 @@
                 async: false
         }).responseText;
 
-        document.getElementById("div_contenido").innerHTML = formProgramarEntrega;
+0       document.getElementById("div_contenido").innerHTML = formProgramarEntrega;
         $('#sistema_alertas').modal('show');
     }
 </script>
