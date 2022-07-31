@@ -38,7 +38,7 @@ class CuentaCorrienteClienteCreditoView extends View {
 									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
 
 		$lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $lst_infocontacto, $infocontacto_collection);
-		$render = str_replace('{lst_infocontacto}', $gui_lst_infocontacto, $gui);
+		$render = str_replace('{lst_infocontacto}', $lst_infocontacto, $gui);
 		$render = str_replace('{tbl_credito}', $tbl_credito, $render);
 		$render = $this->render($obj_cliente, $render);
 		$render = $this->render($obj_vendedor, $render);
