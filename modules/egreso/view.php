@@ -321,15 +321,49 @@ class EgresoView extends View {
 		print $template;
 	}
 
-	function consultar($egresodetalle_collection, $cuentacorrientecliente_collection, $obj_egreso, $egresoafip, $notacredito_id) {
+	function consultar($egresodetalle_collection, $cuentacorrientecliente_collection, $obj_egreso, $egresoafip, $notacredito_id, $tipofactura_id) {
 		$gui = file_get_contents("static/modules/egreso/consultar.html");
 		$tbl_egresodetalle_array = file_get_contents("static/modules/egreso/tbl_egresodetalle_array.html");
-		$tbl_egresodetalle_array = $this->render_regex_dict('TBL_EGRESODETALLE', $tbl_egresodetalle_array, $egresodetalle_collection);
 		
+		if ($tipofactura_id == 1 OR $tipofactura_id == 3) {
+			foreach ($egresodetalle_collection as $clave=>$valor) {
+				//ALICUOTA IVA
+	            $alicuota_iva = 1 + ($valor['IVA'] / 100);
+	            //PVP
+	            $pvp = $valor['COSTO'];
+	            //VALOR DESCUENTO PVP
+	            $valor_descuento_pvp = $valor['DESCUENTO'] * $pvp / 100;
+	            //PVP CON DESCUENTO
+	            $pvp_descuento = round(($pvp - $valor_descuento_pvp), 2);
+	            //IMPORTE TOTAL
+	            $importe_total = $importe_total + ($pvp_descuento * $valor['CANTIDAD']);
+	            //UNITARIO SIN IVA
+	            $unitario_sin_iva = round(($pvp / $alicuota_iva), 2);
+	            //VALOR DESCUENTO
+	            $valor_descuento = $valor['DESCUENTO'] * $unitario_sin_iva / 100;
+	            //UNITARIO SIN IVA MENOS DESCUENTO
+	            $unitario_sin_iva_descuento = round(($unitario_sin_iva - $valor_descuento), 2);
+	            //TOTAL POR LINEA POR UNITARIO
+	            $total_unitario_cantidad = $unitario_sin_iva_descuento * $valor['CANTIDAD'];
+	            //SUBTOTAL
+	            $subtotal = $subtotal + $total_unitario_cantidad;
+	            //VALORES FINALES
+	            $egresodetalle_collection[$clave]['UNITARIO'] = round($unitario_sin_iva, 2);
+	            $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
+	            $egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
+			}
+
+			$importe_iva = round(($subtotal * 0.21), 2);
+	        $obj_egreso->importe_iva = round(($subtotal * 0.21), 2);
+	        $obj_egreso->subtotal = round($subtotal, 2);
+	        $obj_egreso->importe_total = round(($importe_iva + $subtotal), 2);
+		}
+
 		$tipofactura_cliente_nomenclatura = $obj_egreso->cliente->tipofactura->nomenclatura;
 		$tipofactura_cliente_id = $obj_egreso->cliente->tipofactura->tipofactura_id;
-		unset($obj_egreso->cliente->infocontacto_collection, $obj_egreso->vendedor->infocontacto_collection, $obj_egreso->cliente->flete->infocontacto_collection,
-			  $obj_egreso->cliente->vendedor->infocontacto_collection, $obj_egreso->egresoentrega->flete->infocontacto_collection);
+		
+		unset($obj_egreso->cliente->infocontacto_collection, $obj_egreso->vendedor->infocontacto_collection, $obj_egreso->cliente->flete->infocontacto_collection, $obj_egreso->cliente->vendedor->infocontacto_collection, $obj_egreso->egresoentrega->flete->infocontacto_collection);
+
 		$obj_egreso->punto_venta = str_pad($obj_egreso->punto_venta, 4, '0', STR_PAD_LEFT);
 		$obj_egreso->numero_factura = str_pad($obj_egreso->numero_factura, 8, '0', STR_PAD_LEFT);
 		$obj_egreso->egresocomision->valor_abonado = round($obj_egreso->egresocomision->valor_abonado, 2);
@@ -337,23 +371,8 @@ class EgresoView extends View {
 		$btn_entrega_display = ($estadoentrega_id == 1 OR $estadoentrega_id == 2) ? 'block' : 'none';
 		$obj_egreso->egresoentrega->btn_entrega_display = $btn_entrega_display;
 		
-		/*
-		if (!empty($cuentacorrientecliente_collection)) {
-			$obj_egreso->btn_generar_nc = 'none';
-			$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
-		} else {
-			if ($obj_egreso->egresocomision->estadocomision->estadocomision_id != 1) {
-				$obj_egreso->btn_generar_nc = 'none';
-				$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
-			} else {
-				$obj_egreso->btn_generar_nc = ($notacredito_id == 0) ? 'block' : 'none';
-				$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
-			}
-		}
-		*/
-
+		
 		$obj_egreso->btn_generar_nc = ($notacredito_id == 0) ? 'block' : 'none';
-		//$obj_egreso->btn_generar_nc = ($user_level < 2) ? 'none' : $obj_egreso->btn_generar_nc;
 		$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
 
 		$obj_egreso->div_facturarafip_display = (empty($egresoafip)) ? 'inline-block' : 'none';
@@ -366,6 +385,8 @@ class EgresoView extends View {
 		if (isset($egresoafip['PUNTO_VENTA'])) $egresoafip['PUNTO_VENTA'] = str_pad($egresoafip['PUNTO_VENTA'], 4, '0', STR_PAD_LEFT);
 		if (isset($egresoafip['NUMERO_FACTURA'])) $egresoafip['NUMERO_FACTURA'] = str_pad($egresoafip['NUMERO_FACTURA'], 8, '0', STR_PAD_LEFT);
 		$egresoafip = $this->set_dict_array($egresoafip);
+
+		$tbl_egresodetalle_array = $this->render_regex_dict('TBL_EGRESODETALLE', $tbl_egresodetalle_array, $egresodetalle_collection);
 
 		$render = str_replace('{tbl_egresodetalle}', $tbl_egresodetalle_array, $gui);
 		$render = str_replace('{notacredito-notacredito_id}', $notacredito_id, $render);

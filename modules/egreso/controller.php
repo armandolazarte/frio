@@ -288,7 +288,7 @@ class EgresoController {
 			$this->model->numero_factura = $egresoafip['NUMERO_FACTURA'];
 		}
 
-		$this->view->consultar($egresodetalle_collection, $cuentacorrientecliente_collection, $this->model, $egresoafip, $notacredito_id);
+		$this->view->consultar($egresodetalle_collection, $cuentacorrientecliente_collection, $this->model, $egresoafip, $notacredito_id, $tipofactura_id);
 	}
 
 	function prueba_consultar($arg) {
