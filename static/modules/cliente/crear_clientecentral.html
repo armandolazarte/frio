@@ -38,7 +38,7 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <table id="tbl_condicioniva" class="table table-striped table-bordered">
+                <table id="tbl_cliente" class="table table-striped table-bordered">
                     <thead>
                         <tr style="font-size: 12px;">
                             <th></th>
@@ -57,7 +57,7 @@
     <div class="col-md-4 col-sm-12 col-xs-12">
         <div class="x_panel">
             <div class="x_title">
-                <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Seleccionar clientes</h2>
+                <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Clientes del arreglo</h2>
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     <li><a class="close-link"><i class="fa fa-close"></i></a></li>
@@ -65,7 +65,16 @@
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
-                <div class="col-md-12 col-sm-12 col-xs-12" id="div_visor_clientes"></div>
+                <table class="table" id="tbl_array_clientes">
+                    <thead>
+                        <tr style="font-size: 13px;">
+                            <th>COD</th>
+                            <th>Cliente</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTblCliente"></tbody>
+                </table>
                 <div class="col-lg-12" id="div_array_clientes" style="margin-top: 2%;" align="right">
                     <a href="#" class="btn btn-app" onclick="confirma_formulario(1, '')"> <i class="fa fa-save"></i> Agregar </a>
                 </div>
@@ -80,7 +89,7 @@
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
-        $('#tbl_condicioniva').dataTable( {
+        $('#tbl_cliente').dataTable( {
             "aaSorting": [[ 0, "asc" ]]
           , "iDisplayLength":10
         } );
@@ -90,8 +99,40 @@
 
     function agregarCliente(cliente_id) {
         var flag = array_ids.indexOf(cliente_id);
-
+        var codigo = document.getElementById('tdTblChkCodigo_' + cliente_id).innerHTML;
+        var descripcion = document.getElementById('tdTblChkRazonSocial_' + cliente_id).innerHTML; 
+        
         if(parseInt(flag) === -1) {
+            var bodyTblCliente = document.getElementById('bodyTblCliente');
+
+            /* FILA */
+            var trTblCliente = document.createElement("tr");
+            trTblCliente.setAttribute("id", "idTrTbl_" + cliente_id);
+
+            var tdTblCodigo = document.createElement("td");
+            var tdTblDescripcion = document.createElement("td");
+            var tdTblBtnQuitar = document.createElement("td");
+            
+            var btnQuitar = document.createElement("a");
+            btnQuitar.setAttribute("href", "#");
+            btnQuitar.setAttribute("id", "btnQuitar_" + cliente_id);
+            btnQuitar.setAttribute("class", "btn btn-danger btn-xs");
+            btnQuitar.setAttribute("onClick", "quitarCliente(" + cliente_id + ");");
+            var iconQuitar = document.createElement("i");
+            iconQuitar.setAttribute("class", "fa fa-trash-o");
+            btnQuitar.appendChild(iconQuitar);
+
+            var txtCodigo = document.createTextNode(codigo);
+            var txtDescripcion = document.createTextNode(descripcion);
+                
+            tdTblCodigo.appendChild(txtCodigo);
+            tdTblDescripcion.appendChild(txtDescripcion);
+            tdTblBtnQuitar.appendChild(btnQuitar);
+
+            trTblCliente.appendChild(tdTblCodigo);
+            trTblCliente.appendChild(tdTblDescripcion);
+            trTblCliente.appendChild(tdTblBtnQuitar);
+            
             /* ARRAY */
             var div_array_clientes = document.getElementById('div_array_clientes');
             var inputClienteId = document.createElement("input");
