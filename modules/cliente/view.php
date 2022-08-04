@@ -158,5 +158,15 @@ class ClienteView extends View {
 		$template = $this->render_template($render);
 		print $template;
 	}
+
+	function crear_clientecentral($cliente_collection) {
+		$gui = file_get_contents("static/modules/cliente/crear_clientecentral.html");
+		$tbl_cliente = file_get_contents("static/modules/cliente/check_cliente_ajax.html");
+		$tbl_cliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente, $cliente_collection);
+		$render = str_replace('{tbl_cliente}', $tbl_cliente, $gui);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
 }
 ?>

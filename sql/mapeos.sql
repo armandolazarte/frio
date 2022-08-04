@@ -843,3 +843,26 @@ CREATE TABLE IF NOT EXISTS cuentacorrienteclientecredito (
     , usuario_id INT(11)
     , INDEX (usuario_id)
 ) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS clientecentral (
+    clientecentral_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , fecha_creacion DATE
+    , fecha_modificacion DATE
+    , denominacion VARCHAR(250)
+    , cliente_id INT(11)
+    , INDEX (cliente_id)
+    , usuario_id INT(11)
+    , INDEX (usuario_id)
+) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS clientecentralcliente (
+    clientecentralcliente_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , fecha_creacion DATE
+    , fecha_modificacion DATE
+    , clientecentral_id INT(11)
+    , INDEX (clientecentral_id)
+    , cliente_id INT(11)
+    , INDEX (cliente_id)
+) ENGINE=InnoDb;
