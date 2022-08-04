@@ -62,9 +62,10 @@ class FacturaPDF extends View {
         }
 
         //$obj_egreso->importe_iva = round(($importe_total - $subtotal), 2);
+        $importe_iva = round(($subtotal * 0.21), 2);
         $obj_egreso->importe_iva = round(($subtotal * 0.21), 2);
         $obj_egreso->subtotal = round($subtotal, 2);
-        $obj_egreso->importe_total = round(($obj_egreso->importe_iva + $obj_egreso->subtotal), 2);
+        $obj_egreso->importe_total = round(($importe_iva + $subtotal), 2);
         //$obj_egreso->importe_total = round($importe_total, 2);
 
         $obj_egreso = $this->set_dict($obj_egreso);
