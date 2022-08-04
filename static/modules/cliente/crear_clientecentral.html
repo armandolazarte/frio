@@ -55,8 +55,21 @@
         </div>
     </div>
     <div class="col-md-4 col-sm-12 col-xs-12">
-        <div class="col-lg-12" id="div_array_clientes" style="margin-top: 2%;" align="right">
-            <a href="#" class="btn btn-app" onclick="confirma_formulario(1, '')"> <i class="fa fa-save"></i> Agregar </a>
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Seleccionar clientes</h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="col-md-12 col-sm-12 col-xs-12" id="div_visor_clientes"></div>
+                <div class="col-lg-12" id="div_array_clientes" style="margin-top: 2%;" align="right">
+                    <a href="#" class="btn btn-app" onclick="confirma_formulario(1, '')"> <i class="fa fa-save"></i> Agregar </a>
+                </div>
+            </div>
         </div>
     </div>
 </form>
@@ -72,4 +85,21 @@
           , "iDisplayLength":10
         } );
     } );
+
+    array_ids = new Array();
+
+    function agregarCliente(cliente_id) {
+        var flag = array_ids.indexOf(cliente_id);
+
+        if(parseInt(flag) === -1) {
+            /* ARRAY */
+            var div_array_clientes = document.getElementById('div_array_clientes');
+            var inputClienteId = document.createElement("input");
+            inputClienteId.setAttribute("type", "hidden");
+            inputClienteId.setAttribute("name", "clientes[]");
+            inputClienteId.setAttribute("id", "cliente_id_" + cliente_id);
+            inputClienteId.setAttribute("value", cliente_id);
+            div_array_clientes.appendChild(inputClienteId);
+        }
+    }
 </script>
