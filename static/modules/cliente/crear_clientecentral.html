@@ -101,7 +101,7 @@
         var flag = array_ids.indexOf(cliente_id);
         var codigo = document.getElementById('tdTblChkCodigo_' + cliente_id).innerHTML;
         var descripcion = document.getElementById('tdTblChkRazonSocial_' + cliente_id).innerHTML; 
-        
+
         if(parseInt(flag) === -1) {
             var bodyTblCliente = document.getElementById('bodyTblCliente');
 
@@ -140,7 +140,10 @@
             inputClienteId.setAttribute("name", "clientes[]");
             inputClienteId.setAttribute("id", "cliente_id_" + cliente_id);
             inputClienteId.setAttribute("value", cliente_id);
+            
             div_array_clientes.appendChild(inputClienteId);
+            bodyTblCliente.appendChild(trTblCliente);
+            
             array_ids.push(cliente_id);
         }
     }
