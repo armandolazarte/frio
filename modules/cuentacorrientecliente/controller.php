@@ -10,6 +10,7 @@ require_once "modules/chequeclientedetalle/model.php";
 require_once "modules/transferenciaclientedetalle/model.php";
 require_once "modules/retencionclientedetalle/model.php";
 require_once "modules/cuentacorrienteclientecredito/model.php";
+require_once "modules/clientecentral/model.php";
 require_once "tools/cuentaCorrienteClientePDFTool.php";
 
 
