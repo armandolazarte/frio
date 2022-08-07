@@ -106,7 +106,7 @@ class CuentaCorrienteClienteController {
 			if ($valor->oculto == 1) unset($vendedor_collection[$clave]);
 		}
 		
-		$this->view->panel($clientecentral_collection, $totales_array, $vendedor_collection);
+		$this->view->panel_centrales($clientecentral_collection, $totales_array, $vendedor_collection);
 	}
 
 	function vdr_panel() {
