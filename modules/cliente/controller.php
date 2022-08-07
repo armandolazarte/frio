@@ -13,6 +13,7 @@ require_once "modules/listaprecio/model.php";
 require_once "modules/categoriacliente/model.php";
 require_once "modules/clientecentral/model.php";
 require_once "modules/clientecentralcliente/model.php";
+require_once "modules/cuentacorrienteclientecredito/model.php";
 
 
 class ClienteController {
