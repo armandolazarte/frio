@@ -161,7 +161,7 @@ class ClienteView extends View {
 
 	function listar_centrales($clientecentral_collection) {
 		$gui = file_get_contents("static/modules/cliente/listar_clientecentral.html");
-		$tbl_clientecentral = file_get_contents("static/modules/cliente/check_cliente_ajax.html");
+		$tbl_clientecentral = file_get_contents("static/modules/cliente/tbl_clientecentral.html");
 		$tbl_clientecentral = $this->render_regex_dict('TBL_CLIENTECENTRAL', $tbl_clientecentral, $clientecentral_collection);
 		$render = str_replace('{tbl_clientecentral}', $tbl_clientecentral, $gui);
 		$render = $this->render_breadcrumb($render);
