@@ -168,5 +168,18 @@ class ClienteView extends View {
 		$template = $this->render_template($render);
 		print $template;
 	}
+
+	function consultar_clientecentral($clientecentralcliente_collection, $obj_clientecentral) {
+		$gui = file_get_contents("static/modules/cliente/consultar_clientecentral.html");
+		$tbl_clientecentralcliente = file_get_contents("static/modules/cliente/tbl_clientecentralcliente.html");
+		$tbl_clientecentralcliente = $this->render_regex('TBL_CLIENTE', $tbl_clientecentralcliente, $clientecentralcliente_collection);
+
+		$obj_clientecentral = $this->set_dict($obj_clientecentral);
+		$render = str_replace('{tbl_clientecentralcliente}', $tbl_clientecentralcliente, $gui);
+		$render = $this->render($obj_clientecentral, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
 }
 ?>

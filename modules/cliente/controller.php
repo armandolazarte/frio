@@ -316,7 +316,7 @@ class ClienteController {
 			$cccm->save();
 		}
 		
-		$this->view->consultar_clientecentral($clientecentral_id);
+		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
 	}
 
 	function consultar_clientecentral($arg) {
@@ -330,10 +330,7 @@ class ClienteController {
 		$from = "clientecentralcliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$where = "ccc.clientecentral_id = {$clientecentral_id}";
 		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
-
-		print_r($ccm);
-		print_r($clientecentralcliente_collection);
-		exit;
+		$this->view->consultar_clientecentral($clientecentralcliente_collection, $ccm);
 	}
 }
 ?>
