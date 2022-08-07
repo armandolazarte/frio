@@ -405,7 +405,7 @@ class ClienteController {
 		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
 	}
 
-	function actualizar _clientecentralcliente($arg) {
+	function actualizar_clientecentralcliente($arg) {
 		SessionHandler()->check_session();
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$ids = explode('@', $arg);
@@ -425,7 +425,7 @@ class ClienteController {
 		$cccm->clientecentral_id = $clientecentral_id;
 		$cccm->cliente_id = $cliente_id;
 		$cccm->save();
-		
+
 		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
 	}
 }
