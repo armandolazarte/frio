@@ -332,6 +332,7 @@ class ClienteController {
 		$where = "ccc.clientecentral_id = {$clientecentral_id}";
 		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
 
+		$importe_credito_total = 0;
 		foreach ($clientecentralcliente_collection as $clave=>$valor) {
 			$cliente_id = $valor['CLIID'];
 			if ($cliente_seleccionado == $cliente_id) {
@@ -341,7 +342,27 @@ class ClienteController {
 				$clientecentralcliente_collection[$clave]['DISPLAY_SELECT'] = 'none';
 				$clientecentralcliente_collection[$clave]['DISPLAY_BTN'] = 'inline-block';
 			}
+
+			$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+			$from = "cuentacorrienteclientecredito cccc";
+			$where = "cccc.cliente_id = {$clientes_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+			$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+			if ($max_cuentacorrienteclientecredito_id == 0) {
+				$importe_cuentacorrienteclientecredito = 0;
+			} else {
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+				$cccc->get();
+				$importe_cuentacorrienteclientecredito = $cccc->importe;
+			}
+			
+			$clientecentralcliente_collection[$clave]['CREDITO'] = $importe_cuentacorrienteclientecredito;
+			$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
 		}
+
+		$ccm->credito_disponible = $importe_credito_total;
 
 		if ($cliente_seleccionado != 0) {
 			$cm = new Cliente();
