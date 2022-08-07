@@ -147,4 +147,26 @@
             array_ids.push(cliente_id);
         }
     }
+
+    function quitarCliente(indice) {
+        var quitar = /\$/g;
+        var bodyTblCliente = document.getElementById('bodyTblCliente');
+        var trTblCliente = document.getElementById("idTrTbl_" + indice);
+        var tdTblTotal = document.getElementById("idTdTotal_" + indice);
+
+        var div_array_clientes = document.getElementById('div_array_clientes');
+        var input_cliente_id = document.getElementById('cliente_id_' + indice);
+        
+        bodyTblCliente.removeChild(trTblCliente);
+        div_array_clientes.removeChild(input_cliente_id);
+        quitarProductoArray(indice);
+    }
+
+    function quitarProductoArray(cliente_id) {    
+        array_ids.forEach(function(temp_cliente_id, index) {
+            if (cliente_id == temp_cliente_id) {
+                array_ids.splice(index, 1);
+            }
+        });
+    }
 </script>
