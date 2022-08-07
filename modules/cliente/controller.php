@@ -343,6 +343,16 @@ class ClienteController {
 			}
 		}
 
+		if ($cliente_seleccionado != 0) {
+			$cm = new Cliente();
+			$cm->cliente_id = $cliente_seleccionado;
+			$cm->get();
+
+			$ccm->cliente_razonsocial = $cm->razon_social;
+		} else {
+			$ccm->cliente_razonsocial = 'Sin Definir';
+		}
+
 		$this->view->consultar_clientecentral($clientecentralcliente_collection, $ccm);
 	}
 
@@ -375,7 +385,7 @@ class ClienteController {
 		$ccm->get();
 		$ccm->cliente_id = $cliente_id;
 		$ccm->save();
-		
+
 		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
 	}
 }

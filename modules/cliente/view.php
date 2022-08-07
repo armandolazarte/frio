@@ -175,7 +175,6 @@ class ClienteView extends View {
 		$tbl_clientecentralcliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_clientecentralcliente, $clientecentralcliente_collection);
 
 		if ($obj_clientecentral->cliente_id == 0) {
-			$gui = str_replace('{cliente-razon_social}', 'Sin Definir', $gui);
 			$gui = str_replace('{calculo_credito}', '0.00', $gui);
 		}
 
