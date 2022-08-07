@@ -358,5 +358,25 @@ class ClienteController {
 
 		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
 	}
+
+	function seleccionar_clientecentralcliente_credito($arg) {
+		SessionHandler()->check_session();
+		$ids = explode('@', $arg);
+		$clientecentral_id = $ids[0];
+		$clientecentralcliente_id = $ids[1];
+
+		$cccm = new ClienteCentralCliente();
+		$cccm->clientecentralcliente_id = $clientecentralcliente_id;		
+		$cccm->get();
+		$cliente_id = $cccm->cliente_id;
+
+		$ccm = new ClienteCentral();
+		$ccm->clientecentral_id = $clientecentral_id;
+		$ccm->get();
+		$ccm->cliente_id = $cliente_id;
+		$ccm->save();
+		
+		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
+	}
 }
 ?>
