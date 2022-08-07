@@ -400,6 +400,165 @@ class CuentaCorrienteClienteController {
 		$this->view->consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $cm, $importe_cuentacorrienteclientecredito);
 	}
 
+	function consultar_central($arg) {
+    	SessionHandler()->check_session();
+    	$clientecentral_id = $arg;
+    	$select = "cc.cliente_id AS CLIID";
+    	$from = "clientecentral cc";
+    	$where = "cc.clientecentral_id = {$clientecentral_id}";
+		$clientecentral_collection = CollectorCondition()->get('ClienteCentral', $where, 4, $from, $select);
+		$cliente_ids_array = array();
+		foreach ($clientecentral_collection as $clave=>$valor) {
+			$cliente_id = $valor['CLIID'];
+			if(!in_array($cliente_id, $cliente_ids_array)) $cliente_ids_array[] = $cliente_id;
+		}
+
+		$cliente_ids = implode(',', $cliente_ids_array);
+
+		$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
+		$groupby = "ccc.cliente_id";
+		$cuentascorrientes_collection = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select, $groupby);
+
+		$ccm = new ClienteCentral();
+		$ccm->clientecentral_id = $clientecentral_id;
+		$ccm->get();
+
+    	//$cm = new Cliente();
+    	//$cm->cliente_id = $arg;
+    	//$cm->get();
+
+		$select = "ccc.fecha AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ingresotipopago AS ING_TIP_PAG, ccc.cuentacorrientecliente_id CCCID, ccc.cliente_id AS CLIID";
+		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
+		$where = "ccc.cliente_id IN ({$cliente_ids}) AND ccc.estadomovimientocuenta != 4 AND ccc.importe != 0";
+		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+
+		$egreso_ids = array();
+		foreach ($cuentacorriente_collection as $clave=>$valor) {
+			$temp_cuentacorrientecliente_id = $valor['CCCID'];
+			$egreso_id = $valor['EID'];
+			$ingresotipopago_id = $valor['ING_TIP_PAG'];
+			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
+			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE, IF (ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2)))) >= 0, 'none', 'inline-block') AS BTN_DISPLAY";
+			$from = "cuentacorrientecliente ccc";
+			$where = "ccc.egreso_id = {$egreso_id}";
+			$array_temp = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+			
+			$balance = $array_temp[0]['BALANCE'];
+			$balance = ($balance == '-0') ? abs($balance) : $balance;
+			$balance_class = ($balance >= 0) ? 'primary' : 'danger';
+			$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
+			
+			$cuentacorriente_collection[$clave]['BALANCE'] = $new_balance;
+			$cuentacorriente_collection[$clave]['BALCAL'] = abs($balance);
+			$cuentacorriente_collection[$clave]['BCOLOR'] = $balance_class;
+			$cuentacorriente_collection[$clave]['BTN_DISPLAY'] = $array_temp[0]['BTN_DISPLAY'];
+			
+			$select = "CONCAT(tf.nomenclatura, ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) AS REFERENCIA";
+			$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+			$where = "eafip.egreso_id = {$egreso_id}";
+			$eafip = CollectorCondition()->get('EgrasoAFIP', $where, 4, $from, $select);
+			if (is_array($eafip)) {
+				$cuentacorriente_collection[$clave]['REFERENCIA'] = $eafip[0]['REFERENCIA'];
+			} else {
+				$em = new Egreso();
+				$em->egreso_id = $egreso_id;
+				$em->get();
+				$tipofactura_nomenclatura = $em->tipofactura->nomenclatura;
+				$punto_venta = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT);
+				$numero_factura = str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+				$cuentacorriente_collection[$clave]['REFERENCIA'] = "{$tipofactura_nomenclatura} {$punto_venta}-{$numero_factura}";
+			}
+
+			switch ($ingresotipopago_id) {
+				case 1:
+					$select = "ccd.chequeclientedetalle_id AS ID";
+					$from = "chequeclientedetalle ccd";
+					$where = "ccd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
+					$chequeclientedetalle_id = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select);
+					$chequeclientedetalle_id = (is_array($chequeclientedetalle_id) AND !empty($chequeclientedetalle_id)) ? $chequeclientedetalle_id[0]['ID'] : 0;
+
+					if ($chequeclientedetalle_id != 0) {
+						$btn_display_ver_tipopago = 'inline-block';
+						$btn_tipopago_id = $ingresotipopago_id;
+						$btn_movimiento_id = $chequeclientedetalle_id;
+					} else {
+						$btn_display_ver_tipopago = 'none';
+						$btn_tipopago_id = '#';
+						$btn_movimiento_id = '#';
+					}
+					break;
+				case 2:
+					$select = "tcd.transferenciaclientedetalle_id AS ID";
+					$from = "transferenciaclientedetalle tcd";
+					$where = "tcd.cuentacorrientecliente_id = {$temp_cuentacorrientecliente_id}";
+					$transferenciaclientedetalle_id = CollectorCondition()->get('TransferenciaClienteDetalle', $where, 4, $from, $select);
+					$transferenciaclientedetalle_id = (is_array($transferenciaclientedetalle_id) AND !empty($transferenciaclientedetalle_id)) ? $transferenciaclientedetalle_id[0]['ID'] : 0;
+
+					if ($transferenciaclientedetalle_id != 0) {
+						$btn_display_ver_tipopago = 'inline-block';
+						$btn_tipopago_id = $ingresotipopago_id;
+						$btn_movimiento_id = $transferenciaclientedetalle_id;
+					} else {
+						$btn_display_ver_tipopago = 'none';
+						$btn_tipopago_id = '#';
+						$btn_movimiento_id = '#';
+					}
+					break;
+				default:
+					$btn_display_ver_tipopago = 'none';
+					$btn_tipopago_id = '#';
+					$btn_movimiento_id = '#';
+					break;
+			}
+
+			$cuentacorriente_collection[$clave]['DISPLAY_VER_TIPOPAGO'] = $btn_display_ver_tipopago;
+			$cuentacorriente_collection[$clave]['BTN_TIPOPAGO_ID'] = $btn_tipopago_id;
+			$cuentacorriente_collection[$clave]['MOVID'] = $btn_movimiento_id;
+		}
+
+		$max_cuentacorrientecliente_ids = array();
+		foreach ($egreso_ids as $egreso_id) {
+			$select = "ccc.cuentacorrientecliente_id AS ID";
+			$from = "cuentacorrientecliente ccc";
+			$where = "ccc.egreso_id = {$egreso_id} ORDER BY ccc.cuentacorrientecliente_id DESC LIMIT 1";
+			$max_id = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+			if (!in_array($max_id[0]['ID'], $max_cuentacorrientecliente_ids)) $max_cuentacorrientecliente_ids[] = $max_id[0]['ID'];
+		}
+
+    	foreach ($cuentacorriente_collection as $clave=>$valor) {
+			if (!in_array($valor['CCCID'], $max_cuentacorrientecliente_ids)) $cuentacorriente_collection[$clave]['BTN_DISPLAY'] = 'none';
+		}
+			
+		$select = "(SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
+		$where = "ccc.cliente_id IN ({$cliente_ids})";
+		$groupby = "ccc.cliente_id";
+		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
+
+		$cobrador_collection = Collector()->get('Cobrador');
+		foreach ($cobrador_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);
+		}
+
+		$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+		$from = "cuentacorrienteclientecredito cccc";
+		$where = "cccc.cliente_id IN ({$cliente_ids}) ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+		$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+		$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+		if ($max_cuentacorrienteclientecredito_id == 0) {
+			$importe_cuentacorrienteclientecredito = 0;
+		} else {
+			$cccc = new CuentaCorrienteClienteCredito();
+			$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+			$cccc->get();
+			$importe_cuentacorrienteclientecredito = $cccc->importe;
+		}
+
+		$this->view->consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $cm, $importe_cuentacorrienteclientecredito);
+	}
+
 	function vdr_consultar($arg) {
     	SessionHandler()->check_session();
 		
