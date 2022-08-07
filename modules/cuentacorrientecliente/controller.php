@@ -39,6 +39,79 @@ class CuentaCorrienteClienteController {
 		$this->view->panel($cuentacorriente_collection, $totales_array, $vendedor_collection);
 	}
 
+	function panel_centrales() {
+    	SessionHandler()->check_session();
+    	$select = "cc.clientecentral_id AS CLICENID, cc.denominacion AS DENOMINACION, CASE WHEN cc.cliente_id = 0 THEN 'Sin Definir' ELSE c.razon_social END AS CLIENTE, (SELECT COUNT(ccc.clientecentral_id) FROM clientecentralcliente ccc WHERE ccc.clientecentral_id = cc.clientecentral_id) AS CANT";
+		$from = "clientecentral cc LEFT JOIN cliente c ON cc.cliente_id = c.cliente_id";
+		$clientecentral_collection = CollectorCondition()->get('ClienteCentral', NULL, 4, $from, $select);
+
+		foreach ($clientecentral_collection as $clave=>$valor) {
+			$clientecentral_id = $valor['CLICENID'];
+
+			$select = "ccc.clientecentralcliente_id AS CLICENCLIID, ccc.cliente_id AS CLIID";
+			$from = "clientecentralcliente ccc";
+			$where = "ccc.clientecentral_id = {$clientecentral_id}";
+			$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+
+			$importe_credito_total = 0;
+			$importe_deuda_total = 0;
+			if (is_array($clientecentralcliente_collection) AND !empty($clientecentralcliente_collection)) {
+				foreach ($clientecentralcliente_collection as $c=>$v) {
+					//CALCULO CREDITO
+					$cliente_id = $v['CLIID'];
+					$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+					$from = "cuentacorrienteclientecredito cccc";
+					$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+					$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+					$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+					if ($max_cuentacorrienteclientecredito_id == 0) {
+						$importe_cuentacorrienteclientecredito = 0;
+					} else {
+						$cccc = new CuentaCorrienteClienteCredito();
+						$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+						$cccc->get();
+						$importe_cuentacorrienteclientecredito = $cccc->importe;
+					}
+			
+					$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
+
+					//CALCULO DEUDA
+					$select = "ccc.cliente_id AS CID, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+					$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
+					$where = "ccc.cliente_id = {$cliente_id}";
+					$groupby = "ccc.cliente_id";
+					$estado_ctacte = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
+
+					$deuda = (is_null($estado_ctacte[0]['DEUDA'])) ? 0 : round($estado_ctacte[0]['DEUDA'],2);
+					$ingreso = (is_null($estado_ctacte[0]['INGRESO'])) ? 0 : round($estado_ctacte[0]['INGRESO'],2);
+					$cuenta = round(($ingreso - $deuda),2);
+					$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
+					$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
+					$class = ($cuenta >= 0) ? 'info' : 'danger';
+				}
+			}
+
+			$clientecentral_collection[$clave]['CUENTA'] = abs($cuenta);
+			$clientecentral_collection[$clave]['CLASS'] = $class;
+			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
+		}
+
+		print_r($clientecentral_collection);exit;
+    	
+
+		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
+		$from = "cuentacorrientecliente ccc";
+		$totales_array = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
+
+		$vendedor_collection = Collector()->get('Vendedor');
+		foreach ($vendedor_collection as $clave=>$valor) {
+			if ($valor->oculto == 1) unset($vendedor_collection[$clave]);
+		}
+		
+		$this->view->panel($cuentacorriente_collection, $totales_array, $vendedor_collection);
+	}
+
 	function vdr_panel() {
     	SessionHandler()->check_session();
     	$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];	
