@@ -206,7 +206,7 @@
         }
 
         if (flag_array == 0) {
-            if (parseInt(array_ids.length) < 1) {
+            if (array_ids.length < 1) {
                 array.push("<strong>[ERROR]</strong> Selecciones al menos dos clientes para la relación!.");
                 var mensaje = array.join("<br><br>");
                 $('#sistema_alertas').modal('show');
