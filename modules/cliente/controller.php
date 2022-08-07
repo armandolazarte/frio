@@ -290,5 +290,10 @@ class ClienteController {
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
 		$this->view->crear_clientecentral($cliente_collection);
 	}
+
+	function guardar_clientecentral() {
+		SessionHandler()->check_session();
+		print_r($_POST);exit;
+	}
 }
 ?>
