@@ -353,7 +353,12 @@ class ClienteController {
 			$ccm->cliente_razonsocial = 'Sin Definir';
 		}
 
-		$this->view->consultar_clientecentral($clientecentralcliente_collection, $ccm);
+		$select = "c.cliente_id AS CLIENTE_ID, c.codigo AS CODCLI, c.barrio AS BARRIO, CONCAT (c.razon_social, ' (', c.nombre_fantasia, ')') AS RAZON_SOCIAL, c.domicilio AS DOMICILIO";
+		$from = "cliente c";
+		$where = "c.oculto = 0";
+		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+
+		$this->view->consultar_clientecentral($clientecentralcliente_collection, $cliente_collection, $ccm);
 	}
 
 	function eliminar_clientecentralcliente($arg) {

@@ -169,10 +169,12 @@ class ClienteView extends View {
 		print $template;
 	}
 
-	function consultar_clientecentral($clientecentralcliente_collection, $obj_clientecentral) {
+	function consultar_clientecentral($clientecentralcliente_collection, $cliente_collection, $obj_clientecentral) {
 		$gui = file_get_contents("static/modules/cliente/consultar_clientecentral.html");
 		$tbl_clientecentralcliente = file_get_contents("static/modules/cliente/tbl_clientecentralcliente.html");
 		$tbl_clientecentralcliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_clientecentralcliente, $clientecentralcliente_collection);
+		$tbl_cliente = file_get_contents("static/modules/cliente/check_agregar_clientecentralcliente_ajax.html");
+		$tbl_cliente = $this->render_regex_dict('TBL_CLIENTE', $tbl_cliente, $cliente_collection);
 
 		if ($obj_clientecentral->cliente_id == 0) {
 			$gui = str_replace('{calculo_credito}', '0.00', $gui);
@@ -180,6 +182,7 @@ class ClienteView extends View {
 
 		$obj_clientecentral = $this->set_dict($obj_clientecentral);
 		$render = str_replace('{tbl_clientecentralcliente}', $tbl_clientecentralcliente, $gui);
+		$render = str_replace('{tbl_cliente}', $tbl_cliente, $render);
 		$render = $this->render($obj_clientecentral, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
