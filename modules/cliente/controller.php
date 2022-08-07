@@ -363,9 +363,17 @@ class ClienteController {
 
 	function eliminar_clientecentralcliente($arg) {
 		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$ids = explode('@', $arg);
 		$clientecentral_id = $ids[0];
 		$clientecentralcliente_id = $ids[1];
+
+		$ccm = new ClienteCentral();
+		$ccm->clientecentral_id = $clientecentral_id;
+		$ccm->get();
+		$ccm->fecha_modificacion = date('Y-m-d');
+		$ccm->usuario_id = $usuario_id;
+		$ccm->save();
 
 		$cccm = new ClienteCentralCliente();
 		$cccm->clientecentralcliente_id = $clientecentralcliente_id;
@@ -376,6 +384,7 @@ class ClienteController {
 
 	function seleccionar_clientecentralcliente_credito($arg) {
 		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$ids = explode('@', $arg);
 		$clientecentral_id = $ids[0];
 		$clientecentralcliente_id = $ids[1];
@@ -384,13 +393,39 @@ class ClienteController {
 		$cccm->clientecentralcliente_id = $clientecentralcliente_id;		
 		$cccm->get();
 		$cliente_id = $cccm->cliente_id;
-
+		
 		$ccm = new ClienteCentral();
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
 		$ccm->cliente_id = $cliente_id;
+		$ccm->fecha_modificacion = date('Y-m-d');
+		$ccm->usuario_id = $usuario_id;
 		$ccm->save();
 
+		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
+	}
+
+	function actualizar _clientecentralcliente($arg) {
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$ids = explode('@', $arg);
+		$clientecentral_id = $ids[0];
+		$cliente_id = $ids[1];
+
+		$ccm = new ClienteCentral();
+		$ccm->clientecentral_id = $clientecentral_id;
+		$ccm->get();
+		$ccm->fecha_modificacion = date('Y-m-d');
+		$ccm->usuario_id = $usuario_id;
+		$ccm->save();
+
+		$cccm = new ClienteCentralCliente();
+		$cccm->fecha_creacion = date('Y-m-d');
+		$cccm->fecha_modificacion = date('Y-m-d');
+		$cccm->clientecentral_id = $clientecentral_id;
+		$cccm->cliente_id = $cliente_id;
+		$cccm->save();
+		
 		header("Location: " . URL_APP . "/cliente/consultar_clientecentral/{$clientecentral_id}");
 	}
 }
