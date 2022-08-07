@@ -291,6 +291,40 @@ class ClienteController {
 		$from = "clientecentral cc LEFT JOIN cliente c ON cc.cliente_id = c.cliente_id";
 		$clientecentral_collection = CollectorCondition()->get('ClienteCentral', NULL, 4, $from, $select);
 
+		foreach ($clientecentral_collection as $clave=>$valor) {
+			$clientecentral_id = $valor['CLICENID'];
+
+			$select = "ccc.clientecentralcliente_id AS CLICENCLIID, ccc.cliente_id AS CLIID";
+			$from = "clientecentralcliente ccc";
+			$where = "ccc.clientecentral_id = {$clientecentral_id}";
+			$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+
+			$importe_credito_total = 0;
+			if (is_array($clientecentralcliente_collection) AND !empty($clientecentralcliente_collection)) {
+				foreach ($clientecentralcliente_collection as $c=>$v) {
+					$cliente_id = $v['CLIID'];
+					$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+					$from = "cuentacorrienteclientecredito cccc";
+					$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+					$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+					$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+					if ($max_cuentacorrienteclientecredito_id == 0) {
+						$importe_cuentacorrienteclientecredito = 0;
+					} else {
+						$cccc = new CuentaCorrienteClienteCredito();
+						$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+						$cccc->get();
+						$importe_cuentacorrienteclientecredito = $cccc->importe;
+					}
+			
+					$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
+				}
+			}
+			
+			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
+		}
+
 		print_r($clientecentral_collection);exit;
 
 	}
