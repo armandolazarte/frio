@@ -326,7 +326,7 @@ class ClienteController {
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
 
-		$select = "ccc.clientecentralcliente_id AS CLICENCLIID, c.codigo AS COD, c.razon_social AS CLIENTE, CONCAT(c.barrio, ' - ', c.domicilio) AS DOMICILIO";
+		$select = "ccc.clientecentralcliente_id AS CLICENCLIID, c.codigo AS COD, c.razon_social AS RAZSOC, CONCAT(c.barrio, ' - ', c.domicilio) AS DOMICILIO";
 		$from = "clientecentralcliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$where = "ccc.clientecentral_id = {$clientecentral_id}";
 		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
