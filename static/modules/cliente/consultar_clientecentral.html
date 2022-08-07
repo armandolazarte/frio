@@ -80,3 +80,16 @@
         </div>
     </div>
 </div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $(document).ready(function() {
+        $('#tbl_cliente').dataTable( {
+            "aaSorting": [[ 1, "asc" ]]
+          , "iDisplayLength":10
+        } );
+    } );
+</script>
