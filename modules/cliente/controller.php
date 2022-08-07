@@ -346,7 +346,7 @@ class ClienteController {
 
 			$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 			$from = "cuentacorrienteclientecredito cccc";
-			$where = "cccc.cliente_id = {$clientes_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+			$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
 			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 			$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
 
