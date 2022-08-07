@@ -326,11 +326,23 @@ class ClienteController {
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
 		$cliente_seleccionado = $ccm->cliente_id;
-		
-		$select = "ccc.clientecentralcliente_id AS CLICENCLIID, c.codigo AS COD, c.razon_social AS RAZSOC, CONCAT(c.barrio, ' - ', c.domicilio) AS DOMICILIO";
+
+		$select = "ccc.clientecentralcliente_id AS CLICENCLIID, c.codigo AS COD, c.razon_social AS RAZSOC, CONCAT(c.barrio, ' - ', c.domicilio) AS DOMICILIO, ccc.cliente_id AS CLIID";
 		$from = "clientecentralcliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 		$where = "ccc.clientecentral_id = {$clientecentral_id}";
 		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+
+		foreach ($clientecentralcliente_collection as $clave=>$valor) {
+			$cliente_id = $valor['CLIID'];
+			if ($cliente_seleccionado == $cliente_id) {
+				$clientecentralcliente_collection[$clave]['DISPLAY_SELECT'] = 'inline-block';
+				$clientecentralcliente_collection[$clave]['DISPLAY_BTN'] = 'none';
+			} else {
+				$clientecentralcliente_collection[$clave]['DISPLAY_SELECT'] = 'none';
+				$clientecentralcliente_collection[$clave]['DISPLAY_BTN'] = 'inline-block';
+			}
+		}
+
 		$this->view->consultar_clientecentral($clientecentralcliente_collection, $ccm);
 	}
 

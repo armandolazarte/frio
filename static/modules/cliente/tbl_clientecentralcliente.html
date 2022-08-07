@@ -1,9 +1,13 @@
 <!--TBL_CLIENTE-->
 <tr style="font-size: 12px;">
     <td>COD</td>
-    <td>RAZSOC</td>
+    <td>
+        RAZSOC
+        <i class="fa fa-check-circle" style="color: #1abb9c; display: DISPLAY_SELECT;"></i>
+    </td>
     <td>
         <center>
+            <button class="btn btn-success btn-xs" onclick="location.href='{url_app}/cliente/seleccionar_clientecentralcliente_credito/{clientecentral-clientecentral_id}@CLICENCLIID'" title="Seleccionar cliente para crédito" style="display: DISPLAY_BTN;"><i class="fa fa-check"></i></button>
             <button class="btn btn-danger btn-xs" onclick="confirma_formulario(4, '{url_app}/cliente/eliminar_clientecentralcliente/{clientecentral-clientecentral_id}@CLICENCLIID');" title="Eliminar relación"><i class="fa fa-trash"></i></button>
         </center>
     </td>
