@@ -11,6 +11,8 @@ require_once "modules/tipofactura/model.php";
 require_once "modules/infocontacto/model.php";
 require_once "modules/listaprecio/model.php";
 require_once "modules/categoriacliente/model.php";
+require_once "modules/clientecentral/model.php";
+require_once "modules/clientecentralcliente/model.php";
 
 
 class ClienteController {
@@ -293,7 +295,45 @@ class ClienteController {
 
 	function guardar_clientecentral() {
 		SessionHandler()->check_session();
-		print_r($_POST);exit;
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+
+		$ccm = new ClienteCentral();
+		$ccm->fecha_creacion = date('Y-m-d');
+		$ccm->fecha_modificacion = date('Y-m-d');
+		$ccm->denominacion = filter_input(INPUT_POST, 'denominacion');
+		$ccm->cliente_id = 0;
+		$ccm->usuario_id = $usuario_id;
+		$ccm->save();
+		$clientecentral_id = $ccm->clientecentral_id;
+
+		$clientes_ids = $_POST['clientes'];
+		foreach ($clientes_ids as $cliente_id) {
+			$cccm = new ClienteCentralCliente();
+			$cccm->fecha_creacion = date('Y-m-d');
+			$cccm->fecha_modificacion = date('Y-m-d');
+			$cccm->clientecentral_id = $clientecentral_id;
+			$cccm->cliente_id = $cliente_id;
+			$cccm->save();
+		}
+		
+		$this->view->consultar_clientecentral($clientecentral_id);
+	}
+
+	function consultar_clientecentral($arg) {
+		SessionHandler()->check_session();
+		$clientecentral_id = $arg;
+		$ccm = new ClienteCentral();
+		$ccm->clientecentral_id = $clientecentral_id;
+		$ccm->get();
+
+		$select = "ccc.clientecentralcliente_id AS CLICENCLIID, c.codigo AS COD, c.razon_social AS CLIENTE, CONCAT(c.barrio, ' - ', c.domicilio) AS DOMICILIO";
+		$from = "clientecentralcliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
+		$where = "ccc.clientecentral_id = {$clientecentral_id}";
+		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+
+		print_r($ccm);
+		print_r($clientecentralcliente_collection);
+		exit;
 	}
 }
 ?>
