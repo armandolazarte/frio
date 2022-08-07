@@ -321,12 +321,11 @@ class ClienteController {
 					$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
 				}
 			}
-			
+
 			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
 		}
 
-		print_r($clientecentral_collection);exit;
-
+		$this->view->listar_centrales($clientecentral_collection);
 	}
 
 	function crear_clientecentral() {
