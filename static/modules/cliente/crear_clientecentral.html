@@ -206,17 +206,17 @@
         }
 
         if (flag_array == 0) {
-            if (array_ids.length > 0) {
-                document.getElementById('btn_cargar').style.display = "none";
-                document.getElementById('btn_cargar').disabled = true;
-                document.getElementById("formulario_guardar").submit();
-            } else {
+            if (parseInt(array_ids.length) < 1) {
                 array.push("<strong>[ERROR]</strong> Selecciones al menos dos clientes para la relación!.");
                 var mensaje = array.join("<br><br>");
                 $('#sistema_alertas').modal('show');
                 document.getElementById('btn_cargar').style.display = "block";
                 document.getElementById('btn_cargar').disabled = false;
                 document.getElementById("msj_alerta_modal").innerHTML = mensaje;
+            } else {
+                document.getElementById('btn_cargar').style.display = "none";
+                document.getElementById('btn_cargar').disabled = true;
+                document.getElementById("formulario_guardar").submit();
             }
         } else {
             document.getElementById('btn_cargar').style.display = "block";
