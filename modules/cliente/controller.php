@@ -287,7 +287,7 @@ class ClienteController {
 	// GENERADOR DE CLIENTES CENTRALES Y SUCURSALES
 	function listar_centrales() {
 		SessionHandler()->check_session();
-		$select = "cc.clientecentral_id AS CLICENID, cc.denominacion AS DENOMINACION, CASE WHEN cc.cliente_id = 0 THEN 'Sin Definir' ELSE c.razon_social END AS CLIENTE";
+		$select = "cc.clientecentral_id AS CLICENID, cc.denominacion AS DENOMINACION, CASE WHEN cc.cliente_id = 0 THEN 'Sin Definir' ELSE c.razon_social END AS CLIENTE, (SELECT COUNT(ccc.clientecentral_id) FROM clientecentralcliente ccc WHERE ccc.clientecentral_id = cc.clientecentral_id) AS CANT";
 		$from = "clientecentral cc LEFT JOIN cliente c ON cc.cliente_id = c.cliente_id";
 		$clientecentral_collection = CollectorCondition()->get('ClienteCentral', NULL, 4, $from, $select);
 
