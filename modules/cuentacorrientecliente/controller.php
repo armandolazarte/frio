@@ -77,7 +77,7 @@ class CuentaCorrienteClienteController {
 					$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
 
 					//CALCULO DEUDA
-					$select = "ccc.cliente_id AS CID, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
+					$select = "(SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
 					$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
 					$where = "ccc.cliente_id = {$cliente_id}";
 					$groupby = "ccc.cliente_id";
@@ -97,9 +97,6 @@ class CuentaCorrienteClienteController {
 			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
 		}
 
-		print_r($clientecentral_collection);exit;
-    	
-
 		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
 		$totales_array = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
@@ -109,7 +106,7 @@ class CuentaCorrienteClienteController {
 			if ($valor->oculto == 1) unset($vendedor_collection[$clave]);
 		}
 		
-		$this->view->panel($cuentacorriente_collection, $totales_array, $vendedor_collection);
+		$this->view->panel($clientecentral_collection, $totales_array, $vendedor_collection);
 	}
 
 	function vdr_panel() {

@@ -38,6 +38,31 @@ class CuentaCorrienteClienteView extends View {
 		print $template;
 	}
 
+	function panel_centrales($clientecentral_collection, $totales_array, $vendedor_collection) {
+		$gui = file_get_contents("static/modules/cuentacorrientecliente/panel_centrales.html");
+		$gui_slt_vendedor = file_get_contents("static/common/slt_vendedor.html");
+		$tbl_cuentacorriente_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_centrales_array.html");
+		$tbl_cuentacorriente_array = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentacorriente_array, $clientecentral_collection);
+
+		foreach ($vendedor_collection as $vendedor) unset($vendedor->infocontacto_collection);
+		$totales_array = $totales_array[0];
+		$totales_array['BALANCE'] = abs(round(($totales_array['TDEUDA'] - $totales_array['TINGRESO']),2));
+		$totales_array['BALANCE'] = ($totales_array['BALANCE'] > 0.5) ? $totales_array['BALANCE'] : 0;
+		$totales_array['CLASS_BALANCE'] = ($totales_array['TDEUDA'] <= $totales_array['TINGRESO']) ? "green" : "red";
+		$totales_array['TXT_BALANCE'] = ($totales_array['TDEUDA'] <= $totales_array['TINGRESO']) ? "positivo" : "negativo";
+		$totales_array = $this->set_dict_array($totales_array);
+
+		$vendedor_collection = $this->order_collection_objects($vendedor_collection, 'apellido', SORT_ASC);
+		$gui_slt_vendedor = $this->render_regex('SLT_VENDEDOR', $gui_slt_vendedor, $vendedor_collection);
+		
+		$render = str_replace('{tbl_cuentacorriente}', $tbl_cuentacorriente_array, $gui);
+		$render = str_replace('{slt_vendedor}', $gui_slt_vendedor, $render);
+		$render = $this->render($totales_array, $render);
+		$render = $this->render_breadcrumb($render);
+		$template = $this->render_template($render);
+		print $template;
+	}
+
 	function vdr_panel($cuentacorriente_collection, $totales_array) {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/vdr_panel.html");
 		$tbl_cuentacorriente_array = file_get_contents("static/modules/cuentacorrientecliente/vdr_tbl_cuentacorriente_array.html");
