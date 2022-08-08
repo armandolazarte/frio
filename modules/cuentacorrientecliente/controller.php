@@ -985,9 +985,24 @@ class CuentaCorrienteClienteController {
 				$tpdm->save();
 				break;
 			case 6:
+				$select = "ccc.clientecentral_id AS CLICENID";
+				$from = "clientecentralcliente ccc";
+				$where = "ccc.cliente_id = {$cliente_id}";
+				$clientecentral_id = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+				$clientecentral_id = (is_array($clientecentral_id) AND !empty($clientecentral_id)) ? $clientecentral_id[0]['CLICENID'] : 0;
+
+				if ($clientecentral_id != 0) {
+					$ccm = new ClienteCentral();
+					$ccm->clientecentral_id = $clientecentral_id;
+					$ccm->get();
+					$clientecredito = $ccm->cliente_id;
+				} else { 
+					$clientecredito = $cliente_id;
+				}
+
 				$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 				$from = "cuentacorrienteclientecredito cccc";
-				$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+				$where = "cccc.cliente_id = {$clientecredito} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
 				$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 				$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
 
@@ -1005,7 +1020,7 @@ class CuentaCorrienteClienteController {
 				$cccc->movimiento = round($importe, 2);
 				$cccc->cuentacorrientecliente_id = $cuentacorrientecliente_id;
 				$cccc->egreso_id = $egreso_id;
-				$cccc->cliente_id = $cliente_id;
+				$cccc->cliente_id = $clientecredito;
 				$cccc->chequeclientedetalle_id = 0;
 				$cccc->transferenciaclientedetalle_id = 0;
 				$cccc->usuario_id = $usuario_id;
