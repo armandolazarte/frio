@@ -416,11 +416,6 @@ class CuentaCorrienteClienteController {
 
 		$cliente_ids = implode(',', $cliente_ids_array);
 
-		$select = "ccc.cliente_id AS CID, c.razon_social AS CLIENTE, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 1 AND dccc.cliente_id = ccc.cliente_id) AS DEUDA, (SELECT ROUND(SUM(dccc.importe),2) FROM cuentacorrientecliente dccc WHERE dccc.tipomovimientocuenta = 2 AND dccc.cliente_id = ccc.cliente_id) AS INGRESO";
-		$from = "cuentacorrientecliente ccc INNER JOIN cliente c ON ccc.cliente_id = c.cliente_id";
-		$groupby = "ccc.cliente_id";
-		$cuentascorrientes_collection = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select, $groupby);
-
 		$ccm = new ClienteCentral();
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
@@ -570,7 +565,7 @@ class CuentaCorrienteClienteController {
 			}
 		}
 
-		$this->view->consultar_central($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $clientecentralcliente_collection, $ccm, $importe_cuentacorrienteclientecredito);
+		$this->view->consultar_central($cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $clientecentralcliente_collection, $ccm, $importe_cuentacorrienteclientecredito);
 	}
 
 	function vdr_consultar($arg) {
