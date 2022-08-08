@@ -269,6 +269,20 @@ class CuentaCorrienteClienteController {
     	$cm = new Cliente();
     	$cm->cliente_id = $arg;
     	$cm->get();
+
+    	$select = "ccc.clientecentral_id AS CLICENID";
+		$from = "clientecentralcliente ccc";
+		$where = "ccc.cliente_id = {$cliente_id}";
+		$clientecentral_id = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+		$clientecentral_id = (is_array($clientecentral_id) AND !empty($clientecentral_id)) ? $clientecentral_id[0]['CLICENID'] : 0;
+
+		if ($clientecentral_id != 0) {
+			$cm->clientecentral_id = $clientecentral_id;
+			$cm->btn_display_clientecentral = 'inline-block';
+		} else { 
+			$cm->clientecentral_id = 0;
+			$cm->btn_display_clientecentral = 'none';
+		}
     	
 		$select = "ccc.fecha AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ingresotipopago AS ING_TIP_PAG, ccc.cuentacorrientecliente_id CCCID, ccc.cliente_id AS CLIID";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
