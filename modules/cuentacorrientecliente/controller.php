@@ -1147,9 +1147,24 @@ class CuentaCorrienteClienteController {
 		}
 
 		if ($importe > 0.5) {
+			$select = "ccc.clientecentral_id AS CLICENID";
+			$from = "clientecentralcliente ccc";
+			$where = "ccc.cliente_id = {$cliente_id}";
+			$clientecentral_id = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
+			$clientecentral_id = (is_array($clientecentral_id) AND !empty($clientecentral_id)) ? $clientecentral_id[0]['CLICENID'] : 0;
+
+			if ($clientecentral_id != 0) {
+				$ccm = new ClienteCentral();
+				$ccm->clientecentral_id = $clientecentral_id;
+				$ccm->get();
+				$clientecredito = $ccm->cliente_id;
+			} else { 
+				$clientecredito = $cliente_id;
+			}
+
 			$select = "cccc.cuentacorrienteclientecredito_id AS ID";
 			$from = "cuentacorrienteclientecredito cccc";
-			$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+			$where = "cccc.cliente_id = {$clientecredito} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
 			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
 			$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
 
@@ -1162,7 +1177,7 @@ class CuentaCorrienteClienteController {
 				$cccc->movimiento = $importe;
 				$cccc->cuentacorrientecliente_id = 0;
 				$cccc->egreso_id = 0;
-				$cccc->cliente_id = $cliente_id;
+				$cccc->cliente_id = $clientecredito;
 				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) ? $chequeclientedetalle_id : 0;
 				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) ? $transferenciaclientedetalle_id : 0;
 				$cccc->usuario_id = $usuario_id;
@@ -1182,11 +1197,219 @@ class CuentaCorrienteClienteController {
 				$cccc->movimiento = $importe;
 				$cccc->cuentacorrientecliente_id = 0;
 				$cccc->egreso_id = 0;
-				$cccc->cliente_id = $cliente_id;
+				$cccc->cliente_id = $clientecredito;
+				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) ? $chequeclientedetalle_id : 0;
+				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) ? $transferenciaclientedetalle_id : 0;
+				$cccc->usuario_id = $usuario_id;
+				$cccc->save();	
+			}
+		}
+
+		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
+	}
+
+	function guardar_ingreso_cuentacorriente_conjunto_central() {
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
+		$importe = filter_input(INPUT_POST, 'importe');
+		$cobrador = filter_input(INPUT_POST, 'cobrador');
+		//$cliente_id = filter_input(INPUT_POST, 'cliente_id');
+		$clientecentral_id = filter_input(INPUT_POST, 'clientecentral_id');
+		$cuentacorrientecliente_collection = $_POST["cuentacorrientecliente"];
+
+		$egreso_ids = array();
+		foreach ($cuentacorrientecliente_collection as $clave=>$valor) {
+			$cuentacorrientecliente_id = $valor["cuentacorrientecliente_id"];
+			$cccm = new CuentaCorrienteCliente();
+			$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+			$cccm->get();
+
+			$egreso_id = $cccm->egreso_id;
+			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
+		}
+		
+		asort($egreso_ids);
+		foreach ($egreso_ids as $egreso_id) {
+			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE";
+			$from = "cuentacorrientecliente ccc";
+			$where = "ccc.egreso_id = {$egreso_id}";
+			$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+			
+			if ($importe > 0) {
+				if ($importe > abs($balance[0]['BALANCE'])) {
+					$select = "ccc.cuentacorrientecliente_id AS ID";
+					$from = "cuentacorrientecliente ccc";
+					$where = "ccc.egreso_id = {$egreso_id} AND ccc.estadomovimientocuenta IN (1,2,3)";
+					$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+					$estadomovimientocuenta = 4;
+
+					foreach ($cuentacorriente_collection as $cuentacorrientecliente) {
+						$cuentacorrientecliente_id = $cuentacorrientecliente['ID'];
+						$cccm = new CuentaCorrienteCliente();
+						$cccm->cuentacorrientecliente_id = $cuentacorrientecliente_id;
+						$cccm->get();
+						$cccm->estadomovimientocuenta = 4;
+						$cccm->save();
+					}
+
+					$em = new Egreso();
+					$em->egreso_id = $egreso_id;
+					$em->get();
+					$comprobante = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+					$comprobante .= str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+					$cliente_id = $em->cliente->cliente_id;
+
+					$this->model = new CuentaCorrienteCliente();
+					$this->model->fecha = filter_input(INPUT_POST, 'fecha');
+					$this->model->hora = date('H:i:s');
+					$this->model->referencia = "Pago de comprobante {$comprobante}";
+					$this->model->importe = abs($balance[0]['BALANCE']);
+					$this->model->ingreso = abs($balance[0]['BALANCE']);
+					$this->model->cliente_id = $cliente_id;
+					$this->model->egreso_id = $egreso_id;
+					$this->model->ingresotipopago = $ingresotipopago_id;
+					$this->model->tipomovimientocuenta = 2;
+					$this->model->estadomovimientocuenta = 4;
+					$this->model->cobrador = $cobrador;
+					$this->model->save();
+					$final_cuentacorrientecliente_id = $this->model->cuentacorrientecliente_id;
+
+					if ($ingresotipopago_id == 1) {
+						$numero_cheque = filter_input(INPUT_POST, 'numero_cheque'); 
+						$ccdm = new ChequeClienteDetalle();
+						$ccdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+						$ccdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
+						$ccdm->fecha_pago = date('Y-m-d');
+						$ccdm->banco = filter_input(INPUT_POST, 'banco');
+						$ccdm->plaza = filter_input(INPUT_POST, 'plaza');
+						$ccdm->titular = filter_input(INPUT_POST, 'titular');
+						$ccdm->documento = filter_input(INPUT_POST, 'documento');
+						$ccdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
+						$ccdm->estado = 2;
+						$ccdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$ccdm->egreso_id = $egreso_id;
+						$ccdm->save();
+						$chequeclientedetalle_id = $ccdm->chequeclientedetalle_id;
+						$referencia = "Sobrante de pago con Cheque N° {$numero_cheque}";
+					} else {
+						$numero_transferencia = filter_input(INPUT_POST, 'numero_transferencia'); 
+						$tcdm = new TransferenciaClienteDetalle();
+						$tcdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+						$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+						$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+						$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+						$tcdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$tcdm->egreso_id = $egreso_id;
+						$tcdm->save();	
+						$transferenciaclientedetalle_id = $tcdm->transferenciaclientedetalle_id;
+						$referencia = "Sobrante de pago con Transferencia N° {$numero_transferencia}";
+					}
+
+					//RESTANTE IMPORTE CHEQUE
+					$importe = $importe - abs($balance[0]['BALANCE']);
+				} else {
+					$em = new Egreso();
+					$em->egreso_id = $egreso_id;
+					$em->get();
+					$comprobante = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+					$comprobante .= str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
+					$cliente_id = $em->cliente->cliente_id;
+
+					$this->model = new CuentaCorrienteCliente();
+					$this->model->fecha = filter_input(INPUT_POST, 'fecha');
+					$this->model->hora = date('H:i:s');
+					$this->model->referencia = "Pago de comprobante {$comprobante}";
+					$this->model->importe = $importe;
+					$this->model->ingreso = $importe;
+					$this->model->cliente_id = $cliente_id;
+					$this->model->egreso_id = $egreso_id;
+					$this->model->ingresotipopago = $ingresotipopago_id;
+					$this->model->tipomovimientocuenta = 2;
+					$this->model->estadomovimientocuenta = 3;
+					$this->model->cobrador = $cobrador;
+					$this->model->save();
+					$final_cuentacorrientecliente_id = $this->model->cuentacorrientecliente_id;
+
+					if ($ingresotipopago_id == 1) {
+						$ccdm = new ChequeClienteDetalle();
+						$ccdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+						$ccdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
+						$ccdm->fecha_pago = date('Y-m-d');
+						$ccdm->banco = filter_input(INPUT_POST, 'banco');
+						$ccdm->plaza = filter_input(INPUT_POST, 'plaza');
+						$ccdm->titular = filter_input(INPUT_POST, 'titular');
+						$ccdm->documento = filter_input(INPUT_POST, 'documento');
+						$ccdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
+						$ccdm->estado = 2;
+						$ccdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$ccdm->egreso_id = $egreso_id;
+						$ccdm->save();
+						$chequeclientedetalle_id = $ccdm->chequeclientedetalle_id;
+					} else {
+						$tcdm = new TransferenciaClienteDetalle();
+						$tcdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+						$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+						$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+						$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+						$tcdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
+						$tcdm->egreso_id = $egreso_id;
+						$tcdm->save();
+						$transferenciaclientedetalle_id = $tcdm->transferenciaclientedetalle_id;
+					}
+					
+					//FINALIZA IMPORTE CHEQUE
+					$importe = 0;
+				}	
+			}
+		}
+
+		if ($importe > 0.5) {
+			$ccm = new ClienteCentral();
+			$ccm->clientecentral_id = $clientecentral_id;
+			$ccm->get();
+			$clientecredito = $ccm->cliente_id;
+			
+			$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+			$from = "cuentacorrienteclientecredito cccc";
+			$where = "cccc.cliente_id = {$clientecredito} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+			$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+			$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+			if ($max_cuentacorrienteclientecredito_id == 0) {
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->fecha = date('Y-m-d');
+				$cccc->hora = date('H:i:s');
+				$cccc->referencia = $referencia;
+				$cccc->importe = $importe;
+				$cccc->movimiento = $importe;
+				$cccc->cuentacorrientecliente_id = 0;
+				$cccc->egreso_id = 0;
+				$cccc->cliente_id = $clientecredito;
 				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) ? $chequeclientedetalle_id : 0;
 				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) ? $transferenciaclientedetalle_id : 0;
 				$cccc->usuario_id = $usuario_id;
 				$cccc->save();
+			} else {
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+				$cccc->get();
+				$importe_actual = $cccc->importe;
+				$nuevo_importe = $importe_actual + $importe;
+
+				$cccc = new CuentaCorrienteClienteCredito();
+				$cccc->fecha = date('Y-m-d');
+				$cccc->hora = date('H:i:s');
+				$cccc->referencia = $referencia;
+				$cccc->importe = $nuevo_importe;
+				$cccc->movimiento = $importe;
+				$cccc->cuentacorrientecliente_id = 0;
+				$cccc->egreso_id = 0;
+				$cccc->cliente_id = $clientecredito;
+				$cccc->chequeclientedetalle_id = ($ingresotipopago_id == 1) ? $chequeclientedetalle_id : 0;
+				$cccc->transferenciaclientedetalle_id = ($ingresotipopago_id == 2) ? $transferenciaclientedetalle_id : 0;
+				$cccc->usuario_id = $usuario_id;
+				$cccc->save();	
 			}
 		}
 
