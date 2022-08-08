@@ -1241,6 +1241,7 @@ class CuentaCorrienteClienteController {
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
 		$importe = filter_input(INPUT_POST, 'importe');
+		$importe_movimiento = filter_input(INPUT_POST, 'importe');
 		$cobrador = filter_input(INPUT_POST, 'cobrador');
 		//$cliente_id = filter_input(INPUT_POST, 'cliente_id');
 		$clientecentral_id = filter_input(INPUT_POST, 'clientecentral_id');
@@ -1315,6 +1316,7 @@ class CuentaCorrienteClienteController {
 						$ccdm->documento = filter_input(INPUT_POST, 'documento');
 						$ccdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
 						$ccdm->estado = 2;
+						$ccdm->importe = $importe_movimiento;
 						$ccdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
 						$ccdm->egreso_id = $egreso_id;
 						$ccdm->save();
@@ -1327,6 +1329,7 @@ class CuentaCorrienteClienteController {
 						$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
 						$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
 						$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+						$tcdm->importe = $importe_movimiento;
 						$tcdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
 						$tcdm->egreso_id = $egreso_id;
 						$tcdm->save();	
@@ -1370,6 +1373,7 @@ class CuentaCorrienteClienteController {
 						$ccdm->documento = filter_input(INPUT_POST, 'documento');
 						$ccdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
 						$ccdm->estado = 2;
+						$ccdm->importe = $importe_movimiento;
 						$ccdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
 						$ccdm->egreso_id = $egreso_id;
 						$ccdm->save();
@@ -1380,6 +1384,7 @@ class CuentaCorrienteClienteController {
 						$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
 						$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
 						$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+						$tcdm->importe = $importe_movimiento;
 						$tcdm->cuentacorrientecliente_id = $final_cuentacorrientecliente_id;
 						$tcdm->egreso_id = $egreso_id;
 						$tcdm->save();
