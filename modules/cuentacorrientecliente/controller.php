@@ -551,7 +551,7 @@ class CuentaCorrienteClienteController {
 		$where = "ccc.cliente_id IN ({$cliente_ids})";
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
-		print_r($montos_cuentacorriente);exit;
+		
 		$cobrador_collection = Collector()->get('Cobrador');
 		foreach ($cobrador_collection as $clave=>$valor) {
 			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);

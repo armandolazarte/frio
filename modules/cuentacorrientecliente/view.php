@@ -272,9 +272,14 @@ class CuentaCorrienteClienteView extends View {
 			
 		$obj_clientecentral = $this->set_dict($obj_clientecentral);
 
-		$deuda = (is_null($montos_cuentacorriente[0]['DEUDA'])) ? 0 : $montos_cuentacorriente[0]['DEUDA'];
-		$ingreso = (is_null($montos_cuentacorriente[0]['INGRESO'])) ? 0 : $montos_cuentacorriente[0]['INGRESO'];
-		$valor_cuentacorriente = round(($ingreso - $deuda), 2);
+		$deuda_temp = 0;
+		$ingreso_temp = 0;
+		foreach ($montos_cuentacorriente as $clave=>$valor) {
+			$deuda_temp = $deuda_temp + $valor['DEUDA'];
+			$ingreso_temp = $ingreso_temp + $valor['INGRESO'];
+		}
+
+		$valor_cuentacorriente = round(($ingreso_temp - $deuda_temp), 2);
 		$valor_cuentacorriente = (abs($valor_cuentacorriente) > 0 AND abs($valor_cuentacorriente) < 0.99) ? 0 : $valor_cuentacorriente;
 		$class = ($valor_cuentacorriente >= 0) ? 'blue' : 'red';
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
