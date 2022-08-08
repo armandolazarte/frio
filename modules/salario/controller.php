@@ -31,7 +31,6 @@ class SalarioController {
 	function guardar() {
 		SessionHandler()->check_session();
 		foreach ($_POST as $clave=>$valor) $this->model->$clave = $valor;
-		$this->model->fecha = date('Y-m-d');
 		$this->model->hora = date('H:i:s');
 		$this->model->usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
         $this->model->save();
