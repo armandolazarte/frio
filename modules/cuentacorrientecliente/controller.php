@@ -88,13 +88,13 @@ class CuentaCorrienteClienteController {
 					$ingreso = (is_null($estado_ctacte[0]['INGRESO'])) ? 0 : round($estado_ctacte[0]['INGRESO'],2);
 					$cuenta = round(($ingreso - $deuda),2);
 					$importe_deuda_total = $importe_deuda_total + $cuenta;
-					$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
-					$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
-					$class = ($cuenta >= 0) ? 'info' : 'danger';
 				}
 			}
 
-			$clientecentral_collection[$clave]['CUENTA'] = abs($cuenta);
+			$importe_deuda_total = ($importe_deuda_total > 0 AND $importe_deuda_total < 1) ? 0 : $importe_deuda_total;
+			$importe_deuda_total = ($importe_deuda_total > -1 AND $importe_deuda_total < 0) ? 0 : $importe_deuda_total;
+			$class = ($importe_deuda_total >= 0) ? 'info' : 'danger';
+			$clientecentral_collection[$clave]['CUENTA'] = abs($importe_deuda_total);
 			$clientecentral_collection[$clave]['CLASS'] = $class;
 			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
 		}
