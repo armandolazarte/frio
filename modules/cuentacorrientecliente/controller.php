@@ -419,10 +419,16 @@ class CuentaCorrienteClienteController {
 		$ccm = new ClienteCentral();
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
+		$clientecredito_id = $ccm->cliente_id;
+		if ($clientecredito_id != 0) {
+    		$cm = new Cliente();
+    		$cm->cliente_id = $clientecredito_id;
+    		$cm->get();
+    		$ccm->cliente_razonsocial = $cm->razon_social;
+		} else {
+    		$ccm->cliente_razonsocial = 'Sin Definir';
+		}
 
-    	//$cm = new Cliente();
-    	//$cm->cliente_id = $arg;
-    	//$cm->get();
 
 		$select = "ccc.fecha AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ingresotipopago AS ING_TIP_PAG, ccc.cuentacorrientecliente_id CCCID, ccc.cliente_id AS CLIID";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
