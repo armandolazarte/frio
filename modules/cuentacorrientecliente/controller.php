@@ -87,6 +87,7 @@ class CuentaCorrienteClienteController {
 					$deuda = (is_null($estado_ctacte[0]['DEUDA'])) ? 0 : round($estado_ctacte[0]['DEUDA'],2);
 					$ingreso = (is_null($estado_ctacte[0]['INGRESO'])) ? 0 : round($estado_ctacte[0]['INGRESO'],2);
 					$cuenta = round(($ingreso - $deuda),2);
+					$importe_deuda_total = $importe_deuda_total + $cuenta;
 					$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
 					$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 					$class = ($cuenta >= 0) ? 'info' : 'danger';
@@ -551,7 +552,7 @@ class CuentaCorrienteClienteController {
 		$where = "ccc.cliente_id IN ({$cliente_ids})";
 		$groupby = "ccc.cliente_id";
 		$montos_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
-		
+
 		$cobrador_collection = Collector()->get('Cobrador');
 		foreach ($cobrador_collection as $clave=>$valor) {
 			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);
