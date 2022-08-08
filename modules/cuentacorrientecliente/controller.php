@@ -422,6 +422,7 @@ class CuentaCorrienteClienteController {
     	$from = "clientecentral cc";
     	$where = "cc.clientecentral_id = {$clientecentral_id}";
 		$clientecentral_collection = CollectorCondition()->get('ClienteCentral', $where, 4, $from, $select);
+		print_r($clientecentral_collection);exit;
 		$cliente_ids_array = array();
 		foreach ($clientecentral_collection as $clave=>$valor) {
 			$cliente_id = $valor['CLIID'];
@@ -429,7 +430,6 @@ class CuentaCorrienteClienteController {
 		}
 
 		$cliente_ids = implode(',', $cliente_ids_array);
-		print_r($cliente_ids);exit;
 		$ccm = new ClienteCentral();
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
