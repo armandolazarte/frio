@@ -256,7 +256,7 @@ class CuentaCorrienteClienteView extends View {
 	function consultar_central($cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $clientecentralcliente_collection, $obj_clientecentral, $importe_cuentacorrienteclientecredito) {
 		$gui = file_get_contents("static/modules/cuentacorrientecliente/consultar_central.html");
 		$tbl_sucursales = file_get_contents("static/common/tbl_clientecentralcliente.html");
-		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
+		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_central_expandido_array.html");
 		$gui_slt_cobrador = file_get_contents("static/modules/cuentacorrientecliente/slt_cobrador.html");
 
 		foreach ($cuentascorrientes_collection as $clave=>$valor) {
