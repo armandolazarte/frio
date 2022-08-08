@@ -429,7 +429,7 @@ class CuentaCorrienteClienteController {
 		}
 
 		$cliente_ids = implode(',', $cliente_ids_array);
-
+		print_r($cliente_ids);exit;
 		$ccm = new ClienteCentral();
 		$ccm->clientecentral_id = $clientecentral_id;
 		$ccm->get();
