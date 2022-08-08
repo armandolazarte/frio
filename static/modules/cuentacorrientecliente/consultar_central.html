@@ -1,0 +1,619 @@
+<!--DATA TABLE-->
+<link href="{url_static}vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+<link href="{url_static}vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
+<!--DATA TABLE-->
+<div class="col-lg-12">
+    <ul class="breadcrumb">
+        <li><a href="{url_app}/reporte/{panel_general}"><i class="fa fa-home"></i> HOME</a></li>
+        <li><a href="{url_app}/cuentacorrientecliente/panel">Panel Cuentas Corrientes Clientes</a></li>
+    </ul>
+</div>
+<div class="col-md-5 col-sm-5 col-xs-12">
+    <div class="row top_tiles">
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon" style="right: 20px; top: 10px;"><i class="fa fa-arrow-circle-o-{cuentacorriente-icon} {cuentacorriente-class}" style="font-size: 40px;"></i></div>
+                <div class="count {cuentacorriente-class}" style="font-size: 28px;">${cuentacorriente-valor}</div>
+                <p class="{cuentacorriente-class}">Cliente {cuentacorriente-msj}</p>
+            </div>
+        </div>
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon" style="right: 20px; top: 10px;"><i class="fa fa-info-circle blue" style="font-size: 40px;"></i></div>
+                <div class="count blue" style="font-size: 28px;">${cuentacorriente-credito}</div>
+                <p class="blue">Crédito del Cliente</p>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel" style="padding-left: 0px; padding-right: 0px;">
+        <div class="x_content">
+            <div class="pricing">
+                <div class="title" style="height: 85px !important;">
+                    <h1>{clientecentral-denominacion}</h1>
+                </div>
+                <div class="x_content">
+                    <div class="">
+                        <div class="pricing_features" style="min-height: 180px !important; padding: 0px 10px !important;">
+                            <ul class="list-unstyled text-left">
+                                {lst_clientecentralcliente}
+                                <li><i class="fa fa-check text-success"></i> <strong> Sucursal:</strong> {cliente-razon_social}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="verCuentasCorrientes();" id="btn_cuentascorrientes">
+                <i class="fa fa-eye"></i> Ver CTAS CTES
+            </button>
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
+                <i class="fa fa-eye"></i> Ver movimientos
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/egreso/egresar'">
+                <i class="fa fa-usd"></i> Registrar Venta
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrientecliente/listar_cuentas/{cliente-cliente_id}'">
+                <i class="fa fa-table"></i> Listar Cuentas
+            </button>
+        </div>
+
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrienteclientecredito/consultar/{cliente-cliente_id}'">
+                <i class="fa fa-eye"></i> Movimientos Crédito
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/chequeclientedetalle/consultar_pagos_cliente/{cliente-cliente_id}'">
+                <i class="fa fa-eye"></i> Ver Cheques
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/transferenciaclientedetalle/consultar_pagos_cliente/{cliente-cliente_id}'">
+                <i class="fa fa-eye"></i> Ver Transferencias
+            </button>
+        </div>
+    </div>
+</div>
+<div class="col-md-7 col-sm-7 col-xs-12">
+    <div class="col-md-12" style="border: 1px #ccc solid; margin-bottom: 2px; display: none;" id="div_pago_conjunto">
+        <div class="tile_count" style="margin-top: 5px !important;">
+            <div class="col-md-6 col-sm-4" style="margin-bottom: 0px; padding-bottom: 5px;">
+                <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onclick="pagoConjuntoCheque();">
+                    <i class="fa fa-usd"></i> Cheque
+                </button>
+                <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onclick="pagoConjuntoTransferencia();">
+                    <i class="fa fa-usd"></i> Transferencia
+                </button>
+            </div>
+            <div class="col-md-6 col-sm-4 tile_stats_count" style="margin-bottom: 0px; padding-bottom: 5px;">
+                <span class="count_top"><i class="fa fa-usd green"></i> Total Pago Conjunto</span>
+                <div class="count green" id="div_total_pago_conjunto"></div>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel" id="div_movimientos">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Movimientos de la cuenta corriente</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_cuentacorriente" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>#</th>
+                        <th></th>
+                        <th>Fecha</th>
+                        <th>Referencia</th>
+                        <th>Tipo</th>
+                        <th>Mov</th>
+                        <th>Balance</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_cuentacorriente}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="x_panel" style="display: none;" id="div_cuentascorrientes">
+        <div class="x_title">
+            <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Cuentas Corrientes</h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <table id="tbl_cuentascorrientes" class="table table-striped table-bordered">
+                <thead>
+                    <tr style="font-size: 12px;">
+                        <th>Cliente</th>
+                        <th>Cuenta</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tbl_cuentascorrientes}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="sistema_alertas">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12" id="div_contenido">
+                    
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="div_alert_pago_cheque">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <form class="form" id="formulario_guardar_cheque" method="post" action="{url_app}/cuentacorrientecliente/guardar_ingreso_cuentacorriente_conjunto">
+                        <div class="form-group col-lg-12" style="padding-left: 0px;">
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Cliente</label>
+                                    <input type="text" class="form-control" value="{cliente-razon_social}" readonly>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" name="fecha" value="{fecha_sys}" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8" id="div_numero_cheque">
+                                    <label>N° Cheque</label>
+                                    <input type="text" class="form-control" name="numero_cheque" id="numero_cheque">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_fecha_vencimiento">
+                                    <label>Fecha Vencimiento</label>
+                                    <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+                                </div>
+                                <div class="form-group col-lg-6" id="div_titular">
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" name="titular" id="titular">
+                                </div>
+                                <div class="form-group col-lg-6" id="div_documento">
+                                    <label>Documento</label>
+                                    <input type="text" class="form-control" name="documento" id="documento">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_banco">
+                                    <label>Banco</label>
+                                    <input type="text" class="form-control" name="banco" id="banco">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_plaza">
+                                    <label>Plaza</label>
+                                    <input type="text" class="form-control" name="plaza" id="plaza">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_cuenta_corriente">
+                                    <label>Cuenta Corriente</label>
+                                    <input type="text" class="form-control" name="cuenta_corriente" id="cuenta_corriente">
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Entrega</label>
+                                    <select class="form-control" name="cobrador" id="cobrador">
+                                        <option value="0">SELECCIONAR</option>
+                                        {slt_cobrador}
+                                    </select>
+                                    <br>
+                                    <div class="alert alert-danger alert-dismissible " role="alert" id="div_alert_cobrador" style="display: none;">
+                                        <strong>Error!</strong> Por favor seleccione un cobrador.
+                                    </div>       
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Importe</label>
+                                    <input type="text" class="form-control" name="importe" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" align="right" id="div_array_cheque_cuentacorrientecliente_ids">
+                                <input type="hidden" name="ingresotipopago" id="ingresotipopago" value="1">
+                                <input type="hidden" name="cliente_id" id="cliente_id" value="{cliente-cliente_id}">
+                                <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Abonar cuentas </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="div_alert_pago_transferencia">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <form class="form" id="formulario_guardar_transferencia" method="post" action="{url_app}/cuentacorrientecliente/guardar_ingreso_cuentacorriente_conjunto">
+                        <div class="form-group col-lg-12" style="padding-left: 0px;">
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Cliente</label>
+                                    <input type="text" class="form-control" value="{cliente-razon_social}" readonly>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" name="fecha" value="{fecha_sys}" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8" id="div_numero_transferencia">
+                                    <label>N° Transferencia</label>
+                                    <input type="text" class="form-control" name="numero_transferencia" id="numero_transferencia">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_banco_transferencia">
+                                    <label>Banco</label>
+                                    <input type="text" class="form-control" name="banco_transferencia" id="banco_transferencia">
+                                </div>
+                                <div class="form-group col-lg-8" id="div_numero_cuenta_transferencia">
+                                    <label>Número Cuenta</label>
+                                    <input type="text" class="form-control" name="numero_cuenta_transferencia" id="numero_cuenta_transferencia">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_plaza_transferencia">
+                                    <label>Plaza</label>
+                                    <input type="text" class="form-control" name="plaza_transferencia" id="plaza_transferencia">
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Entrega</label>
+                                    <select class="form-control" name="cobrador" id="cobrador">
+                                        <option value="0">SELECCIONAR</option>
+                                        {slt_cobrador}
+                                    </select>
+                                    <br>
+                                    <div class="alert alert-danger alert-dismissible " role="alert" id="div_alert_cobrador" style="display: none;">
+                                        <strong>Error!</strong> Por favor seleccione un cobrador.
+                                    </div>       
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Importe</label>
+                                    <input type="text" class="form-control" name="importe" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" align="right" id="div_array_transferencia_cuentacorrientecliente_ids">
+                                <input type="hidden" name="ingresotipopago" id="ingresotipopago" value="2">
+                                <input type="hidden" name="cliente_id" id="cliente_id" value="{cliente-cliente_id}">
+                                <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Abonar cuentas </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Datatables -->
+<script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/moment.min.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/datetime.js"></script>
+<script type="text/javascript" charset="utf-8">
+    var user_level = {display-user_level};
+    var enviando = false;
+    var ini_balance = 0;
+    var credito_cta_cte = {cuentacorriente-credito};
+    var quitar = /\$/g;
+    array_ids = new Array();
+
+    $( window ).on( "load", function() {
+        switch(user_level){
+            case 2:
+                $(".remover-btn-registrar-venta").css("display","none");
+                break;
+        }
+    });
+
+    $(document).ready(function() {
+        $('#tbl_cuentacorriente').dataTable( {
+            "aaSorting": [[ 0, "desc" ]]
+            , "iDisplayLength":20
+            , columnDefs: [ {
+                targets: 2,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
+            } ]
+        } );
+    } );
+
+    $(document).ready(function() {
+        $('#tbl_cuentascorrientes').dataTable( {
+            "aaSorting": [[ 0, "asc" ]]
+          , "iDisplayLength":20
+        } );
+    } );
+
+    function cargarIngreso() {
+        $('#sistema_alertas').modal('show');
+    }
+
+    function cargarIngresoComprobante(cuentacorrientecliente_id) {
+        var form_cargar_ingreso_cuentacorriente = $.ajax({
+            url: '{url_app}/cuentacorrientecliente/traer_formulario_abonar_ajax/' + cuentacorrientecliente_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById("div_contenido").innerHTML = form_cargar_ingreso_cuentacorriente;
+        $('#sistema_alertas').modal('show');
+    }
+
+    function verCuentasCorrientes() {
+        document.getElementById("div_cuentascorrientes").style.display = "inline-block";
+        document.getElementById("div_movimientos").style.display = "none";
+        document.getElementById("btn_cuentascorrientes").style.display = "none";
+        document.getElementById("btn_movimientos").style.display = "inline-block";  
+    }
+
+    function verMovimientos() {
+        document.getElementById("div_cuentascorrientes").style.display = "none";
+        document.getElementById("div_movimientos").style.display = "inline-block";
+        document.getElementById("btn_cuentascorrientes").style.display = "inline-block";
+        document.getElementById("btn_movimientos").style.display = "none";  
+    }
+
+    function verificaMetodoPago() {
+        var ingresotipopago = document.getElementById("ingresotipopago");
+        var ingresotipopago_id = ingresotipopago.options[ingresotipopago.selectedIndex].value;
+        
+        switch(parseInt(ingresotipopago_id)) {
+            case 1:
+                console.log(ingresotipopago_id);
+                document.getElementById("div_numero_cheque").style.display = "inline-block";
+                document.getElementById("div_fecha_vencimiento").style.display = "inline-block";
+                document.getElementById("div_banco").style.display = "inline-block";
+                document.getElementById("div_plaza").style.display = "inline-block";
+                document.getElementById("div_cuenta_corriente").style.display = "inline-block";
+                document.getElementById("div_titular").style.display = "inline-block";
+                document.getElementById("div_documento").style.display = "inline-block";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                document.getElementById("div_numero_retencion").style.display = "none";
+                document.getElementById("div_mes_retencion").style.display = "none";
+                document.getElementById("div_anio_retencion").style.display = "none";
+                break;
+            case 2:
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "inline-block";
+                document.getElementById("div_banco_transferencia").style.display = "inline-block";
+                document.getElementById("div_plaza_transferencia").style.display = "inline-block";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "inline-block";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                document.getElementById("div_numero_retencion").style.display = "none";
+                document.getElementById("div_mes_retencion").style.display = "none";
+                document.getElementById("div_anio_retencion").style.display = "none";
+                break;
+            case 3:
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                document.getElementById("div_numero_retencion").style.display = "none";
+                document.getElementById("div_mes_retencion").style.display = "none";
+                document.getElementById("div_anio_retencion").style.display = "none";
+                break;
+            case 5:
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                document.getElementById("div_numero_retencion").style.display = "inline-block";
+                document.getElementById("div_mes_retencion").style.display = "inline-block";
+                document.getElementById("div_anio_retencion").style.display = "inline-block";
+                break;
+            case 6:
+                var importe_deuda = document.getElementById('importe_deuda').value;
+                if (parseFloat(credito_cta_cte) >= parseFloat(importe_deuda)) {
+                    document.getElementById('importe_deuda').value = importe_deuda;
+                } else {
+                    document.getElementById('importe_deuda').value = credito_cta_cte;
+                }
+
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
+                document.getElementById("div_numero_retencion").style.display = "none";
+                document.getElementById("div_mes_retencion").style.display = "none";
+                document.getElementById("div_anio_retencion").style.display = "none";
+                break;
+        }
+    }
+
+    function verTipoPagoDetalle(movimiento_id, tipopago_id, cliente_id) {
+        if (tipopago_id == 1) {
+            var tipopagodetalle = $.ajax({
+                url: '{url_app}/cuentacorrientecliente/traer_chequeclientedetalle_ajax/' + movimiento_id + '@' + cliente_id,
+                dataType: 'text',
+                async: false
+            }).responseText;
+        } else {
+            var tipopagodetalle = $.ajax({
+                url: '{url_app}/cuentacorrientecliente/traer_transferenciaclientedetalle_ajax/' + movimiento_id,
+                dataType: 'text',
+                async: false
+            }).responseText;
+        }
+
+        document.getElementById("div_contenido").innerHTML = tipopagodetalle;
+        $('#sistema_alertas').modal('show');
+    }
+
+    function controlaAnio() {
+        var anio_actual = {anio_actual};
+        anio_retencion = document.getElementById('anio_retencion').value;
+        if (parseInt(anio_actual) > parseInt(anio_retencion)) {
+            document.getElementById('anio_retencion').value = anio_actual;
+        }
+    }
+
+    function cargaFacturaPagoConjunto(cuentacorrientecliente_id, balance) {
+        var flag = array_ids.indexOf(cuentacorrientecliente_id);
+        if(parseInt(flag) === -1) {
+            calculo_balance = ini_balance + parseFloat(balance);
+            array_ids.push(cuentacorrientecliente_id);
+        } else {
+            calculo_balance = ini_balance - parseFloat(balance);
+            quitarPagoArray(cuentacorrientecliente_id);
+        }
+
+        Number(calculo_balance.toFixed(2));
+        ini_balance = Number(calculo_balance.toFixed(2));
+
+        document.getElementById('div_total_pago_conjunto').innerHTML = "$" + ini_balance; 
+        if (parseFloat(ini_balance) > 0) {
+            document.getElementById('div_pago_conjunto').style.display = 'inline-block';
+        } else {
+            document.getElementById('div_pago_conjunto').style.display = 'none';
+        }
+    }
+
+    function quitarPagoArray(cuentacorrientecliente_id) {    
+        array_ids.forEach(function(temp_cuentacorrientecliente_id, index) {
+            if (cuentacorrientecliente_id == temp_cuentacorrientecliente_id) {
+                array_ids.splice(index, 1);
+            }
+        });
+    }
+
+    function pagoConjuntoCheque() {
+        var div_array_cuentascorrientes = document.getElementById('div_array_cheque_cuentacorrientecliente_ids');
+        array_ids.forEach(function(temp_cuentacorrientecliente_id, index) {
+            var inputCuentaCorrienteClienteId = document.createElement("input");
+            inputCuentaCorrienteClienteId.setAttribute("type", "hidden");
+            inputCuentaCorrienteClienteId.setAttribute("name", "cuentacorrientecliente[" + temp_cuentacorrientecliente_id + "][cuentacorrientecliente_id]");
+            inputCuentaCorrienteClienteId.setAttribute("id", "cuentacorrientecliente_id_" + temp_cuentacorrientecliente_id);
+            inputCuentaCorrienteClienteId.setAttribute("value", temp_cuentacorrientecliente_id);
+            div_array_cuentascorrientes.appendChild(inputCuentaCorrienteClienteId);
+        });
+
+        $('#div_alert_pago_cheque').modal('show');
+    }
+
+    function pagoConjuntoTransferencia() {
+        var div_array_cuentascorrientes = document.getElementById('div_array_transferencia_cuentacorrientecliente_ids');
+        array_ids.forEach(function(temp_cuentacorrientecliente_id, index) {
+            var inputCuentaCorrienteClienteId = document.createElement("input");
+            inputCuentaCorrienteClienteId.setAttribute("type", "hidden");
+            inputCuentaCorrienteClienteId.setAttribute("name", "cuentacorrientecliente[" + temp_cuentacorrientecliente_id + "][cuentacorrientecliente_id]");
+            inputCuentaCorrienteClienteId.setAttribute("id", "cuentacorrientecliente_id_" + temp_cuentacorrientecliente_id);
+            inputCuentaCorrienteClienteId.setAttribute("value", temp_cuentacorrientecliente_id);
+            div_array_cuentascorrientes.appendChild(inputCuentaCorrienteClienteId);
+        });
+
+        $('#div_alert_pago_transferencia').modal('show');
+    }
+
+    function checkSubmit() {
+        if (!enviando) {
+            var cobrador = document.getElementById("cobrador");
+            var cobrador_id = cobrador.options[cobrador.selectedIndex].value;
+
+            if (cobrador_id == 0) {
+                document.getElementById('div_alert_cobrador').style.display = 'block';
+                return false;
+            } else {
+                document.getElementById('div_alert_cobrador').style.display = 'none';
+                enviando= true;
+                return true;
+            }
+        } else {            
+            alert("La información ya se está enviando. Estamos estableciendo conexión con el servidor.");
+            return false;
+        }
+    }
+</script>

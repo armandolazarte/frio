@@ -542,22 +542,35 @@ class CuentaCorrienteClienteController {
 			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);
 		}
 
-		$select = "cccc.cuentacorrienteclientecredito_id AS ID";
-		$from = "cuentacorrienteclientecredito cccc";
-		$where = "cccc.cliente_id IN ({$cliente_ids}) ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
-		$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
-		$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+		$select = "ccc.cliente_id AS CLIID, c.razon_social AS RAZSOC";
+		$from = "clientecentralcliente ccc INNER JOIN cliente ON ccc.cliente_id = c.cliente_id";
+		$where = "ccc.clientecentral_id = {$clientecentral_id}";
+		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
 
-		if ($max_cuentacorrienteclientecredito_id == 0) {
-			$importe_cuentacorrienteclientecredito = 0;
-		} else {
-			$cccc = new CuentaCorrienteClienteCredito();
-			$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
-			$cccc->get();
-			$importe_cuentacorrienteclientecredito = $cccc->importe;
+		$importe_cuentacorrienteclientecredito = 0;
+		if (is_array($clientecentralcliente_collection) AND !empty($clientecentralcliente_collection)) {
+			foreach ($clientecentralcliente_collection as $clave=>$valor) {
+				$cliente_id = $valor['CLIID'];
+				
+				$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+				$from = "cuentacorrienteclientecredito cccc";
+				$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+				$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+				$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+				
+				if ($max_cuentacorrienteclientecredito_id != 0) {
+					$cccc = new CuentaCorrienteClienteCredito();
+					$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+					$cccc->get();
+					$importe_cuentacorrienteclientecredito = $importe_cuentacorrienteclientecredito + $cccc->importe;
+					$clientecentralcliente_collection[$clave]["CREDITO"] = $cccc->importe;
+				} else {
+					$clientecentralcliente_collection[$clave]["CREDITO"] = 0;
+				}
+			}
 		}
 
-		$this->view->consultar($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $cm, $importe_cuentacorrienteclientecredito);
+		$this->view->consultar_central($cuentascorrientes_collection, $cuentacorriente_collection, $cobrador_collection, $montos_cuentacorriente, $clientecentralcliente_collection, $ccm, $importe_cuentacorrienteclientecredito);
 	}
 
 	function vdr_consultar($arg) {
