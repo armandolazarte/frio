@@ -418,17 +418,17 @@ class CuentaCorrienteClienteController {
 	function consultar_central($arg) {
     	SessionHandler()->check_session();
     	$clientecentral_id = $arg;
-    	$select = "cc.cliente_id AS CLIID";
-    	$from = "clientecentral cc";
-    	$where = "cc.clientecentral_id = {$clientecentral_id}";
+    	$select = "ccc.cliente_id AS CLIID";
+    	$from = "clientecentralcliente ccc";
+    	$where = "ccc.clientecentral_id = {$clientecentral_id}";
 		$clientecentral_collection = CollectorCondition()->get('ClienteCentral', $where, 4, $from, $select);
-		print_r($clientecentral_collection);exit;
+		
 		$cliente_ids_array = array();
 		foreach ($clientecentral_collection as $clave=>$valor) {
 			$cliente_id = $valor['CLIID'];
 			if(!in_array($cliente_id, $cliente_ids_array)) $cliente_ids_array[] = $cliente_id;
 		}
-
+		
 		$cliente_ids = implode(',', $cliente_ids_array);
 		$ccm = new ClienteCentral();
 		$ccm->clientecentral_id = $clientecentral_id;
