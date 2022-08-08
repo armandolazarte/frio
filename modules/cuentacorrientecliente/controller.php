@@ -542,7 +542,7 @@ class CuentaCorrienteClienteController {
 			if ($valor->oculto == 1) unset($cobrador_collection[$clave]);
 		}
 
-		$select = "ccc.cliente_id AS CLIID, c.razon_social AS RAZSOC";
+		$select = "ccc.cliente_id AS CLIID, c.codigo AS COD, c.razon_social AS RAZSOC";
 		$from = "clientecentralcliente ccc INNER JOIN cliente ON ccc.cliente_id = c.cliente_id";
 		$where = "ccc.clientecentral_id = {$clientecentral_id}";
 		$clientecentralcliente_collection = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
