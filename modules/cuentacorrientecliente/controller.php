@@ -272,7 +272,7 @@ class CuentaCorrienteClienteController {
 
     	$select = "ccc.clientecentral_id AS CLICENID";
 		$from = "clientecentralcliente ccc";
-		$where = "ccc.cliente_id = {$cliente_id}";
+		$where = "ccc.cliente_id = {$arg}";
 		$clientecentral_id = CollectorCondition()->get('ClienteCentralCliente', $where, 4, $from, $select);
 		$clientecentral_id = (is_array($clientecentral_id) AND !empty($clientecentral_id)) ? $clientecentral_id[0]['CLICENID'] : 0;
 
