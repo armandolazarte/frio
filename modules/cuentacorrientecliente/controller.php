@@ -1446,7 +1446,7 @@ class CuentaCorrienteClienteController {
 			}
 		}
 
-		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar/{$cliente_id}");
+		header("Location: " . URL_APP . "/cuentacorrientecliente/consultar_central/{$clientecentral_id}");
 	}
 
 	function traer_formulario_abonar_ajax($arg) {
