@@ -1802,7 +1802,7 @@ class EgresoController {
 
 		//UTILIZADO PARA VENTA SEGÚN CALCULOS
 		//LO COMENTO PARA TENER EL VALOR GUARDADO SEGÚN BASE DE DATOS
-		//$pm->precio_venta = round($pvp_factura, 2);
+		$pm->precio_venta = round($pvp_factura, 2);
 
 
 
