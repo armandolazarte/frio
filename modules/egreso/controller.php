@@ -1800,7 +1800,11 @@ class EgresoController {
 			$pvp_factura = $pvp - $valor_por_listaprecio;
 		}
 
-		$pm->precio_venta = round($pvp_factura, 2);
+		//UTILIZADO PARA VENTA SEGÚN CALCULOS
+		//LO COMENTO PARA TENER EL VALOR GUARDADO SEGÚN BASE DE DATOS
+		//$pm->precio_venta = round($pvp_factura, 2);
+
+
 
 		$select = "MAX(s.stock_id) AS MAXID";
 		$from = "stock s";
