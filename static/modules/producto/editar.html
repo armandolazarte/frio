@@ -255,6 +255,10 @@
         var slt_iva = document.getElementById("iva");
         var iva = slt_iva.options[slt_iva.selectedIndex].value;
 
+        costo.toFixed(4);
+        flete.toFixed(4);
+        porcentaje_ganancia.toFixed(4);
+
         if (costo == 0) {
             document.getElementById('precio_venta').value = 0;
         } else {
@@ -266,7 +270,7 @@
 
             var monto_ganancia = (porcentaje_ganancia * costo_iva) / 100;
             var valor_venta = parseFloat(costo_iva) + parseFloat(monto_ganancia);
-            document.getElementById('precio_venta').value = valor_venta.toFixed(2);
+            document.getElementById('precio_venta').value = valor_venta.toFixed(4);
 
             calculaGanancia();
         }
@@ -278,6 +282,10 @@
         var slt_iva = document.getElementById("iva");
         var iva = slt_iva.options[slt_iva.selectedIndex].value;
         var precio_venta = document.getElementById('precio_venta').value;
+
+        costo.toFixed(4);
+        flete.toFixed(4);
+        producto-precio_venta.toFixed(4);
 
         if (costo == 0) {
             document.getElementById('precio_venta').value = 0;
@@ -294,7 +302,7 @@
                 var porcentaje_ganancia = (parseFloat(ganancia) - 1) * 100;
             
 
-            document.getElementById('porcentaje_ganancia').value = porcentaje_ganancia.toFixed(2);
+            document.getElementById('porcentaje_ganancia').value = porcentaje_ganancia.toFixed(4);
         }
     }
 
