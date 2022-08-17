@@ -1786,7 +1786,7 @@ class EgresoController {
 		$iva = round($pm->iva, 2);
 		$neto = round($pm->costo, 2);
 		$flete = round($pm->flete, 2);
-		$porcentaje_ganancia = $pm->porcentaje_ganancia;
+		$porcentaje_ganancia = round($pm->porcentaje_ganancia, 2);
 		
 		$valor_neto = $neto + ($flete * $neto / 100);
 		$valor_con_iva = $valor_neto + ($iva * $valor_neto / 100);
