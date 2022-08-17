@@ -1783,10 +1783,10 @@ class EgresoController {
 		$condicion_listaprecio = $cm->listaprecio->condicion;
 		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
 		
-		$iva = round($pm->iva, 2);
-		$neto = round($pm->costo, 2);
-		$flete = round($pm->flete, 2);
-		$porcentaje_ganancia = round($pm->porcentaje_ganancia, 2);
+		$iva = $pm->iva;
+		$neto = $pm->costo;
+		$flete = $pm->flete;
+		$porcentaje_ganancia = $pm->porcentaje_ganancia;
 		
 		$valor_neto = $neto + ($flete * $neto / 100);
 		$valor_con_iva = $valor_neto + ($iva * $valor_neto / 100);
