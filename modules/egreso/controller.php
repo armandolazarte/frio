@@ -1783,9 +1783,9 @@ class EgresoController {
 		$condicion_listaprecio = $cm->listaprecio->condicion;
 		$porcentaje_listaprecio = $cm->listaprecio->porcentaje;
 		
-		$iva = $pm->iva;
-		$neto = $pm->costo;
-		$flete = $pm->flete;
+		$iva = round($pm->iva, 2);
+		$neto = round($pm->costo, 2);
+		$flete = round($pm->flete, 2);
 		$porcentaje_ganancia = $pm->porcentaje_ganancia;
 		
 		$valor_neto = $neto + ($flete * $neto / 100);
@@ -1800,11 +1800,7 @@ class EgresoController {
 			$pvp_factura = $pvp - $valor_por_listaprecio;
 		}
 
-		//UTILIZADO PARA VENTA SEGÚN CALCULOS
-		//LO COMENTO PARA TENER EL VALOR GUARDADO SEGÚN BASE DE DATOS
 		$pm->precio_venta = round($pvp_factura, 2);
-
-
 
 		$select = "MAX(s.stock_id) AS MAXID";
 		$from = "stock s";
