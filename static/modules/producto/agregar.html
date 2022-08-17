@@ -193,9 +193,9 @@
         var iva = slt_iva.options[slt_iva.selectedIndex].value;
         var precio_venta = document.getElementById('precio_venta').value;
 
-        costo.toFixed(2);
-        flete.toFixed(2);
-        precio_venta.toFixed(2);
+        costo.toFixed(4);
+        flete.toFixed(4);
+        precio_venta.toFixed(4);
 
         if (costo == 0) {
             document.getElementById('precio_venta').value = 0;
@@ -212,7 +212,7 @@
                 var porcentaje_ganancia = (parseFloat(ganancia) - 1) * 100;
             
 
-            document.getElementById('porcentaje_ganancia').value = porcentaje_ganancia;
+            document.getElementById('porcentaje_ganancia').value = porcentaje_ganancia.toFixed(4);
         }
     }
 
