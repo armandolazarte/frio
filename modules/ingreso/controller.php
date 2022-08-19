@@ -22,7 +22,7 @@ class IngresoController {
 
 	function listar($arg) {
     	SessionHandler()->check_session();
-    	$select = "i.ingreso_id AS INGRESO_ID, i.fecha AS FECHA, date_format(i.fecha, '%d/%m/%Y') AS FECEMI, date_format(i.fecha_ingreso, '%d/%m/%Y') AS FECING, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS FECVEN, prv.razon_social AS PROV, ci.denominacion AS CONDI,CONCAT(tf.nomenclatura, ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, i.costo_total AS TOTAL, i.costo_total_iva AS TIVA, cp.denominacion AS CP, CASE WHEN (SELECT COUNT(ccp.ingreso_id) FROM cuentacorrienteproveedor ccp WHERE ccp.ingreso_id = i.ingreso_id) > 1 THEN 'none' ELSE 'inline-block'END AS DSP_BTN_EDIT";
+    	$select = "i.ingreso_id AS INGRESO_ID, i.fecha AS FECHA, date_format(i.fecha, '%d/%m/%Y') AS FECEMI, date_format(i.fecha_ingreso, '%d/%m/%Y') AS FECING, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS FECVEN, prv.razon_social AS PROV, ci.denominacion AS CONDI, i.descuento AS DESCUENTO, CONCAT(tf.nomenclatura, ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, i.costo_total AS TOTAL, i.costo_total_iva AS TIVA, cp.denominacion AS CP, CASE WHEN (SELECT COUNT(ccp.ingreso_id) FROM cuentacorrienteproveedor ccp WHERE ccp.ingreso_id = i.ingreso_id) > 1 THEN 'none' ELSE 'inline-block'END AS DSP_BTN_EDIT";
 		$from = "ingreso i INNER JOIN proveedor prv ON i.proveedor = prv.proveedor_id INNER JOIN  condicionpago cp ON i.condicionpago = cp.condicionpago_id INNER JOIN  condicioniva ci ON i.condicioniva = ci.condicioniva_id INNER JOIN tipofactura tf ON i.tipofactura = tf.tipofactura_id ORDER BY i.fecha DESC";
 		$ingreso_collection = CollectorCondition()->get('Ingreso', NULL, 4, $from, $select);
 		
@@ -93,10 +93,10 @@ class IngresoController {
 		$this->model->ingreso_id = $ingreso_id;
 		$this->model->get();
 
-		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_ingresos = "id.ingreso_id = {$ingreso_id}";
-		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
+		$select = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "id.ingreso_id = {$ingreso_id}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);
 
 		$select = "ccp.referencia AS REF, ccp.importe AS IMP, estadomovimientocuenta AS EST";
 		$from = "cuentacorrienteproveedor ccp";
@@ -150,13 +150,12 @@ class IngresoController {
 		$from = "proveedor p INNER JOIN documentotipo dt ON p.documentotipo = dt.documentotipo_id";
 		$proveedor_collection = CollectorCondition()->get('Proveedor', NULL, 4, $from, $select);
 
-		$select_ingresos = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE, id.ingresodetalle_id AS ID, id.producto_ID AS PRODUCTO";
-		$from_ingresos = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
-		$where_ingresos = "id.ingreso_id = {$arg}";
-		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where_ingresos, 4, $from_ingresos, $select_ingresos);
+		$select = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, id.cantidad AS CANTIDAD, pu.denominacion AS UNIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE, id.ingresodetalle_id AS ID, id.producto_ID AS PRODUCTO";
+		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$where = "id.ingreso_id = {$arg}";
+		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);
 
-		$this->view->editar($producto_collection, $proveedor_collection, $condicionpago_collection, 
-							$condicioniva_collection, $ingresodetalle_collection, $tipofactura_collection, $this->model);
+		$this->view->editar($producto_collection, $proveedor_collection, $condicionpago_collection, $condicioniva_collection, $ingresodetalle_collection, $tipofactura_collection, $this->model);
 	}
 
 	function guardar() {
@@ -174,6 +173,7 @@ class IngresoController {
 		$costo_final = filter_input(INPUT_POST, 'suma_total_iva');
 		$costo_distribucion = filter_input(INPUT_POST, 'costo_distribucion');
 		$valor_distribucion = ($costo_distribucion * 1 / 100) + 1;
+		$descuento = filter_input(INPUT_POST, 'descuento');
 		$opcion_actualiza_stock = filter_input(INPUT_POST, 'opcion_stock');
 		$opcion_actualiza_producto = filter_input(INPUT_POST, 'opcion_producto');
 		$opcion_actualiza_producto_proveedor = filter_input(INPUT_POST, 'opcion_producto_proveedor');
@@ -191,6 +191,7 @@ class IngresoController {
 		$this->model->impuesto_interno = filter_input(INPUT_POST, 'impuesto_interno');
 		$this->model->ingresos_brutos = filter_input(INPUT_POST, 'ingresos_brutos');
 		$this->model->costo_distribucion = $costo_distribucion;
+		$this->model->descuento = $descuento;
 		$this->model->costo_total = filter_input(INPUT_POST, 'suma_total');
 		$this->model->costo_total_iva = $costo_final;
 		$this->model->actualiza_precio_producto = $opcion_actualiza_producto;
@@ -336,6 +337,7 @@ class IngresoController {
 		$importe_total = filter_input(INPUT_POST, 'suma_total');
 		$importe_total_iva = filter_input(INPUT_POST, 'suma_total_iva');
 		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
+		$descuento = filter_input(INPUT_POST, 'descuento');
 		$this->model->punto_venta = $punto_venta;
 		$this->model->numero_factura = $numero_factura;
 		$this->model->fecha = $fecha;
@@ -344,6 +346,7 @@ class IngresoController {
 		$this->model->iva = filter_input(INPUT_POST, 'iva');
 		$this->model->percepcion_iva = filter_input(INPUT_POST, 'percepcion_iva');
 		$this->model->costo_distribucion = $costo_distribucion;
+		$this->model->descuento = $descuento;
 		$this->model->costo_total = $importe_total;
 		$this->model->costo_total_iva = $importe_total_iva;
 		$this->model->proveedor = $proveedor;

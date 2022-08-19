@@ -23,6 +23,7 @@ class Ingreso extends StandardObject {
 		$this->impuesto_interno = 0.00;
 		$this->ingresos_brutos = 0.00;
 		$this->costo_distribucion = 0.00;
+		$this->descuento = 0.00;
 		$this->costo_total = 0.00;
 		$this->costo_total_iva = 0.00;
 		$this->actualiza_precio_producto = 0;

@@ -866,3 +866,25 @@ CREATE TABLE IF NOT EXISTS clientecentralcliente (
     , cliente_id INT(11)
     , INDEX (cliente_id)
 ) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS cuentacorrienteproveedorcredito (
+    cuentacorrienteproveedorcredito_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , fecha DATE
+    , hora TIME
+    , referencia TEXT
+    , importe FLOAT
+    , movimiento FLOAT
+    , cuentacorrienteproveedor_id INT(11)
+    , INDEX (cuentacorrienteproveedor_id)
+    , egreso_id INT(11)
+    , INDEX (egreso_id)
+    , proveedor_id INT(11)
+    , INDEX (proveedor_id)
+    , chequeproveedordetalle_id INT(11)
+    , INDEX (chequeproveedordetalle_id)
+    , transferenciaproveedordetalle_id INT(11)
+    , INDEX (transferenciaproveedordetalle_id)
+    , usuario_id INT(11)
+    , INDEX (usuario_id)
+) ENGINE=InnoDb;
