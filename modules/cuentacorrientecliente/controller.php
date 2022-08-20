@@ -1564,6 +1564,7 @@ class CuentaCorrienteClienteController {
 		$cliente_id = $this->model->cliente_id;
 		$egreso_id = $this->model->egreso_id;
 		$ingresotipopago_id = $this->model->ingresotipopago->ingresotipopago_id;
+		$importe = $this->model->ingreso;
 		$this->model->delete();
 
 		$em = new Egreso();
