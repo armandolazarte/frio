@@ -681,8 +681,8 @@ class CuentaCorrienteClienteController {
 			$array_temp = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 			
 			$balance = $array_temp[0]['BALANCE'];
+			$balance = ($balance > -0.5 AND $balance < 0.5) ? 0 : $balance;
 			$balance = ($balance == '-0') ? abs($balance) : $balance;
-			$balance = ($balance < 0.5) ? 0 : $balance;
 			$balance_class = ($balance >= 0) ? 'primary' : 'danger';
 			$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
 
