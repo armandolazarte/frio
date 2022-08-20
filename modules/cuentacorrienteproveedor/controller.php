@@ -553,8 +553,16 @@ class CuentaCorrienteProveedorController {
 		$this->model->get();
 		$proveedor_id = $this->model->proveedor_id;
 		$ingreso_id = $this->model->ingreso_id;
+		$importe = $this->model->ingreso;
 		$ingresotipopago_id = $this->model->ingresotipopago->ingresotipopago_id;
 		$this->model->delete();
+
+		$im = new Ingreso();
+		$im->ingreso_id = $ingreso_id;
+		$im->get();
+
+		$comprobante = str_pad($im->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+		$comprobante .= str_pad($im->numero_factura, 8, '0', STR_PAD_LEFT);
 
 		$chequeproveedordetalle_id = 0;
 		$transferenciaproveedordetalle_id = 0;
@@ -598,6 +606,34 @@ class CuentaCorrienteProveedorController {
 					$cpdm->delete();
 				}
 				break;
+			case 6:
+				$select = "cccc.cuentacorrienteproveedorcredito_id AS ID";
+				$from = "cuentacorrienteproveedorcredito cccc";
+				$where = "cccc.proveedor_id = {$proveedor_id} ORDER BY cccc.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
+				$max_cuentacorrienteproveedorcredito_id = CollectorCondition()->get('CuentaCorrienteProveedorCredito', $where, 4, $from, $select);
+				$max_cuentacorrienteproveedorcredito_id = (is_array($max_cuentacorrienteproveedorcredito_id) AND !empty($max_cuentacorrienteproveedorcredito_id)) ? $max_cuentacorrienteproveedorcredito_id[0]['ID'] : 0;
+
+				$ccpc = new CuentaCorrienteProveedorCredito();
+				$ccpc->cuentacorrienteproveedorcredito_id = $max_cuentacorrienteproveedorcredito_id;
+				$ccpc->get();
+				$importe_actual = $ccpc->importe;
+				$nuevo_importe = $importe_actual + $importe;
+
+				$ccpc = new CuentaCorrienteProveedorCredito();
+				$ccpc->fecha = date('Y-m-d');
+				$ccpc->hora = date('H:i:s');
+				$ccpc->referencia = "Elimina Pago de comprobante {$comprobante}";
+				$ccpc->importe = $nuevo_importe;
+				$ccpc->movimiento = round($importe, 2);
+				$ccpc->cuentacorrienteproveedor_id = 0;
+				$ccpc->ingreso_id = $ingreso_id;
+				$ccpc->proveedor_id = $proveedor_id;
+				$ccpc->chequeproveedordetalle_id = 0;
+				$ccpc->transferenciaproveedordetalle_id = 0;
+				$ccpc->usuario_id = $usuario_id;
+				$ccpc->save();
+				break;
+			break;
 		}		
 
 		$select = "ccp.importe AS IMPORTE, ccp.ingreso AS INGRESO, ccp.cuentacorrienteproveedor_id AS ID";
