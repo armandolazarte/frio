@@ -321,7 +321,6 @@ class CuentaCorrienteProveedorController {
 
 		$cuentacorrienteproveedor_id = filter_input(INPUT_POST, 'cuentacorrienteproveedor_id');
 		$importe = filter_input(INPUT_POST, 'importe');
-		$importe_original = filter_input(INPUT_POST, 'importe');
 		$proveedor_id = filter_input(INPUT_POST, 'proveedor_id');
 		$ingreso_id = filter_input(INPUT_POST, 'ingreso_id');
 
@@ -385,7 +384,7 @@ class CuentaCorrienteProveedorController {
 				$cpdm->documento = filter_input(INPUT_POST, 'documento');
 				$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
 				$cpdm->estado = 1;
-				$cpdm->importe = $importe_original;
+				$cpdm->importe = $importe;
 				$cpdm->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
 				$cpdm->save();
 				break;
@@ -395,7 +394,7 @@ class CuentaCorrienteProveedorController {
 				$tpdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
 				$tpdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
 				$tpdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
-				$tpdm->importe = $importe_original;
+				$tpdm->importe = $importe;
 				$tpdm->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
 				$tpdm->save();
 				break;
@@ -407,6 +406,33 @@ class CuentaCorrienteProveedorController {
 				$cpdm->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
 				$cpdm->tipofactura = filter_input(INPUT_POST, 'tipofactura_nc');
 				$cpdm->save();
+				break;
+			case 6:
+				$select = "ccpc.cuentacorrienteproveedorcredito_id AS ID";
+				$from = "cuentacorrienteproveedorcredito ccpc";
+				$where = "ccpc.proveedor_id = {$proveedor_id} ORDER BY ccpc.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
+				$max_cuentacorrienteproveedorcredito_id = CollectorCondition()->get('CuentaCorrienteProveedorCredito', $where, 4, $from, $select);
+				$max_cuentacorrienteproveedorcredito_id = (is_array($max_cuentacorrienteproveedorcredito_id) AND !empty($max_cuentacorrienteproveedorcredito_id)) ? $max_cuentacorrienteproveedorcredito_id[0]['ID'] : 0;
+
+				$ccpc = new CuentaCorrienteProveedorCredito();
+				$ccpc->cuentacorrienteproveedorcredito_id = $max_cuentacorrienteproveedorcredito_id;
+				$ccpc->get();
+				$importe_actual = $ccpc->importe;
+				$nuevo_importe = $importe_actual - $importe;
+
+				$ccpc = new CuentaCorrienteProveedorCredito();
+				$ccpc->fecha = date('Y-m-d');
+				$ccpc->hora = date('H:i:s');
+				$ccpc->referencia = "Pago de comprobante {$comprobante}";
+				$ccpc->importe = $nuevo_importe;
+				$ccpc->movimiento = round($importe, 2);
+				$ccpc->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
+				$ccpc->ingreso_id = $ingreso_id;
+				$ccpc->proveedor_id = $proveedor_id;
+				$ccpc->chequeproveedordetalle_id = 0;
+				$ccpc->transferenciaproveedordetalle_id = 0;
+				$ccpc->usuario_id = $usuario_id;
+				$ccpc->save();
 				break;
 		}
 
