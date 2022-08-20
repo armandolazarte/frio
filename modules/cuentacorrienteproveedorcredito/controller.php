@@ -44,7 +44,7 @@ class CuentaCorrienteProveedorCreditoController {
 			$importe_cuentacorrienteproveedorcredito = $cccp->importe;
 		}
 
-		$select = "cccp.cuentacorrienteproveedorcredito_id AS CTACTECLICREID, cccp.fecha AS FECHA, cccp.referencia AS REFERENCIA, cccp.importe AS BALANCE, cccp.movimiento AS MOVIMIENTO";
+		$select = "cccp.cuentacorrienteproveedorcredito_id AS CTACTEPROCREID, cccp.fecha AS FECHA, cccp.referencia AS REFERENCIA, cccp.importe AS BALANCE, cccp.movimiento AS MOVIMIENTO";
 		$from = "cuentacorrienteproveedorcredito cccp";
 		$where = "cccp.proveedor_id = {$proveedor_id}";
 		$credito_collection = CollectorCondition()->get('CuentaCorrienteProveedorCredito', $where, 4, $from, $select);
