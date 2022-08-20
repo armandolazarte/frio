@@ -448,7 +448,7 @@ class CuentaCorrienteProveedorController {
 			$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
 			$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
 			$tcdm->importe = $importe;
-			$tcdm->cuentacorrientecliente_id = 0;
+			$tcdm->cuentacorrienteproveedor_id = 0;
 			$tcdm->save();	
 			$transferenciaproveedordetalle_id = $tcdm->transferenciaproveedordetalle_id;
 			$referencia = "Crédito de pago con Transferencia N° {$numero_transferencia}";
