@@ -318,7 +318,7 @@ class CuentaCorrienteProveedorController {
 
 	function guardar_ingreso_cuentacorriente() {
 		SessionHandler()->check_session();
-
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$cuentacorrienteproveedor_id = filter_input(INPUT_POST, 'cuentacorrienteproveedor_id');
 		$importe = filter_input(INPUT_POST, 'importe');
 		$proveedor_id = filter_input(INPUT_POST, 'proveedor_id');
@@ -547,7 +547,7 @@ class CuentaCorrienteProveedorController {
 
 	function eliminar_movimiento($arg) {
 		SessionHandler()->check_session();
-
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$cuentacorrienteproveedor_id = $arg;
 		$this->model->cuentacorrienteproveedor_id = $cuentacorrienteproveedor_id;
 		$this->model->get();
