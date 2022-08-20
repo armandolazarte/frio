@@ -37,7 +37,7 @@ class CuentaCorrienteProveedorCreditoView extends View {
 		$valor_cuentacorriente = (abs($valor_cuentacorriente) > 0 AND abs($valor_cuentacorriente) < 0.99) ? 0 : $valor_cuentacorriente;
 		$class = ($valor_cuentacorriente >= 0) ? 'blue' : 'red';
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
-		$msj = ($valor_cuentacorriente >= 0) ? 'no posee deuda!' : 'posee deuda!';
+		$msj = ($valor_cuentacorriente >= 0) ? 'Posee deuda' : 'Posee deuda';
 		
 		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
 									   '{cuentacorriente-icon}'=>$icon,
