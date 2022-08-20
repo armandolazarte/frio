@@ -143,7 +143,6 @@ class CuentaCorrienteProveedorController {
 		$where = "cccp.proveedor_id = {$proveedor_id} ORDER BY cccp.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
 		$max_cuentacorrienterpoveedorcredito_id = CollectorCondition()->get('CuentaCorrienteProveedorCredito', $where, 4, $from, $select);
 		$max_cuentacorrienterpoveedorcredito_id = (is_array($max_cuentacorrienterpoveedorcredito_id) AND !empty($max_cuentacorrienterpoveedorcredito_id)) ? $max_cuentacorrienterpoveedorcredito_id[0]['ID'] : 0;
-		print_r($max_cuentacorrienterpoveedorcredito_id);exit;
 		if ($max_cuentacorrienterpoveedorcredito_id == 0) {
 			$importe_cuentacorrienterpoveedorcredito = 0;
 		} else {
@@ -153,6 +152,7 @@ class CuentaCorrienteProveedorController {
 			$importe_cuentacorrienteproveedorcredito = $cccp->importe;
 		}
 
+		print_r($importe_cuentacorrienteproveedorcredito);exit;
 		$this->view->consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $pm, $importe_cuentacorrienteproveedorcredito);
 	}
 
