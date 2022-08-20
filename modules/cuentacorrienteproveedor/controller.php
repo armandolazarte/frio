@@ -469,7 +469,7 @@ class CuentaCorrienteProveedorController {
 			$ccpc->movimiento = $importe;
 			$ccpc->cuentacorrienteproveedor_id = 0;
 			$ccpc->ingreso_id = 0;
-			$ccpc->proveedor_id = $proveedorcredito;
+			$ccpc->proveedor_id = $proveedor_id;
 			$ccpc->chequeproveedordetalle_id = ($ingresotipopago_id == 1) ? $chequeproveedordetalle_id : 0;
 			$ccpc->transferenciaproveedordetalle_id = ($ingresotipopago_id == 2) ? $transferenciaproveedordetalle_id : 0;
 			$ccpc->usuario_id = $usuario_id;
@@ -489,7 +489,7 @@ class CuentaCorrienteProveedorController {
 			$cccc->movimiento = $importe;
 			$cccc->cuentacorrienteproveedor_id = 0;
 			$cccc->ingreso_id = 0;
-			$cccc->proveedor_id = $proveedorcredito;
+			$cccc->proveedor_id = $proveedor_id;
 			$cccc->chequeproveedordetalle_id = ($ingresotipopago_id == 1) ? $chequeproveedordetalle_id : 0;
 			$cccc->transferenciaproveedordetalle_id = ($ingresotipopago_id == 2) ? $transferenciaproveedordetalle_id : 0;
 			$cccc->usuario_id = $usuario_id;
