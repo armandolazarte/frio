@@ -314,6 +314,7 @@
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
 <script type="text/javascript" charset="utf-8">
+    var credito_cta_cte = {cuentacorriente-credito};
     var user_level = {display-user_level};
     $( window ).on( "load", function() {
         switch(user_level){
@@ -436,6 +437,29 @@
                 document.getElementById("div_tipo_nc").style.display = "inline-block";
                 document.getElementById("div_numero_nc").style.display = "inline-block";
                 document.getElementById("div_fecha_nc").style.display = "inline-block";
+                break;
+            case 6:
+                var importe_deuda = document.getElementById('importe_deuda').value;
+                if (parseFloat(credito_cta_cte) >= parseFloat(importe_deuda)) {
+                    document.getElementById('importe_deuda').value = importe_deuda;
+                } else {
+                    document.getElementById('importe_deuda').value = credito_cta_cte;
+                }
+
+                document.getElementById("div_numero_cheque").style.display = "none";
+                document.getElementById("div_fecha_vencimiento").style.display = "none";
+                document.getElementById("div_banco").style.display = "none";
+                document.getElementById("div_plaza").style.display = "none";
+                document.getElementById("div_cuenta_corriente").style.display = "none";
+                document.getElementById("div_titular").style.display = "none";
+                document.getElementById("div_documento").style.display = "none";
+                document.getElementById("div_numero_transferencia").style.display = "none";
+                document.getElementById("div_banco_transferencia").style.display = "none";
+                document.getElementById("div_plaza_transferencia").style.display = "none";
+                document.getElementById("div_numero_cuenta_transferencia").style.display = "none";
+                document.getElementById("div_tipo_nc").style.display = "none";
+                document.getElementById("div_numero_nc").style.display = "none";
+                document.getElementById("div_fecha_nc").style.display = "none";
                 break;
         }
     }

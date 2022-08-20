@@ -214,8 +214,7 @@ class CuentaCorrienteProveedorController {
 		
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 		
-			$select = "ROUND(((ROUND(SUM(CASE WHEN ccp.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - 
-				  	  (ROUND(SUM(CASE WHEN ccp.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE, 'inline-block' AS BTN_DISPLAY";
+			$select = "ROUND(((ROUND(SUM(CASE WHEN ccp.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccp.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE, 'inline-block' AS BTN_DISPLAY";
 			$from = "cuentacorrienteproveedor ccp";
 			$where = "ccp.ingreso_id = {$ingreso_id}";
 			$array_temp = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -513,6 +512,9 @@ class CuentaCorrienteProveedorController {
 		$where = "ccp.ingreso_id = {$ingreso_id}";
 		$balance = CollectorCondition()->get('CuentaCorrienteProveedor', $where, 4, $from, $select);
 		$ingresotipopago_collection = Collector()->get('IngresoTipoPago');
+		foreach ($ingresotipopago_collection as $clave=>$valor) {
+			if ($valor->ingresotipopago_id == 5) unset($ingresotipopago_collection[$clave]);
+		}
 
 		$this->view->traer_formulario_abonar_ajax($ingresotipopago_collection, $this->model, $pm, $balance);
 	}
