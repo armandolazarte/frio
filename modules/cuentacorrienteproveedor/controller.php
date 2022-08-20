@@ -8,6 +8,7 @@ require_once "modules/ingresotipopago/model.php";
 require_once "modules/chequeproveedordetalle/model.php";
 require_once "modules/creditoproveedordetalle/model.php";
 require_once "modules/transferenciaproveedordetalle/model.php";
+require_once "modules/cuentacorrienteproveedorcredito/model.php";
 require_once "tools/cuentaCorrienteProveedorPDFTool.php";
 
 
