@@ -877,8 +877,8 @@ CREATE TABLE IF NOT EXISTS cuentacorrienteproveedorcredito (
     , movimiento FLOAT
     , cuentacorrienteproveedor_id INT(11)
     , INDEX (cuentacorrienteproveedor_id)
-    , egreso_id INT(11)
-    , INDEX (egreso_id)
+    , ingreso_id INT(11)
+    , INDEX (ingreso_id)
     , proveedor_id INT(11)
     , INDEX (proveedor_id)
     , chequeproveedordetalle_id INT(11)

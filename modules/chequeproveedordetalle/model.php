@@ -14,6 +14,7 @@ class ChequeProveedorDetalle extends StandardObject {
 		$this->documento = '';
 		$this->cuenta_corriente = '';
 		$this->estado = '';
+		$this->importe = 0.00;
 		$this->cuentacorrienteproveedor_id = 0;
 	}
 }

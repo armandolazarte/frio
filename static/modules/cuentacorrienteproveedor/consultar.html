@@ -10,41 +10,33 @@
 </div>
 <div class="col-lg-5 col-md-4 col-sm-4 col-xs-12">
     <div class="row top_tiles">
-        <div class="animated flipInY col-lg-8 col-md-8 col-sm-12 col-xs-12">
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
             <div class="tile-stats">
-                <div class="icon" style="margin-top: 10px;"><i class="fa fa-arrow-circle-o-{cuentacorriente-icon} {cuentacorriente-class}" style="font-size: 55px;"></i></div>
-                <div class="count {cuentacorriente-class}" style="font-size: 35px;">${cuentacorriente-valor}</div>
-                <h3 style="font-size: 18px;">Estado Cta Corriente</h3>
+                <div class="icon" style="right: 20px; margin-top: 10px;"><i class="fa fa-arrow-circle-o-{cuentacorriente-icon} {cuentacorriente-class}" style="font-size: 40px;"></i></div>
+                <div class="count {cuentacorriente-class}" style="font-size: 28px;">${cuentacorriente-valor}</div>
                 <p class="{cuentacorriente-class}">{cuentacorriente-msj} con el proveedor!</p>
             </div>
         </div>
-        <div class="col-md-4 col-sm-4 col-xs-4" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
-            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="verCuentasCorrientes();" id="btn_cuentascorrientes">
-                <i class="fa fa-eye"></i> Ver Ctas Ctes
-            </button>
-            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
-                <i class="fa fa-eye"></i> Ver movimientos
-            </button>
-            <button type="button" class="btn btn-primary remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/ingreso/ingresar'">
-                <i class="fa fa-usd"></i> Registrar Compra
-            </button>
-            <button type="button" class="btn btn-danger" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrienteproveedor/listar_cuentas/{proveedor-proveedor_id}'">
-                <i class="fa fa-table"></i> Listar Cuentas
-            </button>
+        <div class="animated flipInY col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <div class="tile-stats">
+                <div class="icon" style="right: 20px; top: 10px;"><i class="fa fa-info-circle blue" style="font-size: 40px;"></i></div>
+                <div class="count blue" style="font-size: 28px;">${cuentacorriente-credito}</div>
+                <p class="blue">Crédito del Proveedor</p>
+            </div>
+
         </div>
     </div>
     <div class="x_panel">
         <div class="x_content">
             <div class="pricing">
                 <div class="title">
-                    <h2>Proveedor</h2>
+                    <h2>{documentotipo-denominacion} {cliente-documento}</h2>
                     <h1>{proveedor-razon_social}</h1>
                 </div>
                 <div class="x_content">
                     <div class="">
                         <div class="pricing_features">
                             <ul class="list-unstyled text-left">
-                                <li><i class="fa fa-check text-success"></i> <strong> Documento:</strong> {documentotipo-denominacion} {proveedor-documento}</li>
                                 <li><i class="fa fa-check text-success"></i> <strong> Condición IVA:</strong> {condicioniva-denominacion}</li>
                                 <li><i class="fa fa-check text-success"></i> <strong> Provincia:</strong> {provincia-denominacion}</li>
                                 <li><i class="fa fa-check text-success"></i> <strong> Localidad:</strong> {proveedor-codigopostal} - {proveedor-localidad}</li>
@@ -55,6 +47,49 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="verCuentasCorrientes();" id="btn_cuentascorrientes">
+                <i class="fa fa-eye"></i> Ver Ctas Ctes
+            </button>
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px; display: none;" onClick="verMovimientos();" id="btn_movimientos">
+                <i class="fa fa-eye"></i> Ver movimientos
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            </button>
+            <button type="button" class="btn btn-dark remover-btn-registrar-venta" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/ingreso/ingresar'">
+                <i class="fa fa-usd"></i> Registrar Compra
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            </button>
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrienteproveedor/listar_cuentas/{proveedor-proveedor_id}'">
+                <i class="fa fa-table"></i> Listar Cuentas
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="agregarCreditoCheque();" id="btn_agregar_credito">
+                <i class="fa fa-eye"></i> Crédito Cheque
+            </button>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="agregarCreditoTransferencia();" id="btn_agregar_credito">
+                <i class="fa fa-eye"></i> Crédito Transferencia
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/cuentacorrienteproveedorcredito/consultar/{proveedor-proveedor_id}'">
+                <i class="fa fa-eye"></i> Movimientos Crédito
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/chequeproveedordetalle/consultar_pagos_proveedor/{proveedor-proveedor_id}'">
+                <i class="fa fa-eye"></i> Ver Cheques
+            </button>
+        </div>
+        <div class="col-md-4 col-sm-12 col-xs-12" style="padding-left: 0px;">
+            <button type="button" class="btn btn-dark" style="width: 100%; font-size: 14px;" onClick="location.href='{url_app}/transferenciaproveedordetalle/consultar_pagos_proveedor/{proveedor-proveedor_id}'">
+                <i class="fa fa-eye"></i> Ver Transferencias
+            </button>
         </div>
     </div>
 </div>
@@ -131,6 +166,149 @@
         </div>
     </div>
 </div>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="div_alert_credito_cheque">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <form class="form" id="formulario_guardar" method="post" action="{url_app}/cuentacorrienteproveedor/guardar_credito_cuentacorriente">
+                        <div class="form-group col-lg-12" style="padding-left: 0px;">
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Proveedor</label>
+                                    <input type="text" class="form-control" value="{proveedor-razon_social}" readonly>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" name="fecha" value="{fecha_sys}" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-5" id="div_numero_cheque">
+                                    <label>N° Cheque</label>
+                                    <input type="text" class="form-control" name="numero_cheque" id="numero_cheque">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_fecha_vencimiento">
+                                    <label>Fecha Vencimiento</label>
+                                    <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+                                </div>
+                                <div class="form-group col-lg-6" id="div_titular">
+                                    <label>Nombre</label>
+                                    <input type="text" class="form-control" name="titular" id="titular">
+                                </div>
+                                <div class="form-group col-lg-6" id="div_documento">
+                                    <label>Documento</label>
+                                    <input type="text" class="form-control" name="documento" id="documento">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_banco">
+                                    <label>Banco</label>
+                                    <input type="text" class="form-control" name="banco" id="banco">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_plaza">
+                                    <label>Plaza</label>
+                                    <input type="text" class="form-control" name="plaza" id="plaza">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_cuenta_corriente">
+                                    <label>Cuenta Corriente</label>
+                                    <input type="text" class="form-control" name="cuenta_corriente" id="cuenta_corriente">
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-4 col-lg-offset-8">
+                                    <label>Importe</label>
+                                    <input type="text" class="form-control" name="importe" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" align="right">
+                                <div class="form-group col-lg-12" align="right">
+                                    <input type="hidden" name="proveedor_id" id="proveedor_id" value="{proveedor-proveedor_id}">
+                                    <input type="hidden" name="ingresotipopago" id="ingresotipopago" value="1">
+                                    <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Cargar Crédito </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="div_alert_credito_transferencia">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">ATENCIÓN! Sistema de Alertas!</h4>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-12">
+                    <form class="form" id="formulario_guardar_transferencia" method="post" action="{url_app}/cuentacorrientecliente/guardar_credito_cuentacorriente">
+                        <div class="form-group col-lg-12" style="padding-left: 0px;">
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-8">
+                                    <label>Proveedor</label>
+                                    <input type="text" class="form-control" value="{proveedor-razon_social}" readonly>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <label>Fecha</label>
+                                    <input type="date" class="form-control" name="fecha" value="{fecha_sys}" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-5" id="div_numero_transferencia">
+                                    <label>N° Transferencia</label>
+                                    <input type="text" class="form-control" name="numero_transferencia" id="numero_transferencia">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_banco_transferencia">
+                                    <label>Banco</label>
+                                    <input type="text" class="form-control" name="banco_transferencia" id="banco_transferencia">
+                                </div>
+                                <div class="form-group col-lg-offset-3 col-lg-5" id="div_numero_cuenta_transferencia">
+                                    <label>Número Cuenta</label>
+                                    <input type="text" class="form-control" name="numero_cuenta_transferencia" id="numero_cuenta_transferencia">
+                                </div>
+                                <div class="form-group col-lg-4" id="div_plaza_transferencia">
+                                    <label>Plaza</label>
+                                    <input type="text" class="form-control" name="plaza_transferencia" id="plaza_transferencia">
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12">
+                                <div class="form-group col-lg-4 col-lg-offset-8">
+                                    <label>Importe</label>
+                                    <input type="text" class="form-control" name="importe" required>
+                                </div>
+                            </div>
+                            <div class="form-group col-lg-12" align="right">
+                                <div class="form-group col-lg-12" align="right">
+                                    <input type="hidden" name="proveedor_id" id="proveedor_id" value="{proveedor-proveedor_id}">
+                                    <input type="hidden" name="ingresotipopago" id="ingresotipopago" value="2">
+                                    <button type="submit" class="btn btn-app"> <i class="fa fa-usd"></i> Cargar Crédito </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+                <br><br><br><br><br><br><br><br>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Datatables -->
 <script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
@@ -154,6 +332,17 @@
     } );
 
     function cargarIngreso() {
+        $('#sistema_alertas').modal('show');
+    }
+
+    function cargarIngresoComprobante(cuentacorrientecliente_id) {
+        var form_cargar_ingreso_cuentacorriente = $.ajax({
+            url: '{url_app}/cuentacorrientecliente/traer_formulario_abonar_ajax/' + cuentacorrientecliente_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        document.getElementById("div_contenido").innerHTML = form_cargar_ingreso_cuentacorriente;
         $('#sistema_alertas').modal('show');
     }
 

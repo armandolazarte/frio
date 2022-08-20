@@ -9,6 +9,7 @@ class TransferenciaProveedorDetalle extends StandardObject {
 		$this->banco = '';
 		$this->plaza = '';
 		$this->numero_cuenta = '';
+		$this->importe = 0.00;
 		$this->cuentacorrienteproveedor_id = 0;
 	}
 }

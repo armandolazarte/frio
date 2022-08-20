@@ -62,7 +62,7 @@ class CuentaCorrienteProveedorView extends View {
 		print $template;
 	}
 	
-	function consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $obj_proveedor) {
+	function consultar($cuentascorrientes_collection, $cuentacorriente_collection, $montos_cuentacorriente, $obj_proveedor, $importe_cuentacorrienteproveedorcredito) {
 		$gui = file_get_contents("static/modules/cuentacorrienteproveedor/consultar.html");
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrienteproveedor/tbl_cuentacorriente_array.html");
@@ -109,7 +109,8 @@ class CuentaCorrienteProveedorView extends View {
 		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
-									   '{cuentacorriente-class}'=>$class);
+									   '{cuentacorriente-class}'=>$class,
+									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteproveedorcredito, 2));
 
 		$gui_lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $gui_lst_infocontacto, $infocontacto_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
