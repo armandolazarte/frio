@@ -37,7 +37,7 @@ class CuentaCorrienteProveedorController {
 
 	function consultar($arg) {
     	SessionHandler()->check_session();
-
+    	$proveedor_id = $arg;
     	$select = "ccp.proveedor_id AS PID, p.razon_social AS PROVEEDOR, (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 1 AND dccp.proveedor_id = ccp.proveedor_id) AS DEUDA, (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 2 AND dccp.proveedor_id = ccp.proveedor_id) AS INGRESO";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id";
 		$groupby = "ccp.proveedor_id";
@@ -140,7 +140,7 @@ class CuentaCorrienteProveedorController {
 
 		$select = "cccp.cuentacorrienteproveedorcredito_id AS ID";
 		$from = "cuentacorrienteproveedorcredito cccp";
-		$where = "cccp.proveedor_id = {$arg} ORDER BY cccp.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
+		$where = "cccp.proveedor_id = {$proveedor_id} ORDER BY cccp.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
 		$max_cuentacorrienterpoveedorcredito_id = CollectorCondition()->get('CuentaCorrienteProveedorCredito', $where, 4, $from, $select);
 		$max_cuentacorrienterpoveedorcredito_id = (is_array($max_cuentacorrienterpoveedorcredito_id) AND !empty($max_cuentacorrienterpoveedorcredito_id)) ? $max_cuentacorrienterpoveedorcredito_id[0]['ID'] : 0;
 
