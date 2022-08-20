@@ -243,7 +243,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-hidden="true" id="div_alert_credito_transferencia">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -335,17 +334,6 @@
         $('#sistema_alertas').modal('show');
     }
 
-    function cargarIngresoComprobante(cuentacorrientecliente_id) {
-        var form_cargar_ingreso_cuentacorriente = $.ajax({
-            url: '{url_app}/cuentacorrientecliente/traer_formulario_abonar_ajax/' + cuentacorrientecliente_id,
-                dataType: 'text',
-                async: false
-        }).responseText;
-
-        document.getElementById("div_contenido").innerHTML = form_cargar_ingreso_cuentacorriente;
-        $('#sistema_alertas').modal('show');
-    }
-
     function cargarIngresoComprobante(cuentacorrienteproveedor_id) {
         var form_cargar_ingreso_cuentacorriente = $.ajax({
             url: '{url_app}/cuentacorrienteproveedor/traer_formulario_abonar_ajax/' + cuentacorrienteproveedor_id,
@@ -355,6 +343,14 @@
 
         document.getElementById("div_contenido").innerHTML = form_cargar_ingreso_cuentacorriente;
         $('#sistema_alertas').modal('show');
+    }
+
+    function agregarCreditoCheque() {
+        $('#div_alert_credito_cheque').modal('show');
+    }
+
+    function agregarCreditoTransferencia() {
+        $('#div_alert_credito_transferencia').modal('show');
     }
 
     function verCuentasCorrientes() {
