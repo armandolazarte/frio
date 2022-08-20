@@ -118,6 +118,7 @@ class CuentaCorrienteProveedorView extends View {
 		$render = str_replace('{lst_infocontacto}', $gui_lst_infocontacto, $gui);
 		$render = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $render);
 		$render = str_replace('{tbl_cuentascorrientes}', $tbl_cuentascorrientes_array, $render);
+		$render = str_replace('{fecha_sys}', date('Y-m-d'), $render);
 		$render = $this->render($obj_proveedor, $render);
 		$render = $this->render($array_cuentacorriente, $render);
 		$render = $this->render_breadcrumb($render);
