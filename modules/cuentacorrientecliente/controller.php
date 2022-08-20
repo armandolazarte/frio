@@ -1557,7 +1557,7 @@ class CuentaCorrienteClienteController {
 
 	function eliminar_movimiento($arg) {
 		SessionHandler()->check_session();
-
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$cuentacorrientecliente_id = $arg;
 		$this->model->cuentacorrientecliente_id = $cuentacorrientecliente_id;
 		$this->model->get();
@@ -1565,6 +1565,23 @@ class CuentaCorrienteClienteController {
 		$egreso_id = $this->model->egreso_id;
 		$ingresotipopago_id = $this->model->ingresotipopago->ingresotipopago_id;
 		$this->model->delete();
+
+		$em = new Egreso();
+		$em->egreso_id = $egreso_id;
+		$em->get();
+
+		$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+		$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+		$where = "eafip.egreso_id = {$egreso_id}";
+		$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+
+		if (is_array($egresoafip)) {
+			$em->punto_venta = $egresoafip[0]['PUNTO_VENTA'];
+			$em->numero_factura = $egresoafip[0]['NUMERO_FACTURA'];
+		}
+
+		$comprobante = str_pad($em->punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+		$comprobante .= str_pad($em->numero_factura, 8, '0', STR_PAD_LEFT);
 
 		$select = "ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, ccc.cuentacorrientecliente_id  AS ID";
 		$from = "cuentacorrientecliente ccc";
@@ -1655,6 +1672,34 @@ class CuentaCorrienteClienteController {
 						$rcdm->retencionclientedetalle_id = $retencionclientedetalle_id;
 						$rcdm->delete();
 					}
+					break;
+				case 6:
+					#CREDITO
+					$select = "cccc.cuentacorrienteclientecredito_id AS ID";
+					$from = "cuentacorrienteclientecredito cccc";
+					$where = "cccc.cliente_id = {$cliente_id} ORDER BY cccc.cuentacorrienteclientecredito_id DESC LIMIT 1";
+					$max_cuentacorrienteclientecredito_id = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
+					$max_cuentacorrienteclientecredito_id = (is_array($max_cuentacorrienteclientecredito_id) AND !empty($max_cuentacorrienteclientecredito_id)) ? $max_cuentacorrienteclientecredito_id[0]['ID'] : 0;
+
+					$cccc = new CuentaCorrienteClienteCredito();
+					$cccc->cuentacorrienteclientecredito_id = $max_cuentacorrienteclientecredito_id;
+					$cccc->get();
+					$importe_actual = $cccc->importe;
+					$nuevo_importe = $importe_actual + $importe;
+
+					$cccc = new CuentaCorrienteClienteCredito();
+					$cccc->fecha = date('Y-m-d');
+					$cccc->hora = date('H:i:s');
+					$cccc->referencia = "Elimina Pago de comprobante {$comprobante}";
+					$cccc->importe = $nuevo_importe;
+					$cccc->movimiento = round($importe, 2);
+					$cccc->cuentacorrientecliente_id = 0;
+					$cccc->egreso_id = $egreso_id;
+					$cccc->cliente_id = $cliente_id;
+					$cccc->chequeclientedetalle_id = 0;
+					$cccc->transferenciaclientedetalle_id = 0;
+					$cccc->usuario_id = $usuario_id;
+					$cccc->save();
 					break;
 			}
 		}

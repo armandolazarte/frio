@@ -499,25 +499,25 @@ class CuentaCorrienteProveedorController {
 			$ccpc->usuario_id = $usuario_id;
 			$ccpc->save();
 		} else {
-			$cccc = new CuentaCorrienteProveedorCredito();
-			$cccc->cuentacorrienteproveedorcredito_id = $max_cuentacorrienteproveedorcredito_id;
-			$cccc->get();
-			$importe_actual = $cccc->importe;
+			$ccpc = new CuentaCorrienteProveedorCredito();
+			$ccpc->cuentacorrienteproveedorcredito_id = $max_cuentacorrienteproveedorcredito_id;
+			$ccpc->get();
+			$importe_actual = $ccpc->importe;
 			$nuevo_importe = $importe_actual + $importe;
 
-			$cccc = new CuentaCorrienteproveedorCredito();
-			$cccc->fecha = date('Y-m-d');
-			$cccc->hora = date('H:i:s');
-			$cccc->referencia = $referencia;
-			$cccc->importe = $nuevo_importe;
-			$cccc->movimiento = $importe;
-			$cccc->cuentacorrienteproveedor_id = 0;
-			$cccc->ingreso_id = 0;
-			$cccc->proveedor_id = $proveedor_id;
-			$cccc->chequeproveedordetalle_id = ($ingresotipopago_id == 1) ? $chequeproveedordetalle_id : 0;
-			$cccc->transferenciaproveedordetalle_id = ($ingresotipopago_id == 2) ? $transferenciaproveedordetalle_id : 0;
-			$cccc->usuario_id = $usuario_id;
-			$cccc->save();	
+			$ccpc = new CuentaCorrienteproveedorCredito();
+			$ccpc->fecha = date('Y-m-d');
+			$ccpc->hora = date('H:i:s');
+			$ccpc->referencia = $referencia;
+			$ccpc->importe = $nuevo_importe;
+			$ccpc->movimiento = $importe;
+			$ccpc->cuentacorrienteproveedor_id = 0;
+			$ccpc->ingreso_id = 0;
+			$ccpc->proveedor_id = $proveedor_id;
+			$ccpc->chequeproveedordetalle_id = ($ingresotipopago_id == 1) ? $chequeproveedordetalle_id : 0;
+			$ccpc->transferenciaproveedordetalle_id = ($ingresotipopago_id == 2) ? $transferenciaproveedordetalle_id : 0;
+			$ccpc->usuario_id = $usuario_id;
+			$ccpc->save();	
 		}		
 
 		header("Location: " . URL_APP . "/cuentacorrienteproveedor/consultar/{$proveedor_id}");
@@ -607,9 +607,9 @@ class CuentaCorrienteProveedorController {
 				}
 				break;
 			case 6:
-				$select = "cccc.cuentacorrienteproveedorcredito_id AS ID";
-				$from = "cuentacorrienteproveedorcredito cccc";
-				$where = "cccc.proveedor_id = {$proveedor_id} ORDER BY cccc.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
+				$select = "ccpc.cuentacorrienteproveedorcredito_id AS ID";
+				$from = "cuentacorrienteproveedorcredito ccpc";
+				$where = "ccpc.proveedor_id = {$proveedor_id} ORDER BY ccpc.cuentacorrienteproveedorcredito_id DESC LIMIT 1";
 				$max_cuentacorrienteproveedorcredito_id = CollectorCondition()->get('CuentaCorrienteProveedorCredito', $where, 4, $from, $select);
 				$max_cuentacorrienteproveedorcredito_id = (is_array($max_cuentacorrienteproveedorcredito_id) AND !empty($max_cuentacorrienteproveedorcredito_id)) ? $max_cuentacorrienteproveedorcredito_id[0]['ID'] : 0;
 
@@ -633,7 +633,6 @@ class CuentaCorrienteProveedorController {
 				$ccpc->usuario_id = $usuario_id;
 				$ccpc->save();
 				break;
-			break;
 		}		
 
 		$select = "ccp.importe AS IMPORTE, ccp.ingreso AS INGRESO, ccp.cuentacorrienteproveedor_id AS ID";
