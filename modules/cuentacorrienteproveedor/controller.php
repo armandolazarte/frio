@@ -414,7 +414,7 @@ class CuentaCorrienteProveedorController {
 		header("Location: " . URL_APP . "/cuentacorrienteproveedor/consultar/{$proveedor_id}");
 	}
 
-	function guardar_credito_cuetacorriente() {
+	function guardar_credito_cuentacorriente() {
 		SessionHandler()->check_session();
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
