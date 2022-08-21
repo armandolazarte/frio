@@ -76,6 +76,14 @@ class MovimientoCajaController {
 		$this->model->save();
 		header("Location: " . URL_APP . "/movimientocaja/panel");
 	}
+
+	function eliminar($arg) {
+		SessionHandler()->check_session();
+		$movimientocaja_id = $arg;
+		$this->model->movimientocaja_id = $movimientocaja_id;
+		$this->model->delete();
+		header("Location: " . URL_APP . "/movimientocaja/panel");
+	}
 	
 	function traer_movimientocaja_ajax($arg) {
 		SessionHandler()->check_session();
