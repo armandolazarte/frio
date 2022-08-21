@@ -892,6 +892,20 @@ class ReporteController {
 		$group_by = "ccc.cobrador";
 		$cobranza_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $group_by);
 
+		#INGRESO MOVIMIENTO CAJA 
+		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$ingreso_movimientocaja = (is_array($ingreso_movimientocaja)) ? $ingreso_movimientocaja[0]['IMPORTETOTAL'] : 0;
+		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
+
+		#DETALLE INGRESO MOVIMIENTO CAJA 
+		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$detalle_ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+
 		#SALIDA MOVIMIENTO CAJA 
 		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
@@ -913,11 +927,12 @@ class ReporteController {
 							   '{gasto_diario}'=>$gasto_diario,
 							   '{liquidacion}'=>$liquidacion,
 							   '{vehiculos}'=>$vehiculos,
+							   '{ingreso_movimientocaja}'=>$ingreso_movimientocaja,
 							   '{salida_movimientocaja}'=>$salida_movimientocaja,
 							   '{caja}'=>$calculo_cajadiaria,
 							   '{fecha}'=>$fecha_filtro);
-		
-		$this->view->resumen_diario($array_totales, $cobranza_collection, $detalle_pagoproveedor, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $detalle_salida_movimientocaja, 2);
+
+		$this->view->resumen_diario($array_totales, $cobranza_collection, $detalle_pagoproveedor, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $detalle_ingreso_movimientocaja, $detalle_salida_movimientocaja, 2);
 	}
 
 	function detalle_cobrador_cobranza($arg) {
