@@ -13,7 +13,7 @@
     </div>
     <div class="form-group col-md-4 col-sm-12 col-xs-12">
         <label>Tipo</label>
-        <input type="text" class="form-control" id="numero_cuenta" name="numero_cuenta" value="{movimientocajatipo-codigo} - {movimientocajatipo-destino}" readonly>
+        <input type="text" class="form-control" id="numero_cuenta" name="numero_cuenta" value="{movimientocajatipo-codigo}: {movimientocajatipo-destino}" readonly>
     </div>
     <div class="form-group col-md-4 col-sm-12 col-xs-12">
         <label>Banco</label>
@@ -37,5 +37,6 @@
     </div>    
 </div>
 <div class="form-group col-md-12 col-sm-12 col-xs-12" style="text-align: right;">
+    <button class="btn btn-warning btn-xs" onclick="confirma_formulario(3, '{url_app}/movimientocaja/editar/{movimientocaja-movimientocaja_id}');" title="Editar movimiento de caja"><i class="fa fa-edit"></i> Editar</button>
     <button class="btn btn-dark btn-xs" onclick="verMovmientosCaja();" title="Volver"><i class="fa fa-arrow-left"></i> Volver</button>
 </div>
