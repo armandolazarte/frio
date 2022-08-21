@@ -916,6 +916,7 @@ class ReporteController {
 							   '{salida_movimientocaja}'=>$salida_movimientocaja,
 							   '{caja}'=>$calculo_cajadiaria,
 							   '{fecha}'=>$fecha_filtro);
+		
 		$this->view->resumen_diario($array_totales, $cobranza_collection, $detalle_pagoproveedor, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $detalle_salida_movimientocaja, 2);
 	}
 
