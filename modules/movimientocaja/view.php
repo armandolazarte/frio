@@ -38,6 +38,7 @@ class MovimientoCajaView extends View {
 		$gui = file_get_contents("static/modules/movimientocaja/traer_movimientocaja_ajax.html");
 		$obj_movimientocaja = $this->set_dict($obj_movimientocaja);
 		$render = $this->render($obj_movimientocaja, $gui);
+		$render = str_replace('{url_app}', URL_APP, $render);
 		print $render;
 	}
 }
