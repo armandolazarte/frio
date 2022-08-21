@@ -39,7 +39,7 @@ if (SO_UNIX == true) {
 
 # Configuración estática del sistema
 const APP_TITTLE = "dhTordo";
-const APP_VERSION = "v3.0.1";
+const APP_VERSION = "v3.3.8";
 const APP_ABREV = "Dharma";
 const LOGIN_URI = "/usuario/login";
 const DEFAULT_MODULE = "reporte";
