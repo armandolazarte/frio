@@ -14,13 +14,14 @@ class MovimientoCajaController {
 	function panel() {
 		SessionHandler()->check_session();
 		#CAJA
-		/*
-    	$select = "i.ingreso_id AS INGRESO_ID, i.fecha AS FECHA, date_format(i.fecha, '%d/%m/%Y') AS FECEMI, date_format(i.fecha_ingreso, '%d/%m/%Y') AS FECING, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS FECVEN, prv.razon_social AS PROV, ci.denominacion AS CONDI, i.descuento AS DESCUENTO, CONCAT(tf.nomenclatura, ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, i.costo_total AS TOTAL, i.costo_total_iva AS TIVA, cp.denominacion AS CP, CASE WHEN (SELECT COUNT(ccp.ingreso_id) FROM cuentacorrienteproveedor ccp WHERE ccp.ingreso_id = i.ingreso_id) > 1 THEN 'none' ELSE 'inline-block'END AS DSP_BTN_EDIT";
-		$from = "ingreso i INNER JOIN proveedor prv ON i.proveedor = prv.proveedor_id INNER JOIN  condicionpago cp ON i.condicionpago = cp.condicionpago_id INNER JOIN  condicioniva ci ON i.condicioniva = ci.condicioniva_id INNER JOIN tipofactura tf ON i.tipofactura = tf.tipofactura_id ORDER BY i.fecha DESC";
-		$ingreso_collection = CollectorCondition()->get('Ingreso', NULL, 4, $from, $select);*/
+		
+    	$select = "mc.movimientocaja_id AS MOVCAJID, mc.fecha AS FECHA, mc.numero AS NUMERO, mc.banco AS BANCO, mc.numero_cuenta AS NUMCUENTA, mct.destino AS TIPMOV, mc.importe AS IMPORTE, mc.detalle AS DETALLE,CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, CASE WHEN mc.codigo = 'INGCAJ00001' THEN 'success' ELSE 'danger' END AS CLAICO";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mct.codigo IN ('INGCAJ00001', 'EGRCAJ00001')"
+		$movimientocaja_collection = CollectorCondition()->get('MovimientoCaja', NULL, 4, $from, $select);*/
 
 		$movimientocajatipo_collection = Collector()->get('MovimientoCajaTipo');
-		$this->view->panel($movimientocajatipo_collection);
+		$this->view->panel($movimientocaja_collection, $movimientocajatipo_collection);
 	}
 
 	function guardar() {
@@ -37,7 +38,7 @@ class MovimientoCajaController {
 		$this->model->usuario_id = $usuario_id;
 		$this->model->movimientocajatipo = filter_input(INPUT_POST, 'movimientocajatipo');
 		$this->model->save();
-		header("Location: " . URL_APP . "/movimientocajatipo/panel");
+		header("Location: " . URL_APP . "/movimientocaja/panel");
 	}
 }
 ?>
