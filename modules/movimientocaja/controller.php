@@ -22,5 +22,22 @@ class MovimientoCajaController {
 		$movimientocajatipo_collection = Collector()->get('MovimientoCajaTipo');
 		$this->view->panel($movimientocajatipo_collection);
 	}
+
+	function guardar() {
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+
+		$this->model->fecha = filter_input(INPUT_POST, 'fecha');
+		$this->model->hora = date('H:i:s');
+		$this->model->numero = filter_input(INPUT_POST, 'numero');
+		$this->model->banco = filter_input(INPUT_POST, 'banco');
+		$this->model->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta');
+		$this->model->importe = filter_input(INPUT_POST, 'importe');
+		$this->model->detalle = filter_input(INPUT_POST, 'detalle');
+		$this->model->usuario_id = $usuario_id;
+		$this->model->movimientocajatipo = filter_input(INPUT_POST, 'movimientocajatipo');
+		$this->model->save();
+		header("Location: " . URL_APP . "/movimientocajatipo/panel");
+	}
 }
 ?>

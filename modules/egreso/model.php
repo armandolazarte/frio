@@ -10,9 +10,7 @@ require_once "modules/egresoentrega/model.php";
 
 class Egreso extends StandardObject {
 	
-	function __construct(Cliente $cliente=NULL, Vendedor $vendedor=NULL, CondicionIVA $condicioniva=NULL, 
-						 CondicionPago $condicionpago=NULL, TipoFactura $tipofactura=NULL, EgresoComision $egresocomision=NULL,
-						 EgresoEntrega $egresoentrega=NULL) {
+	function __construct(Cliente $cliente=NULL, Vendedor $vendedor=NULL, CondicionIVA $condicioniva=NULL, CondicionPago $condicionpago=NULL, TipoFactura $tipofactura=NULL, EgresoComision $egresocomision=NULL, EgresoEntrega $egresoentrega=NULL) {
 		$this->egreso_id = 0;
 		$this->punto_venta = 0;
 		$this->numero_factura = 0;
