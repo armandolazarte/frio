@@ -20,7 +20,6 @@ class MovimientoCajaController {
 		$ingreso_collection = CollectorCondition()->get('Ingreso', NULL, 4, $from, $select);*/
 
 		$movimientocajatipo_collection = Collector()->get('MovimientoCajaTipo');
-		print_r($movimientocajatipo_collection);exit;
 		$this->view->panel($movimientocajatipo_collection);
 	}
 }
