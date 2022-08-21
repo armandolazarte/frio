@@ -97,11 +97,17 @@
 <script src="{url_static}vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="{url_static}vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/moment.min.js"></script>
+<script src="{url_static}vendors/datatables.net-plug-in-date/datetime.js"></script>
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('#tbl_movimientocaja').dataTable( {
             "aaSorting": [[ 0, "asc" ]]
-          , "iDisplayLength":10
+            , "iDisplayLength": 10
+            , columnDefs: [ {
+                targets: 1,
+                render: $.fn.dataTable.render.moment( 'YYYY-MM-DD', 'DD/MM/YYYY' )
+            } ]
         } );
     } );
 </script>
