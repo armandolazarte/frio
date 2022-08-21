@@ -97,7 +97,7 @@ class ReporteView extends View {
 		print $template;
 	}
 
-	function resumen_diario($array_totales, $cobranza_collection, $pagoproveedor_collection, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $tipo_resumen_diario) {
+	function resumen_diario($array_totales, $cobranza_collection, $pagoproveedor_collection, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $detalle_salida_movimientocaja, $tipo_resumen_diario) {
 		if ($tipo_resumen_diario == 1) {
 			$gui = file_get_contents("static/modules/reporte/resumen_diario.html");
 		} else {
@@ -122,6 +122,9 @@ class ReporteView extends View {
 		$gui_detalle_comision = file_get_contents("static/modules/reporte/detalle_comision.html");
 		$gui_detalle_comision = $this->render_regex_dict('DETALLE_COMISION', $gui_detalle_comision, $detalle_comision);
 
+		$gui_detalle_salida_movimientocaja = file_get_contents("static/modules/reporte/detalle_salida_movimientocaja.html");
+		$gui_detalle_salida_movimientocaja = $this->render_regex_dict('DETALLE_MOVIMIENTOCAJA', $gui_detalle_salida_movimientocaja, $detalle_salida_movimientocaja);
+
 		$render = $this->render($array_totales, $gui);
 		$render = str_replace('{detalle_cobranza}', $gui_detalle_cobranza, $render);
 		$render = str_replace('{detalle_pagoproveedor}', $gui_detalle_pagoproveedor, $render);
@@ -129,6 +132,7 @@ class ReporteView extends View {
 		$render = str_replace('{detalle_liquidacion}', $gui_detalle_liquidacion, $render);
 		$render = str_replace('{detalle_vehiculos}', $gui_detalle_vehiculos, $render);
 		$render = str_replace('{detalle_comision}', $gui_detalle_comision, $render);
+		$render = str_replace('{detalle_salida_movimientocaja}', $gui_detalle_salida_movimientocaja, $render);
 		$render = $this->render_breadcrumb($render);
 		$template = $this->render_template($render);
 		print $template;
