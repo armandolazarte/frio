@@ -1923,10 +1923,26 @@ class ReporteController {
 		$salario_total = (is_array($salario_total) AND !empty($salario_total)) ? $salario_total[0]['TOTAL'] : 0;
 		$salario_total = (is_null($salario_total)) ? 0 : $salario_total;
 
+		#INGRESO MOVIMIENTO CAJA 
+		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$ingreso_movimientocaja = (is_array($ingreso_movimientocaja)) ? $ingreso_movimientocaja[0]['IMPORTETOTAL'] : 0;
+		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
+		
+		#SALIDA MOVIMIENTO CAJA 
+		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$salida_movimientocaja = (is_array($salida_movimientocaja)) ? $salida_movimientocaja[0]['IMPORTETOTAL'] : 0;
+		$salida_movimientocaja = (is_null($salida_movimientocaja)) ? 0 : $salida_movimientocaja;
+
 		if ($fecha_cajadiaria == $fecha_sys) {
 			$calculo_cajadiaria = round($cajadiaria,2);
 		} else {
-			$calculo_cajadiaria = round(($cajadiaria + $cobranza - $pago_proveedores - $egreso_comision_hoy - $gasto_diario - $vehiculocombustible_total - $salario_total),2);
+			$calculo_cajadiaria = round(($cajadiaria + $cobranza + $ingreso_movimientocaja - $salida_movimientocaja - $pago_proveedores - $egreso_comision_hoy - $gasto_diario - $vehiculocombustible_total - $salario_total), 2);
 		}
 
 		return $calculo_cajadiaria;
