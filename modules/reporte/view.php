@@ -97,7 +97,7 @@ class ReporteView extends View {
 		print $template;
 	}
 
-	function resumen_diario($array_totales, $cobranza_collection, $pagoproveedor_collection,$detalle_gasto_diario,$detalle_liquidacion,$detalle_vehiculos,$detalle_comision,$tipo_resumen_diario) {
+	function resumen_diario($array_totales, $cobranza_collection, $pagoproveedor_collection, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $tipo_resumen_diario) {
 		if ($tipo_resumen_diario == 1) {
 			$gui = file_get_contents("static/modules/reporte/resumen_diario.html");
 		} else {

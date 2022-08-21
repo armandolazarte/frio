@@ -15,6 +15,7 @@ require_once "modules/notacredito/model.php";
 require_once "modules/notacreditodetalle/model.php";
 require_once "modules/proveedor/model.php";
 require_once "modules/vendedor/model.php";
+require_once "modules/movimientocaja/model.php";
 require_once "modules/cajadiaria/model.php";
 
 
@@ -694,6 +695,7 @@ class ReporteController {
     	SessionHandler()->check_session();
     	$fecha_filtro = filter_input(INPUT_POST, 'fecha');
 
+    	#CAJA DIARIA
     	$select = "cd.caja AS CAJA";
 		$from = "cajadiaria cd";
 		$where = "cd.fecha = '{$fecha_filtro}' ORDER BY cd.fecha DESC LIMIT 1";
@@ -701,6 +703,7 @@ class ReporteController {
 		$cajadiaria = (is_array($cajadiaria) AND !empty($cajadiaria)) ? $cajadiaria[0]['CAJA'] : 0;
 		$cajadiaria = (is_null($cajadiaria)) ? 0 : $cajadiaria;
 
+		#SUMA COBRANZAS CONTADO
 		$select = "e.egreso_id AS EGRID, ROUND(e.importe_total, 2) AS IMPTOT";
 		$from = "egreso e INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id";
 		$where = "e.condicionpago = 2 AND ee.fecha = '{$fecha_filtro}' AND ee.estadoentrega = 4";
@@ -726,6 +729,7 @@ class ReporteController {
 			$sum_contado = $sum_contado + $cobranzacontado_collection[$clave]['IMPTOT'];
 		}
 
+		#SUMA COBRANZAS CTA CTE
 		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
 		$where = "ccc.fecha = '{$fecha_filtro}' AND ccc.ingresotipopago = 3";
@@ -871,7 +875,7 @@ class ReporteController {
 		$vehiculos = (is_null($vehiculos)) ? 0 : $vehiculos;
 
 		//DETALLE VEHICULOS
-		$select = "v.denominacion AS DETALLE,ROUND(vc.importe, 2) AS IMPORTETOTAL";
+		$select = "v.denominacion AS DETALLE, ROUND(vc.importe, 2) AS IMPORTETOTAL";
 		$from = "vehiculocombustible vc INNER JOIN vehiculo v ON v.vehiculo_id = vc.vehiculo";
 		$where = "vc.fecha = '{$fecha_filtro}'";
 		$detalle_vehiculos = CollectorCondition()->get('VehiculoCombustible', $where, 4, $from, $select);
@@ -888,6 +892,14 @@ class ReporteController {
 		$group_by = "ccc.cobrador";
 		$cobranza_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $group_by);
 
+		#EGRESOS MOVIMIENTO CAJA 
+		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$salida_movimientocaja = (is_array($salida_movimientocaja)) ? $salida_movimientocaja[0]['IMPORTETOTAL'] : 0;
+		$salida_movimientocaja = (is_null($salida_movimientocaja)) ? 0 : $salida_movimientocaja;
+
 		$array_totales = array('{cobranza}'=>$cobranza,
 							   '{ventas}'=>$total_facturacion_hoy,
 							   '{pago_proveedores}'=>$pago_proveedores,
@@ -895,6 +907,7 @@ class ReporteController {
 							   '{gasto_diario}'=>$gasto_diario,
 							   '{liquidacion}'=>$liquidacion,
 							   '{vehiculos}'=>$vehiculos,
+							   '{salida_movimientocaja}'=>$salida_movimientocaja,
 							   '{caja}'=>$calculo_cajadiaria,
 							   '{fecha}'=>$fecha_filtro);
 		$this->view->resumen_diario($array_totales, $cobranza_collection, $detalle_pagoproveedor,$detalle_gasto_diario,$detalle_liquidacion,$detalle_vehiculos,$detalle_comision, 2);
