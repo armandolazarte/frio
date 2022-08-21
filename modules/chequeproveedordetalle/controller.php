@@ -46,6 +46,7 @@ class ChequeProveedorDetalleController {
 			}
 		}
 
+		print_r($pagos_chequeproveedordetalle_collection);exit;
 		$this->view->consultar_pagos($pagos_chequeproveedordetalle_collection, $chequeproveedordetalle_collection, $pm);
 	}
 }
