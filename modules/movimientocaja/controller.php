@@ -19,7 +19,7 @@ class MovimientoCajaController {
 		$from = "ingreso i INNER JOIN proveedor prv ON i.proveedor = prv.proveedor_id INNER JOIN  condicionpago cp ON i.condicionpago = cp.condicionpago_id INNER JOIN  condicioniva ci ON i.condicioniva = ci.condicioniva_id INNER JOIN tipofactura tf ON i.tipofactura = tf.tipofactura_id ORDER BY i.fecha DESC";
 		$ingreso_collection = CollectorCondition()->get('Ingreso', NULL, 4, $from, $select);*/
 
-		$movimientocajatipo_collection = CollectorCondition()->get('MovimientoCajaTipo');
+		$movimientocajatipo_collection = Collector()->get('MovimientoCajaTipo');
 		$this->view->panel($movimientocajatipo_collection);
 	}
 }
