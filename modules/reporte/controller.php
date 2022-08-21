@@ -1926,7 +1926,7 @@ class ReporteController {
 		#INGRESO MOVIMIENTO CAJA 
 		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
-		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'INGCAJ00001'";
 		$ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 		$ingreso_movimientocaja = (is_array($ingreso_movimientocaja)) ? $ingreso_movimientocaja[0]['IMPORTETOTAL'] : 0;
 		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
@@ -1934,7 +1934,7 @@ class ReporteController {
 		#SALIDA MOVIMIENTO CAJA 
 		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
-		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'EGRCAJ00001'";
 		$salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 		$salida_movimientocaja = (is_array($salida_movimientocaja)) ? $salida_movimientocaja[0]['IMPORTETOTAL'] : 0;
 		$salida_movimientocaja = (is_null($salida_movimientocaja)) ? 0 : $salida_movimientocaja;
