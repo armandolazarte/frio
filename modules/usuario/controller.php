@@ -29,20 +29,20 @@ class UsuarioController {
     function agregar() {
     	SessionHandler()->check_session();
 		$usuario = $_SESSION["data-login-" . APP_ABREV]["usuario-denominacion"];
-		$select_usuario = "u.usuario_id AS USUARIO_ID, u.denominacion AS DENOMINACION, CONCAT(ud.apellido, ', ', ud.nombre) AS USUARIO";
-		$from_usuario = "usuario u INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
+		$select = "u.usuario_id AS USUARIO_ID, u.denominacion AS DENOMINACION, CONCAT(ud.apellido, ', ', ud.nombre) AS USUARIO, cm.denominacion AS CONMEN";
+		$from = "usuario u INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id INNER JOIN configuracionmenu cm ON u.configuracionmenu = cm.configuracionmenu_id";
 
 		$select_menu = "cm.denominacion AS DENOMINACION, cm.configuracionmenu_id AS CONFIGURACIONMENU_ID";
 		$from_menu = "configuracionmenu cm";
 
 		if ($usuario == "desarrollador") {
 			$configuracionmenu_collection = CollectorCondition()->get('ConfiguracionMenu', NULL, 4, $from_menu, $select_menu);
-			$usuario_collection = CollectorCondition()->get('Usuario', NULL, 4, $from_usuario, $select_usuario);
+			$usuario_collection = CollectorCondition()->get('Usuario', NULL, 4, $from, $select);
 		} else {
 			$where_menu = "cm.denominacion != 'DESARROLLADOR'";
 			$configuracionmenu_collection = CollectorCondition()->get('ConfiguracionMenu', $where_menu, 4, $from_menu, $select_menu);
-			$where_usuario = "u.denominacion != 'desarrollador'";
-			$usuario_collection = CollectorCondition()->get('Usuario', $where_usuario, 4, $from_usuario, $select_usuario);
+			$where = "u.denominacion != 'desarrollador'";
+			$usuario_collection = CollectorCondition()->get('Usuario', $where, 4, $from, $select);
 		}
 
 		$select = "CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, v.vendedor_id AS VID";
