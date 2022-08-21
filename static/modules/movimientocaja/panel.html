@@ -59,7 +59,7 @@
     </div>
 </div>
 <div class="col-md-8 col-sm-8 col-xs-8">
-    <div class="x_panel">
+    <div class="x_panel" id="div_tbl_movimientocaja">
         <div class="x_title">
             <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Listado de movimientos de caja</h2>
             <ul class="nav navbar-right panel_toolbox">
@@ -88,6 +88,7 @@
             </table>
         </div>
     </div>
+    <div class="x_panel" id="div_consultar_movimientocaja" style="display: none;"></div>
 </div>
 <!-- Datatables -->
 <script src="{url_static}vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -107,4 +108,21 @@
             } ]
         } );
     } );
+
+    function consultarMovimiento(movimientocaja_id) {
+        var html_consultar_movimientocaja = $.ajax({
+            url: '{url_app}/movimientocaja/traer_movimientocaja_ajax/' + movimientocaja_id,
+                dataType: 'text',
+                async: false
+        }).responseText;
+        
+        document.getElementById('div_tbl_movimientocaja').style.display = 'none';
+        document.getElementById('div_consultar_movimientocaja').style.display = 'block';
+        document.getElementById('div_consultar_movimientocaja').innerHTML = html_consultar_movimientocaja;
+    }
+
+    function verMovmientosCaja() {
+        document.getElementById('div_tbl_movimientocaja').style.display = 'block';
+        document.getElementById('div_consultar_movimientocaja').style.display = 'none';
+    }
 </script>

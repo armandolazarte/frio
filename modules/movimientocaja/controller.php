@@ -2,6 +2,7 @@
 require_once "modules/movimientocaja/model.php";
 require_once "modules/movimientocaja/view.php";
 require_once "modules/movimientocajatipo/model.php";
+require_once "modules/usuario/model.php";
 
 
 class MovimientoCajaController {
@@ -14,7 +15,6 @@ class MovimientoCajaController {
 	function panel() {
 		SessionHandler()->check_session();
 		#CAJA
-		
     	$select = "mc.movimientocaja_id AS MOVCAJID, mc.fecha AS FECHA, mc.numero AS NUMERO, mc.banco AS BANCO, mc.numero_cuenta AS NUMCUENTA, mct.destino AS TIPMOV, mc.importe AS IMPORTE, mc.detalle AS DETALLE, mct.codigo AS CODIGO, CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'success' ELSE 'danger' END AS CLAICO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'arrow-up' ELSE 'arrow-down' END AS ICON";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
 		$where = "mct.codigo IN ('INGCAJ00001', 'EGRCAJ00001')";
@@ -39,6 +39,22 @@ class MovimientoCajaController {
 		$this->model->movimientocajatipo = filter_input(INPUT_POST, 'movimientocajatipo');
 		$this->model->save();
 		header("Location: " . URL_APP . "/movimientocaja/panel");
+	}
+	
+	function traer_movimientocaja_ajax($arg) {
+		SessionHandler()->check_session();
+		$movimientocaja_id = $arg;
+		$this->model->movimientocaja_id = $movimientocaja_id;
+		$this->model->get();
+		$usuario_id = $this->model->usuario_id;
+
+		$um = new Usuario();
+		$um->usuario_id = $usuario_id;
+		$um->get();
+		unset($um->configuracionmenu);
+		$this->model->usuario = $um;
+
+		$this->view->traer_movimientocaja_ajax($this->model);
 	}
 }
 ?>
