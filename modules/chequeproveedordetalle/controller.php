@@ -19,12 +19,12 @@ class ChequeProveedorDetalleController {
 		$pm->proveedor_id = $proveedor_id;
 		$pm->get();
 
-		$select = "cpd.chequeproveedordetalle_id AS CHEPRODETID, cpd.fecha AS FECHA, cpd.numero AS NUM_CHEQUE, cpd.titular AS TITULAR, cpd.banco AS BANCO, CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE i.tipofactura = tf.tipofactura_id), ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, ccp.cuentacorrienteproveedor_id AS MOVCCP, ccp.ingreso AS PAGO";
+		$select = "cpd.chequeproveedordetalle_id AS CHEPRODETID, cpd.fecha_pago AS FECHA, cpd.numero AS NUM_CHEQUE, cpd.titular AS TITULAR, cpd.banco AS BANCO, CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE i.tipofactura = tf.tipofactura_id), ' ', LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, ccp.cuentacorrienteproveedor_id AS MOVCCP, ccp.ingreso AS PAGO";
 		$from = "chequeproveedordetalle cpd INNER JOIN cuentacorrienteproveedor ccp ON cpd.cuentacorrienteproveedor_id = ccp.cuentacorrienteproveedor_id INNER JOIN ingreso i ON ccp.ingreso_id = i.ingreso_id";
 		$where = "ccp.proveedor_id = {$proveedor_id}";
 		$pagos_chequeproveedordetalle_collection = CollectorCondition()->get('ChequeProveedorDetalle', $where, 4, $from, $select);
 
-		$select = "cpd.fecha AS FECHA, cpd.numero AS CHEQUE, ROUND((SUM(ccp.ingreso)), 2) AS PAGO";
+		$select = "cpd.fecha_pago AS FECHA, cpd.numero AS CHEQUE, ROUND((SUM(ccp.ingreso)), 2) AS PAGO";
 		$from = "chequeproveedordetalle cpd INNER JOIN cuentacorrienteproveedor ccp ON cpd.cuentacorrienteproveedor_id = ccp.cuentacorrienteproveedor_id";
 		$where = "ccp.proveedor_id = {$proveedor_id}";
 		$groupby = "cpd.numero";
