@@ -6,8 +6,8 @@ class MovimientoCajaView extends View {
 		$gui = file_get_contents("static/modules/movimientocaja/panel.html");
 		$tbl_movimientocaja = file_get_contents("static/modules/movimientocaja/tbl_movimientocaja.html");
 		$slt_movimientocajatipo = file_get_contents("static/modules/movimientocaja/slt_movimientocajatipo.html");
-		print_r($movimientocaja_collection);exit;
-		$tbl_movimientocaja = $this->render_regex_dict('TBL_MOVIMIENTOCAJA', $slt_movimientocaja, $movimientocaja_collection);
+		
+		$tbl_movimientocaja = $this->render_regex_dict('TBL_MOVIMIENTOCAJA', $tbl_movimientocaja, $movimientocaja_collection);
 		$slt_movimientocajatipo = $this->render_regex('SLT_MOVIMIENTOCAJATIPO', $slt_movimientocajatipo, $movimientocajatipo_collection);		
 
 		$render = str_replace('{tbl_movimientocaja}', $tbl_movimientocaja, $gui);
