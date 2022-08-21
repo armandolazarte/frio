@@ -56,6 +56,26 @@ class MovimientoCajaController {
 		$this->model->save();
 		header("Location: " . URL_APP . "/movimientocaja/panel");
 	}
+
+	function actualizar() {
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+		$movimientocaja_id = filter_input(INPUT_POST, 'movimientocaja_id');
+
+		$this->model->movimientocaja_id = $movimientocaja_id;
+		$this->model->get();
+		$this->model->fecha = filter_input(INPUT_POST, 'fecha');
+		$this->model->hora = date('H:i:s');
+		$this->model->numero = filter_input(INPUT_POST, 'numero');
+		$this->model->banco = filter_input(INPUT_POST, 'banco');
+		$this->model->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta');
+		$this->model->importe = filter_input(INPUT_POST, 'importe');
+		$this->model->detalle = filter_input(INPUT_POST, 'detalle');
+		$this->model->usuario_id = $usuario_id;
+		$this->model->movimientocajatipo = filter_input(INPUT_POST, 'movimientocajatipo');
+		$this->model->save();
+		header("Location: " . URL_APP . "/movimientocaja/panel");
+	}
 	
 	function traer_movimientocaja_ajax($arg) {
 		SessionHandler()->check_session();

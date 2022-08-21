@@ -52,7 +52,8 @@
                         <textarea class="form-control" id="detalle" name="detalle" rows="5">{movimientocaja-detalle}</textarea>
                     </div>
                     <div class="col-lg-12" style="margin-top: 2%;" align="right">
-                        <a href="#" class="btn btn-app" onclick="confirma_formulario(1, '')"> <i class="fa fa-save"></i> Agregar </a>
+                        <input type="hidden" id="movimientocaja_id" name="movimientocaja_id" value="{movimientocaja-movimientocaja_id}" required>
+                        <a href="#" class="btn btn-app" onclick="confirma_formulario(3, '')"> <i class="fa fa-save"></i> Editar </a>
                     </div>
                 </form>
             </div>            
