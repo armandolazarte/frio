@@ -72,16 +72,13 @@
             <table id="tbl_movimientocaja" class="table table-striped table-bordered">
                 <thead>
                     <tr style="font-size: 12px;">
-                        <th>#</th>
                         <th>Fecha</th>
                         <th>COD</th>
                         <th>Tipo</th>
                         <th>N°</th>
                         <th>Banco</th>
                         <th>N° Cuenta</th>
-                        <th>Detalle</th>
                         <th>Importe</th>
-                        <th>Usuario</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -102,7 +99,7 @@
 <script type="text/javascript" charset="utf-8">
     $(document).ready(function() {
         $('#tbl_movimientocaja').dataTable( {
-            "aaSorting": [[ 0, "asc" ]]
+            "aaSorting": [[ 1, "asc" ]]
             , "iDisplayLength": 10
             , columnDefs: [ {
                 targets: 1,
