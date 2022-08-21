@@ -626,6 +626,34 @@ class ReporteController {
 		$where = "vc.fecha = '{$fecha_sys}'";
 		$detalle_vehiculos = CollectorCondition()->get('VehiculoCombustible', $where, 4, $from, $select);
 
+		#INGRESO MOVIMIENTO CAJA 
+		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$ingreso_movimientocaja = (is_array($ingreso_movimientocaja)) ? $ingreso_movimientocaja[0]['IMPORTETOTAL'] : 0;
+		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
+
+		#DETALLE INGRESO MOVIMIENTO CAJA 
+		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$detalle_ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+
+		#SALIDA MOVIMIENTO CAJA 
+		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$salida_movimientocaja = (is_array($salida_movimientocaja)) ? $salida_movimientocaja[0]['IMPORTETOTAL'] : 0;
+		$salida_movimientocaja = (is_null($salida_movimientocaja)) ? 0 : $salida_movimientocaja;
+
+		#DETALLE SALIDA MOVIMIENTO CAJA 
+		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
+		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$detalle_salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+
 		$calculo_cajadiaria = $this->calcula_cajadiaria();
 
 		$array_totales = array('{cobranza}'=>$cobranza,
@@ -635,9 +663,11 @@ class ReporteController {
 							   '{gasto_diario}'=>$gasto_diario,
 							   '{liquidacion}'=>$liquidacion,
 							   '{vehiculos}'=>$vehiculos,
+							   '{ingreso_movimientocaja}'=>$ingreso_movimientocaja,
+							   '{salida_movimientocaja}'=>$salida_movimientocaja,
 							   '{caja}'=>$calculo_cajadiaria,
 							   '{fecha}'=>$fecha_sys);
-		$this->view->resumen_diario($array_totales, $cobranza_collection, $detalle_pagoproveedor,$detalle_gasto_diario,$detalle_liquidacion,$detalle_vehiculos,$detalle_comision, 1);
+		$this->view->resumen_diario($array_totales, $cobranza_collection, $detalle_pagoproveedor, $detalle_gasto_diario, $detalle_liquidacion, $detalle_vehiculos, $detalle_comision, $detalle_ingreso_movimientocaja, $detalle_salida_movimientocaja, 1);
 	}
 
 	function detalle_facturaproveedor($arg) {
