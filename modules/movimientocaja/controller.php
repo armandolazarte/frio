@@ -17,7 +17,7 @@ class MovimientoCajaController {
 		
     	$select = "mc.movimientocaja_id AS MOVCAJID, mc.fecha AS FECHA, mc.numero AS NUMERO, mc.banco AS BANCO, mc.numero_cuenta AS NUMCUENTA, mct.destino AS TIPMOV, mc.importe AS IMPORTE, mc.detalle AS DETALLE,CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, CASE WHEN mc.codigo = 'INGCAJ00001' THEN 'success' ELSE 'danger' END AS CLAICO";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
-		$where = "mct.codigo IN ('INGCAJ00001', 'EGRCAJ00001')"
+		$where = "mct.codigo IN ('INGCAJ00001', 'EGRCAJ00001')";
 		$movimientocaja_collection = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 
 		$movimientocajatipo_collection = Collector()->get('MovimientoCajaTipo');
