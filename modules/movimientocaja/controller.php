@@ -24,6 +24,22 @@ class MovimientoCajaController {
 		$this->view->panel($movimientocaja_collection, $movimientocajatipo_collection);
 	}
 
+	function editar($arg) {
+		SessionHandler()->check_session();
+		$movimientocaja_id = $arg;
+
+		#CAJA
+		$select = "mc.movimientocaja_id AS MOVCAJID, mc.fecha AS FECHA, mc.numero AS NUMERO, mc.banco AS BANCO, mc.numero_cuenta AS NUMCUENTA, mct.destino AS TIPMOV, mc.importe AS IMPORTE, mc.detalle AS DETALLE, mct.codigo AS CODIGO, CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'success' ELSE 'danger' END AS CLAICO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'arrow-up' ELSE 'arrow-down' END AS ICON";
+		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
+		$where = "mct.codigo IN ('INGCAJ00001', 'EGRCAJ00001')";
+		$movimientocaja_collection = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
+		$movimientocajatipo_collection = Collector()->get('MovimientoCajaTipo');
+		
+		$this->model->movimientocaja_id = $movimientocaja_id;
+		$this->model->get();
+		$this->view->editar($movimientocaja_collection, $movimientocajatipo_collection, $this->model);
+	}
+
 	function guardar() {
 		SessionHandler()->check_session();
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
