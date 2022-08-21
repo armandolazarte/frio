@@ -55,7 +55,7 @@
                                 <th><i class="fa fa-arrow-circle-down red"></i> MOVIMIENTO CAJA: EGRESO</th>
                                 <th class="red">${salida_movimientocaja}</th>
                                 <th>
-                                    <button class="btn btn-dark btn-xs" onClick="verDetallePagoProveedor();" title="Detalle">
+                                    <button class="btn btn-dark btn-xs" onClick="verDetalleMovimientoCajaSalida();" title="Detalle">
                                         <i class="fa fa-eye"></i>
                                     </button>
                                 </th>
@@ -225,7 +225,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_comision">
+    <div class="col-md-12" style="margin-bottom: 3%; width: 100%; display: none;" id="div_detalle_salida_movimientocaja">
         <div class="col-md-12" style="width: 100%;">
             <div class="x_panel">
                 <div class="x_title">
@@ -294,6 +294,7 @@
         document.getElementById('div_detalle_liquidacion').style.display = 'none';
         document.getElementById('div_detalle_vehiculos').style.display = 'none';
         document.getElementById('div_detalle_comision').style.display = 'none';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'none';
     }
 
     function verDetallePagoProveedor() {
@@ -303,6 +304,7 @@
         document.getElementById('div_detalle_liquidacion').style.display = 'none';
         document.getElementById('div_detalle_vehiculos').style.display = 'none';
         document.getElementById('div_detalle_comision').style.display = 'none';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'none';
     }
 
     function verDetalleGastosVarios() {
@@ -312,6 +314,7 @@
         document.getElementById('div_detalle_liquidacion').style.display = 'none';
         document.getElementById('div_detalle_vehiculos').style.display = 'none';
         document.getElementById('div_detalle_comision').style.display = 'none';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'none';
     }
 
     function verDetalleLiquidacion() {
@@ -321,6 +324,7 @@
         document.getElementById('div_detalle_liquidacion').style.display = 'block';
         document.getElementById('div_detalle_vehiculos').style.display = 'none';
         document.getElementById('div_detalle_comision').style.display = 'none';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'none';
     }
 
     function verDetalleVehiculos() {
@@ -330,6 +334,7 @@
         document.getElementById('div_detalle_liquidacion').style.display = 'none';
         document.getElementById('div_detalle_vehiculos').style.display = 'block';
         document.getElementById('div_detalle_comision').style.display = 'none';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'none';
     }
 
 
@@ -340,5 +345,16 @@
         document.getElementById('div_detalle_liquidacion').style.display = 'none';
         document.getElementById('div_detalle_vehiculos').style.display = 'none';
         document.getElementById('div_detalle_comision').style.display = 'block';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'none';
+    }
+
+    function verDetalleMovimientoCajaSalida() {
+        document.getElementById('div_detalle_cobrador_cobranza').style.display = 'none';
+        document.getElementById('div_detalle_pagoproveedor').style.display = 'none';
+        document.getElementById('div_detalle_gastosvarios').style.display = 'none';
+        document.getElementById('div_detalle_liquidacion').style.display = 'none';
+        document.getElementById('div_detalle_vehiculos').style.display = 'none';
+        document.getElementById('div_detalle_comision').style.display = 'block';
+        document.getElementById('div_detalle_salida_movimientocaja').style.display = 'block';
     }
 </script>
