@@ -888,3 +888,30 @@ CREATE TABLE IF NOT EXISTS cuentacorrienteproveedorcredito (
     , usuario_id INT(11)
     , INDEX (usuario_id)
 ) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS movimientocajatipo (
+    movimientocajatipo_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , codigo VARCHAR(100)
+    , tipo VARCHAR(100)
+    , destino VARCHAR(100)
+) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS movimientocaja (
+    movimientocaja_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , fecha DATE
+    , hora TIME
+    , numero VARCHAR(100)
+    , banco VARCHAR(100)
+    , numero_cuenta VARCHAR(100)
+    , importe DECIMAL(10,4)
+    , detalle TEXT
+    , usuario_id INT(11)
+    , INDEX (usuario_id)
+    , movimientocajatipo INT(11)
+    , INDEX (movimientocajatipo)
+    , FOREIGN KEY (movimientocajatipo)
+        REFERENCES movimientocajatipo (movimientocajatipo_id)
+        ON DELETE CASCADE
+) ENGINE=InnoDb;

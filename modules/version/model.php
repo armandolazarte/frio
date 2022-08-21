@@ -5,11 +5,11 @@ class Version extends StandardObject {
 	
 	function __construct() {
 		$this->version_id = 0;
-                $this->version = '';                
+        $this->version = '';                
 		$this->changelog = '';
 		$this->archivo = '';
-                $this->fecha = '';
-                $this->activa = 0;
+        $this->fecha = '';
+        $this->activa = 0;
 	}
 }
 ?>
