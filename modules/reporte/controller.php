@@ -629,7 +629,7 @@ class ReporteController {
 		#INGRESO MOVIMIENTO CAJA 
 		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
-		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'INGCAJ00001'";
 		$ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 		$ingreso_movimientocaja = (is_array($ingreso_movimientocaja)) ? $ingreso_movimientocaja[0]['IMPORTETOTAL'] : 0;
 		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
@@ -637,13 +637,13 @@ class ReporteController {
 		#DETALLE INGRESO MOVIMIENTO CAJA 
 		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
-		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
+		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'INGCAJ00001'";
 		$detalle_ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 
 		#SALIDA MOVIMIENTO CAJA 
 		$select = "ROUND(SUM(mc.importe), 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id";
-		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'EGRCAJ00001'";
 		$salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 		$salida_movimientocaja = (is_array($salida_movimientocaja)) ? $salida_movimientocaja[0]['IMPORTETOTAL'] : 0;
 		$salida_movimientocaja = (is_null($salida_movimientocaja)) ? 0 : $salida_movimientocaja;
@@ -651,7 +651,7 @@ class ReporteController {
 		#DETALLE SALIDA MOVIMIENTO CAJA 
 		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
-		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
+		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'EGRCAJ00001'";
 		$detalle_salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 
 		$calculo_cajadiaria = $this->calcula_cajadiaria();
