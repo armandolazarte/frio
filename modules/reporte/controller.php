@@ -2277,7 +2277,7 @@ class ReporteController {
 		$dias = filter_input(INPUT_POST, 'dias');
 		$cliente = filter_input(INPUT_POST, 'cliente');
 
-		$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA, cl.documento AS DOCUMENTO,p.denominacion AS PROVINCIA";
+		$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA, cl.documento AS DOCUMENTO, p.denominacion AS PROVINCIA, cl.domicilio AS DOMICILIO, cl.barrio AS BARRIO";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN provincia p ON cl.provincia = p.provincia_id";
 		$where_cliente = "e.fecha BETWEEN CURDATE() - INTERVAL {$dias} DAY AND CURDATE() AND cl.oculto = 0";
 		$where = ($cliente == 'all') ? $where_cliente : "{$where_cliente} AND cl.cliente_id = {$cliente} AND cl.oculto = 0";
@@ -2285,13 +2285,13 @@ class ReporteController {
 
 		$egresos_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select,$groupby);
 
-		$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA, cl.documento AS DOCUMENTO,p.denominacion AS PROVINCIA";
+		$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA, cl.documento AS DOCUMENTO, p.denominacion AS PROVINCIA, cl.domicilio AS DOMICILIO, cl.barrio AS BARRIO";
 		$from = "cliente cl INNER JOIN provincia p ON cl.provincia = p.provincia_id";
 		$where = "cl.oculto = 0  ORDER BY cl.razon_social ASC";
 		$clientes_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
 
 		$subtitulo = "Lista de clientes que no compran hace X({$dias}) Días";
-		$array_encabezados = array('COD', 'CLIENTE', 'NOM FANTASIA', 'DOCUMENTO', 'PROVINCIA');
+		$array_encabezados = array('COD', 'CLIENTE', 'NOM FANTASIA', 'DOCUMENTO', 'PROVINCIA', 'BARRIO', 'DOMICILIO');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
@@ -2300,7 +2300,7 @@ class ReporteController {
 				$newArray = array();
 				foreach ($clientes_collection as $key => $cliente) {
 					if (array_search($cliente['ID'], array_column($egresos_collection, 'ID')) === FALSE) {
-						$newArray[] = array('ID'=>$cliente['ID'],'RAZON_SOCIAL'=>$cliente['RAZON_SOCIAL'], 'NOMBRE_FANTASIA'=>$cliente['NOMBRE_FANTASIA'],'DOCUMENTO'=>$cliente['DOCUMENTO'],'PROVINCIA'=>$cliente['PROVINCIA']);
+						$newArray[] = array('ID'=>$cliente['ID'],'RAZON_SOCIAL'=>$cliente['RAZON_SOCIAL'], 'NOMBRE_FANTASIA'=>$cliente['NOMBRE_FANTASIA'],'DOCUMENTO'=>$cliente['DOCUMENTO'],'PROVINCIA'=>$cliente['PROVINCIA'],'BARRIO'=>$cliente['BARRIO'],'DOMICILIO'=>$cliente['DOMICILIO']);
 					}
 				}
 			} else {
@@ -2310,7 +2310,7 @@ class ReporteController {
 			if (is_array($egresos_collection)) {
 				$newArray = array();
 			} else {
-				$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA, cl.documento AS DOCUMENTO,p.denominacion AS PROVINCIA";
+				$select = "cl.cliente_id AS ID,cl.razon_social AS RAZON_SOCIAL, cl.nombre_fantasia AS NOMBRE_FANTASIA, cl.documento AS DOCUMENTO, p.denominacion AS PROVINCIA, cl.domicilio AS DOMICILIO, cl.barrio AS BARRIO";
 				$from = "cliente cl INNER JOIN provincia p ON cl.provincia = p.provincia_id";
 				$where = "cl.cliente_id = {$cliente} AND cl.oculto = 0";
 				$clientes_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
@@ -2320,12 +2320,13 @@ class ReporteController {
 
 		foreach ($newArray as $clave=>$valor) {
 			$array_temp = array();
-			$array_temp = array(
-							$valor["ID"]
-						,	$valor["RAZON_SOCIAL"]
-						, $valor["NOMBRE_FANTASIA"]
-						, $valor["DOCUMENTO"]
-						, $valor["PROVINCIA"]);
+			$array_temp = array($valor["ID"]
+								, $valor["RAZON_SOCIAL"]
+								, $valor["NOMBRE_FANTASIA"]
+								, $valor["DOCUMENTO"]
+								, $valor["PROVINCIA"]
+								, $valor["BARRIO"]
+								, $valor["DOMICILIO"]);
 			$array_exportacion[] = $array_temp;
 		}
 
