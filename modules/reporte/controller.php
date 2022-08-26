@@ -3277,7 +3277,7 @@ class ReporteController {
 		}
 
 		$egreso_ids = implode(',', $egreso_ids);
-		$select = "ed.producto_id AS PRID, pm.denominacion AS MARCA, p.denominacion AS PRODUCTO, ROUND(SUM(ed.cantidad),2) AS CANTIDAD, pu.denominacion AS UNIDAD";
+		$select = "ed.producto_id AS PRID, pm.denominacion AS MARCA,p.codigo AS CODIGO, p.denominacion AS PRODUCTO, ROUND(SUM(ed.cantidad),2) AS CANTIDAD";
 		$from = "egresodetalle ed INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "ed.egreso_id IN ({$egreso_ids}) AND p.productomarca = {$productomarca}";
 		$group_by = "p.producto_id ORDER BY pm.denominacion ASC, p.denominacion ASC, SUM(ed.cantidad) DESC";
@@ -3306,7 +3306,8 @@ class ReporteController {
 		
 		foreach ($datos_temp as $clave=>$valor) {
 			$array_temp = array();
-			$array_temp = array($valor["PRODUCTO"] . $valor["UNIDAD"]
+			$array_temp = array($valor["CODIGO"]
+								, $valor["PRODUCTO"]
 								, $valor["CANTIDAD"]);
 			$array_exportacion[] = $array_temp;
 		}
