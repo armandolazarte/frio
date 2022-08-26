@@ -3300,7 +3300,7 @@ class ReporteController {
 		}
 		
 		$subtitulo = "CANTIDAD DE VENTAS POR MARCA, PRODUCTO Y RANGO DE FECHA";
-		$array_encabezados = array('PRODUCTO', 'CANTIDAD');
+		$array_encabezados = array('CÓDIGO', 'PRODUCTO', 'CANTIDAD');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 		
