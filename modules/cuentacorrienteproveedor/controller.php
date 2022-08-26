@@ -447,36 +447,43 @@ class CuentaCorrienteProveedorController {
 		$importe_movimiento = filter_input(INPUT_POST, 'importe');
 		$proveedor_id = filter_input(INPUT_POST, 'proveedor_id');
 		
-		if ($ingresotipopago_id == 1) {
-			$numero_cheque = filter_input(INPUT_POST, 'numero_cheque'); 
-			$cpdm = new ChequeProveedorDetalle();
-			$cpdm->numero = filter_input(INPUT_POST, 'numero_cheque');
-			$cpdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
-			$cpdm->fecha_pago = date('Y-m-d');
-			$cpdm->banco = filter_input(INPUT_POST, 'banco');
-			$cpdm->plaza = filter_input(INPUT_POST, 'plaza');
-			$cpdm->titular = filter_input(INPUT_POST, 'titular');
-			$cpdm->documento = filter_input(INPUT_POST, 'documento');
-			$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
-			$cpdm->estado = 2;
-			$cpdm->importe = $importe;
-			$cpdm->cuentacorrienteproveedor_id = 0;
-			$cpdm->save();
-			$chequeproveedordetalle_id = $cpdm->chequeproveedordetalle_id;
-			$referencia = "Crédito de pago con Cheque N° {$numero_cheque}";
-		} else {
-			$numero_transferencia = filter_input(INPUT_POST, 'numero_transferencia'); 
-			$tcdm = new TransferenciaProveedorDetalle();
-			$tcdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
-			$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
-			$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
-			$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
-			$tcdm->importe = $importe;
-			$tcdm->cuentacorrienteproveedor_id = 0;
-			$tcdm->save();	
-			$transferenciaproveedordetalle_id = $tcdm->transferenciaproveedordetalle_id;
-			$referencia = "Crédito de pago con Transferencia N° {$numero_transferencia}";
-		}	
+		switch ($ingresotipopago_id) {
+			case 1:
+				$numero_cheque = filter_input(INPUT_POST, 'numero_cheque'); 
+				$cpdm = new ChequeProveedorDetalle();
+				$cpdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+				$cpdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento');
+				$cpdm->fecha_pago = date('Y-m-d');
+				$cpdm->banco = filter_input(INPUT_POST, 'banco');
+				$cpdm->plaza = filter_input(INPUT_POST, 'plaza');
+				$cpdm->titular = filter_input(INPUT_POST, 'titular');
+				$cpdm->documento = filter_input(INPUT_POST, 'documento');
+				$cpdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_corriente');
+				$cpdm->estado = 2;
+				$cpdm->importe = $importe;
+				$cpdm->cuentacorrienteproveedor_id = 0;
+				$cpdm->save();
+				$chequeproveedordetalle_id = $cpdm->chequeproveedordetalle_id;
+				$referencia = "Crédito de pago con Cheque N° {$numero_cheque}";
+				break;
+			case 2:
+				$numero_transferencia = filter_input(INPUT_POST, 'numero_transferencia'); 
+				$tcdm = new TransferenciaProveedorDetalle();
+				$tcdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+				$tcdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+				$tcdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+				$tcdm->numero_cuenta = filter_input(INPUT_POST, 'numero_cuenta_transferencia');
+				$tcdm->importe = $importe;
+				$tcdm->cuentacorrienteproveedor_id = 0;
+				$tcdm->save();	
+				$transferenciaproveedordetalle_id = $tcdm->transferenciaproveedordetalle_id;
+				$referencia = "Crédito de pago con Transferencia N° {$numero_transferencia}";
+				break;
+			case 3:
+				$referencia = "Crédito de pago con Efectivo";
+				break;
+		}
+			
 
 		$select = "ccpc.cuentacorrienteproveedorcredito_id AS ID";
 		$from = "cuentacorrienteproveedorcredito ccpc";
