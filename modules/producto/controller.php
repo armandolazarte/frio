@@ -387,7 +387,7 @@ class ProductoController {
 		$this->model->productocategoria = filter_input(INPUT_POST, 'productocategoria');
 		$this->model->productounidad = filter_input(INPUT_POST, 'productounidad');
 		$this->model->save();
-		header("Location: " . URL_APP . "/producto/editar/{$producto_id}");
+		header("Location: " . URL_APP . "/producto/listar");
 	}
 
 	function actualizar_precio_por_lote() {
