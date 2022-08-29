@@ -480,7 +480,7 @@ class CuentaCorrienteProveedorController {
 				$referencia = "Crédito de pago con Transferencia N° {$numero_transferencia}";
 				break;
 			case 3:
-				$referencia = "Crédito de pago con Efectivo";
+				$referencia = filter_input(INPUT_POST, 'referencia');
 				break;
 		}
 			
