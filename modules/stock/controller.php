@@ -778,7 +778,7 @@ class StockController {
 
 	function update_num_factura {
 		SessionHandler()->check_session();
-
+		/*
     	$fecha_sys = date('d-m-Y');
     	$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(eafip.punto_venta,4,0), '-', LPAD(eafip.numero_factura,8,0)) AS FACT";
 		$from = "stock s, egreso e, egresodetalle ed, egresoafip eafip, tipofactura tf";
@@ -794,6 +794,7 @@ class StockController {
 			$sm->concepto = $detalle;
 			$sm->save();
 		}
+		*/
 	}
 }
 ?>
