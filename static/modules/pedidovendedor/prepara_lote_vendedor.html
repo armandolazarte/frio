@@ -557,6 +557,11 @@
         quitarProductoArray(producto_id);
     }
 
+    function procesarPedido() {
+        document.getElementById('btn_cargar').style.display = 'none';
+        document.getElementById('btn_cargar').disabled = true;
+    }
+
     function quitarProductoArray(producto_id) {    
         array_ids.forEach(function(temp_producto_id, index) {
             if (producto_id == temp_producto_id) {
