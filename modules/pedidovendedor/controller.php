@@ -1650,7 +1650,7 @@ class PedidoVendedorController {
 		$flag_error = 0;
 		if ($tipofactura == 1 OR $tipofactura == 3) {
 			try {
-			    $this->facturar_afip_argumento($egreso_id);
+			    $this->facturar_afip_argumento($egreso_id);   
 			} catch (Exception $e) {
 				$ecm = new EgresoComision();
 				$ecm->egresocomision_id = $egresocomision_id;
@@ -1692,6 +1692,14 @@ class PedidoVendedorController {
 		}
 
 		if ($flag_error == 0) {
+			if ($tipofactura == 1 OR $tipofactura == 3) {
+				$temp_egresoafip = $egresoafip[0];
+				$afip_punto_venta = $temp_egresoafip['PUNTO_VENTA'];
+				$afip_num_factura = $temp_egresoafip['NUMERO_FACTURA'];
+				$comprobante = str_pad($afip_punto_venta, 4, '0', STR_PAD_LEFT) . "-";
+				$comprobante .= str_pad($afip_num_factura, 8, '0', STR_PAD_LEFT);
+			}
+
 			foreach ($egresodetalle_collection as $egreso) {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";
