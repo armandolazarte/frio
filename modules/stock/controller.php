@@ -775,8 +775,8 @@ class StockController {
         array_unshift($array_exportacion, $array_encabezados);
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
-	/*
-	function update_num_factura {
+	
+	function update_num_factura() {
 		SessionHandler()->check_session();
 		$fecha_sys = date('d-m-Y');
     	$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(eafip.punto_venta,4,0), '-', LPAD(eafip.numero_factura,8,0)) AS FACT";
@@ -795,6 +795,6 @@ class StockController {
 		}
 		
 	}
-	*/
+	
 }
 ?>
