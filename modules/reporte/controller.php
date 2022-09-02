@@ -2189,14 +2189,13 @@ class ReporteController {
 		$hasta = filter_input(INPUT_POST, 'hasta');
 
 		$libro_iva_compras = LibroIvaCompras::get_libro_iva_compras($desde, $hasta);
-		$select = "date_format(g.fecha, '%d/%m/%Y') AS FECHA,, 'FT' AS CLA, g.comprobante AS COMPROBANTE, gc.denominacion AS PROVEEDOR, ' ' AS CUIT, g.importe AS NETO, '0' AS EXENTO, g.iva AS IVA, '0' AS IVA10, '0' AS IVA27, '0' AS IMPINTERNO, '0' AS RETIVA, '0' AS RETIIBB, '0' AS PERIVA, '0' AS PERIIBB, '0' AS PERGANANCIA, '0' AS CNOGRAVADO, '0' AS IMPTEM, '0' AS PERIIBBCF, g.total AS TOTAL";
+		$select = "date_format(g.fecha, '%d/%m/%Y') AS FECHA, 'FT' AS CLA, g.comprobante AS COMPROBANTE, gc.denominacion AS PROVEEDOR, ' ' AS CUIT, g.importe AS NETO, '0' AS EXENTO, g.iva AS IVA, '0' AS IVA10, '0' AS IVA27, '0' AS IMPINTERNO, '0' AS RETIVA, '0' AS RETIIBB, '0' AS PERIVA, '0' AS PERIIBB, '0' AS PERGANANCIA, '0' AS CNOGRAVADO, '0' AS IMPTEM, '0' AS PERIIBBCF, g.total AS TOTAL";
 		$from = "gasto g INNER JOIN gastocategoria gc ON g.gastocategoria = gc.gastocategoria_id";
 		$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}' AND g.iva > 0 ORDER BY g.fecha ASC";
 		$libro_iva_gastos = CollectorCondition()->get('Gastos', $where, 4, $from, $select);
 		$libro_iva_gastos = (is_array($libro_iva_gastos) AND !empty($libro_iva_gastos)) ? $libro_iva_gastos : array();
-		print_r($libro_iva_gastos);exit;
+
 		$libro_iva = array_merge($libro_iva_compras, $libro_iva_gastos);
-        
 		$array_temp = array();
         foreach ($libro_iva as $array) {
             $array_temp[] = $array["FECHA"];
