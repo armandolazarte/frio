@@ -40,7 +40,7 @@ class ReporteView extends View {
 			}
 
 			foreach ($sum_importe_producto as $clave=>$valor) {
-				$sum_importe_producto[$clave]['IMPORTE'] = round($valor['IMPORTE'], 2);
+				$sum_importe_producto[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
 			}
 		}
 
