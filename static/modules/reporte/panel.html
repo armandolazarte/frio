@@ -371,37 +371,6 @@
 <!-- Chart.js -->
 <script src="{url_static}vendors/Chart.js/dist/Chart.min.js"></script>
 <script type="text/javascript" charset="utf-8">
-    if ($('#charVentasCondicionPago').length ){
-        var ctx = document.getElementById("charVentasCondicionPago");
-        var data = {
-            labels: [
-                "CTA CORRIENTE",
-                "CONTADO"
-            ],
-            datasets: [{
-                data: [
-                    {suma_importe_ventas_cc},
-                    {suma_importe_ventas_cont}
-                ],
-                backgroundColor: [
-                    "#455C73",
-                    "#9B59B6"
-
-                ],
-                hoverBackgroundColor: [
-                    "#34495E",
-                    "#B370CF"
-                ]
-            }]
-        };
-
-        var charVentasCondicionPago = new Chart(ctx, {
-            type: 'doughnut',
-            tooltipFillColor: "rgba(51, 51, 51, 0.55)",
-            data: data
-        });
-    }
-
     if ($('#charGastos').length ){
         var ctx = document.getElementById("charGastos");
         var data = {
