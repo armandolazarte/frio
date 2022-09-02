@@ -189,7 +189,7 @@ class CuentaCorrienteClienteView extends View {
 			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
 			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 			$class = ($cuenta >= 0) ? 'info' : 'danger';
-			$cuentascorrientes_collection[$clave]['CUENTA'] = abs($cuenta);
+			$cuentascorrientes_collection[$clave]['CUENTA'] = number_format(abs($cuenta), 2, ',', '.');
 			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
 		}
 		
@@ -214,7 +214,7 @@ class CuentaCorrienteClienteView extends View {
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
 		$msj = ($valor_cuentacorriente >= 0) ? 'no posee deuda!' : 'posee deuda!';
 		
-		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
+		$array_cuentacorriente = array('{cuentacorriente-valor}'=>number_format(abs($valor_cuentacorriente), 2, ',', '.'),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class,
