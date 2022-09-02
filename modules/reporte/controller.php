@@ -811,13 +811,13 @@ class ReporteController {
 		$pago_proveedores = $egreso_cuentacorrienteproveedor_hoy + $egreso_contadoproveedor_hoy;
 
 		//DETALLE PAGO PROVEEDORES
-		$select = "p.razon_social AS RAZSOC, p.proveedor_id AS PID, ROUND(SUM(CASE WHEN ccp.tipomovimientocuenta = 2 OR ccp.tipomovimientocuenta = 3 THEN ccp.importe ELSE 0 END),2) AS TSALIDA,'{$fecha_filtro}' AS FECHA";
+		$select = "p.razon_social AS RAZSOC, p.proveedor_id AS PID, SUM(CASE WHEN ccp.tipomovimientocuenta = 2 OR ccp.tipomovimientocuenta = 3 THEN ccp.importe ELSE 0 END) AS TSALIDA,'{$fecha_filtro}' AS FECHA";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id";
 		$where = "ccp.fecha = '{$fecha_filtro}' AND ccp.ingresotipopago != 4";
 		$groupby = "ccp.proveedor_id";
 		$detalle_cuentacorrienteproveedor_hoy = CollectorCondition()->get('CuentaCorrienteProveedor', $where, 4, $from, $select, $groupby);
 
-		$select = "p.razon_social AS RAZSOC, p.proveedor_id AS PID, ROUND(SUM(i.costo_total_iva),2) AS TSALIDA";
+		$select = "p.razon_social AS RAZSOC, p.proveedor_id AS PID, SUM(i.costo_total_iva) AS TSALIDA";
 		$from = "ingreso i INNER JOIN proveedor p ON i.proveedor = p.proveedor_id";
 		$where = "i.fecha = '{$fecha_filtro}' AND i.condicionpago = 2";
 		$groupby = "i.proveedor";
@@ -847,6 +847,8 @@ class ReporteController {
 				$detalle_pagoproveedor = array();
 			}
 		}
+
+		foreach ($detalle_pagoproveedor as $clave=>$valor) $detalle_pagoproveedor[$clave]['TSALIDA'] = number_format($valor['TSALIDA'], 2, ',', '.');
 
 		//PAGO COMISIONES
 		$select = "ROUND(SUM(valor_abonado),2) AS ECOMISION";
