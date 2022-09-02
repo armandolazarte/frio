@@ -307,7 +307,7 @@ class CuentaCorrienteClienteController {
 			$balance_class = ($balance >= 0) ? 'primary' : 'danger';
 			//$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
 			
-			$cuentacorriente_collection[$clave]['BALANCE'] = $new_balance;
+			$cuentacorriente_collection[$clave]['BALANCE'] = $balance;
 			$cuentacorriente_collection[$clave]['IMPORTE'] = number_format($valor["IMPORTE"], 2, ',', '.');
 			$cuentacorriente_collection[$clave]['BALCAL'] = abs($balance);
 			$cuentacorriente_collection[$clave]['BCOLOR'] = $balance_class;
