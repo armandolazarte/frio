@@ -27,6 +27,10 @@ class NotaCreditoView extends View {
 	function consultar($notacreditodetalle_collection, $obj_notacredito, $egresoafip, $obj_egreso, $notacredito_id, $flag_ccc) {
 		$gui = file_get_contents("static/modules/notacredito/consultar.html");
 		$tbl_notacreditodetalle_array = file_get_contents("static/modules/notacredito/tbl_notacreditodetalle_array.html");
+
+		foreach ($notacreditodetalle_collection as $clave=>$valor) {
+			$notacreditodetalle_collection[$clave]['COSTO'] = number_format($valor['COSTO'], 2, ',', '.');
+			$notacreditodetalle_collection[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
 		$tbl_notacreditodetalle_array = $this->render_regex_dict('TBL_NOTACREDITODETALLE', $tbl_notacreditodetalle_array, $notacreditodetalle_collection);
 
 		if (is_object($obj_egreso)) {
@@ -36,8 +40,7 @@ class NotaCreditoView extends View {
 			$obj_egreso->punto_venta = str_pad($obj_egreso->punto_venta, 4, '0', STR_PAD_LEFT);
 			$obj_egreso->numero_factura = str_pad($obj_egreso->numero_factura, 8, '0', STR_PAD_LEFT);
 			
-			unset($obj_egreso->cliente->infocontacto_collection, $obj_egreso->vendedor->infocontacto_collection, $obj_egreso->cliente->flete->infocontacto_collection,
-				  $obj_egreso->cliente->vendedor->infocontacto_collection, $obj_egreso->egresoentrega->flete->infocontacto_collection);
+			unset($obj_egreso->cliente->infocontacto_collection, $obj_egreso->vendedor->infocontacto_collection, $obj_egreso->cliente->flete->infocontacto_collection, $obj_egreso->cliente->vendedor->infocontacto_collection, $obj_egreso->egresoentrega->flete->infocontacto_collection);
 			
 			$obj_egreso->egresocomision->valor_abonado = ($obj_egreso->egresocomision->valor_abonado != 0) ? $obj_egreso->egresocomision->valor_abonado : 0;
 			$valor_abonado = round($obj_egreso->egresocomision->valor_abonado, 2);
