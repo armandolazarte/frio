@@ -11,8 +11,7 @@ class ReporteView extends View {
 		print $template;
 	}
 
-	function panel($stock_collection, $array_totales, $sum_importe_producto, $sum_cantidad_producto, $sum_semestre_cuentas,
-				   $vendedor_collection, $gasto_collection, $cuentacorrienteproveedor_collection) {
+	function panel($stock_collection, $array_totales, $sum_importe_producto, $sum_cantidad_producto, $sum_semestre_cuentas, $vendedor_collection, $gasto_collection, $cuentacorrienteproveedor_collection) {
 		$gui = file_get_contents("static/modules/reporte/panel.html");
 		$tbl_cuentacorrienteproveedor = file_get_contents("static/modules/reporte/tbl_cuentacorrienteproveedor.html");
 		$tbl_sum_importe_producto = file_get_contents("static/modules/reporte/tbl_sum_importe_producto.html");
@@ -38,6 +37,10 @@ class ReporteView extends View {
 			foreach ($sum_importe_producto as $clave=>$valor) {
 				if ($i > 4) unset($sum_importe_producto[$clave]);
 				$i = $i + 1;
+			}
+
+			foreach ($sum_importe_producto as $clave=>$valor) {
+				$sum_importe_producto[$clave]['IMPORTE'] = round($valor['IMPORTE'], 2);
 			}
 		}
 
