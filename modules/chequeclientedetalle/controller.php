@@ -24,7 +24,7 @@ class ChequeClienteDetalleController {
 		$where = "ccc.cliente_id = {$cliente_id}";
 		$pagos_chequeclientedetalle_collection = CollectorCondition()->get('ChequeClienteDetalle', $where, 4, $from, $select);
 
-		$select = "ccd.fecha_pago AS FECHA, ccd.numero AS CHEQUE, ROUND((SUM(ccc.ingreso)), 2) AS PAGO";
+		$select = "ccd.fecha_pago AS FECHA, ccd.numero AS CHEQUE, SUM(ccc.ingreso) AS PAGO";
 		$from = "chequeclientedetalle ccd INNER JOIN cuentacorrientecliente ccc ON ccd.cuentacorrientecliente_id = ccc.cuentacorrientecliente_id";
 		$where = "ccc.cliente_id = {$cliente_id}";
 		$groupby = "ccd.numero";
@@ -47,6 +47,7 @@ class ChequeClienteDetalleController {
 		}
 
 		foreach ($chequeclientedetalle_collection as $clave=>$valor) {
+			$chequeclientedetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
 			$chequeclientedetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
 			$chequeclientedetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
 			$chequeclientedetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
