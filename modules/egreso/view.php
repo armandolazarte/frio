@@ -348,10 +348,10 @@ class EgresoView extends View {
 	            $subtotal = $subtotal + $total_unitario_cantidad;
 	            //VALORES FINALES
 	            //$egresodetalle_collection[$clave]['UNITARIO'] = round($unitario_sin_iva, 2);
-	            $egresodetalle_collection[$clave]['COSTO'] = round($unitario_sin_iva, 2);
-	            $egresodetalle_collection[$clave]['UNICONDES'] = round($unitario_sin_iva_descuento, 2);
+	            $egresodetalle_collection[$clave]['COSTO'] = number_format($unitario_sin_iva, 2, ',', '.');
+	            $egresodetalle_collection[$clave]['UNICONDES'] = number_format($unitario_sin_iva_descuento, 2, ',', '.');
 	            //$egresodetalle_collection[$clave]['TOTAL'] = $total_unitario_cantidad;
-	            $egresodetalle_collection[$clave]['IMPORTE'] = $total_unitario_cantidad;
+	            $egresodetalle_collection[$clave]['IMPORTE'] = number_format($total_unitario_cantidad, 2, ',', '.');
 			}
 
 			$importe_iva = round(($subtotal * 0.21), 2);
