@@ -13,10 +13,6 @@
         <div class="x_panel hidden-print" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
             <div class="x_title" style="padding-left: 2%;">
                 <h2><i class="fa fa-bar-chart"></i>&nbsp;&nbsp; Ventas por Cliente</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">                        
@@ -58,10 +54,6 @@
     <div class="x_panel hidden-print remover-info">
         <div class="x_title">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Ventas por Vendedor y Cliente</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-            </ul>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -91,10 +83,6 @@
     <div class="x_panel hidden-print remover-info">
         <div class="x_title">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Total de Ventas por Vendedor</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-            </ul>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -118,16 +106,18 @@
     <div class="x_panel hidden-print remover-info" style="padding-left: 0px; padding-right: 0px; margin-bottom: 2%;">
         <div class="x_title" style="padding-left: 2%;">
             <h2><i class="fa fa-search"></i>&nbsp;&nbsp; Reporte clientes</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-            </ul>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/reporte/clientes_no_compra_x_dias">
-                    <div class="form-group col-lg-12" align="center">
+                    <div class="form-group col-lg-8">
+                        <label>Vendedor</label>
+                        <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                            {slt_vendedor}
+                        </select>
+                    </div>
+                    <div class="form-group col-lg-4" align="center">
                       <label>Cantidad de Días</label>
                       <input type="number" class="form-control" id="dias" name="dias" required="">
                     </div>
