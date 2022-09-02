@@ -479,7 +479,7 @@ class ReporteController {
 		$egresos_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
 		//DETALLE COBRANZA
-		$select = "c.cobrador_id AS CID, ccc.fecha AS FECHA, c.denominacion AS COBRADOR, ROUND(SUM(ccc.ingreso), 2) AS COBRANZA";
+		$select = "c.cobrador_id AS CID, ccc.fecha AS FECHA, c.denominacion AS COBRADOR, FORMAT(ccc.ingreso, 2,'de_DE') AS COBRANZA";
 		$from = "cuentacorrientecliente ccc INNER JOIN cobrador c ON ccc.cobrador = c.cobrador_id";
 		$where = "ccc.fecha = '{$fecha_sys}' AND ccc.tipomovimientocuenta = 2";
 		$group_by = "ccc.cobrador";
