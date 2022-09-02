@@ -48,8 +48,7 @@ class ReporteController {
 		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
 		$sum_contado = (is_null($sum_contado)) ? 0 : $sum_contado;
 
-		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA,
-				   ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
+		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
 		$sum_cuentacorriente = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
 		if (is_array($sum_cuentacorriente)) {
@@ -61,8 +60,7 @@ class ReporteController {
 		}
 
 		$sum_cuentacorriente = ($sum_cuentacorriente > 0.5) ? $sum_cuentacorriente : 0;
-		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA,
-				   ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
+		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
 		$from = "cuentacorrientecliente ccc";
 		$cuentacorriente_total = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
 		if (is_array($cuentacorriente_total)) {
@@ -79,10 +77,7 @@ class ReporteController {
 
 		$deuda_cuentacorrientecliente = ($deuda_cuentacorrientecliente > 0.5) ? $deuda_cuentacorrientecliente : 0;
 
-		$select = "ccp.proveedor_id AS PID, p.razon_social AS PROVEEDOR, (SELECT ROUND(SUM(dccp.importe),2) FROM
-    			   cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 1 AND dccp.proveedor_id = ccp.proveedor_id) AS DEUDA,
-				   (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 2 AND
-				   dccp.proveedor_id = ccp.proveedor_id) AS INGRESO";
+		$select = "ccp.proveedor_id AS PID, p.razon_social AS PROVEEDOR, (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 1 AND dccp.proveedor_id = ccp.proveedor_id) AS DEUDA, (SELECT ROUND(SUM(dccp.importe),2) FROM cuentacorrienteproveedor dccp WHERE dccp.tipomovimientocuenta = 2 AND dccp.proveedor_id = ccp.proveedor_id) AS INGRESO";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id";
 		$groupby = "ccp.proveedor_id";
 		$cuentacorrienteproveedor_total = CollectorCondition()->get('CuentaCorrienteProveedor', NULL, 4, $from, $select, $groupby);
@@ -95,7 +90,6 @@ class ReporteController {
 				$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
 				$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 				$deuda_cuentacorrienteproveedor = $deuda_cuentacorrienteproveedor + $cuenta;
-
 			}
 		} else {
 			$deuda_cuentacorrienteproveedor = 0;
@@ -116,11 +110,11 @@ class ReporteController {
 			foreach ($productoid_collection as $producto_id) $producto_ids[] = $producto_id['PROD_ID'];
 			$producto_ids = implode(',', $producto_ids);
 
-			$select_stock = "MAX(s.stock_id) AS STOCK_ID";
-			$from_stock = "stock s";
-			$where_stock = "s.producto_id IN ({$producto_ids})";
-			$groupby_stock = "s.producto_id";
-			$stockid_collection = CollectorCondition()->get('Stock', $where_stock, 4, $from_stock, $select_stock, $groupby_stock);
+			$select = "MAX(s.stock_id) AS STOCK_ID";
+			$from = "stock s";
+			$where = "s.producto_id IN ({$producto_ids})";
+			$groupby = "s.producto_id";
+			$stockid_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select, $groupby);
 
 			$stock_collection = array();
 			foreach ($stockid_collection as $stock_id) {
@@ -287,9 +281,9 @@ class ReporteController {
 		}
 
 		$suma_total_compras = $suma_importe_compras_factura + $suma_importe_compras_remito;
-		
+		$estado_actual = ($total_facturado_int + $stock_valorizado) - ($deuda_cuentacorrientecliente + $deuda_cuentacorrienteproveedor); 
 		$array_totales = array('{periodo_actual}'=>$periodo_actual,
-							   '{estado_actual}'=>($total_facturado_int + $stock_valorizado) - ($deuda_cuentacorrientecliente + $deuda_cuentacorrienteproveedor),
+							   '{estado_actual}'=>number_format($estado_actual, 2, ',', '.'),
 							   '{total_facturado}'=>$total_facturado,
 							   '{total_facturado_class}'=>$total_facturado_class,
 							   '{deuda_cuentacorrientecliente}'=>$deuda_cuentacorrientecliente,
