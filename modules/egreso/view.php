@@ -356,7 +356,7 @@ class EgresoView extends View {
 
 			$importe_iva = round(($subtotal * 0.21), 2);
 	        $obj_egreso->importe_iva = number_format($importe_iva, 2, ',', '.');
-	        $obj_egreso->subtotal = round($subtotal, 2);
+	        $obj_egreso->subtotal = number_format($subtotal, 2, ',', '.');
 	        $obj_egreso->importe_total = round(($importe_iva + $subtotal), 2);
 		}
 
