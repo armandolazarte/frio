@@ -303,7 +303,7 @@ class CuentaCorrienteClienteController {
 			
 			$balance = $array_temp[0]['BALANCE'];
 			$balance = ($balance == '-0') ? abs($balance) : $balance;
-			$balance = number_format($balance, 2, ',', '.');
+			//$balance = number_format($balance, 2, ',', '.');
 			$balance_class = ($balance >= 0) ? 'primary' : 'danger';
 			$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
 			
