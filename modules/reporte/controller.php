@@ -286,7 +286,7 @@ class ReporteController {
 							   '{estado_actual}'=>($total_facturado_int + $stock_valorizado) - ($deuda_cuentacorrientecliente + $deuda_cuentacorrienteproveedor),
 							   '{total_facturado}'=>$total_facturado,
 							   '{total_facturado_class}'=>$total_facturado_class,
-							   '{deuda_cuentacorrientecliente}'=>$deuda_cuentacorrientecliente,
+							   '{deuda_cuentacorrientecliente}'=>umber_format($deuda_cuentacorrientecliente, 2, ',', '.'),
 							   '{deuda_cuentacorrienteproveedor}'=>$deuda_cuentacorrienteproveedor,
 							   '{stock_valorizado}'=>$stock_valorizado,
 							   '{ingreso_cuentacorrientecliente_hoy}'=>$ingreso_cuentacorriente_hoy,
