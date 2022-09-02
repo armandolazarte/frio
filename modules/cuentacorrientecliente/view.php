@@ -15,7 +15,7 @@ class CuentaCorrienteClienteView extends View {
 			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
 			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 			$class = ($cuenta >= 0) ? 'info' : 'danger';
-			$cuentacorriente_collection[$clave]['CUENTA'] = abs($cuenta);
+			$cuentacorriente_collection[$clave]['CUENTA'] = number_format(abs($cuenta), 2, ',', '.');
 			$cuentacorriente_collection[$clave]['CLASS'] = $class;
 		}
 
