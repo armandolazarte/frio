@@ -335,6 +335,7 @@ class ReporteController {
 				$sum_importe_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
 			}
 			
+			print_r($sum_importe_producto);exit;
 			foreach ($sum_importe_producto as $clave=>$valor) {
 				$sum_importe_producto[$clave]['IMPORTE'] = number_format($nuevo_valor_importe, 2, ',', '.');
 				$sum_importe_producto[$clave]['CANTIDAD'] = number_format($nuevo_valor_cantidad, 2, ',', '.');
