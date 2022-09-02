@@ -910,7 +910,7 @@ class ReporteController {
 			$calculo_cajadiaria = 0;
 		}
 
-		$select = "c.cobrador_id AS CID, ccc.fecha AS FECHA, c.denominacion AS COBRADOR, FORMAT(ccc.ingreso, 2,'de_DE') AS COBRANZA";
+		$select = "c.cobrador_id AS CID, ccc.fecha AS FECHA, c.denominacion AS COBRADOR, ROUND(ccc.ingreso, 2) AS COBRANZA";
 		$from = "cuentacorrientecliente ccc INNER JOIN cobrador c ON ccc.cobrador = c.cobrador_id";
 		$where = "ccc.fecha = '{$fecha_filtro}' AND ccc.tipomovimientocuenta = 2";
 		$group_by = "ccc.cobrador";
