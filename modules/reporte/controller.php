@@ -311,7 +311,7 @@ class ReporteController {
 
 		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	SUM(ed.importe) DESC";
 		$sum_importe_producto = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
-		//foreach ($sum_importe_producto as $clave=>$valor) $sum_importe_producto[$clave]["IMPORTE"] = number_format($valor["IMPORTE"], 2, ',', '.');
+		foreach ($sum_importe_producto as $clave=>$valor) $sum_importe_producto[$clave]["IMPORTE"] = number_format($valor["IMPORTE"], 2, ',', '.');
 
 		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
 		$sum_cantidad_producto = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
