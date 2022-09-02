@@ -193,6 +193,11 @@ class CuentaCorrienteClienteView extends View {
 			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
 		}
 		
+		foreach ($cuentacorriente_collection as $clave=>$valor) {
+			$cuentacorriente_collection[$clave]['BALCAL'] = number_format($valor['BALCAL'], 2, ',', '.');
+
+		}
+
 		$obj_cliente->codigo = str_pad($obj_cliente->cliente_id, 5, '0', STR_PAD_LEFT);
 		if ($obj_cliente->documentotipo->denominacion == 'CUIL' OR $obj_cliente->documentotipo->denominacion == 'CUIT') {
 			$cuil1 = substr($obj_cliente->documento, 0, 2);
