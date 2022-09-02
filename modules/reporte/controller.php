@@ -371,7 +371,7 @@ class ReporteController {
 		$gasto_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select, $group_by);
 
 		// BOLETAS CON VENCIMIENTO
-		$select = "date_format(i.fecha, '%d/%m/%Y') AS FECHA, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS VENCIMIENTO, ccp.ingreso_id AS IID, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, ccp.proveedor_id AS PROID, p.razon_social AS PROVEEDOR, i.fecha_vencimiento AS FECVEN, i.costo_total_iva AS IMPORTE, ccp.cuentacorrienteproveedor_id AS CCPID, ccp.ingresotipopago AS ING_TIP_PAG";
+		$select = "date_format(i.fecha, '%d/%m/%Y') AS FECHA, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS VENCIMIENTO, ccp.ingreso_id AS IID, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, ccp.proveedor_id AS PROID, p.razon_social AS PROVEEDOR, i.fecha_vencimiento AS FECVEN, FORMAT(i.costo_total_iva, 2,'de_DE') AS IMPORTE, ccp.cuentacorrienteproveedor_id AS CCPID, ccp.ingresotipopago AS ING_TIP_PAG";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id INNER JOIN ingreso i ON ccp.ingreso_id = i.ingreso_id";
 		$where = "ccp.estadomovimientocuenta != 4 GROUP BY ccp.ingreso_id";
 		$cuentacorrienteproveedor_collection = CollectorCondition()->get('CuentaCorrienteProveedor', $where, 4, $from, $select);
