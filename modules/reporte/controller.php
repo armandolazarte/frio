@@ -334,6 +334,11 @@ class ReporteController {
 				$sum_importe_producto[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
 				$sum_importe_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
 			}
+			
+			foreach ($sum_importe_producto as $clave=>$valor) {
+				$sum_importe_producto[$clave]['IMPORTE'] = number_format($nuevo_valor_importe, 2, ',', '.');
+				$sum_importe_producto[$clave]['CANTIDAD'] = number_format($nuevo_valor_cantidad, 2, ',', '.');
+			}
 		}
 
 		if (is_array($sum_cantidad_producto) AND !empty($sum_cantidad_producto)) {
@@ -353,8 +358,6 @@ class ReporteController {
 				$sum_cantidad_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
 			}
 		}
-
-		//foreach ($sum_importe_producto as $clave=>$valor) $sum_importe_producto[$clave]["IMPORTE"] = ;
 
 		$select = "date_format(e.fecha, '%Y%m') AS PERIODO, ROUND(SUM(CASE WHEN e.condicionpago = 1 THEN e.importe_total ELSE 0 END),2) AS SUMCC, ROUND(SUM(CASE WHEN e.condicionpago = 2 THEN e.importe_total ELSE 0 END),2) AS SUMCONT ";
 		$from = "egreso e";
