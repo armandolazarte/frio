@@ -2194,7 +2194,7 @@ class ReporteController {
 		$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}' AND g.iva > 0 ORDER BY g.fecha ASC";
 		$libro_iva_gastos = CollectorCondition()->get('Gastos', $where, 4, $from, $select);
 		$libro_iva_gastos = (is_array($libro_iva_gastos) AND !empty($libro_iva_gastos)) ? $libro_iva_gastos : array();
-
+		print_r($libro_iva_gastos);exit;
 		$libro_iva = array_merge($libro_iva_compras, $libro_iva_gastos);
         
 		$array_temp = array();
