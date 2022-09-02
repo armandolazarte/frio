@@ -369,7 +369,7 @@ class ReporteController {
 		$where = "g.fecha BETWEEN '{$primer_dia_mes}' AND '{$fecha_sys1}'";
 		$group_by = "gc.gastocategoria_id";
 		$gasto_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select, $group_by);
-
+		print_r($gasto_collection);exit;
 		// BOLETAS CON VENCIMIENTO
 		$select = "date_format(i.fecha, '%d/%m/%Y') AS FECHA, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS VENCIMIENTO, ccp.ingreso_id AS IID, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, ccp.proveedor_id AS PROID, p.razon_social AS PROVEEDOR, i.fecha_vencimiento AS FECVEN, FORMAT(i.costo_total_iva, 2,'de_DE') AS IMPORTE, ccp.cuentacorrienteproveedor_id AS CCPID, ccp.ingresotipopago AS ING_TIP_PAG";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id INNER JOIN ingreso i ON ccp.ingreso_id = i.ingreso_id";
