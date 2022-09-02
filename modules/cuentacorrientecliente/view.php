@@ -218,7 +218,7 @@ class CuentaCorrienteClienteView extends View {
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class,
-									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
+									   '{cuentacorriente-credito}'=>number_format($importe_cuentacorrienteclientecredito, 2, ',', '.'));
 
 		$gui_lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $gui_lst_infocontacto, $infocontacto_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
