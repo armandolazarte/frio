@@ -46,6 +46,10 @@ class ChequeClienteDetalleController {
 			}
 		}
 
+		foreach ($chequeclientedetalle_collection as $clave=>$valor) {
+			$chequeclientedetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
+			$chequeclientedetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
+		}
 		$this->view->consultar_pagos_cliente($pagos_chequeclientedetalle_collection, $chequeclientedetalle_collection, $cm);
 	}
 }
