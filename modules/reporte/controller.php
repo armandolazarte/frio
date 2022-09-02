@@ -1939,7 +1939,7 @@ class ReporteController {
 			$calculo_cajadiaria = round(($cajadiaria + $cobranza + $ingreso_movimientocaja - $salida_movimientocaja - $pago_proveedores - $egreso_comision_hoy - $gasto_diario - $vehiculocombustible_total - $salario_total), 2);
 		}
 
-		return $calculo_cajadiaria;
+		return number_format($calculo_cajadiaria, 2, ',', '.');
 	}
 
 	function post_descarga() {
