@@ -194,8 +194,8 @@ class CuentaCorrienteClienteView extends View {
 		}
 		
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
-			$cuentacorriente_collection[$clave]['BALCAL'] = number_format($valor['BALCAL'], 2, ',', '.');
-
+			$cuentacorriente_collection[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
+			$cuentacorriente_collection[$clave]['BALANCE'] = number_format($valor['BALANCE'], 2, ',', '.');
 		}
 
 		$obj_cliente->codigo = str_pad($obj_cliente->cliente_id, 5, '0', STR_PAD_LEFT);
