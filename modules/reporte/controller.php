@@ -284,7 +284,7 @@ class ReporteController {
 		$estado_actual = ($total_facturado_int + $stock_valorizado) - ($deuda_cuentacorrientecliente + $deuda_cuentacorrienteproveedor); 
 		$array_totales = array('{periodo_actual}'=>$periodo_actual,
 							   '{estado_actual}'=>number_format($estado_actual, 2, ',', '.'),
-							   '{total_facturado}'=>$total_facturado,
+							   '{total_facturado}'=>number_format($total_facturado, 2, ',', '.'),
 							   '{total_facturado_class}'=>$total_facturado_class,
 							   '{deuda_cuentacorrientecliente}'=>$deuda_cuentacorrientecliente,
 							   '{deuda_cuentacorrienteproveedor}'=>$deuda_cuentacorrienteproveedor,
