@@ -15,7 +15,7 @@ class MovimientoCajaController {
 	function panel() {
 		SessionHandler()->check_session();
 		#CAJA
-    	$select = "mc.movimientocaja_id AS MOVCAJID, mc.fecha AS FECHA, mc.numero AS NUMERO, mc.banco AS BANCO, mc.numero_cuenta AS NUMCUENTA, mct.destino AS TIPMOV, mc.importe AS IMPORTE, mc.detalle AS DETALLE, mct.codigo AS CODIGO, CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'success' ELSE 'danger' END AS CLAICO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'arrow-up' ELSE 'arrow-down' END AS ICON";
+    	$select = "mc.movimientocaja_id AS MOVCAJID, mc.fecha AS FECHA, mc.numero AS NUMERO, mc.banco AS BANCO, mc.numero_cuenta AS NUMCUENTA, mct.destino AS TIPMOV, FORMAT(mc.importe, 2,'de_DE') AS IMPORTE, mc.detalle AS DETALLE, mct.codigo AS CODIGO, CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'success' ELSE 'danger' END AS CLAICO, CASE WHEN mct.codigo = 'INGCAJ00001' THEN 'arrow-up' ELSE 'arrow-down' END AS ICON";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
 		$where = "mct.codigo IN ('INGCAJ00001', 'EGRCAJ00001')";
 		$movimientocaja_collection = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
