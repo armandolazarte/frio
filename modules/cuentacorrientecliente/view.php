@@ -123,24 +123,7 @@ class CuentaCorrienteClienteView extends View {
 		$gui_lst_infocontacto = file_get_contents("static/common/lst_infocontacto.html");
 		$tbl_cuentascorrientes_array = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_array.html");
 		$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
-		/*
-		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
-		switch ($user_level) {
-			case 1:
-				//$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array_operador.html");
-				// HABILITO CTA CTE A OPERADOR
-				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
-				break;
-			case 2:
-				//$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array_supervisor.html");
-				// HABILITO CTA CTE A OPERADOR
-				$gui_tbl_cuentacorriente = file_get_contents("static/modules/cuentacorrientecliente/tbl_cuentacorriente_expandido_array.html");
-				break;
-			default:
-				break;
-		}
-		*/
-
+		
 		foreach ($cuentascorrientes_collection as $clave=>$valor) {
 			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
 			$ingreso = (is_null($valor['INGRESO'])) ? 0 : round($valor['INGRESO'],2);
@@ -148,7 +131,7 @@ class CuentaCorrienteClienteView extends View {
 			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
 			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 			$class = ($cuenta >= 0) ? 'info' : 'danger';
-			$cuentascorrientes_collection[$clave]['CUENTA'] = abs($cuenta);
+			$cuentascorrientes_collection[$clave]['CUENTA'] = number_format(abs($cuenta), 2, ',', '.');
 			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
 		}
 		
@@ -173,7 +156,7 @@ class CuentaCorrienteClienteView extends View {
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
 		$msj = ($valor_cuentacorriente >= 0) ? 'no posee deuda!' : 'posee deuda!';
 		
-		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
+		$array_cuentacorriente = array('{cuentacorriente-valor}'=>number_format(abs($valor_cuentacorriente), 2, ',', '.'),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class);
