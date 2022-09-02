@@ -1315,7 +1315,7 @@ class ReporteController {
 							   '{deuda_comisiones}'=>number_format($deuda_comision_total, 2, ',', '.'),
 							   '{deuda_ccproveedores_graph}'=>$deuda_cuentacorrienteproveedor,
 							   '{deuda_comisiones_graph}'=>$deuda_comision_total,
-							   '{cajadiaria}'=>number_format($cajadiaria, 2, ',', '.'),
+							   '{cajadiaria}'=>$cajadiaria,
 							   '{activo_corriente}'=>number_format($activo_corriente, 2, ',', '.'),
 							   '{pasivo_corriente}'=>number_format($pasivo_corriente, 2, ',', '.'),
 							   '{ganancia_per_actual}'=>number_format($ganancia_per_actual, 2, ',', '.'));
