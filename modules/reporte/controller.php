@@ -575,7 +575,7 @@ class ReporteController {
 		$egreso_comision_hoy = (is_null($egreso_comision_hoy)) ? 0 : $egreso_comision_hoy;
 
 		//DETALLE COMISIONES
-		$select = "CONCAT(v.apellido,',',v.nombre) AS VENDEDOR,ROUND(SUM(ec.valor_abonado),2) AS VALOR,esc.denominacion AS ESTADO";
+		$select = "CONCAT(v.apellido,',',v.nombre) AS VENDEDOR, FORMAT(SUM(ec.valor_abonado), 2,'de_DE') AS VALOR,esc.denominacion AS ESTADO";
 		$from = "egresocomision ec  INNER JOIN egreso e ON e.egresocomision = ec.egresocomision_id INNER JOIN vendedor v ON v.vendedor_id = e.vendedor INNER JOIN estadocomision esc ON esc.estadocomision_id = ec.estadocomision";
 		$where = "ec.fecha = '{$fecha_sys}' AND ec.estadocomision IN (2,3) GROUP BY e.vendedor";
 		$detalle_comision = CollectorCondition()->get('EgresoComision', $where, 4, $from, $select);
@@ -589,7 +589,7 @@ class ReporteController {
 		$gasto_diario = (is_null($gasto_diario)) ? 0 : $gasto_diario;
 
 		//DETALLE GASTO DIARIO
-		$select = "gc.denominacion AS CATEGORIA, g.detalle AS DETALLE, ROUND(g.total, 2) AS IMPORTETOTAL";
+		$select = "gc.denominacion AS CATEGORIA, g.detalle AS DETALLE, FORMAT(g.total, 2,'de_DE') AS IMPORTETOTAL";
 		$from = "gasto g INNER JOIN gastocategoria gc on gc.gastocategoria_id = g.gastocategoria INNER JOIN gastosubcategoria gs on gs.gastosubcategoria_id = gc.gastosubcategoria";
 		$where = "g.fecha = '{$fecha_sys}'";
 		$detalle_gasto_diario = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
@@ -603,7 +603,7 @@ class ReporteController {
 		$liquidacion = (is_null($liquidacion)) ? 0 : $liquidacion;
 
 		//DETALLE LIQUIDACIONES
-		$select = "CONCAT(e.apellido, e.nombre) AS EMPLEADO, CONCAT('Desde ', date_format(s.desde, '%d/%m/%Y'), 'hasta el ', date_format(s.hasta, '%d/%m/%Y')) AS DETALLE, ROUND(s.monto, 2) AS IMPORTETOTAL";
+		$select = "CONCAT(e.apellido, e.nombre) AS EMPLEADO, CONCAT('Desde ', date_format(s.desde, '%d/%m/%Y'), 'hasta el ', date_format(s.hasta, '%d/%m/%Y')) AS DETALLE, FORMAT(s.monto, 2,'de_DE') AS IMPORTETOTAL";
 		$from = "salario s INNER JOIN empleado e on e.empleado_id = s.empleado";
 		$where = "s.fecha = '{$fecha_sys}' AND s.tipo_pago IN ('SALARIO', 'ADELANTO')";
 		$detalle_liquidacion = CollectorCondition()->get('Salario', $where, 4, $from, $select);
@@ -617,7 +617,7 @@ class ReporteController {
 		$vehiculos = (is_null($vehiculos)) ? 0 : $vehiculos;
 
 		//DETALLE VEHICULOS
-		$select = "v.denominacion AS DETALLE,ROUND(vc.importe, 2) AS IMPORTETOTAL";
+		$select = "v.denominacion AS DETALLE, FORMAT(vc.importe, 2,'de_DE') AS IMPORTETOTAL";
 		$from = "vehiculocombustible vc INNER JOIN vehiculo v ON v.vehiculo_id = vc.vehiculo";
 		$where = "vc.fecha = '{$fecha_sys}'";
 		$detalle_vehiculos = CollectorCondition()->get('VehiculoCombustible', $where, 4, $from, $select);
@@ -631,7 +631,7 @@ class ReporteController {
 		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
 
 		#DETALLE INGRESO MOVIMIENTO CAJA 
-		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
+		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, FORMAT(mc.importe, 2,'de_DE') AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
 		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'INGCAJ00001'";
 		$detalle_ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
@@ -645,7 +645,7 @@ class ReporteController {
 		$salida_movimientocaja = (is_null($salida_movimientocaja)) ? 0 : $salida_movimientocaja;
 
 		#DETALLE SALIDA MOVIMIENTO CAJA 
-		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
+		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, FORMAT(mc.importe, 2,'de_DE') AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
 		$where = "mc.fecha = '{$fecha_sys}' AND mct.codigo = 'EGRCAJ00001'";
 		$detalle_salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
