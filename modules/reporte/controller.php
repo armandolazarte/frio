@@ -311,8 +311,7 @@ class ReporteController {
 
 		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	SUM(ed.importe) DESC";
 		$sum_importe_producto = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
-		//foreach ($sum_importe_producto as $clave=>$valor) $sum_importe_producto[$clave]["IMPORTE"] = number_format($valor["IMPORTE"], 2, ',', '.');
-
+		
 		$groupby = "ed.producto_id, ed.codigo_producto ORDER BY	ROUND(SUM(ed.cantidad),2) DESC";
 		$sum_cantidad_producto = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
 
@@ -354,6 +353,8 @@ class ReporteController {
 				$sum_cantidad_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
 			}
 		}
+
+		foreach ($sum_importe_producto as $clave=>$valor) $sum_importe_producto[$clave]["IMPORTE"] = number_format($valor["IMPORTE"], 2, ',', '.');
 
 		$select = "date_format(e.fecha, '%Y%m') AS PERIODO, ROUND(SUM(CASE WHEN e.condicionpago = 1 THEN e.importe_total ELSE 0 END),2) AS SUMCC, ROUND(SUM(CASE WHEN e.condicionpago = 2 THEN e.importe_total ELSE 0 END),2) AS SUMCONT ";
 		$from = "egreso e";
