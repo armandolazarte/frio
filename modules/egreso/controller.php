@@ -38,42 +38,10 @@ class EgresoController {
     	$fecha_sys = strtotime(date('Y-m-d'));
     	$periodo_actual = date('Ym');
     	$dias_minimo = date("Y-m-d", strtotime("-15 days", $fecha_sys));
-    	$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECMOD, e.fecha AS FECHA, LEFT(e.hora,5) AS HORA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+    	$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECMOD, e.fecha AS FECHA, LEFT(e.hora,5) AS HORA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, FORMAT(e.importe_total, 2,'de_DE') AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "e.fecha >= '{$dias_minimo}' ORDER BY e.fecha DESC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
-
-		$select = "ROUND(SUM(e.importe_total),2) AS CONTADO";
-		$from = "egreso e";
-		$where = "e.condicionpago = 2";
-		$sum_contado = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
-		$sum_contado = (is_array($sum_contado)) ? $sum_contado[0]['CONTADO'] : 0;
-
-		$select = "ROUND(SUM(ccc.importe),2) AS CUENTACORRIENTE";
-		$from = "cuentacorrientecliente ccc";
-		$where = "ccc.tipomovimientocuenta = 2";
-		$sum_cuntacorriente = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
-		$sum_cuntacorriente = (is_array($sum_cuntacorriente)) ? $sum_cuntacorriente[0]['CUENTACORRIENTE'] : 0;
-		$total_facturado = $sum_contado + $sum_cuntacorriente;
-
-		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA,
-				   ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
-		$from = "cuentacorrientecliente ccc";
-		$cuentacorriente_total = CollectorCondition()->get('CuentaCorrienteCliente', NULL, 4, $from, $select);
-		if (is_array($cuentacorriente_total)) {
-			$cuentacorriente_deuda = $cuentacorriente_total[0]['TDEUDA'];
-			$cuentacorriente_deuda = (is_null($cuentacorriente_deuda)) ? 0 : $cuentacorriente_deuda;
-
-			$cuentacorriente_ingreso = $cuentacorriente_total[0]['TINGRESO'];
-			$cuentacorriente_ingreso = (is_null($cuentacorriente_ingreso)) ? 0 : $cuentacorriente_ingreso;
-
-			$deuda_cuentacorrientecliente = $cuentacorriente_deuda - $cuentacorriente_ingreso;
-		} else {
-			$deuda_cuentacorrientecliente = 0;
-		}
-
-		$array_totales = array('{total_facturado}'=>$total_facturado,
-							   '{deuda_cuentacorrientecliente}'=>$deuda_cuentacorrientecliente);
 
 		switch ($arg) {
 			case 1:
@@ -103,7 +71,7 @@ class EgresoController {
 				break;
 		}
 
-		$this->view->listar($egreso_collection, $array_msj, $array_totales);
+		$this->view->listar($egreso_collection, $array_msj);
 	}
 
 	function egresar() {

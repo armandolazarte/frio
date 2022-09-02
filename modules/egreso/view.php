@@ -3,7 +3,7 @@
 
 class EgresoView extends View {
 	
-	function listar($egreso_collection, $array_msj, $array_totales) {
+	function listar($egreso_collection, $array_msj) {
 		$gui = file_get_contents("static/modules/egreso/listar.html");
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		switch ($user_level) {
@@ -20,7 +20,6 @@ class EgresoView extends View {
 
 		$tbl_egreso_array = $this->render_regex_dict('TBL_EGRESO', $tbl_egreso_array, $egreso_collection);		
 		$render = str_replace('{tbl_egreso}', $tbl_egreso_array, $gui);
-		//$render = $this->render($array_totales, $render);
 		$render = $this->render_breadcrumb($render);
 		$render = $this->render($array_msj, $render);
 		$template = $this->render_template($render);
