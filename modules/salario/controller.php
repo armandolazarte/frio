@@ -121,6 +121,36 @@ class SalarioController {
     	$this->model->salario_id = $arg;
 		$this->model->delete();
 		header("Location: " . URL_APP . "/salario/panel");
+	}
+
+	function desc_salarios_fecha() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+		//PARAMETROS
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+
+		$select = "s.salario_id AS SALARIO_ID, CONCAT(date_format(s.fecha, '%d/%m/%Y'), ' ', s.hora) AS FECHA, u.denominacion AS USUARIO, CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO, s.monto AS IMPORTE, s.detalle AS DETALLE, s.tipo_pago AS TIPO, CONCAT('Desde ', date_format(s.desde, '%d/%m/%Y'), ' hasta ', date_format(s.hasta, '%d/%m/%Y')) AS PERIODO";
+		$from = "salario s INNER JOIN empleado e ON s.empleado = e.empleado_id INNER JOIN usuario u ON s.usuario_id = u.usuario_id";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select);
+
+		$subtitulo = "SALARIOS: {$desde} - {$hasta}";
+		$array_encabezados = array('Fecha', 'Período', 'Empleado', 'Detalle', 'Tipo', 'Importe');
+
+		foreach ($salario_collection as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["FECHA"]
+								, $valor["PERIODO"]
+								, $valor["EMPLEADO"]
+								, $valor["DETALLE"]
+								, $valor["TIPO"]
+								, $valor["IMPORTE"]);
+			$array_exportacion[] = $array_temp;
+		}
+		
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+		exit;
 	}	
 }
 ?>
