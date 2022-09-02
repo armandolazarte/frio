@@ -132,7 +132,7 @@ class SalarioController {
 
 		$select = "s.salario_id AS SALARIO_ID, CONCAT(date_format(s.fecha, '%d/%m/%Y'), ' ', s.hora) AS FECHA, u.denominacion AS USUARIO, CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO, s.monto AS IMPORTE, s.detalle AS DETALLE, s.tipo_pago AS TIPO, CONCAT('Desde ', date_format(s.desde, '%d/%m/%Y'), ' hasta ', date_format(s.hasta, '%d/%m/%Y')) AS PERIODO";
 		$from = "salario s INNER JOIN empleado e ON s.empleado = e.empleado_id INNER JOIN usuario u ON s.usuario_id = u.usuario_id";
-		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY s.fecha ASC";
 		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select);
 
 		$subtitulo = "SALARIOS: {$desde} - {$hasta}";
