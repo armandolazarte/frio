@@ -22,6 +22,7 @@ class CuentaCorrienteClienteView extends View {
 		$totales_array = $totales_array[0];
 		$totales_array['BALANCE'] = abs(round(($totales_array['TDEUDA'] - $totales_array['TINGRESO']),2));
 		$totales_array['BALANCE'] = ($totales_array['BALANCE'] > 0.5) ? $totales_array['BALANCE'] : 0;
+		$totales_array['BALANCE'] = number_format($totales_array['BALANCE'], 2, ',', '.');
 		$totales_array['CLASS_BALANCE'] = ($totales_array['TDEUDA'] <= $totales_array['TINGRESO']) ? "green" : "red";
 		$totales_array['TXT_BALANCE'] = ($totales_array['TDEUDA'] <= $totales_array['TINGRESO']) ? "positivo" : "negativo";
 		$totales_array = $this->set_dict_array($totales_array);
