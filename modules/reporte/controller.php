@@ -369,7 +369,7 @@ class ReporteController {
 		$where = "g.fecha BETWEEN '{$primer_dia_mes}' AND '{$fecha_sys1}'";
 		$group_by = "gc.gastocategoria_id";
 		$gasto_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select, $group_by);
-		
+
 		// BOLETAS CON VENCIMIENTO
 		$select = "date_format(i.fecha, '%d/%m/%Y') AS FECHA, date_format(i.fecha_vencimiento, '%d/%m/%Y') AS VENCIMIENTO, ccp.ingreso_id AS IID, CONCAT(LPAD(i.punto_venta, 4, 0), '-', LPAD(i.numero_factura, 8, 0)) AS FACTURA, ccp.proveedor_id AS PROID, p.razon_social AS PROVEEDOR, i.fecha_vencimiento AS FECVEN, FORMAT(i.costo_total_iva, 2,'de_DE') AS IMPORTE, ccp.cuentacorrienteproveedor_id AS CCPID, ccp.ingresotipopago AS ING_TIP_PAG";
 		$from = "cuentacorrienteproveedor ccp INNER JOIN proveedor p ON ccp.proveedor_id = p.proveedor_id INNER JOIN ingreso i ON ccp.ingreso_id = i.ingreso_id";
@@ -910,7 +910,7 @@ class ReporteController {
 			$calculo_cajadiaria = 0;
 		}
 
-		$select = "c.cobrador_id AS CID, ccc.fecha AS FECHA, c.denominacion AS COBRADOR, ROUND(SUM(ccc.ingreso), 2) AS COBRANZA";
+		$select = "c.cobrador_id AS CID, ccc.fecha AS FECHA, c.denominacion AS COBRADOR, FORMAT(ccc.ingreso, 2,'de_DE') AS COBRANZA";
 		$from = "cuentacorrientecliente ccc INNER JOIN cobrador c ON ccc.cobrador = c.cobrador_id";
 		$where = "ccc.fecha = '{$fecha_filtro}' AND ccc.tipomovimientocuenta = 2";
 		$group_by = "ccc.cobrador";
@@ -925,7 +925,7 @@ class ReporteController {
 		$ingreso_movimientocaja = (is_null($ingreso_movimientocaja)) ? 0 : $ingreso_movimientocaja;
 
 		#DETALLE INGRESO MOVIMIENTO CAJA 
-		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, ROUND(mc.importe, 2) AS IMPORTETOTAL";
+		$select = "CONCAT(ud.apellido, ' ', ud.nombre) AS USUARIO, mc.detalle AS DETALLE, FORMAT(mc.importe, 2,'de_DE') AS IMPORTETOTAL";
 		$from = "movimientocaja mc INNER JOIN movimientocajatipo mct ON mc.movimientocajatipo = mct.movimientocajatipo_id INNER JOIN usuario u ON mc.usuario_id = u.usuario_id INNER JOIN usuariodetalle ud ON u.usuariodetalle = ud.usuariodetalle_id";
 		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'INGCAJ00001'";
 		$detalle_ingreso_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
