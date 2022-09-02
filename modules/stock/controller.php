@@ -116,7 +116,7 @@ class StockController {
 
 					$class_stm = ($this->model->cantidad_actual < $pm->stock_minimo) ? 'danger' : 'success';
 					$this->model->producto = $pm;
-					$this->model->valor_stock = $valor_stock_producto;
+					$this->model->valor_stock = number_format($valor_stock_producto, 2, ',', '.');
 					$this->model->class_stm = $class_stm;
 					$this->model->mensaje_stm = $mensaje_stm;
 					unset($this->model->producto_id);
