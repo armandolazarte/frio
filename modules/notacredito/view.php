@@ -71,8 +71,8 @@ class NotaCreditoView extends View {
 			}
 		}
 
-		$obj_egreso->subtotal = number_format($subtotal, 2, ',', '.');
-		$obj_egreso->importe_total = number_format($importe_total, 2, ',', '.');
+		$obj_egreso->subtotal = number_format($obj_egreso->subtotal, 2, ',', '.');
+		$obj_egreso->importe_total = number_format($obj_egreso->importe_total, 2, ',', '.');
 		$obj_egreso = $this->set_dict($obj_egreso);
 		$obj_notacredito = $this->set_dict($obj_notacredito);
 		if (!empty($egresoafip)) {
