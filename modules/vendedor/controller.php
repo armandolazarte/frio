@@ -929,7 +929,7 @@ class VendedorController {
 		$pagoComisionPDFTool->descarga_pago_comision($egresocomision_collection, $array_extra, $this->model);
 	}
 
-	function descargar_visita_clientes() {
+	function desc_visita_clientes() {
 		SessionHandler()->check_session();
 		require_once "tools/excelreport.php";
 
@@ -969,6 +969,41 @@ class VendedorController {
 						, $valor["DOMICILIO"]
 						, $valor["TEL"]
 						, $valor["FLETE"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
+
+	function desc_cliente_vendedor() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$vendedor_id = filter_input(INPUT_POST, 'vendedor');
+		$this->model->vendedor_id = $vendedor_id;
+		$this->model->get();
+		$vendedor_denominacion = $this->model->apellido . " " . $this->model->nombre;
+
+		$select = "LPAD(c.cliente_id, 5, 0) AS CODCLI, c.razon_social AS CLIENTE, c.nombre_fantasia AS FANTASIA, c.domicilio AS DOMICILIO, c.localidad AS BARRIO, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, (SELECT valor FROM infocontacto ic INNER JOIN infocontactocliente icc ON ic.infocontacto_id = icc.compositor WHERE icc.compuesto = c.cliente_id AND ic.denominacion = 'Teléfono') AS TEL, f.denominacion AS FLETE";
+		$from = "cliente c INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id";
+		$where = "c.vendedor = {$vendedor_id} AND c.oculto = 0";
+		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
+		$cliente_collection = (!is_array($cliente_collection)) ? array() : $cliente_collection;
+
+		$subtitulo = "{$vendedor_denominacion}";
+		$array_encabezados = array('COD', 'CLIENTE', 'NOM FANTASIA', 'DOCUMENTO', 'BARRIO', 'DOMICILIO', 'TELEFONO');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+		foreach ($cliente_collection as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array(
+						  $valor["CODCLI"]
+						, $valor["CLIENTE"]
+						, $valor["FANTASIA"]
+						, $valor["DOCUMENTO"]
+						, $valor["BARRIO"]
+						, $valor["DOMICILIO"]
+						, $valor["TEL"]);
 			$array_exportacion[] = $array_temp;
 		}
 

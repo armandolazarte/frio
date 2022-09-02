@@ -12,10 +12,6 @@
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Listado de vendedores</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-            </ul>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -45,16 +41,12 @@
     </button>
     <div class="x_panel">
         <div class="x_title">
-            <h2><i class="fa fa-edit"></i>&nbsp;&nbsp; Descargar frecuencia</h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-            </ul>
+            <h2><i class="fa fa-download"></i>&nbsp;&nbsp; Descargar frecuencia</h2>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
             <div class=" form">
-                <form class="form" id="formulario_guardar" method="post" action="{url_app}/vendedor/descargar_visita_clientes">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/vendedor/desc_visita_clientes">
                     <div class="form-group">
                         <label>Vendedor</label>
                         <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
@@ -68,7 +60,28 @@
                         </select>
                     </div>
                     <div class="col-lg-12" style="margin-top: 2%;" align="right">
-                        <button type="submit" class="btn btn-app"><i class="fa fa-edit"></i> Descargar</button>
+                        <button type="submit" class="btn btn-app"><i class="fa fa-download"></i> Descargar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="x_panel">
+        <div class="x_title">
+            <h2><i class="fa fa-download"></i>&nbsp;&nbsp; Descargar cliente por vendedor</h2>
+            <div class="clearfix"></div>
+        </div>
+        <div class="x_content">
+            <div class=" form">
+                <form class="form" id="formulario_guardar" method="post" action="{url_app}/vendedor/desc_cliente_vendedor">
+                    <div class="form-group">
+                        <label>Vendedor</label>
+                        <select class="form-control m-bot15" name="vendedor" id="vendedor" required>
+                            {slt_vendedor}
+                        </select>
+                    </div>
+                    <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                        <button type="submit" class="btn btn-app"><i class="fa fa-download"></i> Descargar</button>
                     </div>
                 </form>
             </div>
