@@ -44,7 +44,7 @@ class CuentaCorrienteClienteCreditoController {
 			$importe_cuentacorrienteclientecredito = $cccc->importe;
 		}
 
-		$select = "cccc.cuentacorrienteclientecredito_id AS CTACTECLICREID, cccc.fecha AS FECHA, cccc.referencia AS REFERENCIA, cccc.importe AS BALANCE, cccc.movimiento AS MOVIMIENTO";
+		$select = "cccc.cuentacorrienteclientecredito_id AS CTACTECLICREID, cccc.fecha AS FECHA, cccc.referencia AS REFERENCIA, FORMAT(cccc.importe, 2,'de_DE') AS BALANCE, cccc.movimiento AS MOVIMIENTO";
 		$from = "cuentacorrienteclientecredito cccc";
 		$where = "cccc.cliente_id = {$cliente_id}";
 		$credito_collection = CollectorCondition()->get('CuentaCorrienteClienteCredito', $where, 4, $from, $select);
