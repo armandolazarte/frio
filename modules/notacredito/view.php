@@ -31,6 +31,8 @@ class NotaCreditoView extends View {
 		foreach ($notacreditodetalle_collection as $clave=>$valor) {
 			$notacreditodetalle_collection[$clave]['COSTO'] = number_format($valor['COSTO'], 2, ',', '.');
 			$notacreditodetalle_collection[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
+		}
+		
 		$tbl_notacreditodetalle_array = $this->render_regex_dict('TBL_NOTACREDITODETALLE', $tbl_notacreditodetalle_array, $notacreditodetalle_collection);
 
 		if (is_object($obj_egreso)) {
