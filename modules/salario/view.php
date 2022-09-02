@@ -3,7 +3,7 @@
 
 class SalarioView extends View {
 
-	function panel($salario_collection, $empleado_collection) {
+	function listar($salario_collection, $empleado_collection) {
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 		$gui = file_get_contents("static/modules/salario/panel.html");
 		$gui_slt_empleado = file_get_contents("static/common/slt_empleado.html");

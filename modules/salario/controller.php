@@ -11,7 +11,7 @@ class SalarioController {
 		$this->view = new SalarioView();
 	}
 
-	function panel() {
+	function listar() {
     	SessionHandler()->check_session();
     	$periodo_actual =  date('Ym');
 
@@ -25,7 +25,7 @@ class SalarioController {
 			if ($valor->oculto == 1) unset($empleado_collection[$clave]);
 		}
 
-		$this->view->panel($salario_collection, $empleado_collection);
+		$this->view->listar($salario_collection, $empleado_collection);
 	}
 
 	function guardar() {

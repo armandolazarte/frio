@@ -13,10 +13,6 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Agregar salario</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -68,10 +64,6 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Listado de salarios abonados en el mes</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -101,24 +93,20 @@
         <div class="x_panel">
             <div class="x_title">
                 <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Buscar salario</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-                </ul>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
                 <div class=" form">
                     <form class="form" id="formulario" method="post" action="{url_app}/salario/filtrar_salario">
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label>Desde</label>
                             <input type="date" class="form-control" id="filtro_desde" name="desde" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-6">
                             <label>Hasta</label>
                             <input type="date" class="form-control" id="filtro_hasta" name="hasta" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group col-lg-12">
                             <label>Empleado</label>
                             <select class="form-control m-bot15" name="id_empleado" id="id_empleado" required>
                               <option value="">Seleccionar Empleado</option>
@@ -127,6 +115,29 @@
                         </div>
                         <div class="col-lg-12" style="margin-top: 2%;" align="right">
                             <button class="btn btn-xs btn-primary" type="button" onclick="filtrarSalario();" style="width: 100%"> <i class="fa fa-search"></i> Buscar </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="x_panel">
+            <div class="x_title">
+                <h2><i class="fa fa-plus-square"></i>&nbsp;&nbsp; Descargar salarios</h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class=" form">
+                    <form class="form" id="formulario" method="post" action="{url_app}/salario/desc_salarios_fecha">
+                        <div class="form-group col-lg-6">
+                            <label>Desde</label>
+                            <input type="date" class="form-control" id="filtro_desde" name="desde" required>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            <label>Hasta</label>
+                            <input type="date" class="form-control" id="filtro_hasta" name="hasta" required>
+                        </div>
+                        <div class="col-lg-12" style="margin-top: 2%;" align="right">
+                            <button class="btn btn-xs btn-primary" type="submit" style="width: 100%"> <i class="fa fa-download"></i> Descargar </button>
                         </div>
                     </form>
                 </div>
