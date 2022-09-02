@@ -984,7 +984,7 @@ class VendedorController {
 		$this->model->get();
 		$vendedor_denominacion = $this->model->apellido . " " . $this->model->nombre;
 
-		$select = "LPAD(c.cliente_id, 5, 0) AS CODCLI, c.razon_social AS CLIENTE, c.nombre_fantasia AS FANTASIA, c.domicilio AS DOMICILIO, c.localidad AS BARRIO, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, (SELECT valor FROM infocontacto ic INNER JOIN infocontactocliente icc ON ic.infocontacto_id = icc.compositor WHERE icc.compuesto = c.cliente_id AND ic.denominacion = 'Teléfono') AS TEL, f.denominacion AS FLETE";
+		$select = "LPAD(c.cliente_id, 5, 0) AS CODCLI, c.razon_social AS CLIENTE, c.nombre_fantasia AS FANTASIA, c.domicilio AS DOMICILIO, c.localidad AS BARRIO, CONCAT(dt.denominacion, ' ', c.documento) AS DOCUMENTO, (SELECT valor FROM infocontacto ic INNER JOIN infocontactocliente icc ON ic.infocontacto_id = icc.compositor WHERE icc.compuesto = c.cliente_id AND ic.denominacion = 'Teléfono') AS TEL";
 		$from = "cliente c INNER JOIN documentotipo dt ON c.documentotipo = dt.documentotipo_id";
 		$where = "c.vendedor = {$vendedor_id} AND c.oculto = 0";
 		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
