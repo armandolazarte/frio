@@ -137,6 +137,8 @@ class SalarioController {
 
 		$subtitulo = "SALARIOS: {$desde} - {$hasta}";
 		$array_encabezados = array('Fecha', 'Período', 'Empleado', 'Detalle', 'Tipo', 'Importe');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
 
 		foreach ($salario_collection as $clave=>$valor) {
 			$array_temp = array();
