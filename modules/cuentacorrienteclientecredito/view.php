@@ -43,11 +43,11 @@ class CuentaCorrienteClienteCreditoView extends View {
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
 		$msj = ($valor_cuentacorriente >= 0) ? 'no posee deuda!' : 'posee deuda!';
 		
-		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
+		$array_cuentacorriente = array('{cuentacorriente-valor}'=>number_format(abs($valor_cuentacorriente), 2, ',', '.'),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class,
-									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
+									   '{cuentacorriente-credito}'=>number_format($importe_cuentacorrienteclientecredito, 2, ',', '.'));
 
 		$tbl_cuentascorrientes = $this->render_regex_dict('TBL_CUENTACORRIENTE', $tbl_cuentascorrientes, $cuentascorrientes_collection);
 		$lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $lst_infocontacto, $infocontacto_collection);
