@@ -944,15 +944,15 @@ class ReporteController {
 		$where = "mc.fecha = '{$fecha_filtro}' AND mct.codigo = 'EGRCAJ00001'";
 		$detalle_salida_movimientocaja = CollectorCondition()->get('MovimientoCaja', $where, 4, $from, $select);
 
-		$array_totales = array('{cobranza}'=>$cobranza,
-							   '{ventas}'=>$total_facturacion_hoy,
-							   '{pago_proveedores}'=>$pago_proveedores,
-							   '{pago_comisiones}'=>$egreso_comision_hoy,
-							   '{gasto_diario}'=>$gasto_diario,
-							   '{liquidacion}'=>$liquidacion,
-							   '{vehiculos}'=>$vehiculos,
-							   '{ingreso_movimientocaja}'=>$ingreso_movimientocaja,
-							   '{salida_movimientocaja}'=>$salida_movimientocaja,
+		$array_totales = array('{cobranza}'=>number_format($cobranza, 2, ',', '.'),
+							   '{ventas}'=>number_format($total_facturacion_hoy, 2, ',', '.'),
+							   '{pago_proveedores}'=>number_format($pago_proveedores, 2, ',', '.'),
+							   '{pago_comisiones}'=>number_format($egreso_comision_hoy, 2, ',', '.'),
+							   '{gasto_diario}'=>number_format($gasto_diario, 2, ',', '.'),
+							   '{liquidacion}'=>number_format($liquidacion, 2, ',', '.'),
+							   '{vehiculos}'=>number_format($vehiculos, 2, ',', '.'),
+							   '{ingreso_movimientocaja}'=>number_format($ingreso_movimientocaja, 2, ',', '.'),
+							   '{salida_movimientocaja}'=>number_format($salida_movimientocaja, 2, ',', '.'),
 							   '{caja}'=>$calculo_cajadiaria,
 							   '{fecha}'=>$fecha_filtro);
 
