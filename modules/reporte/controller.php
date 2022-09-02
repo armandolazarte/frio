@@ -331,8 +331,8 @@ class ReporteController {
 					$nuevo_valor_cantidad = 0;
 				}
 
-				$sum_importe_producto[$clave]['IMPORTE'] = number_format($nuevo_valor_importe, 2, ',', '.');
-				$sum_importe_producto[$clave]['CANTIDAD'] = number_format($nuevo_valor_cantidad, 2, ',', '.');
+				$sum_importe_producto[$clave]['IMPORTE'] = round($nuevo_valor_importe, 2);
+				$sum_importe_producto[$clave]['CANTIDAD'] = round($nuevo_valor_cantidad, 2);
 			}
 		}
 
