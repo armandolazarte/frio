@@ -587,6 +587,8 @@ class CuentaCorrienteClienteController {
 				} else {
 					$clientecentralcliente_collection[$clave]["CREDITO"] = 0;
 				}
+				
+				$clientecentralcliente_collection[$clave]["CREDITO"] = number_format($valor["CREDITO"], 2, ',', '.');
 			}
 		}
 
