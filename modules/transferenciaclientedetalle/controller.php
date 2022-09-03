@@ -46,7 +46,7 @@ class TransferenciaClienteDetalleController {
 			}
 		}
 
-		foreach ($$pagos_transferenciaclientedetalle_collection as $clave=>$valor) {
+		foreach ($transferenciaclientedetalle_collection as $clave=>$valor) {
 			$transferenciaclientedetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
 			$transferenciaclientedetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
 			$transferenciaclientedetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
