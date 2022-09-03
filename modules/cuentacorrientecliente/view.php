@@ -271,7 +271,7 @@ class CuentaCorrienteClienteView extends View {
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
 		$msj = ($valor_cuentacorriente >= 0) ? 'no posee deuda!' : 'posee deuda!';
 		
-		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
+		$array_cuentacorriente = array('{cuentacorriente-valor}'=>number_format(abs($valor_cuentacorriente), 2, ',', '.'),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class,
