@@ -252,7 +252,7 @@ class CuentaCorrienteClienteView extends View {
 			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
 			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 			$class = ($cuenta >= 0) ? 'info' : 'danger';
-			$cuentascorrientes_collection[$clave]['CUENTA'] = abs($cuenta);
+			$cuentascorrientes_collection[$clave]['CUENTA'] = number_format(abs($cuenta), 2, ',', '.');
 			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
 		}
 			
@@ -275,7 +275,8 @@ class CuentaCorrienteClienteView extends View {
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class,
-									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteclientecredito, 2));
+									   '{cuentacorriente-credito_ajax}'=>round($importe_cuentacorrienteclientecredito, 2),
+									   '{cuentacorriente-credito}'=>number_format($importe_cuentacorrienteclientecredito, 2, ',', '.'));
 
 		$tbl_sucursales = $this->render_regex_dict('TBL_CLIENTECENTRALCLIENTE', $tbl_sucursales, $clientecentralcliente_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
