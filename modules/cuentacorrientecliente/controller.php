@@ -94,9 +94,9 @@ class CuentaCorrienteClienteController {
 			$importe_deuda_total = ($importe_deuda_total > 0 AND $importe_deuda_total < 1) ? 0 : $importe_deuda_total;
 			$importe_deuda_total = ($importe_deuda_total > -1 AND $importe_deuda_total < 0) ? 0 : $importe_deuda_total;
 			$class = ($importe_deuda_total >= 0) ? 'info' : 'danger';
-			$clientecentral_collection[$clave]['CUENTA'] = abs($importe_deuda_total);
+			$clientecentral_collection[$clave]['CUENTA'] = number_format(abs($importe_deuda_total), 2, ',', '.');
 			$clientecentral_collection[$clave]['CLASS'] = $class;
-			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
+			$clientecentral_collection[$clave]['CREDITO'] = number_format($importe_credito_total, 2, ',', '.');
 		}
 
 		$select = "ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN ccc.importe ELSE 0 END),2) AS TDEUDA, ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 OR ccc.tipomovimientocuenta = 3 THEN ccc.importe ELSE 0 END),2) AS TINGRESO";
