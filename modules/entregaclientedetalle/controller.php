@@ -74,12 +74,12 @@ class EntregaClienteDetalleController {
 
   	function vendedor_cobranza_total($arg) {
 	    SessionHandler()->check_session();
-	    $select = "CONCAT('$ ',ROUND(SUM(ecd.monto), 2)) AS TOTAL";
+	    $select = "SUM(ecd.monto) AS TOTAL";
 	    $from = "entregaclientedetalle ecd INNER JOIN entregacliente ec ON ec.entregacliente_id = ecd.entregacliente_id";
 	    $where = "ec.vendedor_id  = {$arg} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now()";
 	    $cobranza = CollectorCondition()->get('EntregaClienteDetalle', $where, 4, $from, $select);
 	    $total = (is_array($cobranza)) ? $cobranza[0]["TOTAL"] : 0 ;
-	    print_r($total);
+	    print_r("$" . number_format($total, 2, ',', '.'));
   	}
 
 	function guardar() {
