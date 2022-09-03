@@ -19,7 +19,7 @@ class TransferenciaClienteDetalleController {
 		$cm->cliente_id = $cliente_id;
 		$cm->get();
 
-		$select = "tcd.transferenciaclientedetalle_id AS TRACLIDETID, ccc.fecha AS FECHA, tcd.numero AS NUMTRA, tcd.banco AS BANCO, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, ccc.cuentacorrientecliente_id AS MOVCCC, ccc.ingreso AS PAGO";
+		$select = "tcd.transferenciaclientedetalle_id AS TRACLIDETID, ccc.fecha AS FECHA, tcd.numero AS NUMTRA, tcd.banco AS BANCO, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, ccc.cuentacorrientecliente_id AS MOVCCC, FORMAT(ccc.ingreso, 2,'de_DE') AS PAGO";
 		$from = "transferenciaclientedetalle tcd INNER JOIN cuentacorrientecliente ccc ON tcd.cuentacorrientecliente_id = ccc.cuentacorrientecliente_id INNER JOIN egreso e ON ccc.egreso_id = e.egreso_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "ccc.cliente_id = {$cliente_id}";
 		$pagos_transferenciaclientedetalle_collection = CollectorCondition()->get('TransferenciaClienteDetalle', $where, 4, $from, $select);
@@ -44,6 +44,13 @@ class TransferenciaClienteDetalleController {
 				$transferenciaclientedetalle_collection[$clave]['CREDITO'] = 0;
 				$transferenciaclientedetalle_collection[$clave]['TOTAL'] = round($valor['PAGO'], 2);
 			}
+		}
+
+		foreach ($$transferenciaclientedetalle_collection as $clave=>$valor) {
+			$$transferenciaclientedetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
+			$$transferenciaclientedetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
+			$$transferenciaclientedetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
+			$$transferenciaclientedetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
 		}
 
 		$this->view->consultar_pagos_cliente($pagos_transferenciaclientedetalle_collection, $transferenciaclientedetalle_collection, $cm);
