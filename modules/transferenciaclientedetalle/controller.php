@@ -46,11 +46,11 @@ class TransferenciaClienteDetalleController {
 			}
 		}
 
-		foreach ($$transferenciaclientedetalle_collection as $clave=>$valor) {
-			$$transferenciaclientedetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
-			$$transferenciaclientedetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
-			$$transferenciaclientedetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
-			$$transferenciaclientedetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
+		foreach ($$pagos_transferenciaclientedetalle_collection as $clave=>$valor) {
+			$transferenciaclientedetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
+			$transferenciaclientedetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
+			$transferenciaclientedetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
+			$transferenciaclientedetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
 		}
 
 		$this->view->consultar_pagos_cliente($pagos_transferenciaclientedetalle_collection, $transferenciaclientedetalle_collection, $cm);
