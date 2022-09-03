@@ -588,6 +588,9 @@ class CuentaCorrienteClienteController {
 					$clientecentralcliente_collection[$clave]["CREDITO"] = 0;
 				}
 				
+			}
+
+			foreach ($clientecentralcliente_collection as $clave=>$valor) {
 				$clientecentralcliente_collection[$clave]["CREDITO"] = number_format($valor["CREDITO"], 2, ',', '.');
 			}
 		}
