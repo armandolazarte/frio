@@ -49,11 +49,29 @@ class ProveedorController {
 
 	function consultar($arg) {
 		SessionHandler()->check_session();
-		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, ROUND((((p.costo * p.iva)/100)+p.costo), 3) AS CMI, p.iva AS IVA, p.producto_id AS PRODUCTO_ID, ROUND((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100), 3) AS VG, p.descuento AS DESCUENTO, p.porcentaje_ganancia AS GANANCIA, CASE WHEN MOD(@rownum:=@rownum+1,2) = 1 THEN 'even' ELSE 'odd' END AS CLASSTR, ROUND((((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100) + ((p.costo * p.iva / 100) + p.costo)) * p.descuento / 100), 3) AS VD, ROUND((((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100) + ((p.costo * p.iva / 100) + p.costo)) - (((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100) + ((p.costo * p.iva / 100) + p.costo)) * p.descuento / 100)), 3) AS VENTA";
+		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.flete AS FLETE, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, CASE WHEN MOD(@rownum:=@rownum+1,2) = 1 THEN 'even' ELSE 'odd' END AS CLASSTR, p.precio_venta AS VENTA";
 		$from = "(SELECT @rownum:=0) r, producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id";
 		$where = "pd.proveedor_id = {$arg}";
 		$groupby = "pd.producto_id";
 		$productodetalle_collection = CollectorCondition()->get('ProductoDetalle', $where, 4, $from, $select, $groupby);
+
+		foreach ($productodetalle_collection as $clave=>$valor) {
+			$neto = $valor["COSTO"];
+			$flete = $valor["FLETE"];
+			$iva = $valor["IVA"];
+			$pvp = $valor["VENTA"];
+
+			//PRECIO NETO
+			$valor_neto = $neto + ($iva * $neto / 100);
+			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);
+			$productodetalle_collection[$clave]["CMI"] = number_format($valor_neto, 2, ',', '.');
+
+			//VALOR GANANCIA
+			$valor_ganancia = $pvp - $valor_neto;
+			$productodetalle_collection[$clave]["VG"] = number_format($valor_ganancia, 2, ',', '.');
+			$productodetalle_collection[$clave]["COSTO"] = number_format($valor["COSTO"], 4, ',', '.');
+			$productodetalle_collection[$clave]["VENTA"] = number_format($valor["VENTA"], 2, ',', '.');
+		}
 
 		$this->model->proveedor_id = $arg;
 		$this->model->get();
