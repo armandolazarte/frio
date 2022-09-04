@@ -165,9 +165,8 @@ class ProductoView extends View {
 
 	function consultar($stock_collection, $obj_producto) {
 		$gui = file_get_contents("static/modules/producto/consultar.html");
-		$tbl_stock_array = file_get_contents("static/modules/stock/tbl_stock_array.html");
+		$tbl_stock_array = file_get_contents("static/modules/producto/tbl_stock_array.html");
 		$tbl_stock_array = $this->render_regex_dict('TBL_STOCK', $tbl_stock_array, $stock_collection);
-
 		$obj_producto = $this->set_dict($obj_producto);
 		$render = $this->render($obj_producto, $gui);
 		$render = str_replace('{tbl_stock_array}', $tbl_stock_array, $render);
