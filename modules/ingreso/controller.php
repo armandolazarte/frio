@@ -43,6 +43,8 @@ class IngresoController {
 				$ingreso_collection[$clave]['NC_IMPORTE_TOTAL'] = 0;
 				$ingreso_collection[$clave]['TIVA'] = number_format($valor['TIVA'], 2, ',', '.');
 			}
+			
+			$ingreso_collection[$clave]['TOTAL'] = number_format($valor['TOTAL'], 2, ',', '.');
 		}
 
 		switch ($arg) {
