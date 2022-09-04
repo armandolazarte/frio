@@ -67,7 +67,7 @@ class ProductoController {
 
 	function lista_precio() {
 		SessionHandler()->check_session();
-		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.producto_id AS PRODUCTO_ID, p.precio_venta AS VALOR_VENTA, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA";
+		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, FORMAT(p.costo, 2,'de_DE') AS COSTO, p.producto_id AS PRODUCTO_ID, FORMAT(p.precio_venta, 2,'de_DE') AS VALOR_VENTA, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA";
 		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "p.oculto = 0";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
