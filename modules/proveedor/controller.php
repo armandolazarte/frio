@@ -77,7 +77,7 @@ class ProveedorController {
 			}
 		}
 
-		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.flete AS FLETE p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, CASE WHEN MOD(@rownum:=@rownum+1,2) = 1 THEN 'even' ELSE 'odd' END AS CLASSTR, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA";
+		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.flete AS FLETE, p.iva AS IVA, p.porcentaje_ganancia AS GANANCIA, CASE WHEN MOD(@rownum:=@rownum+1,2) = 1 THEN 'even' ELSE 'odd' END AS CLASSTR, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA";
 		$from = "(SELECT @rownum:=0) r, producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id";
 		$where = "pd.proveedor_id = {$proveedor_id}";
 		$groupby = "pd.producto_id";
