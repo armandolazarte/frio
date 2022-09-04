@@ -97,6 +97,7 @@ class ProveedorController {
 			//VALOR GANANCIA
 			$valor_ganancia = $pvp - $valor_neto;
 			$productodetalle_collection[$clave]["VG"] = number_format($valor_ganancia, 2, ',', '.');
+			$productodetalle_collection[$clave]["COSTO"] = number_format($valor["COSTO"], 2, ',', '.');
 			$productodetalle_collection[$clave]["VENTA"] = number_format($valor["VENTA"], 2, ',', '.');
 		}
 
