@@ -304,6 +304,8 @@ class ProductoController {
 
 		$this->model->producto_id = $arg;
 		$this->model->get();
+		$this->model->costo = number_format($costo, 2, ',', '.');
+		$this->model->precio_venta = number_format($precio_venta, 2, ',', '.');
 		$this->view->consultar($stock_collection, $this->model);
 	}
 
