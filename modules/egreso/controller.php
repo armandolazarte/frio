@@ -1420,7 +1420,7 @@ class EgresoController {
 				unset($egreso_collection[$clave]);
 			}
 
-			$egreso_collection[$clave]['IMPORTETOTAL'] == number_format($valor['IMPORTETOTAL'], 2, ',', '.');
+			$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
 		}
 
 		$array_temp = array();
