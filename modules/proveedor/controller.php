@@ -77,11 +77,14 @@ class ProveedorController {
 			}
 		}
 
-		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, ROUND((((p.costo * p.iva)/100)+p.costo), 3) AS CMI, p.iva AS IVA, p.producto_id AS PRODUCTO_ID, ROUND((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100), 3) AS VG, p.descuento AS DESCUENTO, p.porcentaje_ganancia AS GANANCIA, CASE WHEN MOD(@rownum:=@rownum+1,2) = 1 THEN 'even' ELSE 'odd' END AS CLASSTR, ROUND((((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100) + ((p.costo * p.iva / 100) + p.costo)) * p.descuento / 100), 3) AS VD, ROUND((((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100) + ((p.costo * p.iva / 100) + p.costo)) - (((((p.costo * p.iva / 100) + p.costo) * p.porcentaje_ganancia / 100) + ((p.costo * p.iva / 100) + p.costo)) * p.descuento / 100)), 3) AS BKPVP, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA";
+		$select = "p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, p.costo as COSTO, p.iva AS IVA, p.producto_id AS PRODUCTO_ID, p.porcentaje_ganancia AS GANANCIA, CASE WHEN MOD(@rownum:=@rownum+1,2) = 1 THEN 'even' ELSE 'odd' END AS CLASSTR, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA";
 		$from = "(SELECT @rownum:=0) r, producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id";
 		$where = "pd.proveedor_id = {$proveedor_id}";
 		$groupby = "pd.producto_id";
 		$productodetalle_collection = CollectorCondition()->get('ProductoDetalle', $where, 4, $from, $select, $groupby);
+
+		
+		
 		$this->view->modificar_lista_precio($productodetalle_collection, $msj_array, $proveedor_id);
 	}
 
