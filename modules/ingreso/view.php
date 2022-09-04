@@ -23,8 +23,7 @@ class IngresoView extends View {
 		print $template;
 	}
 
-	function ingresar($producto_collection, $proveedor_collection, $condicionpago_collection, 
-					  $condicioniva_collection, $tipofactura_collection) {
+	function ingresar($producto_collection, $proveedor_collection, $condicionpago_collection, $condicioniva_collection, $tipofactura_collection) {
 		$gui = file_get_contents("static/modules/ingreso/ingresar.html");
 		$slt_condicionpago = file_get_contents("static/common/slt_condicionpago.html");
 		$slt_condicioniva = file_get_contents("static/common/slt_condicioniva.html");
@@ -54,8 +53,7 @@ class IngresoView extends View {
 		print $template;
 	}
 
-	function editar($producto_collection, $proveedor_collection, $condicionpago_collection, 
-					$condicioniva_collection, $ingresodetalle_collection, $tipofactura_collection, $obj_ingreso) {
+	function editar($producto_collection, $proveedor_collection, $condicionpago_collection, $condicioniva_collection, $ingresodetalle_collection, $tipofactura_collection, $obj_ingreso) {
 		$gui = file_get_contents("static/modules/ingreso/editar.html");
 		$slt_condicionpago = file_get_contents("static/common/slt_condicionpago.html");
 		$slt_condicioniva = file_get_contents("static/common/slt_condicioniva.html");
@@ -81,11 +79,9 @@ class IngresoView extends View {
 			foreach ($ingresodetalle_collection as $clave=>$valor) $array_producto_ids[] = '"' . $valor['PRODUCTO'] . '"';
 			$array_producto_ids = implode(',', $array_producto_ids);
 			$obj_ingreso->array_producto_ids = $array_producto_ids;
-			$tbl_editar_ingresodetalle_array = $this->render_regex_dict('TBL_INGRESODETALLE', $tbl_editar_ingresodetalle_array, 
-																		$ingresodetalle_collection);
+			$tbl_editar_ingresodetalle_array = $this->render_regex_dict('TBL_INGRESODETALLE', $tbl_editar_ingresodetalle_array, $ingresodetalle_collection);
 			$tbl_editar_ingresodetalle_array = str_replace('<!--TBL_INGRESODETALLE-->', '', $tbl_editar_ingresodetalle_array);
-			$hidden_editar_ingresodetalle_array = $this->render_regex_dict('HDN_INGRESODETALLE', $hidden_editar_ingresodetalle_array, 
-																		   $ingresodetalle_collection);
+			$hidden_editar_ingresodetalle_array = $this->render_regex_dict('HDN_INGRESODETALLE', $hidden_editar_ingresodetalle_array, $ingresodetalle_collection);
 			$hidden_editar_ingresodetalle_array = str_replace('<!--HDN_INGRESODETALLE-->', '', $hidden_editar_ingresodetalle_array);
 			$costo_base = 0;
 			foreach ($ingresodetalle_collection as $clave=>$valor) $costo_base = $costo_base + $valor['IMPORTE'];
@@ -120,8 +116,7 @@ class IngresoView extends View {
 		print $template;
 	}
 
-	function consultar($ingresodetalle_collection, $cuentacorrienteproveedor_collection, $obj_notacreditoproveedor,
-					   $notacreditoproveedordetalle_collection, $obj_ingreso, $notacredito_id) {
+	function consultar($ingresodetalle_collection, $cuentacorrienteproveedor_collection, $obj_notacreditoproveedor, $notacreditoproveedordetalle_collection, $obj_ingreso, $notacredito_id) {
 		$gui = file_get_contents("static/modules/ingreso/consultar.html");
 		$tbl_ingresodetalle_array = file_get_contents("static/modules/ingreso/tbl_ingresodetalle_array.html");
 		$tbl_ingresodetalle_array = $this->render_regex_dict('TBL_INGRESODETALLE', $tbl_ingresodetalle_array, $ingresodetalle_collection);

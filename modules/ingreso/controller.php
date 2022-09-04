@@ -97,7 +97,7 @@ class IngresoController {
 		$this->model->ingreso_id = $ingreso_id;
 		$this->model->get();
 
-		$select = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, id.costo_producto AS COSTO, id.importe AS IMPORTE";
+		$select = "id.codigo_producto AS CODIGO, id.descripcion_producto AS DESCRIPCION, CONCAT(id.cantidad, pu.denominacion)  AS CANTIDAD, id.descuento1 AS DESCUENTO1, id.descuento2 AS DESCUENTO2, id.descuento3 AS DESCUENTO3, FORMAT(id.costo_producto, 2,'de_DE') AS COSTO, FORMAT(id.importe, 2,'de_DE') AS IMPORTE";
 		$from = "ingresodetalle id INNER JOIN producto p ON id.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 		$where = "id.ingreso_id = {$ingreso_id}";
 		$ingresodetalle_collection = CollectorCondition()->get('IngresoDetalle', $where, 4, $from, $select);
@@ -118,7 +118,7 @@ class IngresoController {
 			$ncpm->notacreditoproveedor_id = $ingreso_id;
 			$ncpm->get();
 
-			$select = "ncpd.codigo_producto AS CODIGO, ncpd.descripcion_producto AS DESCRIPCION, CONCAT(ncpd.cantidad, pu.denominacion) as CANTIDAD, ncpd.descuento1 AS DESCUENTO1, ncpd.descuento2 AS DESCUENTO2, ncpd.descuento3 AS DESCUENTO3, costo_producto AS COSTO, ncpd.importe AS IMPORTE";
+			$select = "ncpd.codigo_producto AS CODIGO, ncpd.descripcion_producto AS DESCRIPCION, CONCAT(ncpd.cantidad, pu.denominacion) as CANTIDAD, ncpd.descuento1 AS DESCUENTO1, ncpd.descuento2 AS DESCUENTO2, ncpd.descuento3 AS DESCUENTO3, FORMAT(costo_producto, 2,'de_DE') AS COSTO, FORMAT(ncpd.importe, 2,'de_DE') AS IMPORTE";
 			$from = "notacreditoproveedordetalle ncpd INNER JOIN producto p ON ncpd.producto_id = p.producto_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
 			$where = "ncpd.ingreso_id = {$ingreso_id} AND ncpd.notacreditoproveedor_id = {$notacredito_id} ORDER BY ncpd.notacreditoproveedordetalle_id DESC";
 			$notacreditoproveedordetalle_collection = CollectorCondition()->get('NotaCreditoProveedorDetalle', $where, 4, $from, $select);
