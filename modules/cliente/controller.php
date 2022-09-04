@@ -406,7 +406,7 @@ class ClienteController {
 			$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
 		}
 
-		$ccm->credito_disponible = $importe_credito_total;
+		$ccm->credito_disponible = number_format($importe_credito_total, 2, ',', '.');
 
 		if ($cliente_seleccionado != 0) {
 			$cm = new Cliente();
