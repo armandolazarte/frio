@@ -35,7 +35,7 @@ class EntregaClienteDetalleController {
   	function vendedor_cobranza($arg) {
 	    SessionHandler()->check_session();
 
-	    $select = "ecd.entregaclientedetalle_id AS ID, ec.entregacliente_id AS ENTREGACLIENTE, ecd.egreso_id AS EGRESO, CONCAT(c.razon_social,'(', c.nombre_fantasia , ')') AS CLIENTE, ec.cliente_id AS CLINT, ec.estado AS ESTADO, ec.fecha AS FECHA, CONCAT('$',ROUND(ecd.monto,2)) AS MONTO, ecd.monto AS PRIMONTO, e.punto_venta AS PUNTO_VENTA, ecd.parcial AS VAL_PARCIAL, (CASE WHEN ecd.parcial = 1 THEN 'PARCIAL' ELSE 'TOTAL' END) AS PARCIAL, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, CASE WHEN ecd.ingresotipopago_id = 0 THEN 3 ELSE ecd.ingresotipopago_id END AS INGTIPPAG";
+	    $select = "ecd.entregaclientedetalle_id AS ID, ec.entregacliente_id AS ENTREGACLIENTE, ecd.egreso_id AS EGRESO, CONCAT(c.razon_social,'(', c.nombre_fantasia , ')') AS CLIENTE, ec.cliente_id AS CLINT, ec.estado AS ESTADO, ec.fecha AS FECHA, CONCAT('$',ROUND(ecd.monto,2)) AS MONTO, ecd.monto AS PRIMON, e.punto_venta AS PUNTO_VENTA, ecd.parcial AS VAL_PARCIAL, (CASE WHEN ecd.parcial = 1 THEN 'PARCIAL' ELSE 'TOTAL' END) AS PARCIAL, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, CASE WHEN ecd.ingresotipopago_id = 0 THEN 3 ELSE ecd.ingresotipopago_id END AS INGTIPPAG";
 	    $from = "entregaclientedetalle ecd INNER JOIN entregacliente ec ON ec.entregacliente_id = ecd.entregacliente_id INNER JOIN cliente c on c.cliente_id = ec.cliente_id INNER JOIN egreso e ON e.egreso_id = ecd.egreso_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 	    $where = "ec.vendedor_id  = {$arg} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now() ORDER BY CONCAT(c.razon_social,'(', c.nombre_fantasia , ')') ASC";
 	    $entregacliente_collection = CollectorCondition()->get('EntregaClienteDetalle', $where, 4, $from, $select);
@@ -54,7 +54,7 @@ class EntregaClienteDetalleController {
 	    		$balance = (is_array($balance) AND !empty($balance)) ? $balance[0]['BALANCE'] : 0;				
 				$entregacliente_collection[$clave]['BALANCE'] = $balance;
 				$entregacliente_collection[$clave]['PRIBAL'] = number_format($balance, 2, ',', '.');
-				$entregacliente_collection[$clave]['PRIMONTO'] = number_format($valor['PRIMONTO'], 2, ',', '.');
+				$entregacliente_collection[$clave]['PRIMON'] = number_format($valor['PRIMON'], 2, ',', '.');
 
 				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
 				$from = "cuentacorrientecliente ccc";
@@ -271,7 +271,7 @@ class EntregaClienteDetalleController {
 		}
 
 		$vendedor_id = $arg;
-		$select = "ecd.entregaclientedetalle_id AS ID, ec.entregacliente_id AS ENTREGACLIENTE, ecd.egreso_id AS EGRESO, CONCAT(c.razon_social,'(', c.nombre_fantasia , ')') AS CLIENTE, ec.cliente_id AS CLINT, ec.estado AS ESTADO, ec.fecha AS FECHA, CONCAT('$',ROUND(ecd.monto,2)) AS MONTO, e.punto_venta AS PUNTO_VENTA, ecd.parcial AS VAL_PARCIAL, (CASE WHEN ecd.parcial = 1 THEN 'PARCIAL' ELSE 'TOTAL' END) AS PARCIAL, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, CASE WHEN ecd.ingresotipopago_id = 0 THEN 3 ELSE ecd.ingresotipopago_id END AS INGTIPPAG";
+		$select = "ecd.entregaclientedetalle_id AS ID, ec.entregacliente_id AS ENTREGACLIENTE, ecd.egreso_id AS EGRESO, CONCAT(c.razon_social,'(', c.nombre_fantasia , ')') AS CLIENTE, ec.cliente_id AS CLINT, ec.estado AS ESTADO, ec.fecha AS FECHA, CONCAT('$',ROUND(ecd.monto,2)) AS MONTO, ecd.monto AS PRIMON, e.punto_venta AS PUNTO_VENTA, ecd.parcial AS VAL_PARCIAL, (CASE WHEN ecd.parcial = 1 THEN 'PARCIAL' ELSE 'TOTAL' END) AS PARCIAL, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, CASE WHEN ecd.ingresotipopago_id = 0 THEN 3 ELSE ecd.ingresotipopago_id END AS INGTIPPAG";
 	    $from = "entregaclientedetalle ecd INNER JOIN entregacliente ec ON ec.entregacliente_id = ecd.entregacliente_id INNER JOIN cliente c on c.cliente_id = ec.cliente_id INNER JOIN egreso e ON e.egreso_id = ecd.egreso_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 	    $where = "ec.vendedor_id  = {$arg} AND ec.anulada = 0 and ec.estado = 1 and ec.fecha < now() ORDER BY CONCAT(c.razon_social,'(', c.nombre_fantasia , ')') ASC";
 	    $entregacliente_collection = CollectorCondition()->get('EntregaClienteDetalle', $where, 4, $from, $select);
@@ -289,6 +289,8 @@ class EntregaClienteDetalleController {
 				$balance = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
 	    		$balance = (is_array($balance) AND !empty($balance)) ? $balance[0]['BALANCE'] : 0;				
 				$entregacliente_collection[$clave]['BALANCE'] = $balance;
+				$entregacliente_collection[$clave]['PRIBAL'] = number_format($balance, 2, ',', '.');
+				$entregacliente_collection[$clave]['PRIMON'] = number_format($valor['PRIMON'], 2, ',', '.');
 
 
 				$select = "COUNT(ccc.egreso_id) AS CANTIDAD";
