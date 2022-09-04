@@ -143,11 +143,9 @@ class EgresoController {
 							  "{numero_remito}"=>str_pad($siguiente_remito, 8, '0', STR_PAD_LEFT));
 
 		if ($facturacion_rapida == 1) {
-			$this->view->cb_egresar($producto_collection, $cliente_collection, $vendedor_collection, $tipofactura_collection,
-								 	$condicionpago_collection, $condicioniva_collection, $array_remito, $ccm);
+			$this->view->cb_egresar($producto_collection, $cliente_collection, $vendedor_collection, $tipofactura_collection, $condicionpago_collection, $condicioniva_collection, $array_remito, $ccm);
 		} else {
-			$this->view->egresar($producto_collection, $cliente_collection, $vendedor_collection, $tipofactura_collection,
-								 $condicionpago_collection, $condicioniva_collection, $array_remito);
+			$this->view->egresar($producto_collection, $cliente_collection, $vendedor_collection, $tipofactura_collection, $condicionpago_collection, $condicioniva_collection, $array_remito);
 		}
 	}
 
