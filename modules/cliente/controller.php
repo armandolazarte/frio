@@ -322,7 +322,7 @@ class ClienteController {
 				}
 			}
 
-			$clientecentral_collection[$clave]['CREDITO'] = $importe_credito_total;
+			$clientecentral_collection[$clave]['CREDITO'] = number_format($importe_credito_total, 2, ',', '.');
 		}
 
 		$this->view->listar_centrales($clientecentral_collection);
