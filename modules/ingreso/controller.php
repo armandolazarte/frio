@@ -96,6 +96,12 @@ class IngresoController {
 		$ingreso_id = $arg;
 		$this->model->ingreso_id = $ingreso_id;
 		$this->model->get();
+		$this->model->iva = number_format($this->model->iva, 2, ',', '.');
+		$this->model->percepcion_iva = number_format($this->model->percepcion_iva, 2, ',', '.');
+		$this->model->impuesto_interno = number_format($this->model->impuesto_interno, 2, ',', '.');
+		$this->model->ingresos_brutos = number_format($this->model->ingresos_brutos, 2, ',', '.');
+		$this->model->costo_distribucion = number_format($this->model->costo_distribucion, 2, ',', '.');
+		$this->model->descuento = number_format($this->model->descuento, 2, ',', '.');
 		$this->model->costo_total = number_format($this->model->costo_total, 2, ',', '.');
 		$this->model->costo_total_iva = number_format($this->model->costo_total_iva, 2, ',', '.');
 
