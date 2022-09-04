@@ -12,11 +12,14 @@ class CuentaCorrienteProveedorView extends View {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
 			$deuda = (is_null($valor['DEUDA'])) ? 0 : round($valor['DEUDA'],2);
 			$ingreso = (is_null($valor['INGRESO'])) ? 0 : round($valor['INGRESO'],2);
+			
 			$cuenta = round(($ingreso - $deuda),2);
+			$cuenta = ($cuenta > 0 AND $cuenta < 1) ? 0 : $cuenta;
+			$cuenta = ($cuenta > -1 AND $cuenta < 0) ? 0 : $cuenta;
 			$class = ($cuenta >= 0) ? 'info' : 'danger';
-			$cuenta = abs($cuenta);
+
 			$balance_temp = $balance_temp + $cuenta;
-			$cuentacorriente_collection[$clave]['CUENTA'] = ($cuenta > 0.5) ? $cuenta : 0;
+			$cuentacorriente_collection[$clave]['CUENTA'] = number_format(abs($cuenta), 2, ',', '.');
 			$cuentacorriente_collection[$clave]['CLASS'] = $class;
 
 		}
