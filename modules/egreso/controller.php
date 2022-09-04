@@ -1437,10 +1437,40 @@ class EgresoController {
 
 	function flete_entregas_pendientes($arg) {
 		SessionHandler()->check_session();
-    	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, CONCAT(LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) AS FACTURA, e.subtotal AS SUBTOTAL, f.denominacion AS FLETE, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CONCAT(ese.denominacion, ' (', date_format(ee.fecha, '%d/%m/%Y'), ')') AS ENTREGA, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, cl.localidad AS LOCALIDAD, cl.domicilio AS DOMICILIO";
-		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id INNER JOIN flete f ON ee.flete = f.flete_id";
+    	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, f.denominacion AS FLETE, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CONCAT(ese.denominacion, ' (', date_format(ee.fecha, '%d/%m/%Y'), ')') AS ENTREGA, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id INNER JOIN flete f ON ee.flete = f.flete_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "ee.estadoentrega NOT IN(3,4,5) AND f.flete_id = {$arg} ORDER BY e.fecha ASC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+
+		foreach ($egreso_collection as $clave=>$valor) {
+			$egreso_id = $valor['EGRESO_ID'];
+			$select = "nc.importe_total AS IMPORTETOTAL";
+			$from = "notacredito nc";
+			$where = "nc.egreso_id = {$egreso_id}";
+			$notacredito = CollectorCondition()->get('NotaCredito', $where, 4, $from, $select);
+
+			if (is_array($notacredito) AND !empty($notacredito)) {
+				$importe_notacredito = $notacredito[0]['IMPORTETOTAL'];
+				$temp_importe_total = $egreso_collection[$clave]['IMPORTETOTAL'] - $importe_notacredito;
+				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = $importe_notacredito;
+				$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($temp_importe_total, 2, ',', '.');
+			} else {
+				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = 0;
+				$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
+			}
+
+			if ($egreso_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_collection[$clave]["VC"] == 0) {
+				unset($egreso_collection[$clave]);
+			}
+
+		}
+
+		$array_temp = array();
+        foreach ($egreso_collection as $array) {
+            $array_temp[] = $array['FACTURA'];
+        }
+
+        array_multisort($array_temp, SORT_ASC, $egreso_collection);
 		print_r(count($egreso_collection));exit;
 		$flete_collection = Collector()->get('Flete');
 
