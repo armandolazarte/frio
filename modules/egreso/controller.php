@@ -1439,7 +1439,7 @@ class EgresoController {
 		SessionHandler()->check_session();
     	$select = "e.egreso_id AS EGRESO_ID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, UPPER(cl.razon_social) AS CLIENTE, CONCAT(LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) AS FACTURA, e.subtotal AS SUBTOTAL, f.denominacion AS FLETE, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CONCAT(ese.denominacion, ' (', date_format(ee.fecha, '%d/%m/%Y'), ')') AS ENTREGA, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 3 THEN 'none' END AS DSP_BTN_ENT, cl.localidad AS LOCALIDAD, cl.domicilio AS DOMICILIO";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id INNER JOIN flete f ON ee.flete = f.flete_id";
-		$where = "ee.estadoentrega != 4 AND f.flete_id = {$arg} ORDER BY e.fecha ASC";
+		$where = "ee.estadoentrega NOT IN(3,4,5) AND f.flete_id = {$arg} ORDER BY e.fecha ASC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 		print_r(count($egreso_collection));exit;
 		$flete_collection = Collector()->get('Flete');
