@@ -111,7 +111,6 @@ class ProveedorView extends View {
 	function modificar_lista_precio($productodetalle_collection, $msj_array, $proveedor_id) {
 		$gui = file_get_contents("static/modules/proveedor/modificar_lista_precio.html");
 		$gui_tbl_productodetalle = file_get_contents("static/modules/proveedor/tbl_chk_productodetalle_array.html");
-
 		$gui_tbl_productodetalle = $this->render_regex_dict('TBL_PRODUCTODETALLE', $gui_tbl_productodetalle, $productodetalle_collection);
 		$render = str_replace('{tbl_productodetalle}', $gui_tbl_productodetalle, $gui);
 		$render = str_replace('<!--TBL_PRODUCTODETALLE-->', '', $render);
