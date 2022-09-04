@@ -1431,7 +1431,6 @@ class EgresoController {
 
         array_multisort($array_temp, SORT_ASC, $egreso_collection);
 		$flete_collection = Collector()->get('Flete');
-		print_r(count($egreso_collection));exit;
 		$this->view->entregas_pendientes($egreso_collection, $flete_collection, $arg);
 	}
 
@@ -1471,7 +1470,6 @@ class EgresoController {
         }
 
         array_multisort($array_temp, SORT_ASC, $egreso_collection);
-		print_r(count($egreso_collection));exit;
 		$flete_collection = Collector()->get('Flete');
 
 		$fm = new Flete();
