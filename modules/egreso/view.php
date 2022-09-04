@@ -61,9 +61,7 @@ class EgresoView extends View {
 
 		switch ($arg) {
 			case 1:
-				$modal_array = array('{display_modal}'=>'',
-									 '{display_btn}'=>'none',
-									 '{txt_modal}'=>'');
+				$modal_array = array('{display_modal}'=>'', '{display_btn}'=>'none', '{txt_modal}'=>'');
 				break;
 			case 2:
 				$modal_array = array('{display_modal}'=>'show',
