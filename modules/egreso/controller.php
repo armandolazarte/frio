@@ -1415,7 +1415,7 @@ class EgresoController {
 				$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($temp_importe_total, 2, ',', '.');
 			} else {
 				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = 0;
-				//$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
+				$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
 			}
 
 			if ($egreso_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_collection[$clave]["VC"] == 0) {
