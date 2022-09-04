@@ -36,7 +36,7 @@ class IngresoController {
 			if (is_array($notacredito) AND !empty($notacredito)) {
 				$importe_notacredito = $notacredito[0]['IMPORTETOTAL'];
 				$ingreso_collection[$clave]['NC_IMPORTE_TOTAL'] = $importe_notacredito;
-				$temp_importetotal = $ingreso_collection[$clave]['TIVA'] - $importe_notacredito
+				$temp_importetotal = $ingreso_collection[$clave]['TIVA'] - $importe_notacredito;
 				$ingreso_collection[$clave]['TIVA'] = number_format($temp_importetotal, 2, ',', '.');
 				$ingreso_collection[$clave]['DSP_BTN_EDIT'] = 'none';
 			} else {
