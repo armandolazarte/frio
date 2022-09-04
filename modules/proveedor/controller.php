@@ -87,11 +87,16 @@ class ProveedorController {
 			$neto = $valor["COSTO"];
 			$flete = $valor["FLETE"];
 			$iva = $valor["IVA"];
+			$pvp = $valor["VENTA"];
 
 			//PRECIO NETO
 			$valor_neto = $neto + ($iva * $neto / 100);
 			$valor_neto = $valor_neto + ($flete * $valor_neto / 100);
 			$productodetalle_collection[$clave]["CMI"] = number_format($valor_neto, 2, ',', '.');
+
+			//VALOR GANANCIA
+			$valor_ganancia = $pvp - $valor_neto;
+			$productodetalle_collection[$clave]["VG"] = number_format($valor_ganancia, 2, ',', '.');
 		}
 
 		$this->view->modificar_lista_precio($productodetalle_collection, $msj_array, $proveedor_id);
