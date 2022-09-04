@@ -1431,7 +1431,7 @@ class EgresoController {
 
         array_multisort($array_temp, SORT_ASC, $egreso_collection);
 		$flete_collection = Collector()->get('Flete');
-
+		print_r(count($egreso_collection));exit;
 		$this->view->entregas_pendientes($egreso_collection, $flete_collection, $arg);
 	}
 
@@ -1441,6 +1441,7 @@ class EgresoController {
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id INNER JOIN flete f ON ee.flete = f.flete_id";
 		$where = "ee.estadoentrega != 4 AND f.flete_id = {$arg} ORDER BY e.fecha ASC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+		print_r(count($egreso_collection));exit;
 		$flete_collection = Collector()->get('Flete');
 
 		$fm = new Flete();
