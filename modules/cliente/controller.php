@@ -402,8 +402,8 @@ class ClienteController {
 				$importe_cuentacorrienteclientecredito = $cccc->importe;
 			}
 			
-			$clientecentralcliente_collection[$clave]['CREDITO'] = $importe_cuentacorrienteclientecredito;
 			$importe_credito_total = $importe_credito_total + $importe_cuentacorrienteclientecredito;
+			$clientecentralcliente_collection[$clave]['CREDITO'] = number_format($importe_cuentacorrienteclientecredito, 2, ',', '.');
 		}
 
 		$ccm->credito_disponible = number_format($importe_credito_total, 2, ',', '.');
