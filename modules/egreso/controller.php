@@ -1419,6 +1419,8 @@ class EgresoController {
 			if ($egreso_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_collection[$clave]["VC"] == 0) {
 				unset($egreso_collection[$clave]);
 			}
+
+			$egreso_collection[$clave]['IMPORTETOTAL'] == number_format($valor['IMPORTETOTAL'], 2, ',', '.');
 		}
 
 		$array_temp = array();
