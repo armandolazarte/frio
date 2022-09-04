@@ -41,7 +41,7 @@ class IngresoController {
 				$ingreso_collection[$clave]['DSP_BTN_EDIT'] = 'none';
 			} else {
 				$ingreso_collection[$clave]['NC_IMPORTE_TOTAL'] = 0;
-				$ingreso_collection[$clave]['TIVA'] = number_format($temp_importetotal, 2, ',', '.');
+				$ingreso_collection[$clave]['TIVA'] = number_format($valor['TIVA'], 2, ',', '.');
 			}
 		}
 
