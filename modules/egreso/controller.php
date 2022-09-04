@@ -1411,8 +1411,8 @@ class EgresoController {
 			if (is_array($notacredito) AND !empty($notacredito)) {
 				$importe_notacredito = $notacredito[0]['IMPORTETOTAL'];
 				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = $importe_notacredito;
-				$egreso_collection[$clave]['IMPORTETOTAL'] = $egreso_collection[$clave]['IMPORTETOTAL'] - $importe_notacredito;
-				$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($egreso_collection[$clave]['IMPORTETOTAL'], 2, ',', '.');
+				$temp_importe_total = $egreso_collection[$clave]['IMPORTETOTAL'] - $importe_notacredito
+				$egreso_collection[$clave]['IMPORTETOTAL'] = number_format($temp_importe_total, 2, ',', '.');
 			} else {
 				$egreso_collection[$clave]['NC_IMPORTE_TOTAL'] = 0;
 			}
