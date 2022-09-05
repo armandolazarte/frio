@@ -136,7 +136,11 @@ class VendedorView extends View {
 			$gui_top3_vendedor_proveedor_filas = file_get_contents("static/modules/vendedor/tbl_row_top3_vendedor_proveedor.html");
             $tbl_row_top3 = $this->get_regex('TBL_TOTAL_VENDEDOR_PROVEEDOR', $gui_top3_vendedor_proveedor_filas);
             $render_row_top3 = '';
-            foreach($totales_proveedores as $dict) $render_row_top3 .= str_replace(array_keys($dict), array_values($dict), $tbl_row_top3);
+            foreach($totales_proveedores as $dict) {
+            	print_r($dict);exit;
+            	$render_row_top3 .= str_replace(array_keys($dict), array_values($dict), $tbl_row_top3);
+            }
+
             $tbl_vendedor = str_replace('{tbl_row_top3_vendedor_proveedor}', $render_row_top3, $tbl_vendedor);
             $render_top3_vendedor_proveedor .= $tbl_vendedor;
         }
