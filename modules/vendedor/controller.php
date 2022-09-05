@@ -187,10 +187,10 @@ class VendedorController {
 		$temp_array_totales = array();
 		foreach ($temp_top3_vendedor_proveedor as $clave=>$valor) {
 			$temp_vendedor_id = $valor['VID'];
+			$temp_top3_vendedor_proveedor[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
 
 			if (!in_array($temp_vendedor_id, $array_vendedor_id)) {
 				$array_vendedor_id[] = $temp_vendedor_id;
-
 				if ($flag_ini == 0) {
 					$temp_vendedor_denominacion = $valor['VENDEDOR'];
 					$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $valor['IMPORTE']);
