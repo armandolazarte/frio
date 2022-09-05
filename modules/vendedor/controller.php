@@ -147,13 +147,13 @@ class VendedorController {
 				}
 			}
 		}
-		
+		/*
 		foreach ($ventas_vendedor_tipo_factura as $clave=>$valor) {
 			$ventas_vendedor_tipo_factura[$clave]['BLANCO'] = number_format($valor['BLANCO'], 2, ',', '.');
 			$ventas_vendedor_tipo_factura[$clave]['NEGRO'] = number_format($valor['NEGRO'], 2, ',', '.');
 			$ventas_vendedor_tipo_factura[$clave]['TOTAL'] = number_format($valor['TOTAL'], 2, ',', '.');
 		}
-		
+		*/
 		$select = "v.vendedor_id AS VID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, LEFT(pr.razon_social, 25) AS PROVEEDOR, ROUND(SUM(ed.importe),2) AS IMPORTE";
 		$from = "egreso e INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id INNER JOIN proveedor pr ON pd.proveedor_id = pr.proveedor_id";
 		$where = "e.fecha BETWEEN '{$primer_dia_mes}' AND '{$fecha_sys}'";
