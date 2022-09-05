@@ -375,20 +375,8 @@ class VendedorController {
 		$vm->vendedor_id = $vendedor_id;
 		$vm->get();
 
-		$select = "e.egreso_id AS EGRESO_ID, e.fecha AS FECHA, cl.razon_social AS CLIENTE, ci.denominacion AS CI,
-    			   e.subtotal AS SUBTOTAL, ec.fecha AS FECCOM, ROUND(ec.valor_abonado,2) AS VALABO,
-    			   e.importe_total AS IMPORTETOTAL, CONCAT(ve.APELLIDO, ' ', ve.nombre) AS VENDEDOR, cp.denominacion AS CP,
-    			   ec.valor_comision AS COMISION, ROUND((ec.valor_comision * e.importe_total / 100),2) AS VC, esc.denominacion AS ESTCOM,
-    			   CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0))
-				   ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA,
-				   'checked' AS CHK";
-		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN
-				 vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN
-				 condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN
-				 condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN
-				 egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN
-				 estadocomision esc ON ec.estadocomision = esc.estadocomision_id LEFT JOIN
-				 egresoafip eafip ON e.egreso_id = eafip.egreso_id";
+		$select = "e.egreso_id AS EGRESO_ID, e.fecha AS FECHA, cl.razon_social AS CLIENTE, ci.denominacion AS CI, e.subtotal AS SUBTOTAL, ec.fecha AS FECCOM, ROUND(ec.valor_abonado,2) AS VALABO, e.importe_total AS IMPORTETOTAL, CONCAT(ve.APELLIDO, ' ', ve.nombre) AS VENDEDOR, cp.denominacion AS CP, ec.valor_comision AS COMISION, ROUND((ec.valor_comision * e.importe_total / 100),2) AS VC, esc.denominacion AS ESTCOM, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA, 'checked' AS CHK";
+		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN estadocomision esc ON ec.estadocomision = esc.estadocomision_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where_pendiente = "e.vendedor = {$vendedor_id} AND ec.estadocomision IN(1,2) AND e.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hasta}' ORDER BY e.fecha DESC";
 		$where_total = "e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hasta}' ORDER BY e.fecha DESC";
 		$egreso_pendiente_collection = CollectorCondition()->get('Egreso', $where_pendiente, 4, $from, $select);
@@ -450,7 +438,6 @@ class VendedorController {
 			}
 		}
 
-
 		/*COMISION SIN IVA*/
 		$valor_comision_pendiente_siniva = 0;
 		foreach ($egreso_pendiente_collection as $clave=>$valor) {
@@ -469,53 +456,48 @@ class VendedorController {
 			$where = "egreso_id = {$egreso_id}";
 			$notacredito = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
 			if (is_array($notacredito) AND !empty($notacredito)) {
+				$importe_notacredito = $notacredito[0]['IMPORTETOTAL'];
+			 	$egreso_pendiente_collection[$clave]['NC_IMPORTE_TOTAL_SINIVA'] = $importe_notacredito;
+			 	$egreso_pendiente_collection[$clave]['ITSINIVA'] = $egreso_pendiente_collection[$clave]['ITSINIVA'] - $importe_notacredito;
+			 	$egreso_pendiente_collection[$clave]['CSINIVA'] = round(($egreso_pendiente_collection[$clave]['COMISION'] * $egreso_pendiente_collection[$clave]['ITSINIVA'] / 100),2);
+		 	} else {
+			 	$egreso_pendiente_collection[$clave]['NC_IMPORTE_TOTAL_SINIVA'] = 0;
+		 	}
 
-			 $importe_notacredito = $notacredito[0]['IMPORTETOTAL'];
-			 $egreso_pendiente_collection[$clave]['NC_IMPORTE_TOTAL_SINIVA'] = $importe_notacredito;
-			 $egreso_pendiente_collection[$clave]['ITSINIVA'] = $egreso_pendiente_collection[$clave]['ITSINIVA'] - $importe_notacredito;
-			 $egreso_pendiente_collection[$clave]['CSINIVA'] = round(($egreso_pendiente_collection[$clave]['COMISION'] * $egreso_pendiente_collection[$clave]['ITSINIVA'] / 100),2);
-		 } else {
-			 $egreso_pendiente_collection[$clave]['NC_IMPORTE_TOTAL_SINIVA'] = 0;
-		 }
-
-		 $valor_comision_pendiente_siniva = $valor_comision_pendiente_siniva + $egreso_pendiente_collection[$clave]["CSINIVA"];
+		 	$valor_comision_pendiente_siniva = $valor_comision_pendiente_siniva + $egreso_pendiente_collection[$clave]["CSINIVA"];
 		}
+		
 		$select_ventas_per_actual = "date_format(e.fecha, '%Y%m') AS PERIODO, COUNT(e.egreso_id) AS CANTIDAD";
 		$from_ventas_per_actual = "egreso e";
 		$where_ventas_per_actual = "e.fecha >= date_sub(curdate(), interval 6 month) AND e.vendedor = {$vendedor_id}";
 		$groupby_ventas_per_actual = "date_format(e.fecha, '%Y%m')";
-		$ventas_per_actual_collection = CollectorCondition()->get('Egreso', $where_ventas_per_actual, 4, $from_ventas_per_actual,
-										$select_ventas_per_actual, $groupby_ventas_per_actual);
+		$ventas_per_actual_collection = CollectorCondition()->get('Egreso', $where_ventas_per_actual, 4, $from_ventas_per_actual, $select_ventas_per_actual, $groupby_ventas_per_actual);
 
 		//$valor_comision_abonado = $valor_comision_total - $valor_comision_pendiente;
 		$valor_comision_abonado_siniva = $valor_comision_total - $valor_comision_pendiente_siniva;
 
 		/*Comisión Abonada-SIN IVA*/
 		$select = "ROUND(SUM(ec.valor_abonado),2) AS VALOR_ABONADO";
-		$from = "egreso e INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN
-				 egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN
-				 estadocomision esc ON ec.estadocomision = esc.estadocomision_id";
+		$from = "egreso e INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN estadocomision esc ON ec.estadocomision = esc.estadocomision_id";
 		$where_pendiente = "e.vendedor = {$vendedor_id} AND ec.estadocomision IN(3) AND e.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hasta}' AND ec.iva = 1 ORDER BY e.fecha DESC";
 		$egresopendiente_siniva_collection = CollectorCondition()->get('Egreso', $where_pendiente, 4, $from, $select);
 
 		$select = "ROUND(SUM(ec.valor_abonado),2) AS VALOR_ABONADO";
-		$from = "egreso e INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN
-				 egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN
-				 estadocomision esc ON ec.estadocomision = esc.estadocomision_id";
+		$from = "egreso e INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN estadocomision esc ON ec.estadocomision = esc.estadocomision_id";
 		$where_pendiente = "e.vendedor = {$vendedor_id} AND ec.estadocomision IN(3) AND e.fecha BETWEEN '{$fecha_desde}' AND '{$fecha_hasta}' AND ec.iva = 0 ORDER BY e.fecha DESC";
 		$comisionabonada_collection = CollectorCondition()->get('Egreso', $where_pendiente, 4, $from, $select);
 
 		if (is_array($egresopendiente_siniva_collection) AND !empty($egresopendiente_siniva_collection)) {
 			$abonado_siniva = $egresopendiente_siniva_collection[0]['VALOR_ABONADO'];
 			$valor_comision_abonado_siniva = $abonado_siniva;
-		}else {
+		} else {
 			$valor_comision_abonado_siniva = 0;
 		}
 
 		if (is_array($comisionabonada_collection) AND !empty($comisionabonada_collection)) {
 			$abonado = $comisionabonada_collection[0]['VALOR_ABONADO'];
 			$valor_comision_abonado = $abonado;
-		}else {
+		} else {
 			$valor_comision_abonado = 0;
 		}
 
@@ -525,15 +507,21 @@ class VendedorController {
 							   '{hasta}'=>$fecha_hasta,
 							   '{porcentaje_comision}'=>"%{$porcentaje_comision}",
 							   '{valor_comision_total}'=>round($valor_comision_total,2),
+							   '{print_valor_comision_total}'=>number_format($valor_comision_total, 2, ',', '.'),
 		 					   '{valor_comision_pendiente}'=>round($valor_comision_pendiente,2),
+							   '{print_valor_comision_pendiente}'=>number_format($valor_comision_pendiente, 2, ',', '.'),
 							   '{valor_comision_pendiente_siniva}'=>round($valor_comision_pendiente_siniva,2),
+							   '{print_valor_comision_pendiente_siniva}'=>number_format($valor_comision_pendiente_siniva, 2, ',', '.'),
 		 					   '{valor_comision_abonada}'=>round($valor_comision_abonado,2),
+							   '{print_valor_comision_abonada}'=>number_format($valor_comision_abonado, 2, ',', '.'),
 							   '{valor_comision_abonado_siniva}'=>round($valor_comision_abonado_siniva,2),
+							   '{print_comision_abonado_siniva}'=>number_format($valor_comision_abonado_siniva, 2, ',', '.'),
 		 					   '{valor_total_facturado}'=>round($valor_total_facturado,2),
-		 					   '{valor_total_facturado_comision_pendiente}'=>round($valor_total_facturado_comision_pendiente,2));
+							   '{print_valor_total_facturado}'=>number_format($valor_total_facturado, 2, ',', '.'),
+		 					   '{valor_total_facturado_comision_pendiente}'=>round($valor_total_facturado_comision_pendiente,2),
+		 					   '{print_valor_total_facturado_comision_pendiente}'=>round($valor_total_facturado_comision_pendiente,2));
 
-		$this->view->ventas_vendedor($egreso_pendiente_collection, $egreso_total_collection, $ventas_per_actual_collection,
-									 $array_busqueda, $vm, $array_totales);
+		$this->view->ventas_vendedor($egreso_pendiente_collection, $egreso_total_collection, $ventas_per_actual_collection, $array_busqueda, $vm, $array_totales);
 	}
 
 	function cambiar_comision_conjunta() {

@@ -194,8 +194,7 @@ class VendedorView extends View {
 		print $template;
 	}
 
-	function ventas_vendedor($egreso_pendiente_collection, $egreso_total_collection, $ventas_per_actual_collection,
-							 $array_busqueda, $obj_vendedor, $array_totales) {
+	function ventas_vendedor($egreso_pendiente_collection, $egreso_total_collection, $ventas_per_actual_collection, $array_busqueda, $obj_vendedor, $array_totales) {
 		$gui = file_get_contents("static/modules/vendedor/ventas_vendedor.html");
 		$tbl_egreso_pendiente_array = file_get_contents("static/modules/vendedor/tbl_chk_egreso_pendiente_array.html");
 		$tbl_egreso_pendiente_array = $this->render_regex_dict('TBL_EGRESO', $tbl_egreso_pendiente_array, $egreso_pendiente_collection);
@@ -203,10 +202,8 @@ class VendedorView extends View {
 		$tbl_egreso_total_array = $this->render_regex_dict('TBL_EGRESO', $tbl_egreso_total_array, $egreso_total_collection);
 		$lst_carga_bardonuts_periodo_array = file_get_contents("static/modules/vendedor/lst_carga_bardonuts_periodo.html");
 		$lst_carga_bardonuts_cantidad_array = file_get_contents("static/modules/vendedor/lst_carga_bardonuts_cantidad.html");
-		$lst_carga_bardonuts_periodo_array = $this->render_regex_dict('LST_PERIODO', $lst_carga_bardonuts_periodo_array,
-											 $ventas_per_actual_collection);
-		$lst_carga_bardonuts_cantidad_array = $this->render_regex_dict('LST_CANTIDAD', $lst_carga_bardonuts_cantidad_array,
-											 $ventas_per_actual_collection);
+		$lst_carga_bardonuts_periodo_array = $this->render_regex_dict('LST_PERIODO', $lst_carga_bardonuts_periodo_array, $ventas_per_actual_collection);
+		$lst_carga_bardonuts_cantidad_array = $this->render_regex_dict('LST_CANTIDAD', $lst_carga_bardonuts_cantidad_array, $ventas_per_actual_collection);
 
 		$infocontacto_collection = $obj_vendedor->infocontacto_collection;
 		unset($obj_vendedor->infocontacto_collection);

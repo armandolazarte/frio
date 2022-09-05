@@ -40,7 +40,7 @@
                 <center>
                     <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count">
                         <span class="count_top"><i class="fa fa-usd blue"></i> Facturación</span>
-                        <div class="count blue" style="font-size: 30px;">${valor_total_facturado}</div>
+                        <div class="count blue" style="font-size: 30px;">${print_valor_total_facturado}</div>
                     </div>
                 </center>
                 <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count visible-print" style="display: none;">
@@ -49,7 +49,7 @@
                 </div>
                 <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count">
                     <span class="count_top"><i class="fa fa-usd red"></i> Comisión a Pagar</span>
-                    <div class="count red" style="font-size: 30px;" id="comision_pendiente">${valor_comision_pendiente}</div>
+                    <div class="count red" style="font-size: 30px;" id="comision_pendiente">${print_valor_comision_pendiente}</div>
                 </div>
                 <!--
                 <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
@@ -193,15 +193,15 @@
                     <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
                             <span class="count_top"><i class="fa fa-usd blue"></i> Pago Comisión</span>
-                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${valor_comision_pendiente}</div>
+                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${print_valor_comision_pendiente}</div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
                             <span class="count_top"><i class="fa fa-usd blue"></i> Pago Comisión (Sin IVA)</span>
-                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${valor_comision_pendiente_siniva}</div>
+                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${print_valor_comision_pendiente_siniva}</div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
                             <span class="count_top"><i class="fa fa-usd blue"></i> Total Facturado (Com. Pendiente)</span>
-                            <div class="count blue" id="txt_total" style="font-size: 30px;">${valor_total_facturado_comision_pendiente}</div>
+                            <div class="count blue" id="txt_total" style="font-size: 30px;">${print_valor_total_facturado_comision_pendiente}</div>
                         </div>
                     </div>
                 </div>
