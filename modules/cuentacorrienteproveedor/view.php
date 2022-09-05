@@ -49,7 +49,8 @@ class CuentaCorrienteProveedorView extends View {
 		foreach ($cuentacorriente_collection as $clave=>$valor) {
             $balance = abs($valor['BALANCE']);
             $cant_total = $cant_total + $balance;
-            $cuentacorriente_collection[$clave]['BALANCE'] =  number_format($balance, 2, ',', '.');
+            $cuentacorriente_collection[$clave]['BALANCE'] = $balance;
+            //$cuentacorriente_collection[$clave]['BALANCE'] =  number_format($balance, 2, ',', '.');
         } 
 
 		$gui_slt_proveedor = $this->render_regex('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
