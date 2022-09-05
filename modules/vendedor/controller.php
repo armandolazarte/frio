@@ -446,6 +446,9 @@ class VendedorController {
 				$egreso_pendiente_collection[$clave]['SUBTOTAL'] = number_format($valor['SUBTOTAL'], 2, ',', '.');
 				$egreso_pendiente_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
 				$egreso_pendiente_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
+				$egreso_pendiente_collection[$clave]['ITSINIVA'] = number_format($valor['ITSINIVA'], 2, ',', '.');
+				$egreso_pendiente_collection[$clave]['CSINIVA'] = number_format($valor['CSINIVA'], 2, ',', '.');
+				$egreso_pendiente_collection[$clave]['VALABO'] = number_format($valor['VALABO'], 2, ',', '.');
 			}
 		}
 
