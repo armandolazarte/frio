@@ -192,15 +192,15 @@
                     </button>
                     <div class="row tile_count" style="margin-bottom: 0px; margin-top: 0px;">
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
-                            <span class="count_top"><i class="fa fa-usd blue"></i> Pago Comisión</span>
+                            <span class="count_top"><i class="fa fa-usd blue"></i> Comisión</span>
                             <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${print_valor_comision_pendiente}</div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
-                            <span class="count_top"><i class="fa fa-usd blue"></i> Pago Comisión (Sin IVA)</span>
-                            <div class="count blue" id="txt_comision_total" style="font-size: 30px;">${print_valor_comision_pendiente_siniva}</div>
+                            <span class="count_top"><i class="fa fa-usd blue"></i> Comisión s/IVA</span>
+                            <div class="count blue" id="txt_comision_siniva_total" style="font-size: 30px;">${print_valor_comision_pendiente_siniva}</div>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
-                            <span class="count_top"><i class="fa fa-usd blue"></i> Total Facturado (Com. Pendiente)</span>
+                            <span class="count_top"><i class="fa fa-usd blue"></i> Facturación (Com. Pendiente)</span>
                             <div class="count blue" id="txt_total" style="font-size: 30px;">${print_valor_total_facturado_comision_pendiente}</div>
                         </div>
                     </div>
@@ -229,7 +229,7 @@
     </div>
 </div>
 <script>
-    var comision_total = {valor_comision_pendiente_siniva};
+    var comision_siniva_total = {valor_comision_pendiente_siniva};
     var total = {valor_total_facturado_comision_pendiente};
 
     // Table
@@ -245,14 +245,20 @@
     });
 
     var checkState = '';
-
     $('.bulk_action input').on('ifChecked', function () {
         checkState = '';
         $(this).parent().parent().parent().addClass('selected');
         var egresocomision_id = $(this).val();
 
-        //COMISION
-        var comision = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
+        //COMISION SIN IVA
+        var comision_siniva = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
+        comision_siniva = comision_siniva.substring(1)
+        comision_siniva_total = parseFloat(comision_siniva_total) + parseFloat(comision_siniva);
+        comision_siniva_total = Number(comision_siniva_total.toFixed(2));
+        document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total;
+
+        //COMISION CON IVA
+        var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
         comision = comision.substring(1)
         comision_total = parseFloat(comision_total) + parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
@@ -268,13 +274,21 @@
         countChecked();
 
     });
+
     $('.bulk_action input').on('ifUnchecked', function () {
         checkState = '';
         $(this).parent().parent().parent().removeClass('selected');
         var egresocomision_id = $(this).val();
 
-        //COMISION
-        var comision = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
+        //COMISION SIN IVA
+        var comision_siniva = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
+        comision_siniva = comision_siniva.substring(1)
+        comision_siniva_total = parseFloat(comision_siniva_total) - parseFloat(comision_siniva);
+        comision_siniva_total = Number(comision_siniva_total.toFixed(2));
+        document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total;
+
+        //COMISION CON IVA
+        var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
         comision = comision.substring(1)
         comision_total = parseFloat(comision_total) - parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
