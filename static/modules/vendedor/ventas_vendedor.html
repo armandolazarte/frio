@@ -274,6 +274,8 @@
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
         importe = importe.substring(1);
+        importe = importe.replace('.','');
+        importe = importe.replace(',','.');
         total = parseFloat(total) + parseFloat(importe);
         total = Number(total.toFixed(2));
         document.getElementById('txt_total').innerHTML = "$" + total;
@@ -310,6 +312,8 @@
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
         importe = importe.substring(1);
+        importe = importe.replace('.','');
+        importe = importe.replace(',','.');
         total = parseFloat(total) - parseFloat(importe);
         total = Number(total.toFixed(2));
         document.getElementById('txt_total').innerHTML = "$" + total;
