@@ -408,6 +408,9 @@ class VendedorController {
 
 			if ($egreso_total_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_total_collection[$clave]["VC"] == 0) {
 				unset($egreso_total_collection[$clave]);
+			} else {
+				$egreso_total_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
+				$egreso_total_collection[$clave]['IMPORTETOTAL'] = number_format($valor['VC'], 2, ',', '.');
 			}
 		}
 
