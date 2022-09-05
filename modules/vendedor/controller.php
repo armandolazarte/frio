@@ -366,9 +366,7 @@ class VendedorController {
 			}
 		}
 
-		$array_busqueda = array('{fecha_desde}'=>$fecha_desde,
-								'{fecha_hasta}'=>$fecha_hasta,
-								'{vendedor_id}'=>$vendedor_id);
+		$array_busqueda = array('{fecha_desde}'=>$fecha_desde, '{fecha_hasta}'=>$fecha_hasta, '{vendedor_id}'=>$vendedor_id);
 		$_SESSION["data-search-" . APP_ABREV] = $array_busqueda;
 
 		$vm = new Vendedor();
@@ -409,12 +407,18 @@ class VendedorController {
 			if ($egreso_total_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_total_collection[$clave]["VC"] == 0) {
 				unset($egreso_total_collection[$clave]);
 			} else {
-				$egreso_total_collection[$clave]['SUBTOTAL'] = number_format($valor['SUBTOTAL'], 2, ',', '.');
-				$egreso_total_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
-				$egreso_total_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
-				$egreso_total_collection[$clave]['ITSINIVA'] = number_format($valor['ITSINIVA'], 2, ',', '.');
-				$egreso_total_collection[$clave]['CSINIVA'] = number_format($valor['CSINIVA'], 2, ',', '.');
-				$egreso_total_collection[$clave]['VALABO'] = number_format($valor['VALABO'], 2, ',', '.');
+				$subtotal = $valor['SUBTOTAL'];
+				$importetotal = $valor['IMPORTETOTAL'];
+				$vc = $valor['VC'];
+				$valabo = $valor['VALABO'];
+				$egreso_total_collection[$clave]['SUBTOTAL'] = round($subtotal, 2);
+				$egreso_total_collection[$clave]['PRISUB'] = number_format($subtotal, 2, ',', '.');
+				$egreso_total_collection[$clave]['IMPORTETOTAL'] = round($importetotal, 2);
+				$egreso_total_collection[$clave]['PRIIMPTOT'] = number_format($importetotal, 2, ',', '.');
+				$egreso_total_collection[$clave]['VC'] = round($vc, 2);
+				$egreso_total_collection[$clave]['PRIVALCOM'] = number_format($vc, 2, ',', '.');
+				$egreso_total_collection[$clave]['VALABO'] = round($valabo, 2);
+				$egreso_total_collection[$clave]['PRIVALAB'] = number_format($valabo, 2, ',', '.');
 			}
 		}
 
@@ -475,12 +479,24 @@ class VendedorController {
 		}
 		
 		foreach ($egreso_pendiente_collection as $clave=>$valor) {
-			$egreso_pendiente_collection[$clave]['SUBTOTAL'] = number_format($valor['SUBTOTAL'], 2, ',', '.');
-			$egreso_pendiente_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
-			$egreso_pendiente_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
-			$egreso_pendiente_collection[$clave]['ITSINIVA'] = number_format($valor['ITSINIVA'], 2, ',', '.');
-			$egreso_pendiente_collection[$clave]['CSINIVA'] = number_format($valor['CSINIVA'], 2, ',', '.');
-			$egreso_pendiente_collection[$clave]['VALABO'] = number_format($valor['VALABO'], 2, ',', '.');
+			$subtotal = $valor['SUBTOTAL'];
+			$importetotal = $valor['IMPORTETOTAL'];
+			$vc = $valor['VC'];
+			$itsiniva = $valor['ITSINIVA'];
+			$csiniva = $valor['CSINIVA'];
+			$valabo = $valor['VALABO'];
+			$egreso_pendiente_collection[$clave]['SUBTOTAL'] = round($subtotal, 2);
+			$egreso_pendiente_collection[$clave]['PRISUB'] = number_format($subtotal, 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['IMPORTETOTAL'] = round($importetotal, 2);
+			$egreso_pendiente_collection[$clave]['PRIIMPTOT'] = number_format($importetotal, 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['VC'] = round($vc, 2);
+			$egreso_pendiente_collection[$clave]['PRIVALCOM'] = number_format($vc, 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['ITSINIVA'] = round($itsiniva, 2);
+			$egreso_pendiente_collection[$clave]['PRIIMTOSINIVA'] = number_format($itsiniva, 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['CSINIVA'] = round($csiniva, 2);
+			$egreso_pendiente_collection[$clave]['PRICOMSINIVA'] = number_format($csiniva, 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['VALABO'] = round($valabo, 2);
+			$egreso_pendiente_collection[$clave]['PRIVALAB'] = number_format($valabo, 2, ',', '.');
 		}
 		
 		$select_ventas_per_actual = "date_format(e.fecha, '%Y%m') AS PERIODO, COUNT(e.egreso_id) AS CANTIDAD";
