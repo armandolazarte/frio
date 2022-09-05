@@ -154,7 +154,7 @@ class VendedorController {
 			$ventas_vendedor_tipo_factura[$clave]['TBLTOT'] = number_format($valor['TOTAL'], 2, ',', '.');
 		}
 		
-		$select = "v.vendedor_id AS VID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, LEFT(pr.razon_social, 25) AS PROVEEDOR, ROUND(SUM(ed.importe),2) AS IMPORTE";
+		$select = "v.vendedor_id AS VID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, LEFT(pr.razon_social, 25) AS PROVEEDOR, SUM(ed.importe) AS IMPORTE";
 		$from = "egreso e INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id INNER JOIN proveedor pr ON pd.proveedor_id = pr.proveedor_id";
 		$where = "e.fecha BETWEEN '{$primer_dia_mes}' AND '{$fecha_sys}'";
 		$groupby = "v.vendedor_id, pr.proveedor_id ORDER BY	CONCAT(v.apellido, ' ', v.nombre), ROUND(SUM(ed.importe),2) DESC";
@@ -188,12 +188,13 @@ class VendedorController {
 		foreach ($temp_top3_vendedor_proveedor as $clave=>$valor) {
 			$temp_vendedor_id = $valor['VID'];
 			$temp_top3_vendedor_proveedor[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
+			$temp_importe = number_format($valor['IMPORTE'], 2, ',', '.');
 
 			if (!in_array($temp_vendedor_id, $array_vendedor_id)) {
 				$array_vendedor_id[] = $temp_vendedor_id;
 				if ($flag_ini == 0) {
 					$temp_vendedor_denominacion = $valor['VENDEDOR'];
-					$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $valor['IMPORTE']);
+					$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $temp_importe);
 					$flag_ini = 1;
 				} else {
 					if (count($temp_array_totales) < 3) {
@@ -201,23 +202,21 @@ class VendedorController {
 						for ($i=0; $i < $faltantes; $i++) $temp_array_totales[] = array('{PROVEEDOR}'=>'-', '{IMPORTE}'=>'');
 					}
 
-					$temp_array = array('{VENDEDOR}'=>$temp_vendedor_denominacion,
-										'ARRAY_TOTALES'=>$temp_array_totales);
+					$temp_array = array('{VENDEDOR}'=>$temp_vendedor_denominacion, 'ARRAY_TOTALES'=>$temp_array_totales);
 					$top3_vendedor_proveedor_final[] = $temp_array;
 					$temp_array_totales = array();
-					$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $valor['IMPORTE']);
+					$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $temp_importe);
 					$temp_vendedor_denominacion = $valor['VENDEDOR'];
 				}
 			} else {
-				$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $valor['IMPORTE']);
+				$temp_array_totales[] = array('{PROVEEDOR}'=>$valor['PROVEEDOR'], '{IMPORTE}'=>'$' . $temp_importe);
 				if ($cant_array == ($clave + 1)) {
 					if (count($temp_array_totales) < 3) {
 						$faltantes = 3 - count($temp_array_totales);
 						for ($i=0; $i < $faltantes; $i++) $temp_array_totales[] = array('{PROVEEDOR}'=>'-', '{IMPORTE}'=>'');
 					}
 
-					$temp_array = array('{VENDEDOR}'=>$temp_vendedor_denominacion,
-										'ARRAY_TOTALES'=>$temp_array_totales);
+					$temp_array = array('{VENDEDOR}'=>$temp_vendedor_denominacion, 'ARRAY_TOTALES'=>$temp_array_totales);
 					$top3_vendedor_proveedor_final[] = $temp_array;
 					$temp_array_totales = array();
 				}
