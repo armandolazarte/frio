@@ -43,22 +43,26 @@
                         <div class="count blue" style="font-size: 30px;">${print_valor_total_facturado}</div>
                     </div>
                 </center>
-                <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count visible-print" style="display: none;">
+                <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count">
                     <span class="count_top">% Comisión</span>
                     <div class="count red" style="font-size: 30px;">{porcentaje_comision}</div>
                 </div>
-                <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-usd red"></i> Comisión a Pagar</span>
+                <div class="col-md-12 col-sm-12 col-xs-12 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd red"></i> Comisión Pendiente</span>
                     <div class="count red" style="font-size: 30px;" id="comision_pendiente">${print_valor_comision_pendiente}</div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd green"></i> Comisión c/IVA a Pagar</span>
+                    <div class="count green" style="font-size: 30px;"><font id="print_comision_coniva">${print_valor_comision_pendiente}</font></div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12 tile_stats_count">
+                    <span class="count_top"><i class="fa fa-usd green"></i> Comisión s/IVA a Pagar</span>
+                    <div class="count green" style="font-size: 30px;"><font id="print_comision_siniva">${print_valor_comision_pendiente_siniva}</font></div>
                 </div>
                 <!--
                 <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-usd green"></i> Comisión Abonada</span>
                     <div class="count green" style="font-size: 30px;">${valor_comision_abonada}</div>
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
-                    <span class="count_top"><i class="fa fa-usd green"></i> Comisión Abonada (Sin IVA)</span>
-                    <div class="count green" style="font-size: 30px;">${valor_comision_abonado_siniva}</div>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 tile_stats_count">
                     <span class="count_top"><i class="fa fa-usd red"></i> Comisión Pendiente (Sin IVA)</span>
@@ -131,10 +135,6 @@
     <div class="x_panel">
         <div class="x_title">
             <h2><i class="fa fa-table"></i>&nbsp;&nbsp; Ventas a rendir con vendedor <small>Desde {fecha_desde} hasta {fecha_hasta}</small></h2>
-            <ul class="nav navbar-right panel_toolbox">
-                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
-                <li><a class="close-link"><i class="fa fa-close"></i></a></li>
-            </ul>
             <div class="clearfix"></div>
         </div>
         <div class="x_content">
@@ -257,6 +257,7 @@
         comision_siniva_total = parseFloat(comision_siniva_total) + parseFloat(comision_siniva);
         comision_siniva_total = Number(comision_siniva_total.toFixed(2));
         document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total;
+        document.getElementById('print_comision_siniva').innerHTML = "$" + comision_siniva_total;
 
         //COMISION CON IVA
         var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
@@ -264,6 +265,7 @@
         comision_total = parseFloat(comision_total) + parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
         document.getElementById('txt_comision_total').innerHTML = "$" + comision_total;
+        document.getElementById('print_comision_coniva').innerHTML = "$" + comision_total;
 
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
@@ -287,6 +289,7 @@
         comision_siniva_total = parseFloat(comision_siniva_total) - parseFloat(comision_siniva);
         comision_siniva_total = Number(comision_siniva_total.toFixed(2));
         document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total;
+        document.getElementById('print_comision_siniva').innerHTML = "$" + comision_siniva_total;
 
         //COMISION CON IVA
         var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
@@ -294,6 +297,7 @@
         comision_total = parseFloat(comision_total) - parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
         document.getElementById('txt_comision_total').innerHTML = "$" + comision_total;
+        document.getElementById('print_comision_coniva').innerHTML = "$" + comision_total;
 
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
