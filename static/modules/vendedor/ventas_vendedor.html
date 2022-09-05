@@ -287,7 +287,9 @@
 
         //COMISION SIN IVA
         var comision_siniva = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
-        comision_siniva = comision_siniva.substring(1)
+        comision_siniva = comision_siniva.substring(1);
+        comision_siniva = comision_siniva.replace('.','');
+        comision_siniva = comision_siniva.replace(',','.');
         comision_siniva_total = parseFloat(comision_siniva_total) - parseFloat(comision_siniva);
         comision_siniva_total = Number(comision_siniva_total.toFixed(2));
         document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total;
