@@ -34,7 +34,7 @@ class SalarioController {
 		$this->model->hora = date('H:i:s');
 		$this->model->usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
         $this->model->save();
-		header("Location: " . URL_APP . "/salario/panel");
+		header("Location: " . URL_APP . "/salario/listar");
 	}
 
 	function editar($arg) {
@@ -100,7 +100,7 @@ class SalarioController {
 		SessionHandler()->check_session();		
     	$this->model->salario_id = $arg;
 		$this->model->delete();
-		header("Location: " . URL_APP . "/salario/panel");
+		header("Location: " . URL_APP . "/salario/listar");
 	}
 
 	function desc_salarios_fecha() {
