@@ -216,7 +216,8 @@ class VendedorController {
 						for ($i=0; $i < $faltantes; $i++) $temp_array_totales[] = array('{PROVEEDOR}'=>'-', '{IMPORTE}'=>'');
 					}
 
-					$temp_array = array('{VENDEDOR}'=>$temp_vendedor_denominacion, 'ARRAY_TOTALES'=>$temp_array_totales);
+					$temp_array = array('{VENDEDOR}'=>$temp_vendedor_denominacion,
+										'ARRAY_TOTALES'=>$temp_array_totales);
 					$top3_vendedor_proveedor_final[] = $temp_array;
 					$temp_array_totales = array();
 				}
