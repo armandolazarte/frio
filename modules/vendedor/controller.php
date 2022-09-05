@@ -366,9 +366,7 @@ class VendedorController {
 			}
 		}
 
-		$array_busqueda = array('{fecha_desde}'=>$fecha_desde,
-								'{fecha_hasta}'=>$fecha_hasta,
-								'{vendedor_id}'=>$vendedor_id);
+		$array_busqueda = array('{fecha_desde}'=>$fecha_desde, '{fecha_hasta}'=>$fecha_hasta, '{vendedor_id}'=>$vendedor_id);
 		$_SESSION["data-search-" . APP_ABREV] = $array_busqueda;
 
 		$vm = new Vendedor();
@@ -408,6 +406,9 @@ class VendedorController {
 
 			if ($egreso_total_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_total_collection[$clave]["VC"] == 0) {
 				unset($egreso_total_collection[$clave]);
+			} else {
+				$egreso_total_collection[$clave]['IMPORTETOTAL'] = ;
+				$egreso_total_collection[$clave]["VC"]
 			}
 		}
 
