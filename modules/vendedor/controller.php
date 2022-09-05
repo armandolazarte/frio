@@ -30,11 +30,8 @@ class VendedorController {
 	}
 
 	function listar() {
-		$select = "v.vendedor_id AS VENDEDOR_ID, v.localidad AS LOCALIDAD, pr.denominacion AS PROVINCIA, v.codigopostal AS CODPOSTAL,
-				   v.apellido AS APELLIDO, v.nombre AS NOMBRE, v.documento AS DOCUMENTO, v.comision AS COMISION,
-				   CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA";
-		$from = "vendedor v INNER JOIN provincia pr ON v.provincia = pr.provincia_id INNER JOIN
-				 frecuenciaventa fv ON v.frecuenciaventa = fv.frecuenciaventa_id";
+		$select = "v.vendedor_id AS VENDEDOR_ID, v.localidad AS LOCALIDAD, pr.denominacion AS PROVINCIA, v.codigopostal AS CODPOSTAL, v.apellido AS APELLIDO, v.nombre AS NOMBRE, v.documento AS DOCUMENTO, v.comision AS COMISION, CONCAT(fv.denominacion, ' (', fv.dia_1, '-', fv.dia_2, ')') AS FRECUENCIAVENTA";
+		$from = "vendedor v INNER JOIN provincia pr ON v.provincia = pr.provincia_id INNER JOIN frecuenciaventa fv ON v.frecuenciaventa = fv.frecuenciaventa_id";
 		$where = "v.oculto = 0";
 		$vendedor_collection = CollectorCondition()->get('Vendedor', $where, 4, $from, $select);
 
@@ -73,8 +70,7 @@ class VendedorController {
 
 		$periodo_actual = date('Ym');
 		$select = "ROUND(SUM(e.importe_total),2) AS TOTAL, COUNT(*) AS CANTVENTAS";
-		$from = "egreso e INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN
-				 vendedor v ON e.vendedor = v.vendedor_id";
+		$from = "egreso e INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id";
 		$where = "v.vendedor_id = {$vendedor_id} AND date_format(e.fecha, '%Y%m') = '{$periodo_actual}'";
 		$groupby = "date_format(e.fecha, '%Y%m')";
 		$estadisticas = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
@@ -90,16 +86,13 @@ class VendedorController {
 		$estadisticas['PERACTUAL'] = $periodo_actual;
 		$estadisticas['EGRESOCOMISION'] = $egreso_comision_periodoactual;
 
-		$select = "v.vendedor_id AS VID, date_format(ec.fecha, '%d/%m/%Y') AS ECFECHA, ec.fecha AS ECFECBUS,
-				   ROUND(SUM(ec.valor_abonado),2) AS COMISION, ROUND(SUM(e.importe_total),2) AS TOTALFACTURADO";
-		$from = "egreso e INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN
-				 vendedor v ON e.vendedor = v.vendedor_id";
+		$select = "v.vendedor_id AS VID, date_format(ec.fecha, '%d/%m/%Y') AS ECFECHA, ec.fecha AS ECFECBUS, ROUND(SUM(ec.valor_abonado),2) AS COMISION, ROUND(SUM(e.importe_total),2) AS TOTALFACTURADO";
+		$from = "egreso e INNER JOIN egresocomision ec ON e.egresocomision = ec.egresocomision_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id";
 		$where = "v.vendedor_id = {$vendedor_id} AND ec.estadocomision IN (2,3)";
 		$groupby = "ec.fecha ORDER BY date_format(ec.fecha, '%d/%m/%Y') DESC";
 		$egresocomision_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
 
-		$select = "ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, ROUND(SUM(ed.importe),2) AS IMPORTE,
-				   ROUND(SUM(ed.cantidad),2) AS CANTIDAD";
+		$select = "ed.codigo_producto AS COD, ed.descripcion_producto AS PRODUCTO, ROUND(SUM(ed.importe),2) AS IMPORTE, ROUND(SUM(ed.cantidad),2) AS CANTIDAD";
 		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id";
 		$where = "date_format(e.fecha, '%Y%m') = '{$periodo_actual}' AND e.vendedor = {$vendedor_id}";
 
@@ -155,6 +148,12 @@ class VendedorController {
 			}
 		}
 
+		foreach ($ventas_vendedor_tipo_factura as $clave=>$valor) {
+			$ventas_vendedor_tipo_factura[$clave]['BLANCO'] = number_format($valor['BLANCO'], 2, ',', '.');
+			$ventas_vendedor_tipo_factura[$clave]['NEGRO'] = number_format($valor['NEGRO'], 2, ',', '.');
+			$ventas_vendedor_tipo_factura[$clave]['TOTAL'] = number_format($valor['TOTAL'], 2, ',', '.');
+		}
+	
 		$select = "v.vendedor_id AS VID, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, LEFT(pr.razon_social, 25) AS PROVEEDOR, ROUND(SUM(ed.importe),2) AS IMPORTE";
 		$from = "egreso e INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productodetalle pd ON p.producto_id = pd.producto_id INNER JOIN proveedor pr ON pd.proveedor_id = pr.proveedor_id";
 		$where = "e.fecha BETWEEN '{$primer_dia_mes}' AND '{$fecha_sys}'";
