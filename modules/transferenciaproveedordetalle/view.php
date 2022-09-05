@@ -3,8 +3,7 @@
 
 class TransferenciaProveedorDetalleView extends View {
 	function consultar_pagos($pagos_transferenciaproveedordetalle_collection, $transferenciaproveedordetalle_collection, $obj_proveedor) {
-		$gui = file_get_contents("static/modules/transferenciaproveedordetalle/consultar_pagos.html");
-		
+		$gui = file_get_contents("static/modules/transferenciaproveedordetalle/consultar_pagos.html");		
 		$tbl_pagos_transferencias_proveedor = file_get_contents("static/modules/transferenciaproveedordetalle/tbl_pagos_transferencias_proveedor.html");
 		$tbl_pagos_transferencias_proveedor = $this->render_regex_dict('TBL_TRANSFERENCIAPROVEEDORDETALLE', $tbl_pagos_transferencias_proveedor, $pagos_transferenciaproveedordetalle_collection);
 

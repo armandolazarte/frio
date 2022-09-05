@@ -46,6 +46,13 @@ class ChequeProveedorDetalleController {
 			}
 		}
 
+		foreach ($chequeproveedordetalle_collection as $clave=>$valor) {
+			$chequeproveedordetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
+			$chequeproveedordetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
+			$chequeproveedordetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
+			$chequeproveedordetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
+		}
+
 		$this->view->consultar_pagos($pagos_chequeproveedordetalle_collection, $chequeproveedordetalle_collection, $pm);
 	}
 }

@@ -46,6 +46,13 @@ class TransferenciaProveedorDetalleController {
 			}
 		}
 
+		foreach ($transferenciaproveedordetalle_collection as $clave=>$valor) {
+			$transferenciaproveedordetalle_collection[$clave]['PAGO'] = number_format($valor["PAGO"], 2, ',', '.');
+			$transferenciaproveedordetalle_collection[$clave]['SOBRANTE'] = number_format($valor["SOBRANTE"], 2, ',', '.');
+			$transferenciaproveedordetalle_collection[$clave]['CREDITO'] = number_format($valor["CREDITO"], 2, ',', '.');
+			$transferenciaproveedordetalle_collection[$clave]['TOTAL'] = number_format($valor["TOTAL"], 2, ',', '.');
+		}
+
 		$this->view->consultar_pagos($pagos_transferenciaproveedordetalle_collection, $transferenciaproveedordetalle_collection, $pm);
 	}
 }

@@ -4,8 +4,7 @@
 class ChequeProveedorDetalleView extends View {
 
 	function consultar_pagos($pagos_chequeproveedordetalle_collection, $chequeproveedordetalle_collection, $obj_proveedor) {
-		$gui = file_get_contents("static/modules/chequeproveedordetalle/consultar_pagos.html");
-		
+		$gui = file_get_contents("static/modules/chequeproveedordetalle/consultar_pagos.html");		
 		$tbl_pagos_cheques_proveedor = file_get_contents("static/modules/chequeproveedordetalle/tbl_pagos_cheques_proveedor.html");
 		$tbl_pagos_cheques_proveedor = $this->render_regex_dict('TBL_CHEQUEPROVEEDORDETALLE', $tbl_pagos_cheques_proveedor, $pagos_chequeproveedordetalle_collection);
 

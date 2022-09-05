@@ -3,8 +3,7 @@
 
 class TransferenciaClienteDetalleView extends View {
 	function consultar_pagos_cliente($pagos_transferenciaclientedetalle_collection, $transferenciaclientedetalle_collection, $obj_cliente) {
-		$gui = file_get_contents("static/modules/transferenciaclientedetalle/consultar_pagos_cliente.html");
-		
+		$gui = file_get_contents("static/modules/transferenciaclientedetalle/consultar_pagos_cliente.html");		
 		$tbl_pagos_transferencias_cliente = file_get_contents("static/modules/transferenciaclientedetalle/tbl_pagos_transferencias_cliente.html");
 		$tbl_pagos_transferencias_cliente = $this->render_regex_dict('TBL_TRANSFERENCIACLIENTEDETALLE', $tbl_pagos_transferencias_cliente, $pagos_transferenciaclientedetalle_collection);
 
