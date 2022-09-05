@@ -442,13 +442,6 @@ class VendedorController {
 
 			if ($egreso_pendiente_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_pendiente_collection[$clave]["VC"] == 0) {
 				unset($egreso_pendiente_collection[$clave]);
-			} else {
-				$egreso_pendiente_collection[$clave]['SUBTOTAL'] = number_format($valor['SUBTOTAL'], 2, ',', '.');
-				$egreso_pendiente_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
-				$egreso_pendiente_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
-				$egreso_pendiente_collection[$clave]['ITSINIVA'] = number_format($valor['ITSINIVA'], 2, ',', '.');
-				$egreso_pendiente_collection[$clave]['CSINIVA'] = number_format($valor['CSINIVA'], 2, ',', '.');
-				$egreso_pendiente_collection[$clave]['VALABO'] = number_format($valor['VALABO'], 2, ',', '.');
 			}
 		}
 
@@ -479,6 +472,15 @@ class VendedorController {
 		 	}
 
 		 	$valor_comision_pendiente_siniva = $valor_comision_pendiente_siniva + $egreso_pendiente_collection[$clave]["CSINIVA"];
+		}
+		
+		foreach ($egreso_pendiente_collection as $clave=>$valor) {
+			$egreso_pendiente_collection[$clave]['SUBTOTAL'] = number_format($valor['SUBTOTAL'], 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['ITSINIVA'] = number_format($valor['ITSINIVA'], 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['CSINIVA'] = number_format($valor['CSINIVA'], 2, ',', '.');
+			$egreso_pendiente_collection[$clave]['VALABO'] = number_format($valor['VALABO'], 2, ',', '.');
 		}
 		
 		$select_ventas_per_actual = "date_format(e.fecha, '%Y%m') AS PERIODO, COUNT(e.egreso_id) AS CANTIDAD";
