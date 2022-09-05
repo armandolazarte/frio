@@ -439,6 +439,10 @@ class VendedorController {
 
 			if ($egreso_pendiente_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_pendiente_collection[$clave]["VC"] == 0) {
 				unset($egreso_pendiente_collection[$clave]);
+			} else {
+				$egreso_pendiente_collection[$clave]['SUBTOTAL'] = number_format($valor['SUBTOTAL'], 2, ',', '.');
+				$egreso_pendiente_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
+				$egreso_pendiente_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
 			}
 		}
 
