@@ -410,7 +410,7 @@ class VendedorController {
 				unset($egreso_total_collection[$clave]);
 			} else {
 				$egreso_total_collection[$clave]['IMPORTETOTAL'] = number_format($valor['IMPORTETOTAL'], 2, ',', '.');
-				$egreso_total_collection[$clave]['IMPORTETOTAL'] = number_format($valor['VC'], 2, ',', '.');
+				$egreso_total_collection[$clave]['VC'] = number_format($valor['VC'], 2, ',', '.');
 			}
 		}
 
