@@ -519,7 +519,7 @@ class VendedorController {
 		 					   '{valor_total_facturado}'=>round($valor_total_facturado,2),
 							   '{print_valor_total_facturado}'=>number_format($valor_total_facturado, 2, ',', '.'),
 		 					   '{valor_total_facturado_comision_pendiente}'=>round($valor_total_facturado_comision_pendiente,2),
-		 					   '{print_valor_total_facturado_comision_pendiente}'=>round($valor_total_facturado_comision_pendiente,2));
+		 					   '{print_valor_total_facturado_comision_pendiente}'=>number_format($valor_total_facturado_comision_pendiente, 2, ',', '.'));
 
 		$this->view->ventas_vendedor($egreso_pendiente_collection, $egreso_total_collection, $ventas_per_actual_collection, $array_busqueda, $vm, $array_totales);
 	}
