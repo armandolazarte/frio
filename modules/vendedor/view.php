@@ -137,7 +137,7 @@ class VendedorView extends View {
             $tbl_row_top3 = $this->get_regex('TBL_TOTAL_VENDEDOR_PROVEEDOR', $gui_top3_vendedor_proveedor_filas);
             $render_row_top3 = '';
             foreach($totales_proveedores as $dict) {
-            	$dict['{IMPORTE}'] = number_format($dict['{IMPORTE}'], 2, ',', '.');
+            	//$dict['{IMPORTE}'] = number_format($dict['{IMPORTE}'], 2, ',', '.');
             	$render_row_top3 .= str_replace(array_keys($dict), array_values($dict), $tbl_row_top3);
             }
 
