@@ -258,8 +258,8 @@
         comision_siniva = comision_siniva.replace(',','.');
         comision_siniva_total = parseFloat(comision_siniva_total) + parseFloat(comision_siniva);
         comision_siniva_total = Number(comision_siniva_total.toFixed(2));
-        document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total.toLocaleString();
-        document.getElementById('print_comision_siniva').innerHTML = "$" + comision_siniva_total.toLocaleString();
+        document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total.toLocaleString('es-AR');
+        document.getElementById('print_comision_siniva').innerHTML = "$" + comision_siniva_total.toLocaleString('es-AR');
 
         //COMISION CON IVA
         var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
@@ -268,8 +268,8 @@
         comision = comision.replace(',','.');
         comision_total = parseFloat(comision_total) + parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
-        document.getElementById('txt_comision_total').innerHTML = "$" + comision_total.toLocaleString();
-        document.getElementById('print_comision_coniva').innerHTML = "$" + comision_total.toLocaleString();
+        document.getElementById('txt_comision_total').innerHTML = "$" + comision_total.toLocaleString('es-AR');
+        document.getElementById('print_comision_coniva').innerHTML = "$" + comision_total.toLocaleString('es-AR');
 
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
@@ -278,7 +278,7 @@
         importe = importe.replace(',','.');
         total = parseFloat(total) + parseFloat(importe);
         total = Number(total.toFixed(2));
-        document.getElementById('txt_total').innerHTML = "$" + total.toLocaleString();
+        document.getElementById('txt_total').innerHTML = "$" + total.toLocaleString('es-AR');
 
         countChecked();
 
@@ -296,8 +296,8 @@
         comision_siniva = comision_siniva.replace(',','.');
         comision_siniva_total = parseFloat(comision_siniva_total) - parseFloat(comision_siniva);
         comision_siniva_total = Number(comision_siniva_total.toFixed(2));
-        document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total.toLocaleString();
-        document.getElementById('print_comision_siniva').innerHTML = "$" + comision_siniva_total.toLocaleString();
+        document.getElementById('txt_comision_siniva_total').innerHTML = "$" + comision_siniva_total.toLocaleString('es-AR');
+        document.getElementById('print_comision_siniva').innerHTML = "$" + comision_siniva_total.toLocaleString('es-AR');
 
         //COMISION CON IVA
         var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
@@ -306,8 +306,8 @@
         comision = comision.replace(',','.');
         comision_total = parseFloat(comision_total) - parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
-        document.getElementById('txt_comision_total').innerHTML = "$" + comision_total.toLocaleString();
-        document.getElementById('print_comision_coniva').innerHTML = "$" + comision_total.toLocaleString();
+        document.getElementById('txt_comision_total').innerHTML = "$" + comision_total.toLocaleString('es-AR');
+        document.getElementById('print_comision_coniva').innerHTML = "$" + comision_total.toLocaleString('es-AR');
 
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
@@ -316,7 +316,7 @@
         importe = importe.replace(',','.');
         total = parseFloat(total) - parseFloat(importe);
         total = Number(total.toFixed(2));
-        document.getElementById('txt_total').innerHTML = "$" + total.toLocaleString();
+        document.getElementById('txt_total').innerHTML = "$" + total.toLocaleString('es-AR');
 
         countChecked();
     });
