@@ -253,7 +253,7 @@
 
         //COMISION SIN IVA
         var comision_siniva = document.getElementById("column_price_siniva_" + egresocomision_id).innerHTML;
-        comision_siniva = comision_siniva.substring(1)
+        comision_siniva = comision_siniva.substring(1);
         comision_siniva = comision_siniva.replace('.','');
         comision_siniva = comision_siniva.replace(',','.');
         comision_siniva_total = parseFloat(comision_siniva_total) + parseFloat(comision_siniva);
@@ -263,7 +263,9 @@
 
         //COMISION CON IVA
         var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
-        comision = comision.substring(1)
+        comision = comision.substring(1);
+        comision = comision.replace('.','');
+        comision = comision.replace(',','.');
         comision_total = parseFloat(comision_total) + parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
         document.getElementById('txt_comision_total').innerHTML = "$" + comision_total;
@@ -271,7 +273,7 @@
 
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
-        importe = importe.substring(1)
+        importe = importe.substring(1);
         total = parseFloat(total) + parseFloat(importe);
         total = Number(total.toFixed(2));
         document.getElementById('txt_total').innerHTML = "$" + total;
@@ -297,7 +299,9 @@
 
         //COMISION CON IVA
         var comision = document.getElementById("column_price_" + egresocomision_id).innerHTML;
-        comision = comision.substring(1)
+        comision = comision.substring(1);
+        comision = comision.replace('.','');
+        comision = comision.replace(',','.');
         comision_total = parseFloat(comision_total) - parseFloat(comision);
         comision_total = Number(comision_total.toFixed(2));
         document.getElementById('txt_comision_total').innerHTML = "$" + comision_total;
@@ -305,7 +309,7 @@
 
         //TOTAL
         var importe = document.getElementById("column_price_egreso_" + egresocomision_id).innerHTML;
-        importe = importe.substring(1)
+        importe = importe.substring(1);
         total = parseFloat(total) - parseFloat(importe);
         total = Number(total.toFixed(2));
         document.getElementById('txt_total').innerHTML = "$" + total;
