@@ -304,9 +304,7 @@ class CuentaCorrienteClienteView extends View {
 				break;
 		}
 
-		unset($obj_cliente->infocontacto_collection, $obj_cliente->vendedor->infocontacto_collection, 
-			  $obj_cliente->vendedor->frecuenciaventa, $obj_cliente->flete->infocontacto_collection);	
-		
+		unset($obj_cliente->infocontacto_collection, $obj_cliente->vendedor->infocontacto_collection, $obj_cliente->vendedor->frecuenciaventa, $obj_cliente->flete->infocontacto_collection);
 		$obj_cliente = $this->set_dict($obj_cliente);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
 		$render = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $gui);

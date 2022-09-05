@@ -142,8 +142,7 @@ class CuentaCorrienteProveedorView extends View {
 				break;
 		}
 
-		unset($obj_proveedor->infocontacto_collection);	
-		
+		unset($obj_proveedor->infocontacto_collection);
 		$obj_proveedor = $this->set_dict($obj_proveedor);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
 		$render = str_replace('{tbl_cuentacorriente}', $gui_tbl_cuentacorriente, $gui);

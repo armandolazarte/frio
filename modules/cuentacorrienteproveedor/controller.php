@@ -182,7 +182,9 @@ class CuentaCorrienteProveedorController {
 			$array_temp = CollectorCondition()->get('CuentaCorrienteProveedor', $where, 4, $from, $select);
 			
 			$balance = $array_temp[0]['BALANCE'];
+			$balance = ($balance > -0.5 AND $balance < 0.5) ? 0 : $balance;
 			$balance = ($balance == '-0') ? abs($balance) : $balance;
+			$balance = number_format($balance, 2, ',', '.');
 			$balance_class = ($balance >= 0) ? 'primary' : 'danger';
 			$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
 			
@@ -225,10 +227,12 @@ class CuentaCorrienteProveedorController {
 			
 			$balance = $array_temp[0]['BALANCE'];
 			$balance = ($balance == '-0') ? abs($balance) : $balance;
+			$balance = number_format($balance, 2, ',', '.');
 			$balance_class = ($balance >= 0) ? 'blue' : 'red';
 			$new_balance = ($balance >= 0) ? "$" . $balance : str_replace('-', '-$', $balance);
 
 			$cuentacorriente_collection[$clave]['BALANCE'] = $new_balance;
+			$cuentacorriente_collection[$clave]['IMPORTE'] = number_format($valor['IMPORTE'], 2, ',', '.');
 			$cuentacorriente_collection[$clave]['BCOLOR'] = $balance_class;
 			$cuentacorriente_collection[$clave]['BTN_DISPLAY'] = $array_temp[0]['BTN_DISPLAY'];
 		}
