@@ -93,6 +93,7 @@ class CuentaCorrienteProveedorView extends View {
 			$class = ($cuenta >= 0) ? 'info' : 'danger';
 			$cuenta = abs($cuenta);
 			$cuentascorrientes_collection[$clave]['CUENTA'] = ($cuenta > 0.5) ? $cuenta : 0;
+			$cuentascorrientes_collection[$clave]['CUENTA'] = number_format(abs($cuenta), 2, ',', '.');
 			$cuentascorrientes_collection[$clave]['CLASS'] = $class;
 		}
 
@@ -108,11 +109,12 @@ class CuentaCorrienteProveedorView extends View {
 		$icon = ($valor_cuentacorriente >= 0) ? 'up' : 'down';
 		$msj = ($valor_cuentacorriente >= 0) ? 'No posee deuda' : 'Posee deuda';
 		
-		$array_cuentacorriente = array('{cuentacorriente-valor}'=>abs($valor_cuentacorriente),
+		$array_cuentacorriente = array('{cuentacorriente-valor}'=>number_format(abs($valor_cuentacorriente), 2, ',', '.'),
 									   '{cuentacorriente-icon}'=>$icon,
 									   '{cuentacorriente-msj}'=>$msj,
 									   '{cuentacorriente-class}'=>$class,
-									   '{cuentacorriente-credito}'=>round($importe_cuentacorrienteproveedorcredito, 2));
+									   '{cuentacorriente-credito_ajax}'=>round($importe_cuentacorrienteproveedorcredito, 2),
+									   '{cuentacorriente-credito}'=>number_format($importe_cuentacorrienteproveedorcredito, 2, ',', '.'));
 		
 		$gui_lst_infocontacto = $this->render_regex('LST_INFOCONTACTO', $gui_lst_infocontacto, $infocontacto_collection);
 		$gui_tbl_cuentacorriente = $this->render_regex_dict('TBL_CUENTACORRIENTE', $gui_tbl_cuentacorriente, $cuentacorriente_collection);
