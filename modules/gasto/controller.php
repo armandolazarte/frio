@@ -47,7 +47,7 @@ class GastoController {
 		$this->model->gasto_id = $arg;
 		$this->model->get();
 
-		$select = "g.gasto_id AS ID, g.comprobante AS COMPROBANTE, g.fecha AS FECHA, gc.denominacion AS CATEGORIA, g.detalle AS DETALLE, g.importe AS IMPORTE, g.iva AS IVA, g.total AS TOTAL";
+		$select = "g.gasto_id AS ID, g.comprobante AS COMPROBANTE, g.fecha AS FECHA, gc.denominacion AS CATEGORIA, g.detalle AS DETALLE, FORMAT(g.importe, 2,'de_DE') AS IMPORTE, FORMAT(g.iva, 2,'de_DE') AS IVA, FORMAT(g.total, 2,'de_DE') AS TOTAL";
 		$from = "gasto g INNER JOIN gastocategoria gc ON g.gastocategoria = gc.gastocategoria_id";
 		$where = "date_format(g.fecha, '%Y%m') = {$periodo_actual}";
 		$gasto_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
@@ -72,7 +72,7 @@ class GastoController {
     	$desde = filter_input(INPUT_POST, 'desde');
     	$hasta = filter_input(INPUT_POST, 'hasta');
 		
-		$select = "g.gasto_id AS ID, g.comprobante AS COMPROBANTE, g.fecha AS FECHA, gc.denominacion AS CATEGORIA, g.detalle AS DETALLE, g.importe AS IMPORTE, g.iva AS IVA, g.total AS TOTAL";
+		$select = "g.gasto_id AS ID, g.comprobante AS COMPROBANTE, g.fecha AS FECHA, gc.denominacion AS CATEGORIA, g.detalle AS DETALLE, FORMAT(g.importe, 2,'de_DE') AS IMPORTE, FORMAT(g.iva, 2,'de_DE') AS IVA, FORMAT(g.total, 2,'de_DE') AS TOTAL";
 		$from = "gasto g INNER JOIN gastocategoria gc ON g.gastocategoria = gc.gastocategoria_id";
 		$where = "g.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$gasto_collection = CollectorCondition()->get('Gasto', $where, 4, $from, $select);
