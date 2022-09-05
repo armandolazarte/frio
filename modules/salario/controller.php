@@ -129,14 +129,20 @@ class SalarioController {
 		//PARAMETROS
 		$desde = filter_input(INPUT_POST, 'desde');
 		$hasta = filter_input(INPUT_POST, 'hasta');
+		$empleado = filter_input(INPUT_POST, 'empleado');
+
+		$em = new Empleado();
+		$em->empleado_id = $empleado;
+		$em->get();
+		$denominacion_empleado = $em->apellido . ' ' . $em->nombre;
 
 		$select = "s.salario_id AS SALARIO_ID, CONCAT(date_format(s.fecha, '%d/%m/%Y'), ' ', s.hora) AS FECHA, u.denominacion AS USUARIO, CONCAT(e.apellido, ' ', e.nombre) AS EMPLEADO, s.monto AS IMPORTE, s.detalle AS DETALLE, s.tipo_pago AS TIPO, CONCAT('Desde ', date_format(s.desde, '%d/%m/%Y'), ' hasta ', date_format(s.hasta, '%d/%m/%Y')) AS PERIODO";
 		$from = "salario s INNER JOIN empleado e ON s.empleado = e.empleado_id INNER JOIN usuario u ON s.usuario_id = u.usuario_id";
-		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' ORDER BY s.fecha ASC";
+		$where = "s.fecha BETWEEN '{$desde}' AND '{$hasta}' AND s.empleado = {$empleado} ORDER BY s.fecha ASC";
 		$salario_collection = CollectorCondition()->get('Salario', $where, 4, $from, $select);
 
-		$subtitulo = "SALARIOS: {$desde} - {$hasta}";
-		$array_encabezados = array('Fecha', 'Período', 'Empleado', 'Detalle', 'Tipo', 'Importe');
+		$subtitulo = "SALARIOS: {$desde} - {$hasta} de {$denominacion_empleado}";
+		$array_encabezados = array('Fecha', 'Período', 'Detalle', 'Tipo', 'Importe');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
@@ -144,7 +150,6 @@ class SalarioController {
 			$array_temp = array();
 			$array_temp = array($valor["FECHA"]
 								, $valor["PERIODO"]
-								, $valor["EMPLEADO"]
 								, $valor["DETALLE"]
 								, $valor["TIPO"]
 								, $valor["IMPORTE"]);
