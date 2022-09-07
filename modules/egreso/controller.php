@@ -653,15 +653,19 @@ class EgresoController {
 		$where = "e.numero_factura = {$num_factura}";
 		$groupby = "e.tipofactura";
 		$verificar_remito = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
-
-		if (is_array($verificar_remito)) {
-			$num_factura = $this->siguiente_remito();
-		}
-
+		if (is_array($verificar_remito)) $num_factura = $this->siguiente_remito();
 		$fecha = filter_input(INPUT_POST, 'fecha');
 		$hora = date('H:i:s');
-		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
-		$comprobante .= str_pad($num_factura, 8, '0', STR_PAD_LEFT);
+
+		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
+		$tfm = new TipoFactura();
+		$tfm->tipofactura_id = $tipofactura;
+		$tfm->get();
+
+		$tmp_nomenclatura = $tfm->nomenclatura;
+		$tmp_puntoventa = str_pad($punto_venta, 4, '0', STR_PAD_LEFT);
+		$tmp_numero = str_pad($num_factura, 8, '0', STR_PAD_LEFT);
+		$comprobante = "{$tmp_nomenclatura} {$tmp_puntoventa}-{$tmp_numero}";
 
 		$vendedor_id = filter_input(INPUT_POST, 'vendedor');
 		$vm = new Vendedor();
@@ -697,7 +701,6 @@ class EgresoController {
 
 		$condicionpago = filter_input(INPUT_POST, 'condicionpago');
 		$importe_total = filter_input(INPUT_POST, 'importe_total');
-		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
 		$fact_descuento = filter_input(INPUT_POST, 'descuento');
 		$this->model = new Egreso();
 		$this->model->punto_venta = $punto_venta;
@@ -859,6 +862,23 @@ class EgresoController {
 		}
 
 		if ($flag_error == 0) {
+			if ($tipofactura == 1 OR $tipofactura == 3) {
+				$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+				$where = "eafip.egreso_id = {$egreso_id}";
+				$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+				$egresoafip = $egresoafip[0];
+
+			    $tfm = new TipoFactura();
+				$tfm->tipofactura_id = $tipofactura;
+				$tfm->get();
+
+				$tmp_nomenclatura = $tfm->nomenclatura;
+				$tmp_puntoventa = str_pad($egresoafip['PUNTO_VENTA'], 4, '0', STR_PAD_LEFT);
+				$tmp_numero = str_pad($egresoafip['NUMERO_FACTURA'], 8, '0', STR_PAD_LEFT);
+				$comprobante = "{$tmp_nomenclatura} {$tmp_puntoventa}-{$tmp_numero}";
+			}
+			
 			foreach ($egresodetalle_collection as $egreso) {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";

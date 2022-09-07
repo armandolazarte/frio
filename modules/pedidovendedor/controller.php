@@ -844,9 +844,17 @@ class PedidoVendedorController {
 		if (is_array($verificar_remito)) $num_factura = $this->siguiente_remito();
 		$fecha = filter_input(INPUT_POST, 'fecha');
 		$hora = date('H:i:s');
-		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
-		$comprobante .= str_pad($num_factura, 8, '0', STR_PAD_LEFT);
 
+		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
+		$tfm = new TipoFactura();
+		$tfm->tipofactura_id = $tipofactura;
+		$tfm->get();
+
+		$tmp_nomenclatura = $tfm->nomenclatura;
+		$tmp_puntoventa = str_pad($punto_venta, 4, '0', STR_PAD_LEFT);
+		$tmp_numero = str_pad($num_factura, 8, '0', STR_PAD_LEFT);
+		$comprobante = "{$tmp_nomenclatura} {$tmp_puntoventa}-{$tmp_numero}";
+		
 		$vendedor_id = filter_input(INPUT_POST, 'vendedor');
 		$vm = new Vendedor();
 		$vm->vendedor_id = $vendedor_id;
@@ -897,7 +905,6 @@ class PedidoVendedorController {
 
 		$condicionpago = filter_input(INPUT_POST, 'condicionpago');
 		$importe_total = filter_input(INPUT_POST, 'importe_total');
-		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
 		$descuento = filter_input(INPUT_POST, 'descuento');
 		$mem = new Egreso();
 		$mem->punto_venta = $punto_venta;
@@ -1051,6 +1058,23 @@ class PedidoVendedorController {
 		}
 
 		if ($flag_error == 0) {
+			if ($tipofactura == 1 OR $tipofactura == 3) {
+				$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+				$where = "eafip.egreso_id = {$egreso_id}";
+				$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+				$egresoafip = $egresoafip[0];
+
+			    $tfm = new TipoFactura();
+				$tfm->tipofactura_id = $tipofactura;
+				$tfm->get();
+
+				$tmp_nomenclatura = $tfm->nomenclatura;
+				$tmp_puntoventa = str_pad($egresoafip['PUNTO_VENTA'], 4, '0', STR_PAD_LEFT);
+				$tmp_numero = str_pad($egresoafip['NUMERO_FACTURA'], 8, '0', STR_PAD_LEFT);
+				$comprobante = "{$tmp_nomenclatura} {$tmp_puntoventa}-{$tmp_numero}";
+			}
+
 			foreach ($egresodetalle_collection as $egreso) {
 				$temp_producto_id = $egreso['PRODUCTO_ID'];
 				$select = "MAX(s.stock_id) AS STOCK_ID";
@@ -1475,8 +1499,17 @@ class PedidoVendedorController {
 		if (is_array($verificar_remito)) $num_factura = $this->siguiente_remito();
 		$fecha = date('Y-m-d');
 		$hora = date('H:i:s');
-		$comprobante = str_pad($punto_venta, 4, '0', STR_PAD_LEFT) . "-";
-		$comprobante .= str_pad($num_factura, 8, '0', STR_PAD_LEFT);
+
+		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
+		$tfm = new TipoFactura();
+		$tfm->tipofactura_id = $tipofactura;
+		$tfm->get();
+		
+		$tmp_nomenclatura = $tfm->nomenclatura;
+		$tmp_puntoventa = str_pad($punto_venta, 4, '0', STR_PAD_LEFT);
+		$tmp_numero = str_pad($num_factura, 8, '0', STR_PAD_LEFT);
+		$comprobante = "{$tmp_nomenclatura} {$tmp_puntoventa}-{$tmp_numero}";
+
 		$vendedor_id = filter_input(INPUT_POST, 'vendedor');
 		$vm = new Vendedor();
 		$vm->vendedor_id = $vendedor_id;
@@ -1528,7 +1561,6 @@ class PedidoVendedorController {
 
 		$condicionpago = filter_input(INPUT_POST, 'condicionpago');
 		$importe_total = filter_input(INPUT_POST, 'importe_total');
-		$tipofactura = filter_input(INPUT_POST, 'tipofactura');
 		$descuento = filter_input(INPUT_POST, 'descuento');
 		$mem = new Egreso();
 		$mem->punto_venta = $punto_venta;
@@ -1652,7 +1684,7 @@ class PedidoVendedorController {
 		$flag_error = 0;
 		if ($tipofactura == 1 OR $tipofactura == 3) {
 			try {
-			    $this->facturar_afip_argumento($egreso_id);   
+			    $this->facturar_afip_argumento($egreso_id);
 			} catch (Exception $e) {
 				$ecm = new EgresoComision();
 				$ecm->egresocomision_id = $egresocomision_id;
@@ -1695,11 +1727,20 @@ class PedidoVendedorController {
 
 		if ($flag_error == 0) {
 			if ($tipofactura == 1 OR $tipofactura == 3) {
-				$temp_egresoafip = $egresoafip[0];
-				$afip_punto_venta = $temp_egresoafip['PUNTO_VENTA'];
-				$afip_num_factura = $temp_egresoafip['NUMERO_FACTURA'];
-				$comprobante = str_pad($afip_punto_venta, 4, '0', STR_PAD_LEFT) . "-";
-				$comprobante .= str_pad($afip_num_factura, 8, '0', STR_PAD_LEFT);
+				$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+				$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+				$where = "eafip.egreso_id = {$egreso_id}";
+				$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
+				$egresoafip = $egresoafip[0];
+
+			    $tfm = new TipoFactura();
+				$tfm->tipofactura_id = $tipofactura;
+				$tfm->get();
+
+				$tmp_nomenclatura = $tfm->nomenclatura;
+				$tmp_puntoventa = str_pad($egresoafip['PUNTO_VENTA'], 4, '0', STR_PAD_LEFT);
+				$tmp_numero = str_pad($egresoafip['NUMERO_FACTURA'], 8, '0', STR_PAD_LEFT);
+				$comprobante = "{$tmp_nomenclatura} {$tmp_puntoventa}-{$tmp_numero}";
 			}
 
 			foreach ($egresodetalle_collection as $egreso) {
