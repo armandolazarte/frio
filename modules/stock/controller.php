@@ -697,7 +697,7 @@ class StockController {
 	function consultar_producto($arg) {
     	SessionHandler()->check_session();
 		
-		$select = "s.stock_id AS ID, date_format(s.fecha, '%d/%m/%Y') AS FECMOD, s.fecha AS FECHA, s.hora AS HORA, CONCAT(s.cantidad_actual, pu.denominacion) AS CANT, s.concepto AS CONCEPTO, CONCAT(s.cantidad_movimiento, pu.denominacion) AS MOVIMIENTO";
+		$select = "s.stock_id AS ID, date_format(s.fecha, '%d/%m/%Y') AS FECMOD, s.fecha AS FECHA, s.hora AS HORA, CONCAT(s.cantidad_actual, pu.denominacion) AS CANT, s.concepto AS CONCEPTO, CONCAT(s.cantidad_movimiento, pu.denominacion) AS MOVIMIENTO, CASE s.egreso_id > 0 THEN 'inline-block' ELSE 'none' END AS BTNEGRID, s.egreso_id AS EGREID";
 		$from = "stock s INNER JOIN producto p ON s.producto_id = p.producto_id INNER JOIN productounidad pu  ON p.productounidad = pu.productounidad_id";
 		$where = "s.producto_id = {$arg} ORDER BY s.fecha DESC, s.hora DESC";
 		$stock_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
