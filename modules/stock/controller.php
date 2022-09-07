@@ -791,9 +791,9 @@ class StockController {
 
 		$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(e.punto_venta,4,0), '-', LPAD(e.numero_factura,8,0)) AS FACT, e.egreso_id AS EGRID";
 		$from = "stock s, egreso e, tipofactura tf";
-		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.tipofactura = tf.tipofactura_id AND e.fecha BETWEEN '2021-01-01' AND '2022-09-07' AND e.tipofactura IN (2)";
+		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.tipofactura = tf.tipofactura_id AND e.fecha BETWEEN '2022-01-01' AND '2022-09-07' AND e.tipofactura IN (2)";
 		$facturas_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
-
+		print_r($facturas_collection);exit;
 
 		foreach ($facturas_collection as $clave=>$valor) {
 			$stock_id = $valor['STID'];
