@@ -793,8 +793,7 @@ class StockController {
 		$from = "stock s, egreso e, tipofactura tf";
 		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.tipofactura = tf.tipofactura_id AND e.fecha BETWEEN '2022-01-01' AND '2022-09-07' AND e.tipofactura IN (2)";
 		$facturas_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
-		print_r($facturas_collection);exit;
-
+		
 		foreach ($facturas_collection as $clave=>$valor) {
 			$stock_id = $valor['STID'];
 			$egreso_id = $valor['EGRID'];
