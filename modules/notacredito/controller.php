@@ -67,16 +67,16 @@ class NotaCreditoController {
 		$where = "ncd.notacredito_id = {$notacredito_id}";
 		$notacreditodetalle_collection = CollectorCondition()->get('NotaCreditoDetalle', $where, 4, $from, $select);
 		
-		$select_egresoafip = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
-		$from_egresoafip = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
-		$where_egresoafip = "eafip.egreso_id = {$egreso_id}";
-		$egresoafip = CollectorCondition()->get('EgresoAfip', $where_egresoafip, 4, $from_egresoafip, $select_egresoafip);
+		$select = "eafip.punto_venta AS PUNTO_VENTA, eafip.numero_factura AS NUMERO_FACTURA, tf.nomenclatura AS TIPOFACTURA, eafip.cae AS CAE, eafip.vencimiento AS FVENCIMIENTO, eafip.fecha AS FECHA, tf.tipofactura_id AS TF_ID";
+		$from = "egresoafip eafip INNER JOIN tipofactura tf ON eafip.tipofactura = tf.tipofactura_id";
+		$where = "eafip.egreso_id = {$egreso_id}";
+		$egresoafip = CollectorCondition()->get('EgresoAfip', $where, 4, $from, $select);
 		$egresoafip = (is_array($egresoafip)) ? $egresoafip : array();
 
 		if (!empty($egresoafip)) {
 			$em->punto_venta = $egresoafip[0]['PUNTO_VENTA'];
 			$em->numero_factura = $egresoafip[0]['NUMERO_FACTURA'];		
-		}		
+		}
 		
 		$notacreditoPDFHelper = new NotaCreditoPDF();
 		$notacreditoPDFHelper->genera_notacredito($notacreditodetalle_collection, $cm, $em, $this->model);
@@ -84,6 +84,11 @@ class NotaCreditoController {
 		$em = new Egreso();
 		$em->egreso_id = $this->model->egreso_id;
 		$em->get();
+
+		if (!empty($egresoafip)) {
+			$em->punto_venta = $egresoafip[0]['PUNTO_VENTA'];
+			$em->numero_factura = $egresoafip[0]['NUMERO_FACTURA'];		
+		}
 
 		$select = "ccc.importe AS IMP";
 		$from = "cuentacorrientecliente ccc";
