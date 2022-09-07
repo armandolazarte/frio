@@ -783,10 +783,18 @@ class StockController {
 	function update_num_factura() {
 		SessionHandler()->check_session();
 		$fecha_sys = date('d-m-Y');
+    	/*
     	$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(eafip.punto_venta,4,0), '-', LPAD(eafip.numero_factura,8,0)) AS FACT, e.egreso_id AS EGRID";
 		$from = "stock s, egreso e, egresodetalle ed, egresoafip eafip, tipofactura tf";
-		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.egreso_id = ed.egreso_id AND e.egreso_id = eafip.egreso_id AND e.fecha BETWEEN '2021-07-01' AND '2022-09-07' AND e.tipofactura IN (1,3) AND eafip.tipofactura = tf.tipofactura_id";
+		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.egreso_id = ed.egreso_id AND e.egreso_id = eafip.egreso_id AND e.fecha BETWEEN '2021-01-01' AND '2022-09-07' AND e.tipofactura IN (1,3) AND eafip.tipofactura = tf.tipofactura_id";
+		*/
+
+		$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(e.punto_venta,4,0), '-', LPAD(e.numero_factura,8,0)) AS FACT, e.egreso_id AS EGRID";
+		$from = "stock s, egreso e, tipofactura tf";
+		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.egreso_id = ed.egreso_id AND e.tipofactura = tf.tipofactura_id AND e.fecha BETWEEN '2021-01-01' AND '2022-09-07' AND e.tipofactura IN (2)";
 		$facturas_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
+
+
 		foreach ($facturas_collection as $clave=>$valor) {
 			$stock_id = $valor['STID'];
 			$egreso_id = $valor['EGRID'];
@@ -800,6 +808,5 @@ class StockController {
 			$sm->save();
 		}
 	}
-	
 }
 ?>
