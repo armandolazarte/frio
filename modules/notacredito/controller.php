@@ -250,6 +250,7 @@ class NotaCreditoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = '-' . $cantidad;
 				$sm->producto_id = $producto_id;
+				$sm->egreso_id = $egreso_id;
 				$sm->almacen_id = $almacen_id;
 				$sm->save();
 			}

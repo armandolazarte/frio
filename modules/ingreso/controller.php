@@ -299,6 +299,7 @@ class IngresoController {
 				$sm->cantidad_actual = $ingreso['CANTIDAD'];
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = 1;
 				$sm->save();
 			} else {
@@ -317,6 +318,7 @@ class IngresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = 1;
 				$sm->save();
 			}
@@ -438,6 +440,7 @@ class IngresoController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$ingresodetalle['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = 0;
 					$sm->almacen_id = 1;
 					$sm->save();
 				}
@@ -493,6 +496,7 @@ class IngresoController {
 				$sm->cantidad_actual = $ingreso['CANTIDAD'];
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = 1;
 				$sm->save();
 			} else {
@@ -511,6 +515,7 @@ class IngresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = $ingreso['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = 1;
 				$sm->save();
 			}
@@ -646,6 +651,7 @@ class IngresoController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = $notacredito['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = 0;
 					$sm->almacen_id = 1;
 					$sm->save();
 				}
@@ -703,6 +709,7 @@ class IngresoController {
 				$sm->cantidad_actual = $nueva_cantidad;
 				$sm->cantidad_movimiento = -$notacredito['CANTIDAD'];
 				$sm->producto_id = $temp_producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = 1;
 				$sm->save();				
 			}

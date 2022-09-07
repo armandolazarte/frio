@@ -1067,6 +1067,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = $egreso_id;
 					$sm->almacen_id = 1;
 					$sm->save();
 				} else {
@@ -1085,6 +1086,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = $egreso_id;
 					$sm->almacen_id = 1;
 					$sm->save();
 				}
@@ -1716,6 +1718,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = $egreso_id;
 					$sm->almacen_id = 1;
 					$sm->save();
 				} else {
@@ -1734,6 +1737,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = $egreso_id;
 					$sm->almacen_id = 1;
 					$sm->save();
 				}
@@ -2158,6 +2162,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $egreso['CANTIDAD'];
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = $egreso_id;
 					$sm->almacen_id = 1;
 					$sm->save();
 				} else {
@@ -2176,6 +2181,7 @@ class PedidoVendedorController {
 					$sm->cantidad_actual = $nueva_cantidad;
 					$sm->cantidad_movimiento = -$egreso['CANTIDAD'];
 					$sm->producto_id = $temp_producto_id;
+					$sm->egreso_id = $egreso_id;
 					$sm->almacen_id = 1;
 					$sm->save();
 				}

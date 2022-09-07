@@ -495,6 +495,7 @@ class StockController {
 				$sm->cantidad_actual = $valor;
 				$sm->cantidad_movimiento = $valor;
 				$sm->producto_id = $producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = $almacen_id;
 				$sm->save();
 				$i = $i + 1;
@@ -598,6 +599,7 @@ class StockController {
 				$sm->cantidad_actual = $cantidad_final_origen;
 				$sm->cantidad_movimiento = -$valor;
 				$sm->producto_id = $producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = $almacen_origen;
 				$sm->save();
 				$i = $i + 1;
@@ -630,6 +632,7 @@ class StockController {
 				$sm->cantidad_actual = $cantidad_final_destino;
 				$sm->cantidad_movimiento = $valor;
 				$sm->producto_id = $producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = $almacen_destino;
 				$sm->save();
 			}
@@ -677,6 +680,7 @@ class StockController {
 				$sm->cantidad_actual = $valor;
 				$sm->cantidad_movimiento = $valor;
 				$sm->producto_id = $producto_id;
+				$sm->egreso_id = 0;
 				$sm->almacen_id = 1;
 				$sm->save();
 				$i = $i + 1;
@@ -779,21 +783,22 @@ class StockController {
 	function update_num_factura() {
 		SessionHandler()->check_session();
 		$fecha_sys = date('d-m-Y');
-    	$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(eafip.punto_venta,4,0), '-', LPAD(eafip.numero_factura,8,0)) AS FACT";
+    	$select = "DISTINCT(s.stock_id) AS STID, CONCAT(tf.nomenclatura,LPAD(eafip.punto_venta,4,0), '-', LPAD(eafip.numero_factura,8,0)) AS FACT, e.egreso_id AS EGRID";
 		$from = "stock s, egreso e, egresodetalle ed, egresoafip eafip, tipofactura tf";
-		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.egreso_id = ed.egreso_id AND e.egreso_id = eafip.egreso_id AND e.fecha BETWEEN '2021-08-01' AND '2022-08-31' AND e.tipofactura IN (1,3) AND eafip.tipofactura = tf.tipofactura_id";
+		$where = "s.fecha = e.fecha AND s.hora = e.hora AND e.egreso_id = ed.egreso_id AND e.egreso_id = eafip.egreso_id AND e.fecha BETWEEN '2021-01-01' AND '2022-06-30' AND e.tipofactura IN (1,3) AND eafip.tipofactura = tf.tipofactura_id";
 		$facturas_collection = CollectorCondition()->get('Stock', $where, 4, $from, $select);
 		foreach ($facturas_collection as $clave=>$valor) {
 			$stock_id = $valor['STID'];
+			$egreso_id = $valor['EGRID'];
 			$detalle = 'Venta. Comprobante: ' . $valor['FACT'];
 
 			$sm = new Stock();
 			$sm->stock_id = $stock_id;
 			$sm->get();
 			$sm->concepto = $detalle;
+			$sm->egreso_id = $egreso_id;
 			$sm->save();
 		}
-		
 	}
 	
 }
