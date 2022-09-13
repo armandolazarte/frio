@@ -3393,7 +3393,7 @@ class ReporteController {
 		}
 			
 		$subtitulo = "Importes de Venta por Cliente y Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
-		$array_encabezados = array('COD', 'CLIENTE', 'BARRIO', 'DOMICILIO' 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
+		$array_encabezados = array('COD', 'CLIENTE', 'BARRIO', 'DOMICILIO', 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
