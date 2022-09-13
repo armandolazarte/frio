@@ -3329,6 +3329,69 @@ class ReporteController {
 		exit;
 	}
 
+	function desc_producto_venta_x_familia() {
+		SessionHandler()->check_session();
+		require_once "tools/reporte_por_familia.php";
+		$desde = filter_input(INPUT_POST, 'desde');
+		$hasta = filter_input(INPUT_POST, 'hasta');
+
+		$select = "v.vendedor_id, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, pf.denominacion AS FAMILIA, round(SUM(ed.cantidad), 2) AS CANTIDAD";
+		$from = "egreso e INNER JOIN egresodetalle ed ON e.egreso_id = ed.egreso_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id";
+		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
+		$groupby = "e.vendedor, p.productofamilia";
+		$rst = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
+
+		$array_vendedores = array();
+		$array_familias = array();
+		foreach ($rst as $clave=>$valor) {
+			if (!in_array($valor['VENDEDOR'], $array_vendedores)) $array_vendedores[] = $valor['VENDEDOR'];
+			if (!in_array($valor['FAMILIA'], $array_familias)) $array_familias[] = $valor['FAMILIA'];
+		}
+
+		$array_temp = array();
+		foreach ($array_vendedores as $vendedor) {
+			$array = array();
+			$array['VENDEDOR'] = $vendedor;
+			foreach ($array_familias as $familia) {
+				$array["{$familia}"] = 0;
+			}
+
+			$array_temp[] = $array;
+		}
+
+
+		foreach ($array_temp as $clave=>$valor) {
+			$vendedor = $valor['VENDEDOR'];
+
+			foreach ($rst as $c=>$v) {
+				$temp_vendedor = $v["VENDEDOR"];
+				$temp_familia = $v["FAMILIA"];
+				$cantidad = $v["CANTIDAD"];
+
+				if ($vendedor == $temp_vendedor) {
+					$array_temp[$clave][$temp_familia] = $cantidad;
+				}
+			}
+		}
+
+		array_unshift($array_familias, 'VENDEDOR');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_familias;
+
+		foreach ($array_temp as $array) {
+			$arreglo = array();
+			foreach ($array as $valor) {
+				$arreglo[] = $valor;
+			}
+
+			$array_exportacion[] = $arreglo;
+		}
+		
+		$subtitulo = "Reporte por familia del {$desde} al {$hasta}";
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+		exit;		
+	}
+
 	// REPORTES CLIENTES
 	function desc_importe_venta_cliente_vendedor_fecha() {
 		SessionHandler()->check_session();
