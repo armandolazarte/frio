@@ -219,10 +219,12 @@ class CuentaCorrienteClienteController {
 						$btn_display_ver_tipopago = 'inline-block';
 						$btn_tipopago_id = $ingresotipopago_id;
 						$btn_movimiento_id = $chequeclientedetalle_id;
+						$denominacion_ingreso = 'Cheque';
 					} else {
 						$btn_display_ver_tipopago = 'none';
 						$btn_tipopago_id = '#';
 						$btn_movimiento_id = '#';
+						$denominacion_ingreso = 'Sin Información';
 					}
 					break;
 				case 2:
@@ -236,22 +238,35 @@ class CuentaCorrienteClienteController {
 						$btn_display_ver_tipopago = 'inline-block';
 						$btn_tipopago_id = $ingresotipopago_id;
 						$btn_movimiento_id = $transferenciaclientedetalle_id;
+						$denominacion_ingreso = 'Transferencia';
 					} else {
 						$btn_display_ver_tipopago = 'none';
 						$btn_tipopago_id = '#';
 						$btn_movimiento_id = '#';
+						$denominacion_ingreso = 'Sin Información';
 					}
+					break;
+				case 3:
+					$denominacion_ingreso = 'Efectivo';
+					break;
+				case 5:
+					$denominacion_ingreso = 'Retención';
+					break;
+				case 6:
+					$denominacion_ingreso = 'Crédito CTA CTE';
 					break;
 				default:
 					$btn_display_ver_tipopago = 'none';
 					$btn_tipopago_id = '#';
 					$btn_movimiento_id = '#';
+					$denominacion_ingreso = 'Sin Información';
 					break;
 			}
 
 			$cuentacorriente_collection[$clave]['DISPLAY_VER_TIPOPAGO'] = $btn_display_ver_tipopago;
 			$cuentacorriente_collection[$clave]['BTN_TIPOPAGO_ID'] = $btn_tipopago_id;
 			$cuentacorriente_collection[$clave]['MOVID'] = $btn_movimiento_id;
+			$cuentacorriente_collection[$clave]['DENINGTIPPAG'] = $denominacion_ingreso;
 		}
 
 		$max_cuentacorrientecliente_ids = array();
