@@ -24,8 +24,8 @@ class ProductoController {
 
 	function listar() {
 		SessionHandler()->check_session();
-		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, FORMAT(p.costo, 2,'de_DE') as COSTO, p.iva AS IVA, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA, p.ubicacion AS UBICACION";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, pf.denominacion AS FAMILIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, FORMAT(p.costo, 2,'de_DE') as COSTO, p.iva AS IVA, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA, p.ubicacion AS UBICACION";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id";
 		$where = "p.oculto = 0";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 		$this->view->listar($producto_collection);
@@ -58,8 +58,8 @@ class ProductoController {
 
 	function ocultos() {
 		SessionHandler()->check_session();
-		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.iva AS IVA, p.precio_venta AS VENTA, p.ubicacion AS UBICACION";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id";
+		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, pf.denominacion AS FAMILIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.iva AS IVA, p.precio_venta AS VENTA, p.ubicacion AS UBICACION";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id";
 		$where = "p.oculto = 1";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 		$this->view->ocultos($producto_collection);
@@ -159,12 +159,11 @@ class ProductoController {
 		$array_exportacion[] = $array_encabezados;
 		foreach ($producto_collection as $clave=>$valor) {
 			$array_temp = array();
-			$array_temp = array(
-						  $valor["CODIGO"]
-						, $valor["CATEGORIA"]
-						, $valor["MARCA"]
-						, $valor["DENOMINACION"]
-						, $valor["VALOR_VENTA"]);
+			$array_temp = array($valor["CODIGO"]
+								, $valor["CATEGORIA"]
+								, $valor["MARCA"]
+								, $valor["DENOMINACION"]
+								, $valor["VALOR_VENTA"]);
 			$array_exportacion[] = $array_temp;
 		}
 
@@ -236,6 +235,7 @@ class ProductoController {
     	SessionHandler()->check_session();
 		$productomarca_collection = Collector()->get('ProductoMarca');
 		$productocategoria_collection = Collector()->get('ProductoCategoria');
+		$productofamilia_collection = Collector()->get('ProductoFamilia');
 		$productounidad_collection = Collector()->get('ProductoUnidad');
 		$proveedor_collection = Collector()->get('Proveedor');
 
@@ -256,7 +256,7 @@ class ProductoController {
 		}
 
 
-		$this->view->agregar($productomarca_collection, $productocategoria_collection , $productounidad_collection, $proveedor_collection);
+		$this->view->agregar($productomarca_collection, $productocategoria_collection, $productofamilia_collection, $productounidad_collection, $proveedor_collection);
 	}
 
 	function editar($arg) {
@@ -272,6 +272,7 @@ class ProductoController {
 		$productodetalle_collection = CollectorCondition()->get('ProductoDetalle', $where_productoproveedor, 4, $from_productoproveedor, $select_productoproveedor, $groupby_productoproveedor);
 		$productomarca_collection = Collector()->get('ProductoMarca');
 		$productocategoria_collection = Collector()->get('ProductoCategoria');
+		$productofamilia_collection = Collector()->get('ProductoFamilia');
 		$productounidad_collection = Collector()->get('ProductoUnidad');
 		$proveedor_collection = Collector()->get('Proveedor');
 
@@ -287,7 +288,7 @@ class ProductoController {
 			if ($valor->oculto == 1) unset($productounidad_collection[$clave]);
 		}
 
-		$this->view->editar($productomarca_collection, $productocategoria_collection , $productounidad_collection, $productodetalle_collection, $proveedor_collection, $this->model);
+		$this->view->editar($productomarca_collection, $productocategoria_collection, $productofamilia_collection, $productounidad_collection, $productodetalle_collection, $proveedor_collection, $this->model);
 	}
 
 	function consultar($arg) {
@@ -335,6 +336,7 @@ class ProductoController {
 		$this->model->detalle = filter_input(INPUT_POST, 'detalle');
 		$this->model->productomarca = filter_input(INPUT_POST, 'productomarca');
 		$this->model->productocategoria = filter_input(INPUT_POST, 'productocategoria');
+		$this->model->productofamilia = filter_input(INPUT_POST, 'productofamilia');
 		$this->model->productounidad = filter_input(INPUT_POST, 'productounidad');
 		$this->model->save();
 		$producto_id = $this->model->producto_id;
@@ -387,6 +389,7 @@ class ProductoController {
 		$this->model->detalle = filter_input(INPUT_POST, 'detalle');
 		$this->model->productomarca = filter_input(INPUT_POST, 'productomarca');
 		$this->model->productocategoria = filter_input(INPUT_POST, 'productocategoria');
+		$this->model->productofamilia = filter_input(INPUT_POST, 'productofamilia');
 		$this->model->productounidad = filter_input(INPUT_POST, 'productounidad');
 		$this->model->save();
 		header("Location: " . URL_APP . "/producto/listar");

@@ -110,19 +110,22 @@ class ProductoView extends View {
 		print $template;
 	}
 
-	function agregar($productomarca_collection, $productocategoria_collection, $productounidad_collection, $proveedor_collection) {
+	function agregar($productomarca_collection, $productocategoria_collection, $productofamilia_collection, $productounidad_collection, $proveedor_collection) {
 		$gui = file_get_contents("static/modules/producto/agregar.html");
 		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
 		$gui_slt_productocategoria = file_get_contents("static/common/slt_productocategoria.html");
+		$gui_slt_productofamilia = file_get_contents("static/common/slt_productofamilia.html");
 		$gui_slt_productounidad = file_get_contents("static/common/slt_productounidad.html");
 		$gui_slt_proveedor = file_get_contents("static/common/slt_proveedor.html");
 
 		$gui_slt_productomarca = $this->render_regex('SLT_PRODUCTOMARCA', $gui_slt_productomarca, $productomarca_collection);
 		$gui_slt_productocategoria = $this->render_regex('SLT_PRODUCTOCATEGORIA', $gui_slt_productocategoria, $productocategoria_collection);
+		$gui_slt_productofamilia = $this->render_regex('SLT_PRODUCTOFAMILIA', $gui_slt_productofamilia, $productofamilia_collection);
 		$gui_slt_productounidad = $this->render_regex('SLT_PRODUCTOUNIDAD', $gui_slt_productounidad, $productounidad_collection);
 		$gui_slt_proveedor = $this->render_regex('SLT_PROVEEDOR', $gui_slt_proveedor, $proveedor_collection);
 		$render = str_replace('{slt_productomarca}', $gui_slt_productomarca, $gui);
 		$render = str_replace('{slt_productocategoria}', $gui_slt_productocategoria, $render);
+		$render = str_replace('{slt_productofamilia}', $gui_slt_productofamilia, $render);
 		$render = str_replace('{slt_productounidad}', $gui_slt_productounidad, $render);
 		$render = str_replace('{slt_proveedor}', $gui_slt_proveedor, $render);
 		$render = $this->render_breadcrumb($render);
@@ -130,11 +133,11 @@ class ProductoView extends View {
 		print $template;
 	}
 
-	function editar($productomarca_collection, $productocategoria_collection, $productounidad_collection,
-					$productodetalle_collection, $proveedor_collection, $obj_producto) {
+	function editar($productomarca_collection, $productocategoria_collection, $productofamilia_collection, $productounidad_collection, $productodetalle_collection, $proveedor_collection, $obj_producto) {
 		$gui = file_get_contents("static/modules/producto/editar.html");
 		$gui_slt_productomarca = file_get_contents("static/common/slt_productomarca.html");
 		$gui_slt_productocategoria = file_get_contents("static/common/slt_productocategoria.html");
+		$gui_slt_productofamilia = file_get_contents("static/common/slt_productofamilia.html");
 		$gui_slt_productounidad = file_get_contents("static/common/slt_productounidad.html");
 		$gui_tbl_proveedorproducto = file_get_contents("static/modules/producto/tbl_proveedor_producto.html");
 		$gui_tbl_opt_proveedor = file_get_contents("static/modules/producto/tbl_opt_proveedor.html");
@@ -147,6 +150,7 @@ class ProductoView extends View {
 
 		$gui_slt_productomarca = $this->render_regex('SLT_PRODUCTOMARCA', $gui_slt_productomarca, $productomarca_collection);
 		$gui_slt_productocategoria = $this->render_regex('SLT_PRODUCTOCATEGORIA', $gui_slt_productocategoria, $productocategoria_collection);
+		$gui_slt_productofamilia = $this->render_regex('SLT_PRODUCTOFAMILIA', $gui_slt_productofamilia, $productofamilia_collection);
 		$gui_slt_productounidad = $this->render_regex('SLT_PRODUCTOUNIDAD', $gui_slt_productounidad, $productounidad_collection);
 		$gui_tbl_proveedorproducto = $this->render_regex_dict('TBL_PROVEEDOR', $gui_tbl_proveedorproducto, $productodetalle_collection);
 		$gui_tbl_opt_proveedor = $this->render_regex('TBL_PROVEEDOR', $gui_tbl_opt_proveedor, $proveedor_collection);
