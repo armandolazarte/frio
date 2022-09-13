@@ -25,7 +25,7 @@ class ProductoController {
 	function listar() {
 		SessionHandler()->check_session();
 		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, pf.denominacion AS FAMILIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, FORMAT(p.costo, 2,'de_DE') as COSTO, p.iva AS IVA, FORMAT(p.precio_venta, 2,'de_DE') AS VENTA, p.ubicacion AS UBICACION";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id";
 		$where = "p.oculto = 0";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 		$this->view->listar($producto_collection);
@@ -59,7 +59,7 @@ class ProductoController {
 	function ocultos() {
 		SessionHandler()->check_session();
 		$select = "p.producto_id AS PRODUCTO_ID, p.codigo AS CODIGO, pc.denominacion AS CATEGORIA, pf.denominacion AS FAMILIA, CONCAT(pm.denominacion, ' ', p.denominacion) AS DENOMINACION, ROUND(p.costo, 2) as COSTO, p.iva AS IVA, p.precio_venta AS VENTA, p.ubicacion AS UBICACION";
-		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id INNER JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id";
+		$from = "producto p INNER JOIN productocategoria pc ON p.productocategoria = pc.productocategoria_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id INNER JOIN productounidad pu ON p.productounidad = pu.productounidad_id LEFT JOIN productofamilia pf ON p.productofamilia = pf.productofamilia_id";
 		$where = "p.oculto = 1";
 		$producto_collection = CollectorCondition()->get('Producto', $where, 4, $from, $select);
 		$this->view->ocultos($producto_collection);

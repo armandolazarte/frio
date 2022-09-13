@@ -203,6 +203,13 @@ CREATE TABLE IF NOT EXISTS infocontactoproveedor (
         ON DELETE CASCADE
 ) ENGINE=InnoDb;
 
+CREATE TABLE IF NOT EXISTS productofamilia (
+    productofamilia_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , denominacion VARCHAR(150)
+    , detalle TEXT
+) ENGINE=InnoDb;
+
 CREATE TABLE IF NOT EXISTS productocategoria (
     productocategoria_id INT(11) NOT NULL 
         AUTO_INCREMENT PRIMARY KEY
