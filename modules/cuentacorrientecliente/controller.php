@@ -162,7 +162,7 @@ class CuentaCorrienteClienteController {
 			$cm->btn_display_clientecentral = 'none';
 		}
     	
-		$select = "ccc.fecha AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ingresotipopago AS ING_TIP_PAG, ccc.cuentacorrientecliente_id CCCID, ccc.cliente_id AS CLIID";
+		$select = "ccc.fecha AS FECHA, ccc.importe AS IMPORTE, ccc.ingreso AS INGRESO, tmc.denominacion AS MOVIMIENTO, ccc.egreso_id AS EID, ccc.referencia AS REFERENCIA, CASE ccc.tipomovimientocuenta WHEN 1 THEN 'danger' WHEN 2 THEN 'success' END AS CLASS, ingresotipopago AS ING_TIP_PAG, ccc.cuentacorrientecliente_id CCCID, ccc.cliente_id AS CLIID, ccc.tipomovimientocuenta AS TIPMOVCUE";
 		$from = "cuentacorrientecliente ccc INNER JOIN tipomovimientocuenta tmc ON ccc.tipomovimientocuenta = tmc.tipomovimientocuenta_id";
 		$where = "ccc.cliente_id = {$arg} AND ccc.estadomovimientocuenta != 4 AND ccc.importe != 0";
 		$cuentacorriente_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
@@ -172,6 +172,7 @@ class CuentaCorrienteClienteController {
 			$temp_cuentacorrientecliente_id = $valor['CCCID'];
 			$egreso_id = $valor['EID'];
 			$ingresotipopago_id = $valor['ING_TIP_PAG'];
+			$tipomovimientocuenta = $valor['TIPMOVCUE'];
 			if (!in_array($egreso_id, $egreso_ids)) $egreso_ids[] = $egreso_id;
 			$select = "ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2))),2) AS BALANCE, IF (ROUND(((ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 2 THEN importe ELSE 0 END),2)) - (ROUND(SUM(CASE WHEN ccc.tipomovimientocuenta = 1 THEN importe ELSE 0 END),2)))) >= 0, 'none', 'inline-block') AS BTN_DISPLAY";
 			$from = "cuentacorrientecliente ccc";
@@ -259,7 +260,11 @@ class CuentaCorrienteClienteController {
 					$btn_display_ver_tipopago = 'none';
 					$btn_tipopago_id = '#';
 					$btn_movimiento_id = '#';
-					$denominacion_ingreso = 'Sin Información';
+					if ($tipomovimientocuenta == 1) {
+						$denominacion_ingreso = '';
+					} else {
+						$denominacion_ingreso = 'Sin Información';
+					}
 					break;
 			}
 
