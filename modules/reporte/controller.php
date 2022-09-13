@@ -3340,7 +3340,7 @@ class ReporteController {
 		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$groupby = "e.vendedor, p.productofamilia";
 		$rst = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
-
+		print_r($rst);exit;
 		$array_vendedores = array();
 		$array_familias = array();
 		foreach ($rst as $clave=>$valor) {
