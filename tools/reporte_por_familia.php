@@ -22,7 +22,7 @@ class ExcelReport extends View {
                                  ->setKeywords("infDHTordo")
                                  ->setCategory("infDHTordo");
 
-    $tituloReporte = "RR Distribuciones";
+    $tituloReporte = "Frío Distribuciones";
     $fechaReporte = date("d-m-Y");
     $softReporte = "dhTordo";
     $tituloWeb = $tituloReporte;
@@ -108,7 +108,7 @@ class ExcelReport extends View {
                                  ->setKeywords("infDHTordo")
                                  ->setCategory("infDHTordo");
 
-    $tituloReporte = "RR Distribuciones";
+    $tituloReporte = "Frío Distribuciones";
     $fechaReporte = date("d-m-Y");
     $softReporte = "dhTordo";
     $tituloWeb = $tituloReporte;
@@ -187,7 +187,7 @@ class ExcelReport extends View {
 
     $objPHPExcel->createSheet();
 
-    $tituloReporte = "RR Distribuciones";
+    $tituloReporte = "Frío Distribuciones";
     $fechaReporte = date("d-m-Y");
     $softReporte = "dhTordo";
     $tituloWeb = $tituloReporte;
