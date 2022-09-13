@@ -8,9 +8,7 @@ class ExcelReport extends View {
   public $estilo_titulo_reporte = "";
   public $estilo_titulo_columnas = "";
   public $estilo_informacion = "";
-  public $abecedario = array("B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z", 
-                             "AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU",
-                             "AV","AW","AX","AY","AZ");
+  public $abecedario = array("B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","AA","AB","AC","AD","AE","AF","AG","AH","AI","AJ","AK","AL","AM","AN","AO","AP","AQ","AR","AS","AT","AU","AV","AW","AX","AY","AZ");
 
   function extraer_informe_conjunto($subtitulo, $array_exportacion) {
     date_default_timezone_set('America/Mexico_City');
@@ -45,7 +43,6 @@ class ExcelReport extends View {
     $objPHPExcel->setActiveSheetIndex(0)
                 ->setShowGridlines(false)
                 ->mergeCells("B1:E1")
-                ->mergeCells("F1:{$ultimaLetraPosicion}1")
                 ->setCellValue("B1", $tituloReporte)
                 ->setCellValue("F1", $fechaReporte)
                 ->mergeCells("B2:{$ultimaLetraPosicion}2")
