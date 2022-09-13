@@ -3340,7 +3340,6 @@ class ReporteController {
 		$where = "e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$groupby = "e.vendedor, p.productofamilia";
 		$rst = CollectorCondition()->get('Egreso', $where, 4, $from, $select, $groupby);
-		print_r($rst);exit;
 		$array_vendedores = array();
 		$array_familias = array();
 		foreach ($rst as $clave=>$valor) {
@@ -3387,6 +3386,7 @@ class ReporteController {
 			$array_exportacion[] = $arreglo;
 		}
 		
+		print_r($array_exportacion);exit;
 		$subtitulo = "Reporte por familia del {$desde} al {$hasta}";
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 		exit;		
