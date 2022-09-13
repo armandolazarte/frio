@@ -3357,7 +3357,7 @@ class ReporteController {
 
 		if (!empty($egreso_ids)) {
 			$egreso_ids = implode(',', $egreso_ids);
-			$select = "c.cliente_id AS CLIENTE_ID, c.codigo AS CODIGO, c.razon_social AS CLIENTE, ROUND(SUM(e.importe_total), 2) AS IMPORTETOTAL";
+			$select = "c.cliente_id AS CLIENTE_ID, c.codigo AS CODIGO, c.razon_social AS CLIENTE, c.barrio AS BARRIO, c.domicilio AS DOMICILIO, ROUND(SUM(e.importe_total), 2) AS IMPORTETOTAL";
 			$from = "egreso e INNER JOIN cliente c ON e.cliente = c.cliente_id";
 			$where = "e.egreso_id IN ($egreso_ids)";
 			$group_by = "e.cliente";
@@ -3393,7 +3393,7 @@ class ReporteController {
 		}
 			
 		$subtitulo = "Importes de Venta por Cliente y Vendedor: {$denominacion_vendedor} - ({$desde} - {$hasta})";
-		$array_encabezados = array('COD', 'CLIENTE', 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
+		$array_encabezados = array('COD', 'CLIENTE', 'BARRIO', 'DOMICILIO' 'IMPORTE TOTAL VENTA','IMPORTE TOTAL NC.', 'IMPORTE TOTAL FINAL');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
@@ -3401,6 +3401,8 @@ class ReporteController {
 			$array_temp = array();
 			$array_temp = array($valor["CODIGO"]
 								, $valor["CLIENTE"]
+								, $valor["BARRIO"]
+								, $valor["DOMICILIO"]
 								, $valor["IMPORTETOTAL"]
 								, $valor["IMPORTETOTAL_NC"]
 								, $valor["IMPORTETOTAL_FINAL"]);
