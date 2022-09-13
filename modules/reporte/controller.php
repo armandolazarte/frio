@@ -3184,12 +3184,14 @@ class ReporteController {
 					$datos_temp[$clave]['IMPORTE'] = $importe_ini - $importe_ncd;
 				}
 
+				/*
 				if ($tmp_productounidad == 5) {
 					$pm = new Producto();
 					$pm->producto_id = $tmp_producto_id;
 					$pm->get();
 					$datos_temp[$clave]['CANTIDAD'] = $datos_temp[$clave]['CANTIDAD'] * $pm->peso;
 				}
+				*/
 			}
 
 			$subtitulo = "VENTAS POR VENDEDOR, RANGO DE FECHA Y PRODUCTO";
