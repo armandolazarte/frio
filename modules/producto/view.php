@@ -159,6 +159,7 @@ class ProductoView extends View {
 		$render = str_replace('{tbl_proveedorproducto}', $gui_tbl_proveedorproducto, $render);
 		$render = str_replace('{slt_productomarca}', $gui_slt_productomarca, $render);
 		$render = str_replace('{slt_productocategoria}', $gui_slt_productocategoria, $render);
+		$render = str_replace('{slt_productofamilia}', $gui_slt_productofamilia, $render);
 		$render = str_replace('{slt_productounidad}', $gui_slt_productounidad, $render);
 		$render = str_replace('{fecha_sys}', $fecha_sys, $render);
 		$render = $this->render($obj_producto, $render);

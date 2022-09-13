@@ -3,6 +3,7 @@ require_once "modules/producto/model.php";
 require_once "modules/producto/view.php";
 require_once "modules/productomarca/model.php";
 require_once "modules/productocategoria/model.php";
+require_once "modules/productofamilia/model.php";
 require_once "modules/productounidad/model.php";
 require_once "modules/productodetalle/model.php";
 require_once "modules/proveedor/model.php";
