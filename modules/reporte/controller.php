@@ -2833,7 +2833,7 @@ class ReporteController {
 		$vendedor_id = filter_input(INPUT_POST, 'vendedor_id');
 		$marca_id = filter_input(INPUT_POST, "marca_id");
 		
-		$select = "ROUND(SUM(ed.cantidad),2) AS TOTCANT, ROUND(SUM(ed.importe),2) AS TOTIMPO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, pm.denominacion AS MARCA, ed.producto_id AS PRID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, ed.descripcion_producto AS PRODUCTO";
+		$select = "ROUND(SUM(ed.cantidad),2) AS TOTCANT, ROUND(SUM(ed.importe),2) AS TOTIMPO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR, pm.denominacion AS MARCA, ed.producto_id AS PRID, date_format(e.fecha, '%d/%m/%Y') AS FECHA, ed.descripcion_producto AS PRODUCTO, p.peso AS PESO_PROD";
 		$from = "egresodetalle ed INNER JOIN egreso e ON ed.egreso_id = e.egreso_id INNER JOIN vendedor v ON e.vendedor = v.vendedor_id INNER JOIN producto p ON ed.producto_id = p.producto_id INNER JOIN productomarca pm ON p.productomarca = pm.productomarca_id";
 		$where = "pm.productomarca_id = {$marca_id} AND e.vendedor = {$vendedor_id} AND e.fecha BETWEEN '{$desde}' AND '{$hasta}'";
 		$group_by = "ed.producto_id ORDER BY ed.descripcion_producto ASC, e.fecha DESC";
@@ -2869,16 +2869,18 @@ class ReporteController {
 		}
 
 		$subtitulo = "VENTAS POR VENDEDOR, RANGO DE FECHA, MARCA Y PRODUCTO";
-		$array_encabezados = array('VENDEDOR', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'IMPORTE');
+		$array_encabezados = array('VENDEDOR', 'MARCA', 'PRODUCTO', 'CANTIDAD', 'KILOS', 'IMPORTE');
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 		$sum_importe = 0;
 		foreach ($datos_reporte as $clave=>$valor) {
 			$array_temp = array();
+			$peso_temp = $valor["TOTCANT"] * $valor["PESO_PROD"];
 			$array_temp = array($valor["VENDEDOR"]
 								, $valor["MARCA"]
 								, $valor["PRODUCTO"]
 								, $valor["TOTCANT"]
+								, $peso_temp
 								, $valor["TOTIMPO"]);
 			$array_exportacion[] = $array_temp;
 		}
