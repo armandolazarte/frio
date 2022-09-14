@@ -70,7 +70,7 @@ class EgresoController {
 					if ($estadoentrega == 4) {
 						$egreso_collection[$clave]['ESTADO'] = 'Abonada';
 					} else {
-						$egreso_collection[$clave]['ESTADO'] = 'Pendiente';
+						$egreso_collection[$clave]['ESTADO'] = 'Pago Pendiente';
 					}
 				} else {
 					$select = "ccc.estadomovimientocuenta AS MOVIMIENTO";
@@ -80,10 +80,10 @@ class EgresoController {
 					$estadomovimientocuenta_id = $estado_ctacte[0]['MOVIMIENTO'];
 					switch ($estadomovimientocuenta_id) {
 						case 1:
-							$egreso_collection[$clave]['ESTADO'] = 'Pendiente';
+							$egreso_collection[$clave]['ESTADO'] = 'Pago Pendiente';
 							break;
 						case 3:
-							$egreso_collection[$clave]['ESTADO'] = 'Parcial';
+							$egreso_collection[$clave]['ESTADO'] = 'Pago Parcial';
 							break;
 						case 4:
 							$egreso_collection[$clave]['ESTADO'] = 'Abonada';
