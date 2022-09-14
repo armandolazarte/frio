@@ -16,11 +16,11 @@ class ExcelReport extends View {
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setCreator("DHARMA")
                                  ->setLastModifiedBy("DHARMA")
-                                 ->setTitle("infDHTordo")
-                                 ->setSubject("infDHTordo")
-                                 ->setDescription("infDHTordo")
-                                 ->setKeywords("infDHTordo")
-                                 ->setCategory("infDHTordo");
+                                 ->setTitle("dhT_ReporteFamiliaProducto")
+                                 ->setSubject("dhT_ReporteFamiliaProducto")
+                                 ->setDescription("dhT_ReporteFamiliaProducto")
+                                 ->setKeywords("dhT_ReporteFamiliaProducto")
+                                 ->setCategory("dhT_ReporteFamiliaProducto");
 
     $tituloReporte = "Frío Distribuciones";
     $fechaReporte = date("d-m-Y");
@@ -82,12 +82,12 @@ class ExcelReport extends View {
     }
 
     //$objPHPExcel->getActiveSheet()->setSharedStyle($this->estilo_informacion, "{$celdas_informacion}");
-    $objPHPExcel->getActiveSheet()->setTitle("infDHTordo");
+    $objPHPExcel->getActiveSheet()->setTitle("dhT_ReporteFamiliaProducto");
     $objPHPExcel->setActiveSheetIndex(0);
     $objPHPExcel->getActiveSheet(0)->freezePaneByColumnAndRow(2,4);
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="infDHTordo.xlsx"');
+    header('Content-Disposition: attachment;filename="dhT_ReporteFamiliaProducto.xlsx"');
     header('Cache-Control: max-age=0');
 
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -102,11 +102,11 @@ class ExcelReport extends View {
     $objPHPExcel = new PHPExcel();
     $objPHPExcel->getProperties()->setCreator("DHARMA")
                                  ->setLastModifiedBy("DHARMA")
-                                 ->setTitle("infDHTordo")
-                                 ->setSubject("infDHTordo")
-                                 ->setDescription("infDHTordo")
-                                 ->setKeywords("infDHTordo")
-                                 ->setCategory("infDHTordo");
+                                 ->setTitle("dhT_ReporteFamiliaProducto")
+                                 ->setSubject("dhT_ReporteFamiliaProducto")
+                                 ->setDescription("dhT_ReporteFamiliaProducto")
+                                 ->setKeywords("dhT_ReporteFamiliaProducto")
+                                 ->setCategory("dhT_ReporteFamiliaProducto");
 
     $tituloReporte = "Frío Distribuciones";
     $fechaReporte = date("d-m-Y");
@@ -181,7 +181,7 @@ class ExcelReport extends View {
     }
 
     //$objPHPExcel->getActiveSheet()->setSharedStyle($this->estilo_informacion, "{$celdas_informacion}");
-    $objPHPExcel->getActiveSheet()->setTitle("infDHTordo");
+    $objPHPExcel->getActiveSheet()->setTitle("dhT_ReporteFamiliaProducto");
     $objPHPExcel->setActiveSheetIndex(0);
     $objPHPExcel->getActiveSheet(0)->freezePaneByColumnAndRow(0,4);
 
@@ -264,7 +264,7 @@ class ExcelReport extends View {
     $objPHPExcel->getActiveSheet(1)->freezePaneByColumnAndRow(0,4);
 
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="infDHTordo.xlsx"');
+    header('Content-Disposition: attachment;filename="dhT_ReporteFamiliaProducto.xlsx"');
     header('Cache-Control: max-age=0');
 
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

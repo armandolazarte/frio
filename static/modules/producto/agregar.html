@@ -32,6 +32,10 @@
                         </select>
                     </div>
                     <div class="form-group col-lg-3">
+                        <label>Peso</label>
+                        <input type="number" step="0.0001" class="form-control" id="peso" name="peso" value="0" required>
+                    </div>
+                    <div class="form-group col-lg-3">
                         <label>Marca</label>
                         <select class="form-control m-bot15" name="productomarca" id="productomarca" required>
                             {slt_productomarca}
@@ -41,12 +45,6 @@
                         <label>Rubro</label>
                         <select class="form-control m-bot15" name="productocategoria" id="productocategoria" required>
                             {slt_productocategoria}
-                        </select>
-                    </div>
-                    <div class="form-group col-lg-3">
-                        <label>Familia</label>
-                        <select class="form-control m-bot15" name="productofamilia" id="productofamilia" required>
-                            {slt_productofamilia}
                         </select>
                     </div>
                     <div class="form-group col-lg-3">
@@ -137,7 +135,7 @@
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
                         <input type="hidden" id="barcode" name="barcode" value="" required>
-                        <input type="hidden" id="peso" name="peso" value="0" required>
+                        <input type="hidden" id="productofamilia" name="productofamilia" value="NSNC" required>
                         <a href="#" class="btn btn-app" onclick="verificarProducto();"> <i class="fa fa-save"></i> Guardar </a>
                     </div>
                 </form>
