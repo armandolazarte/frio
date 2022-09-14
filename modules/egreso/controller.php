@@ -38,12 +38,14 @@ class EgresoController {
     	$fecha_sys = strtotime(date('Y-m-d'));
     	$periodo_actual = date('Ym');
     	$dias_minimo = date("Y-m-d", strtotime("-10 days", $fecha_sys));
-    	$select = "e.egreso_id AS EGRESO_ID, CONCAT(date_format(e.fecha, '%d/%m/%Y'), ' ', LEFT(e.hora,5)) AS FECMOD, e.fecha AS FECHA, LEFT(e.hora,5) AS HORA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
+    	$select = "e.egreso_id AS EGRESO_ID, e.fecha AS FECHA, UPPER(cl.razon_social) AS CLIENTE, e.subtotal AS SUBTOTAL, ese.estadoentrega_id AS ESTENTID, ese.denominacion AS ENTREGA, e.importe_total AS IMPORTETOTAL, UPPER(CONCAT(ve.APELLIDO, ' ', ve.nombre)) AS VENDEDOR, cp.condicionpago_id AS CONPAGID, UPPER(cp.denominacion) AS CP, CASE ee.estadoentrega WHEN 1 THEN 'inline-block' WHEN 2 THEN 'inline-block' WHEN 3 THEN 'none' WHEN 4 THEN 'none' END AS DSP_BTN_ENT, CASE e.emitido WHEN 1 THEN 'none' ELSE (CASE WHEN eafip.egresoafip_id IS NULL THEN 'inline-block' ELSE 'none' END) END AS DSP_BTN_EDIT, CASE WHEN eafip.egresoafip_id IS NULL THEN CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE e.tipofactura = tf.tipofactura_id), ' ', LPAD(e.punto_venta, 4, 0), '-', LPAD(e.numero_factura, 8, 0)) ELSE CONCAT((SELECT tf.nomenclatura FROM tipofactura tf WHERE eafip.tipofactura = tf.tipofactura_id), ' ', LPAD(eafip.punto_venta, 4, 0), '-', LPAD(eafip.numero_factura, 8, 0)) END AS FACTURA";
 		$from = "egreso e INNER JOIN cliente cl ON e.cliente = cl.cliente_id INNER JOIN vendedor ve ON e.vendedor = ve.vendedor_id INNER JOIN condicionpago cp ON e.condicionpago = cp.condicionpago_id INNER JOIN condicioniva ci ON e.condicioniva = ci.condicioniva_id INNER JOIN egresoentrega ee ON e.egresoentrega = ee.egresoentrega_id INNER JOIN estadoentrega ese ON ee.estadoentrega = ese.estadoentrega_id LEFT JOIN egresoafip eafip ON e.egreso_id = eafip.egreso_id";
 		$where = "e.fecha >= '{$dias_minimo}' ORDER BY e.fecha DESC";
 		$egreso_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
 
 		foreach ($egreso_collection as $clave=>$valor) {
+			$estadoentrega_id = $valor['ESTENTID'];
+			$condicionpago_id = $valor['CONPAGID'];
 			$egreso_id = $valor['EGRESO_ID'];
 			$select = "nc.importe_total AS IMPORTETOTAL";
 			$from = "notacredito nc";
@@ -61,7 +63,36 @@ class EgresoController {
 			}
 
 			if ($egreso_collection[$clave]['IMPORTETOTAL'] == 0 AND $egreso_collection[$clave]["VC"] == 0) {
-				
+				$egreso_collection[$clave]['ESTADO'] = 'Anulada';
+			} else {
+
+				if ($condicionpago_id == 2) {
+					if ($estadoentrega == 4) {
+						$egreso_collection[$clave]['ESTADO'] = 'Abonada';
+					} else {
+						$egreso_collection[$clave]['ESTADO'] = 'Pendiente';
+					}
+				} else {
+					$select = "ccc.estadomovimientocuenta AS MOVIMIENTO";
+					$from = "cuentacorrientecliente ccc";
+					$where = "ccc.egreso_id = {$egreso_id} ORDER BY ccc.cuentacorrientecliente_id DESC LIMIT 1";
+					$estado_ctacte = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select);
+					$estadomovimientocuenta_id = $estado_ctacte[0]['MOVIMIENTO'];
+					switch ($estadomovimientocuenta_id) {
+						case 1:
+							$egreso_collection[$clave]['ESTADO'] = 'Pendiente';
+							break;
+						case 3:
+							$egreso_collection[$clave]['ESTADO'] = 'Parcial';
+							break;
+						case 4:
+							$egreso_collection[$clave]['ESTADO'] = 'Abonada';
+							break;
+						default:
+							$egreso_collection[$clave]['ESTADO'] = 'Sin Información';
+							break;
+					}
+				}
 			}
 		}
 
