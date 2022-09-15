@@ -358,6 +358,26 @@ class EgresoView extends View {
 	        $obj_egreso->importe_total = number_format(($importe_iva + $subtotal), 2, ',', '.');
 		}
 
+		$estadoentrega_id = $obj_egreso->egresoentrega->estadoentrega->estadoentrega_id;
+		$condicionpago_id = $obj_egreso->condicionpago->condicionpago_id;
+		if ($notacredito_id != 0) {
+			$obj_egreso->btn_consultar_nc = 'block';
+		} else {
+			if($condicionpago_id == 2) {
+				if ($estadoentrega_id == 4) {
+					$obj_egreso->btn_generar_nc = 'none';
+				} else {
+					$obj_egreso->btn_generar_nc = 'block';
+				}
+			} else {
+				if (!empty($cuentacorrientecliente_collection) AND count($cuentacorrientecliente_collection) > 1) {
+					$obj_egreso->btn_generar_nc = 'none';
+				}
+			}
+
+			$obj_egreso->btn_consultar_nc = 'none';
+		}
+
 		$tipofactura_cliente_nomenclatura = $obj_egreso->cliente->tipofactura->nomenclatura;
 		$tipofactura_cliente_id = $obj_egreso->cliente->tipofactura->tipofactura_id;
 		
