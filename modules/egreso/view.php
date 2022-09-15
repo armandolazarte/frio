@@ -364,7 +364,7 @@ class EgresoView extends View {
 			$obj_egreso->btn_consultar_nc = 'block';
 			$obj_egreso->btn_generar_nc = 'none';
 		} else {
-			if($condicionpago_id == 1) {
+			if($condicionpago_id == 2) {
 				if ($estadoentrega_id == 4) {
 					$obj_egreso->btn_generar_nc = 'none';
 				} else {
