@@ -67,7 +67,7 @@ class EgresoController {
 			} else {
 
 				if ($condicionpago_id == 2) {
-					if ($estadoentrega == 4) {
+					if ($estadoentrega_id == 4) {
 						$egreso_collection[$clave]['ESTADO'] = 'Abonada';
 					} else {
 						$egreso_collection[$clave]['ESTADO'] = 'Pendiente';
