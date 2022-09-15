@@ -371,7 +371,6 @@ class EgresoView extends View {
 					$obj_egreso->btn_generar_nc = 'block';
 				}
 			} else {
-				print_r($cuentacorrientecliente_collection);exit;
 				if (!empty($cuentacorrientecliente_collection) AND count($cuentacorrientecliente_collection) > 1) {
 					$obj_egreso->btn_generar_nc = 'none';
 				}
