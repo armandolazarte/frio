@@ -392,7 +392,6 @@ class ProductoController {
 		$this->model->productocategoria = filter_input(INPUT_POST, 'productocategoria');
 		$this->model->productofamilia = filter_input(INPUT_POST, 'productofamilia');
 		$this->model->productounidad = filter_input(INPUT_POST, 'productounidad');
-		print_r($this->model);exit;
 		$this->model->save();
 		header("Location: " . URL_APP . "/producto/listar");
 	}
