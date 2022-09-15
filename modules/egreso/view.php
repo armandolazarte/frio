@@ -391,8 +391,8 @@ class EgresoView extends View {
 		$obj_egreso->egresoentrega->btn_entrega_display = $btn_entrega_display;
 		
 		
-		$obj_egreso->btn_generar_nc = ($notacredito_id == 0) ? 'block' : 'none';
-		$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
+		//$obj_egreso->btn_generar_nc = ($notacredito_id == 0) ? 'block' : 'none';
+		//$obj_egreso->btn_consultar_nc = ($notacredito_id == 0) ? 'none' : 'block';
 
 		$obj_egreso->div_facturarafip_display = (empty($egresoafip)) ? 'inline-block' : 'none';
 		$obj_egreso->div_facturarafip_display = ($obj_egreso->tipofactura->tipofactura_id == 2) ? 'none' : $obj_egreso->div_facturarafip_display;
