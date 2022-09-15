@@ -360,12 +360,12 @@ class EgresoView extends View {
 
 		$estadoentrega_id = $obj_egreso->egresoentrega->estadoentrega->estadoentrega_id;
 		$condicionpago_id = $obj_egreso->condicionpago->condicionpago_id;
-		print_r($estadoentrega_id);
-		print_r($condicionpago_id);exit;
 		if ($notacredito_id != 0) {
 			$obj_egreso->btn_consultar_nc = 'block';
 			$obj_egreso->btn_generar_nc = 'none';
 		} else {
+		print_r($estadoentrega_id);
+		print_r($condicionpago_id);exit;
 			if($condicionpago_id == 2) {
 				if ($estadoentrega_id == 4) {
 					$obj_egreso->btn_generar_nc = 'none';
