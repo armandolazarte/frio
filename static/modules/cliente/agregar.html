@@ -157,10 +157,14 @@
                         </div>
                     </div>
                     <div class="form-group col-lg-4">
-                        <div class="form-group col-lg-12" style="padding-right: 0px;">
-                            <label>% de Entrega Minima</label>
-                            <input type="text" class="form-control" id="entregaminima" name="entregaminima" placeholder="30" required>
-                        </div>                        
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
+                            <label>Freezer</label>
+                            <input type="text" class="form-control" id="freezer" name="freezer" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
+                            <label>Horno</label>
+                            <input type="text" class="form-control" id="horno" name="horno" required>
+                        </div>                      
                         <div class="form-group col-lg-6" style="padding-right: 0px;">
                             <label>Latitud</label>
                             <input type="text" class="form-control" id="latitud" name="latitud" required>
@@ -176,6 +180,7 @@
                     </div>
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
                         <input type="hidden" id="entregaminima" name="entregaminima" value="100" required>
+                        <input type="hidden" id="ordenentrega" name="ordenentrega" value="1" required>
                         <a href="#" class="btn btn-app" onclick="verificarCliente();"> <i class="fa fa-save"></i> Agregar </a>
                     </div>
                 </form>

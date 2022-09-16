@@ -120,6 +120,8 @@ class ClienteController {
 		$dias_vencimiento_cuenta_corriente = filter_input(INPUT_POST, 'dias_vencimiento_cuenta_corriente');
 		$domicilio = filter_input(INPUT_POST, 'domicilio');
 		$ordenentrega = filter_input(INPUT_POST, 'ordenentrega');
+		$freezer = filter_input(INPUT_POST, 'freezer');
+		$horno = filter_input(INPUT_POST, 'horno');
 		$observacion = filter_input(INPUT_POST, 'observacion');
 		$condicioniva = filter_input(INPUT_POST, 'condicioniva');
 		$condicionfiscal = filter_input(INPUT_POST, 'condicioniva');
@@ -153,6 +155,8 @@ class ClienteController {
 		$this->model->domicilio = (is_null($domicilio) OR empty($domicilio)) ? '-' : $domicilio;
 		$this->model->ordenentrega = (is_null($ordenentrega) OR empty($ordenentrega)) ? 1 : $ordenentrega;
 		$this->model->entregaminima = 100;
+		$this->model->freezer = (is_null($freezer) OR empty($freezer)) ? '-' : $freezer;
+		$this->model->horno = (is_null($horno) OR empty($horno)) ? '-' : $horno;
 		$this->model->observacion = (is_null($observacion) OR empty($observacion)) ? '-' : $observacion;
 		$this->model->condicioniva = filter_input(INPUT_POST, 'condicioniva');
 		$this->model->condicionfiscal = filter_input(INPUT_POST, 'condicioniva');
@@ -217,6 +221,8 @@ class ClienteController {
 		$this->model->domicilio = filter_input(INPUT_POST, 'domicilio');
 		$this->model->ordenentrega = filter_input(INPUT_POST, 'ordenentrega');
 		$this->model->entregaminima = 100;
+		$this->model->freezer = filter_input(INPUT_POST, 'freezer');
+		$this->model->horno = filter_input(INPUT_POST, 'horno');
 		$this->model->observacion = filter_input(INPUT_POST, 'observacion');
 		$this->model->condicioniva = filter_input(INPUT_POST, 'condicioniva');
 		$this->model->condicionfiscal = filter_input(INPUT_POST, 'condicioniva');

@@ -155,9 +155,13 @@
                         {lst_input_infocontacto}                        
                     </div>
                     <div class="form-group col-lg-4">
-                        <div class="form-group col-lg-12" style="padding-right: 0px;">
-                            <label>Orden de Entrega</label>
-                            <input type="text" class="form-control" id="ordenentrega" name="ordenentrega" value="{cliente-ordenentrega}" required>
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
+                            <label>Freezer</label>
+                            <input type="text" class="form-control" id="freezer" name="freezer" value="{cliente-freezer}" required>
+                        </div>
+                        <div class="form-group col-lg-6" style="padding-right: 0px;">
+                            <label>Horno</label>
+                            <input type="text" class="form-control" id="horno" name="horno" value="{cliente-horno}" required>
                         </div>
                         <div class="form-group col-lg-6" style="padding-right: 0px;">
                             <label>Latitud</label>
@@ -175,6 +179,7 @@
                     <div class="form-group col-lg-12" style="margin-top: 2%;" align="right">
                         <input type="hidden" id="entregaminima" name="entregaminima" value="100" required>
                         <input type="hidden" name="cliente_id" value="{cliente-cliente_id}">
+                        <input type="hidden" id="ordenentrega" name="ordenentrega" value="1" required>
                         <a href="#" class="btn btn-app" onclick="verificarCliente()"><i class="fa fa-edit"></i> Editar</a>
                     </div>
                 </form>
