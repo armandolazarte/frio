@@ -20,7 +20,10 @@
                     <div class="">
                         <div class="pricing_features">
                             <ul class="list-unstyled text-left">
-                                <li><i class="fa fa-check text-success"></i> <strong> Documento:</strong> {documentotipo-denominacion} {cliente-documento}</li>
+                                <li>
+                                    <i class="fa fa-check text-success"></i> <strong> Documento:</strong> {documentotipo-denominacion} {cliente-documento}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-check text-success"></i> <strong> Días Vto. CTA CTE:</strong> {cliente-dias_vencimiento_cuenta_corriente}
+                                </li>
                                 <li>
                                     <i class="fa fa-check text-success"></i> <strong> Condición IVA:</strong> {condicioniva-denominacion}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <i class="fa fa-check text-success"></i> <strong> IVA:</strong> {cliente-iva}%
@@ -29,17 +32,20 @@
                                     <i class="fa fa-check text-success"></i> <strong> Vendedor:</strong> {vendedor-apellido} {vendedor-nombre}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <i class="fa fa-check text-success"></i> <strong> Zona:</strong> {frecuenciaventa-denominacion} ({frecuenciaventa-dia_1}-{frecuenciaventa-dia_2})
                                 </li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Flete:</strong> {flete-denominacion}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Lista de Precio:</strong> {listaprecio-denominacion} ( {listaprecio-condicion} {listaprecio-porcentaje}% )</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Provincia:</strong> {provincia-denominacion}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Localidad:</strong> {cliente-codigopostal} - {cliente-localidad}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Barrio:</strong> {cliente-barrio}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Domicilio:</strong> {cliente-domicilio}</li>
+                                <li>
+                                    <i class="fa fa-check text-success"></i> <strong> Flete:</strong> {flete-denominacion}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-check text-success"></i> <strong> Lista de Precio:</strong> {listaprecio-denominacion} ( {listaprecio-condicion} {listaprecio-porcentaje}% )
+                                </li>
+                                <li>
+                                    <i class="fa fa-check text-success"></i> <strong> Provincia:</strong> {provincia-denominacion}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-check text-success"></i> <strong> Localidad:</strong> {cliente-codigopostal} - {cliente-localidad}
+                                </li>
+                                <li>
+                                    <i class="fa fa-check text-success"></i> <strong> Barrio:</strong> {cliente-barrio}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <i class="fa fa-check text-success"></i> <strong> Domicilio:</strong> {cliente-domicilio}
+                                </li>
                                 <li><i class="fa fa-check text-success"></i> <strong> Categoria:</strong> {categoriacliente-denominacion}</li>
                                 {lst_infocontacto}
-                                <li><i class="fa fa-check text-success"></i> <strong> Días Vto. Cta. Cte.:</strong> {cliente-dias_vencimiento_cuenta_corriente}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> Orden de Entrega:</strong> {cliente-ordenentrega}</li>
-                                <li><i class="fa fa-check text-success"></i> <strong> % de Entrega Minima:</strong> {cliente-entregaminima}</li>
                             </ul>
                         </div>
                     </div>
