@@ -3619,6 +3619,36 @@ class ReporteController {
 		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
 	}
 
+	function desc_cliente_horno_freezer() {
+		SessionHandler()->check_session();
+		require_once "tools/excelreport.php";
+
+		$select = "c.codigo AS CODIGO, c.razon_social AS CLIENTE, c.barrio AS BARRIO, c.domicilio AS DOMICILIO, c.freezer AS FREEZER, c.horno AS HORNO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR";
+		$from = "cliente c INNER JOIN vendedor v ON c.vendedor = v.vendedor_id";
+		$where = "c.freezer IS NOT NULL AND c.freezer <> '' OR c.horno IS NOT NULL AND c.horno <> ''";
+		$cliente_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+		$cliente_collection = (is_array($cliente_collection) AND !empty($cliente_collection)) ? $cliente_collection : array();
+
+		$subtitulo = "Reporte de Clientes con Freezer y/o Horno";
+		$array_encabezados = array('COD', 'CLIENTE', 'BARRIO', 'DOMICILIO', 'VENDEDOR','HORNO', 'FREEZER');
+		$array_exportacion = array();
+		$array_exportacion[] = $array_encabezados;
+
+		foreach ($importe_venta_cliente as $clave=>$valor) {
+			$array_temp = array();
+			$array_temp = array($valor["CODIGO"]
+								, $valor["CLIENTE"]
+								, $valor["BARRIO"]
+								, $valor["DOMICILIO"]
+								, $valor["VENDEDOR"]
+								, $valor["HORNO"]
+								, $valor["FREEZER"]);
+			$array_exportacion[] = $array_temp;
+		}
+
+		ExcelReport()->extraer_informe_conjunto($subtitulo, $array_exportacion);
+	}
+
 
 	// REPORTES GASTOS
 	function desc_gastos_categoria_fecha() {
