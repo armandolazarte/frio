@@ -698,6 +698,17 @@
             array.push("<strong>[ERROR]</strong> Por favor seleccione el PROVEEDOR.");
         }
 
+        var flag_control_comprobante = $.ajax({
+            url: '{url_app}/ingreso/control_comprobante_ajax/' + proveedor + "@" + punto_venta + "@" + numero_factura,
+                dataType: 'text',
+                async: false
+        }).responseText;
+
+        if (parseInt(flag_control_comprobante) > 0) {
+            flag_array = 1;
+            array.push("<strong>[ERROR]</strong> Ya existe un comprobante con el mismo PUNTO DE VENTA Y NÚMERO para el PROVEEDOR.");    
+        }
+
         if (flag_array == 0) {
             var div_productos = document.getElementById("div_productos");
             var input_producto = document.getElementById("producto");
