@@ -1238,6 +1238,24 @@ class PedidoVendedorController {
 		$vm->vendedor_id = $vendedor_id;
 		$vm->get();
 
+		foreach ($pedidovendedor_collection as $clave=>$valor) {
+			$cliente_id = $valor['CLIID'];
+			$cm = new Cliente();
+			$cm->cliente_id = $cliente_id;
+			$cm->get();
+			$dias_vencimiento_cuenta_corriente = $cm->dias_vencimiento_cuenta_corriente;
+			
+			$select = "COUNT(ccc.egreso_id) AS CANT";
+			$from = "cuentacorrientecliente ccc";
+			$where = "ccc.fecha < date_add(NOW(), INTERVAL -{$dias_vencimiento_cuenta_corriente} DAY) AND ccc.cliente_id = {$cliente_id} AND ccc.estadomovimientocuenta != 4 AND (ccc.importe > 0 OR ccc.ingreso > 0)";
+			$groupby = "ccc.egreso_id ORDER BY ccc.cliente_id ASC, ccc.egreso_id ASC, ccc.fecha DESC, ccc.estadomovimientocuenta DESC";
+			$vencimiento_collection = CollectorCondition()->get('CuentaCorrienteCliente', $where, 4, $from, $select, $groupby);
+			$cant_facturas_vencidas = (is_array($vencimiento_collection) AND !empty($vencimiento_collection)) ? $vencimiento_collection[0]['CANT'] : 0;
+
+			$pedidovendedor_collection[$clave]["BTNAPROC"] = ($cant_facturas_vencidas > 0) ? 'none' : $pedidovendedor_collection[$clave]["BTNAPROC"];
+			$pedidovendedor_collection[$clave]["DISPLAY_ESTADO_CCC_VENCIDA"] = ($cant_facturas_vencidas > 0) ? 'inline-block': 'none';
+		}
+
 		$this->view->prepara_lote_vendedor($pedidovendedor_collection, $producto_collection, $vm);
 	}
 

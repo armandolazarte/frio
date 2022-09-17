@@ -2,13 +2,15 @@
 <tr style="font-size: 11px; text-align: right;">
     <td>FECHA</td>
     <td>CLIENTE</td>
-    <td style="text-align: left;"><span class="label label-CLAEST" style="font-size: 11px;">LBLEST</span></td>
+    <td style="text-align: left;">
+        <span class="label label-CLAEST" style="font-size: 11px;">LBLEST</span>
+        <span class="label label-danger" style="font-size: 11px; display: DISPLAY_ESTADO_CCC_VENCIDA;">CTA. VENCIDA</span>
+    </td>
     <td style="text-align: left;">DETALLE</td>
     <td>$IMPORTETOTAL</td>
     <td style="text-align: right;">
         <button class="btn btn-dark btn-xs" title="Consultar pedido" onclick="traerPedido(PEDVENID);" style="display: BTNAPROC;"><i class="fa fa-eye"></i></button>
         <button class="btn btn-danger btn-xs" onclick="confirma_formulario(4, '{url_app}/pedidovendedor/eliminar/PEDVENID@{vendedor-vendedor_id}');" title="Eliminar pedido" style="display: BTNAPROC;"><i class="fa fa-trash"></i></button>
-        <!--<a href="file.php?f=facturas_egresos_Factura-EGRID&a=d" class="btn btn-success btn-xs" title="Imprimir pedido" style="display: BTNAIMPR;" target="_blank"><i class="fa fa-download"></i></a>-->
         <a href="{url_app}/pedidovendedor/descargar_factura_lote/PEDVENID@EGRID" class="btn btn-success btn-xs" title="Imprimir pedido" style="display: BTNAIMPR;" target="_blank"><i class="fa fa-download"></i></a>
     </td>
 </tr>
