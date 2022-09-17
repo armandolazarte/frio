@@ -700,6 +700,10 @@
 
         var tipofactura = document.getElementById("tipofactura");
         var tipofactura_id = tipofactura.options[tipofactura.selectedIndex].value;
+        console.log(proveedor);
+        console.log(punto_venta);
+        console.log(numero_factura);
+        console.log(tipofactura);
         var flag_control_comprobante = $.ajax({
             url: '{url_app}/ingreso/control_comprobante_ajax/' + proveedor + "@" + punto_venta + "@" + numero_factura + "@" + tipofactura,
                 dataType: 'text',
