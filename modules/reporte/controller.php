@@ -3626,7 +3626,7 @@ class ReporteController {
 		$select = "c.codigo AS CODIGO, c.razon_social AS CLIENTE, c.barrio AS BARRIO, c.domicilio AS DOMICILIO, c.freezer AS FREEZER, c.horno AS HORNO, CONCAT(v.apellido, ' ', v.nombre) AS VENDEDOR";
 		$from = "cliente c INNER JOIN vendedor v ON c.vendedor = v.vendedor_id";
 		$where = "c.freezer IS NOT NULL AND c.freezer <> '' OR c.horno IS NOT NULL AND c.horno <> ''";
-		$cliente_collection = CollectorCondition()->get('Egreso', $where, 4, $from, $select);
+		$cliente_collection = CollectorCondition()->get('Cliente', $where, 4, $from, $select);
 		$cliente_collection = (is_array($cliente_collection) AND !empty($cliente_collection)) ? $cliente_collection : array();
 
 		$subtitulo = "Reporte de Clientes con Freezer y/o Horno";
@@ -3634,7 +3634,7 @@ class ReporteController {
 		$array_exportacion = array();
 		$array_exportacion[] = $array_encabezados;
 
-		foreach ($importe_venta_cliente as $clave=>$valor) {
+		foreach ($cliente_collection as $clave=>$valor) {
 			$array_temp = array();
 			$array_temp = array($valor["CODIGO"]
 								, $valor["CLIENTE"]
