@@ -698,8 +698,10 @@
             array.push("<strong>[ERROR]</strong> Por favor seleccione el PROVEEDOR.");
         }
 
+        var tipofactura = document.getElementById("tipofactura");
+        var tipofactura_id = tipofactura.options[tipofactura.selectedIndex].value;
         var flag_control_comprobante = $.ajax({
-            url: '{url_app}/ingreso/control_comprobante_ajax/' + proveedor + "@" + punto_venta + "@" + numero_factura + "@" + condicioniva,
+            url: '{url_app}/ingreso/control_comprobante_ajax/' + proveedor + "@" + punto_venta + "@" + numero_factura + "@" + tipofactura,
                 dataType: 'text',
                 async: false
         }).responseText;
