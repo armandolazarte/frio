@@ -846,9 +846,10 @@ class IngresoController {
 		$proveedor_id = $ids[0];
 		$punto_venta = $ids[1];
 		$numero_factura = $ids[2];
+		$condicioniva = $ids[3];
 		$select = "COUNT(*) AS CANT";
 		$from = "ingreso i";
-		$where = "i.punto_venta = {$punto_venta} AND i.numero_factura = {$numero_factura} AND i.proveedor = {$proveedor_id}";
+		$where = "i.punto_venta = {$punto_venta} AND i.numero_factura = {$numero_factura} AND i.proveedor = {$proveedor_id} AND i.condicioniva = {$condicioniva}";
 		$flag = CollectorCondition()->get('Ingreso', $where, 4, $from, $select);
 		$flag = (is_array($flag) AND !empty($flag)) ? $flag[0]['CANT'] : 0;
 		print $flag;

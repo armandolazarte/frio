@@ -699,7 +699,7 @@
         }
 
         var flag_control_comprobante = $.ajax({
-            url: '{url_app}/ingreso/control_comprobante_ajax/' + proveedor + "@" + punto_venta + "@" + numero_factura,
+            url: '{url_app}/ingreso/control_comprobante_ajax/' + proveedor + "@" + punto_venta + "@" + numero_factura + "@" + condicioniva,
                 dataType: 'text',
                 async: false
         }).responseText;
