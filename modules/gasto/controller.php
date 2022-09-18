@@ -1,6 +1,7 @@
 <?php
 require_once "modules/gasto/model.php";
 require_once "modules/gasto/view.php";
+require_once "modules/ingresotipopago/model.php";
 
 
 class GastoController {
@@ -30,7 +31,12 @@ class GastoController {
 			if ($valor->oculto == 1) unset($gastocategoria_collection[$clave]);
 		}
 
-		$this->view->panel($gasto_collection, $gastocategoria_collection, $sum_gasto);
+		$ingresotipopago_collection = Collector()->get('IngresoTipoPago');
+		foreach ($ingresotipopago_collection as $clave=>$valor) {
+			if ($valor->ingresotipopago_id > 3) unset($ingresotipopago_collection[$clave]);
+		}
+
+		$this->view->panel($gasto_collection, $gastocategoria_collection, $ingresotipopago_collection, $sum_gasto);
 	}
 
 	function guardar() {

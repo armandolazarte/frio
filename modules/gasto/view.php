@@ -3,11 +3,12 @@
 
 class GastoView extends View {
 	
-	function panel($gasto_collection, $gastocategoria_collection, $sum_gasto) {
+	function panel($gasto_collection, $gastocategoria_collection, $ingresotipopago_collection, $sum_gasto) {
 		$user_level = $_SESSION["data-login-" . APP_ABREV]["usuario-nivel"];
 
 		$gui = file_get_contents("static/modules/gasto/panel.html");
 		$gui_slt_gastocategoria = file_get_contents("static/modules/gasto/slt_gastocategoria.html");
+		$gui_slt_ingresotipopago = file_get_contents("static/common/slt_ingresotipopago.html");
 		switch ($user_level) {
 			case 1:
 				$gui_tbl_gasto = file_get_contents("static/modules/gasto/tbl_gasto_supervisor_array.html");
@@ -22,9 +23,11 @@ class GastoView extends View {
 
 		$gui_tbl_gasto = $this->render_regex_dict('TBL_GASTO', $gui_tbl_gasto, $gasto_collection);
 		$gui_slt_gastocategoria = $this->render_regex('SLT_GASTOCATEGORIA', $gui_slt_gastocategoria, $gastocategoria_collection);
+		$gui_slt_ingresotipopago = $this->render_regex('SLT_INGRESOTIPOPAGO', $gui_slt_ingresotipopago, $ingresotipopago_collection);
 
 		$render = str_replace('{tbl_gasto}', $gui_tbl_gasto, $gui);
 		$render = str_replace('{slt_gastocategoria}', $gui_slt_gastocategoria, $render);
+		$render = str_replace('{slt_ingresotipopago}', $gui_slt_ingresotipopago, $render);
 		$render = str_replace('{gasto-mensual}', $sum_gasto, $render);
 		$render = str_replace('{fecha_sys}', date('Y-m-d'), $render);
 		$render = $this->render_breadcrumb($render);

@@ -31,35 +31,41 @@
         <div class="x_content">
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/gasto/guardar">
-                    <div class="form-group col-lg-12">
+                    <div class="form-group col-lg-8">
                         <label>Comprobante</label>
                         <input type="text" class="form-control" id="comprobante" name="comprobante" value="0" required>
                     </div>
-                    <div class="form-group col-lg-5">
+                    <div class="form-group col-lg-4">
                         <label>Fecha</label>
                         <input type="date" class="form-control" id="fecha" name="fecha" value="{fecha_sys}" required>
                     </div>
-                    <div class="form-group col-lg-7">
+                    <div class="form-group col-lg-6">
                         <label>Categoría</label>
                         <select class="form-control m-bot15" name="gastocategoria" id="gastocategoria" required>
                             {slt_gastocategoria}
                         </select>
                     </div>
                     <div class="form-group col-lg-6">
-                        <label>Importe</label>
-                        <input type="text" class="form-control" id="importe" name="importe" required>
-                    </div>
-                    <div class="form-group col-lg-6">
-                        <label>IVA</label>
-                        <input type="text" class="form-control" id="iva" name="iva" required>
-                    </div>
-                    <div class="form-group col-lg-12">
-                        <label>Total</label>
-                        <input type="text" class="form-control" id="total" name="total" required>
+                        <label>Tipo Pago</label>
+                        <select class="form-control m-bot15" name="ingresotipopago" id="ingresotipopago" required>
+                            {slt_ingresotipopago}
+                        </select>
                     </div>
                     <div class="form-group col-lg-12">
                         <label>Detalle</label>
                         <textarea class="form-control" id="detalle" name="detalle" required></textarea>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Importe</label>
+                        <input type="text" class="form-control" id="importe" name="importe" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>IVA</label>
+                        <input type="text" class="form-control" id="iva" name="iva" required>
+                    </div>
+                    <div class="form-group col-lg-4">
+                        <label>Total</label>
+                        <input type="text" class="form-control" id="total" name="total" required>
                     </div>
                     <div class="col-lg-12" style="margin-top: 2%;" align="right">
                         <a href="#" class="btn btn-app" onclick="confirma_formulario(1, '')"> <i class="fa fa-save"></i> Agregar </a>
