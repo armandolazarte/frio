@@ -87,23 +87,23 @@
                         <label>Titular</label>
                         <input type="text" class="form-control" id="titular_cheque" name="titular_cheque" required>
                     </div>
-                    <div class="form-group col-lg-6" id="div_cheque_3" style="display: none;">
+                    <div class="form-group col-lg-6" id="div_cheque_4" style="display: none;">
                         <label>Fecha Vencimiento</label>
                         <input type="date" class="form-control" id="fecha_vencimiento_cheque" name="fecha_vencimiento_cheque" required>
                     </div>
-                    <div class="form-group col-lg-6" id="div_cheque_4" style="display: none;">
+                    <div class="form-group col-lg-6" id="div_cheque_5" style="display: none;">
                         <label>Fecha Pago</label>
                         <input type="date" class="form-control" id="fecha_pago_cheque" name="fecha_pago_cheque" required>
                     </div>
-                    <div class="form-group col-lg-6" id="div_cheque_3" style="display: none;">
+                    <div class="form-group col-lg-6" id="div_cheque_6" style="display: none;">
                         <label>Banco</label>
                         <input type="text" class="form-control" id="banco_cheque" name="banco_cheque" required>
                     </div>
-                    <div class="form-group col-lg-6" id="div_cheque_3" style="display: none;">
+                    <div class="form-group col-lg-6" id="div_cheque_7" style="display: none;">
                         <label>Plaza</label>
                         <input type="text" class="form-control" id="plaza_cheque" name="plaza_cheque" required>
                     </div>
-                    <div class="form-group col-lg-6" id="div_cheque_5" style="display: none;">
+                    <div class="form-group col-lg-6" id="div_cheque_8" style="display: none;">
                         <label>N° Cuenta</label>
                         <input type="text" class="form-control" id="cuenta_cheque" name="cuenta_cheque" required>
                     </div>
@@ -209,6 +209,14 @@
         
         switch(parseInt(ingresotipopago_id)) {
             case 1:
+                document.getElementById("div_cheque_1").style.display = "block";
+                document.getElementById("div_cheque_2").style.display = "block";
+                document.getElementById("div_cheque_3").style.display = "block";
+                document.getElementById("div_cheque_4").style.display = "block";
+                document.getElementById("div_cheque_5").style.display = "block";
+                document.getElementById("div_cheque_6").style.display = "block";
+                document.getElementById("div_cheque_7").style.display = "block";
+                document.getElementById("div_cheque_8").style.display = "block";
                 document.getElementById("div_transferencia_1").style.display = "none";
                 document.getElementById("div_transferencia_2").style.display = "none";
                 document.getElementById("div_transferencia_3").style.display = "none";
@@ -216,6 +224,14 @@
                 document.getElementById("div_transferencia_5").style.display = "none";
                 break;
             case 2:
+                document.getElementById("div_cheque_1").style.display = "none";
+                document.getElementById("div_cheque_2").style.display = "none";
+                document.getElementById("div_cheque_3").style.display = "none";
+                document.getElementById("div_cheque_4").style.display = "none";
+                document.getElementById("div_cheque_5").style.display = "none";
+                document.getElementById("div_cheque_6").style.display = "none";
+                document.getElementById("div_cheque_7").style.display = "none";
+                document.getElementById("div_cheque_8").style.display = "none";
                 document.getElementById("div_transferencia_1").style.display = "inline-block";
                 document.getElementById("div_transferencia_2").style.display = "inline-block";
                 document.getElementById("div_transferencia_3").style.display = "inline-block";
@@ -223,6 +239,14 @@
                 document.getElementById("div_transferencia_5").style.display = "inline-block";
                 break;
             case 3:
+                document.getElementById("div_cheque_1").style.display = "none";
+                document.getElementById("div_cheque_2").style.display = "none";
+                document.getElementById("div_cheque_3").style.display = "none";
+                document.getElementById("div_cheque_4").style.display = "none";
+                document.getElementById("div_cheque_5").style.display = "none";
+                document.getElementById("div_cheque_6").style.display = "none";
+                document.getElementById("div_cheque_7").style.display = "none";
+                document.getElementById("div_cheque_8").style.display = "none";
                 document.getElementById("div_transferencia_1").style.display = "none";
                 document.getElementById("div_transferencia_2").style.display = "none";
                 document.getElementById("div_transferencia_3").style.display = "none";
