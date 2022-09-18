@@ -47,13 +47,33 @@
                     </div>
                     <div class="form-group col-lg-6">
                         <label>Tipo Pago</label>
-                        <select class="form-control m-bot15" name="ingresotipopago" id="ingresotipopago" required>
+                        <select class="form-control m-bot15" name="ingresotipopago" id="ingresotipopago" onchange="traerTipoPago();" required>
                             {slt_ingresotipopago}
                         </select>
                     </div>
                     <div class="form-group col-lg-12">
                         <label>Detalle</label>
                         <textarea class="form-control" id="detalle" name="detalle" required></textarea>
+                    </div>
+                    <div class="form-group col-lg-12" id="div_transferencia_1" style="display: none;">
+                        <label>Transferencia</label>
+                        <hr />
+                    </div>
+                    <div class="form-group col-lg-6" id="div_transferencia_2" style="display: none;">
+                        <label>N° Transferencia</label>
+                        <input type="text" class="form-control" id="numero_transferencia" name="numero_transferencia" required>
+                    </div>
+                    <div class="form-group col-lg-6" id="div_transferencia_3" style="display: none;">
+                        <label>Banco</label>
+                        <input type="text" class="form-control" id="banco_transferencia" name="banco_transferencia" required>
+                    </div>
+                    <div class="form-group col-lg-6" id="div_transferencia_4" style="display: none;">
+                        <label>Plaza</label>
+                        <input type="text" class="form-control" id="plaza_transferencia" name="plaza_transferencia" required>
+                    </div>
+                    <div class="form-group col-lg-6" id="div_transferencia_5" style="display: none;">
+                        <label>N° Cuenta</label>
+                        <input type="text" class="form-control" id="cuenta_transferencia" name="cuenta_transferencia" required>
                     </div>
                     <div class="form-group col-lg-4">
                         <label>Importe</label>
@@ -150,4 +170,33 @@
             } ]
         } );
     } );
+
+    function traerTipoPago() {
+        var ingresotipopago = document.getElementById("ingresotipopago");
+        var ingresotipopago_id = ingresotipopago.options[ingresotipopago.selectedIndex].value;
+        
+        switch(parseInt(ingresotipopago_id)) {
+            case 1:
+                document.getElementById("div_trasnferencia_1").style.display = "inline-block";
+                document.getElementById("div_trasnferencia_2").style.display = "inline-block";
+                document.getElementById("div_trasnferencia_3").style.display = "inline-block";
+                document.getElementById("div_trasnferencia_4").style.display = "inline-block";
+                document.getElementById("div_trasnferencia_5").style.display = "inline-block";
+                break;
+            case 2:
+                document.getElementById("div_trasnferencia_1").style.display = "none";
+                document.getElementById("div_trasnferencia_2").style.display = "none";
+                document.getElementById("div_trasnferencia_3").style.display = "none";
+                document.getElementById("div_trasnferencia_4").style.display = "none";
+                document.getElementById("div_trasnferencia_5").style.display = "none";
+                break;
+            case 3:
+                document.getElementById("div_trasnferencia_1").style.display = "none";
+                document.getElementById("div_trasnferencia_2").style.display = "none";
+                document.getElementById("div_trasnferencia_3").style.display = "none";
+                document.getElementById("div_trasnferencia_4").style.display = "none";
+                document.getElementById("div_trasnferencia_5").style.display = "none";
+                break;
+        }
+    }
 </script>
