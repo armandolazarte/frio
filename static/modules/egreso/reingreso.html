@@ -22,11 +22,11 @@
             <div class=" form">
                 <form class="form" id="formulario_guardar" method="post" action="{url_app}/egreso/guardar_nota_credito">
                     <div class="col-lg-6">
-                        <div class="form-group col-lg-4">
+                        <div class="form-group col-lg-2">
                             <label>Pto Venta</label>
                             <input type="number" class="form-control" id="punto_venta" value="{egreso-punto_venta}" readonly>
                         </div>
-                        <div class="form-group col-lg-8">
+                        <div class="form-group col-lg-6">
                             <label>N° Factura</label>
                             <input type="number" class="form-control" id="numero_factura" value="{egreso-numero_factura}" readonly>
                         </div>
@@ -34,33 +34,23 @@
                             <label>Fecha</label>
                             <input type="date" class="form-control" id="fecha" value="{egreso-fecha}" readonly>
                         </div>
-                        <div class="form-group col-lg-4">
-                            <label>Descuento (%)</label>
-                            <input type="number" class="form-control" id="descuento" value="{egreso-descuento}" onChange="actualizarDescuento();" readonly>
-                        </div>
-                        <div class="form-group col-lg-4">
-                            <label>Tipo Factura</label>
-                            <select class="form-control m-bot15" id="tipofactura" disabled>
-                                <option value="4">Nota de Crédito</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label>Condición IVA</label>
                             <select class="form-control m-bot15" name="condicioniva" id="condicioniva" disabled>
                                 <option value="{condicioniva-condicioniva_id}" selected>{condicioniva-denominacion}</option>
                             </select>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label>Condición Pago</label>
                             <select class="form-control m-bot15" name="condicionpago" id="condicionpago" disabled>
                                 <option value="{condicionpago-condicionpago_id}" selected>{condicionpago-denominacion}</option>
                             </select>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label>Cliente</label>
                             <input type="text" class="form-control" id="cliente_denominacion" name="cliente_denominacion" value="{cliente-descripcion}" readonly>
                         </div>
-                        <div class="form-group col-lg-6">
+                        <div class="form-group col-lg-3">
                             <label>Vendedor</label>
                             <input type="text" class="form-control" id="vendedor_denominacion" name="vendedor_denominacion" value="{vendedor-descripcion}" readonly>
                         </div>
@@ -98,6 +88,8 @@
                         </ul>
                     </div>
                     <div class="form-group col-lg-12" align="right" id="div_array_egresos">
+                        <input type="hidden" id="descuento" value="{egreso-descuento}" readonly>
+                        <input type="hidden" id="tipofactura" value="4" readonly>
                         <input type="hidden" name="egreso_id" id="egreso_id" value="{egreso-egreso_id}">
                         <input type="hidden" name="producto" id="producto">
                         <input type="hidden" name="subtotal" id="input_subtotal" value="{egreso-subtotal}">
