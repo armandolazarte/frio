@@ -309,6 +309,7 @@
             
             costo_final = 0;
             costo_base = parseFloat(costo_base) + parseFloat(costo_total);
+            console.log(costo_base);
             var descuento = document.getElementById('descuento').value;
             if (descuento != null && descuento.length != 0 && descuento != "" && descuento > 0) {
                 var valor_descuento = parseFloat(descuento) * parseFloat(costo_base) / 100;
