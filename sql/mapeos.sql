@@ -937,3 +937,22 @@ CREATE TABLE IF NOT EXISTS transferenciadetalle (
     , usuario_id INT(11)
     , INDEX (usuario_id)
 ) ENGINE=InnoDb;
+
+CREATE TABLE IF NOT EXISTS chequedetalle (
+    chequedetalle_id INT(11) NOT NULL 
+        AUTO_INCREMENT PRIMARY KEY
+    , fecha DATE
+    , hora TIME
+    , numero VARCHAR(100)
+    , fecha_vencimiento DATE
+    , fecha_pago DATE
+    , banco VARCHAR(100)
+    , plaza VARCHAR(100)
+    , titular VARCHAR(100)
+    , documento VARCHAR(100)
+    , cuenta_corriente VARCHAR(100)
+    , importe DECIMAL(10,4)
+    , detalle TEXT
+    , usuario_id INT(11)
+    , INDEX (usuario_id)
+) ENGINE=InnoDb;

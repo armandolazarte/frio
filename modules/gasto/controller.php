@@ -2,6 +2,8 @@
 require_once "modules/gasto/model.php";
 require_once "modules/gasto/view.php";
 require_once "modules/ingresotipopago/model.php";
+require_once "modules/chequedetalle/model.php";
+require_once "modules/transferenciadetalle/model.php";
 
 
 class GastoController {
@@ -40,9 +42,54 @@ class GastoController {
 	}
 
 	function guardar() {
-		SessionHandler()->check_session();		
-		foreach ($_POST as $clave=>$valor) $this->model->$clave = $valor;
-        $this->model->save();
+		SessionHandler()->check_session();
+		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
+
+		$importe = filter_input(INPUT_POST, 'importe');
+		$detalle = filter_input(INPUT_POST, 'detalle');
+		$this->model->comprobante = filter_input(INPUT_POST, 'comprobante');
+		$this->model->fecha = filter_input(INPUT_POST, 'fecha');
+		$this->model->importe = $importe;
+		$this->model->iva = filter_input(INPUT_POST, 'iva');
+		$this->model->total = filter_input(INPUT_POST, 'total');
+		$this->model->detalle = $detalle;
+		$this->model->gastocategoria = filter_input(INPUT_POST, 'gastocategoria');
+		$this->model->save();
+
+		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago_id');
+		switch ($ingresotipopago_id) {
+			case 1:
+				$cdm = new ChequeDetalle();
+				$cdm->fecha = date('Y-m-d');
+				$cdm->hora = date('H:i:s');
+				$cdm->numero = filter_input(INPUT_POST, 'numero_cheque');
+				$cdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento_cheque');
+				$cdm->fecha_pago = filter_input(INPUT_POST, 'fecha_pago_cheque');
+				$cdm->banco = filter_input(INPUT_POST, 'banco_cheque');
+				$cdm->plaza = filter_input(INPUT_POST, 'plaza_cheque');
+				$cdm->titular = filter_input(INPUT_POST, 'titular_cheque');
+				$cdm->documento = filter_input(INPUT_POST, 'documento_cheque');
+				$cdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_cheque');
+				$cdm->importe = $importe;
+				$cdm->detalle = $detalle;
+				$cdm->usuario_id = $usuario_id;
+				$cdm->save();
+				break;
+			case 2:
+				$tdm = new TransferenciaDetalle();
+				$tdm->fecha = date('Y-m-d');
+				$tdm->hora = date('H:i:s');
+				$tdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
+				$tdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+				$tdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
+				$tdm->numero_cuenta = filter_input(INPUT_POST, 'cuenta_transferencia');
+				$tdm->importe = $importe;
+				$tdm->detalle = $detalle;
+				$tdm->usuario_id = $usuario_id;
+				$tdm->save();
+				break;
+		}
+
 		header("Location: " . URL_APP . "/gasto/panel");
 	}
 
