@@ -56,7 +56,7 @@ class GastoController {
 		$this->model->gastocategoria = filter_input(INPUT_POST, 'gastocategoria');
 		$this->model->save();
 
-		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago_id');
+		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
 		switch ($ingresotipopago_id) {
 			case 1:
 				$cdm = new ChequeDetalle();
