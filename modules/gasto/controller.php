@@ -84,7 +84,7 @@ class GastoController {
 				$tdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
 				$tdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
 				$tdm->numero_cuenta = filter_input(INPUT_POST, 'cuenta_transferencia');
-				$tdm->importe = $importe;
+				$tdm->importe = $total;
 				$tdm->detalle = $detalle;
 				$tdm->usuario_id = $usuario_id;
 				$tdm->save();
