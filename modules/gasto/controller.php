@@ -4,6 +4,7 @@ require_once "modules/gasto/view.php";
 require_once "modules/ingresotipopago/model.php";
 require_once "modules/chequedetalle/model.php";
 require_once "modules/transferenciadetalle/model.php";
+require_once "modules/movimientocaja/model.php";
 
 
 class GastoController {
@@ -45,6 +46,8 @@ class GastoController {
 		SessionHandler()->check_session();
 		$usuario_id = $_SESSION["data-login-" . APP_ABREV]["usuario-usuario_id"];
 
+		$fecha = date('Y-m-d');
+		$hora = date('H:i:s');
 		$importe = filter_input(INPUT_POST, 'importe');
 		$detalle = filter_input(INPUT_POST, 'detalle');
 		$total = filter_input(INPUT_POST, 'total');
@@ -61,8 +64,8 @@ class GastoController {
 		switch ($ingresotipopago_id) {
 			case 1:
 				$cdm = new ChequeDetalle();
-				$cdm->fecha = date('Y-m-d');
-				$cdm->hora = date('H:i:s');
+				$cdm->fecha = $fecha;
+				$cdm->hora = $hora;
 				$cdm->numero = filter_input(INPUT_POST, 'numero_cheque');
 				$cdm->fecha_vencimiento = filter_input(INPUT_POST, 'fecha_vencimiento_cheque');
 				$cdm->fecha_pago = filter_input(INPUT_POST, 'fecha_pago_cheque');
@@ -77,17 +80,31 @@ class GastoController {
 				$cdm->save();
 				break;
 			case 2:
+				$numero_transferencia = filter_input(INPUT_POST, 'numero_transferencia');
+				$banco_transferencia = filter_input(INPUT_POST, 'banco_transferencia');
+				$numero_cuenta = filter_input(INPUT_POST, 'cuenta_transferencia');
 				$tdm = new TransferenciaDetalle();
-				$tdm->fecha = date('Y-m-d');
-				$tdm->hora = date('H:i:s');
-				$tdm->numero = filter_input(INPUT_POST, 'numero_transferencia');
-				$tdm->banco = filter_input(INPUT_POST, 'banco_transferencia');
+				$tdm->fecha = $fecha;
+				$tdm->hora = $hora;
+				$tdm->numero = $numero_transferencia;
+				$tdm->banco = $banco_transferencia;
 				$tdm->plaza = filter_input(INPUT_POST, 'plaza_transferencia');
-				$tdm->numero_cuenta = filter_input(INPUT_POST, 'cuenta_transferencia');
+				$tdm->numero_cuenta = $numero_cuenta;
 				$tdm->importe = $total;
 				$tdm->detalle = $detalle;
 				$tdm->usuario_id = $usuario_id;
 				$tdm->save();
+
+				$mcm->fecha = $hora;
+				$mcm->hora = $hora;
+				$mcm->numero = $numero_transferencia;
+				$mcm->banco = $banco_transferencia;
+				$mcm->numero_cuenta = $numero_cuenta;
+				$mcm->importe = $total;
+				$mcm->detalle = $detalle;
+				$mcm->usuario_id = $usuario_id;
+				$mcm->movimientocajatipo = 5;
+				$mcm->save();
 				break;
 		}
 
