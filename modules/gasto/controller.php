@@ -47,14 +47,15 @@ class GastoController {
 
 		$importe = filter_input(INPUT_POST, 'importe');
 		$detalle = filter_input(INPUT_POST, 'detalle');
+		$total = filter_input(INPUT_POST, 'total');
 		$this->model->comprobante = filter_input(INPUT_POST, 'comprobante');
 		$this->model->fecha = filter_input(INPUT_POST, 'fecha');
 		$this->model->importe = $importe;
 		$this->model->iva = filter_input(INPUT_POST, 'iva');
-		$this->model->total = filter_input(INPUT_POST, 'total');
+		$this->model->total = $total;
 		$this->model->detalle = $detalle;
 		$this->model->gastocategoria = filter_input(INPUT_POST, 'gastocategoria');
-		//$this->model->save();
+		$this->model->save();
 
 		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
 		switch ($ingresotipopago_id) {
@@ -70,10 +71,9 @@ class GastoController {
 				$cdm->titular = filter_input(INPUT_POST, 'titular_cheque');
 				$cdm->documento = filter_input(INPUT_POST, 'documento_cheque');
 				$cdm->cuenta_corriente = filter_input(INPUT_POST, 'cuenta_cheque');
-				$cdm->importe = $importe;
+				$cdm->importe = $total;
 				$cdm->detalle = $detalle;
 				$cdm->usuario_id = $usuario_id;
-				print_r($cdm);exit;
 				$cdm->save();
 				break;
 			case 2:
