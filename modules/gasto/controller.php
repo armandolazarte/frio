@@ -95,7 +95,8 @@ class GastoController {
 				$tdm->usuario_id = $usuario_id;
 				$tdm->save();
 
-				$mcm->fecha = $hora;
+				$mcm = new MovimientoCaja();
+				$mcm->fecha = $fecha;
 				$mcm->hora = $hora;
 				$mcm->numero = $numero_transferencia;
 				$mcm->banco = $banco_transferencia;
