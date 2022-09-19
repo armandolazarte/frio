@@ -54,7 +54,7 @@ class GastoController {
 		$this->model->total = filter_input(INPUT_POST, 'total');
 		$this->model->detalle = $detalle;
 		$this->model->gastocategoria = filter_input(INPUT_POST, 'gastocategoria');
-		$this->model->save();
+		//$this->model->save();
 
 		$ingresotipopago_id = filter_input(INPUT_POST, 'ingresotipopago');
 		switch ($ingresotipopago_id) {
@@ -73,6 +73,7 @@ class GastoController {
 				$cdm->importe = $importe;
 				$cdm->detalle = $detalle;
 				$cdm->usuario_id = $usuario_id;
+				print_r($cdm);exit;
 				$cdm->save();
 				break;
 			case 2:
